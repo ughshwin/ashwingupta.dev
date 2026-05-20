@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Infrastructure systems mark">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#121820"/>
+      <stop offset="1" stop-color="#0a0f14"/>
+    </linearGradient>
+    <linearGradient id="rail" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8ba2b7"/>
+      <stop offset="1" stop-color="#5f768b"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="url(#bg)"/>
+
+  <rect x="9" y="11" width="46" height="42" rx="8" fill="none" stroke="#2e3e4e" stroke-width="1.4"/>
+
+  <rect x="14" y="18" width="30" height="5" rx="2.5" fill="url(#rail)"/>
+  <rect x="14" y="28" width="30" height="5" rx="2.5" fill="#9bb1c5"/>
+  <rect x="14" y="38" width="30" height="5" rx="2.5" fill="#6f879c"/>
+
+  <path d="M44 20H50V40" fill="none" stroke="#9fb5c8" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="50" cy="40" r="4" fill="#22384a" stroke="#8ea6bb" stroke-width="1.2"/>
+  <circle cx="50" cy="20" r="2.1" fill="#d7e2ec"/>
+
+  <circle cx="14" cy="53" r="2" fill="#647d91"/>
+  <circle cx="24" cy="53" r="2" fill="#647d91"/>
+  <circle cx="34" cy="53" r="2" fill="#647d91"/>
+</svg>

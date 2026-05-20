@@ -1,8 +1,10 @@
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { TiltCard } from "./TiltCard";
-import { Mail, Phone, Github, Linkedin, MapPin, Send } from "lucide-react";
+import { Mail, Github, Linkedin, MapPin, Send, FileDown } from "lucide-react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
+// @ts-ignore
+import resumeUrl from "../../assets/Ashwin_Gupta_Senior_AI_Engineer.pdf?url";
 
 const KaggleIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -19,6 +21,26 @@ export function Contact() {
   const [status, setStatus] = useState<
     "idle" | "sending" | "success" | "error"
   >("idle");
+  const [copyToastMessage, setCopyToastMessage] = useState<string | null>(null);
+  const [downloadToastMessage, setDownloadToastMessage] = useState<string | null>(null);
+
+  const copyEmailToClipboard = async () => {
+    try {
+      await globalThis.navigator.clipboard.writeText(
+        "ashwingupta3012@gmail.com",
+      );
+      setCopyToastMessage("Email copied to clipboard!");
+      setTimeout(() => setCopyToastMessage(null), 1600);
+    } catch {
+      setCopyToastMessage("Could not copy email");
+      setTimeout(() => setCopyToastMessage(null), 1800);
+    }
+  };
+
+  const handleResumeDownload = () => {
+    setDownloadToastMessage("Resume downloaded!");
+    setTimeout(() => setDownloadToastMessage(null), 1600);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,21 +69,22 @@ export function Contact() {
 
   const links = [
     {
+      label: "Resume",
+      value: "Ashwin_Gupta_Senior_AI_Engineer.pdf",
+      href: resumeUrl,
+      icon: <FileDown size={14} />,
+      download: "Ashwin_Gupta_Senior_AI_Engineer.pdf",
+    },
+    {
       label: "Email",
       value: "ashwingupta3012@gmail.com",
       href: "mailto:ashwingupta3012@gmail.com",
       icon: <Mail size={14} />,
     },
     {
-      label: "Phone",
-      value: "+91 79966 01575",
-      href: "tel:+917996601575",
-      icon: <Phone size={14} />,
-    },
-    {
       label: "GitHub",
-      value: "github.com/spice14",
-      href: "https://github.com/spice14",
+      value: "github.com/ughshwin",
+      href: "https://github.com/ughshwin",
       icon: <Github size={14} />,
     },
     {
@@ -89,7 +112,7 @@ export function Contact() {
       id="contact"
       style={{
         padding: isMobile ? "4rem 4vw 3rem" : "10rem 6vw 8rem",
-        background: "rgba(255,255,255,0.015)",
+        background: "transparent",
         position: "relative",
       }}
     >
@@ -110,7 +133,7 @@ export function Contact() {
             textTransform: "uppercase",
           }}
         >
-          04 — Contact
+          05 — Contact
         </span>
         <div
           style={{
@@ -134,8 +157,7 @@ export function Contact() {
           <div style={{ overflow: "hidden", marginBottom: "2rem" }}>
             <motion.h2
               initial={{ y: "100%" }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true }}
+              animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
               style={{
                 fontFamily: FONT_SERIF,
@@ -153,10 +175,47 @@ export function Contact() {
             </motion.h2>
           </div>
 
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "10px",
+              padding: "10px 16px",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: "4px",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <div
+              style={{
+                width: "7px",
+                height: "7px",
+                borderRadius: "50%",
+                background: "#ef4444",
+                boxShadow: "0 0 8px #ef4444",
+                animation: "pulse 2s infinite",
+                flexShrink: 0,
+              }}
+            />
+            <span
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.72rem",
+                letterSpacing: "0.12em",
+                color: "rgba(255,255,255,0.55)",
+                textTransform: "uppercase",
+              }}
+            >
+              Optimising: Residuals · Not: Roles
+            </span>
+          </motion.div>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             style={{
               fontFamily: FONT_SANS,
@@ -167,61 +226,33 @@ export function Contact() {
               marginBottom: "2.5rem",
             }}
           >
-            Open to full-time AI/ML engineering roles, research collaborations,
-            and interesting problems at the intersection of LLMs, distributed
-            systems, and scientific ML.
+            Heads-down building right now — not looking for roles. But if you've
+            got a hard problem, a wild idea, or just want to talk shop about
+            LLMs, distributed systems, scientific ML, or why this site is
+            unreasonably over-engineered for a portfolio, I'm always up for that.
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.25 }}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "10px",
-              padding: "10px 16px",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "4px",
-              marginBottom: "2.5rem",
-            }}
-          >
-            <div
-              style={{
-                width: "6px",
-                height: "6px",
-                borderRadius: "50%",
-                background: "#4ade80",
-                boxShadow: "0 0 8px #4ade80",
-                animation: "pulse 2s infinite",
-              }}
-            />
-            <span
-              style={{
-                fontFamily: FONT_MONO,
-                fontSize: "0.65rem",
-                letterSpacing: "0.12em",
-                color: "rgba(255,255,255,0.65)",
-                textTransform: "uppercase",
-              }}
-            >
-              Open to opportunities
-            </span>
-          </motion.div>
-
           <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
-            {links.map(({ label, value, href, icon }, i) => (
+            {links.map(({ label, value, href, icon, download }, i) => (
               <motion.a
                 key={i}
                 href={href}
-                target={href.startsWith("http") ? "_blank" : undefined}
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
+                download={download ?? undefined}
+                target={!download && href.startsWith("http") ? "_blank" : undefined}
+                rel={
+                  !download && href.startsWith("http") ? "noopener noreferrer" : undefined
+                }
                 whileHover={{ x: 4 }}
+                onClick={
+                  label === "Email"
+                    ? (e) => {
+                        e.preventDefault();
+                        void copyEmailToClipboard();
+                      }
+                    : label === "Resume"
+                    ? () => handleResumeDownload()
+                    : undefined
+                }
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -256,15 +287,44 @@ export function Contact() {
                   >
                     {label}
                   </p>
-                  <p
-                    style={{
-                      fontFamily: FONT_SANS,
-                      fontSize: "0.85rem",
-                      color: "rgba(255,255,255,0.5)",
-                    }}
-                  >
-                    {value}
-                  </p>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <p
+                      style={{
+                        fontFamily: FONT_SANS,
+                        fontSize: "0.85rem",
+                        color: "rgba(255,255,255,0.5)",
+                        margin: 0,
+                      }}
+                    >
+                      {value}
+                    </p>
+                    {(label === "Email" || label === "Resume") && (
+                      <AnimatePresence mode="wait">
+                        {(label === "Email" ? copyToastMessage : downloadToastMessage) && (
+                          <motion.p
+                            key={label === "Email" ? copyToastMessage! : downloadToastMessage!}
+                            initial={{ opacity: 0, x: -6, scale: 0.98 }}
+                            animate={{ opacity: 1, x: 0, scale: 1 }}
+                            exit={{ opacity: 0, x: -4, scale: 0.98 }}
+                            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                            style={{
+                              fontFamily: FONT_SANS,
+                              fontSize: "0.78rem",
+                              color: "#4ade80",
+                              border: "1px solid rgba(74,222,128,0.35)",
+                              background: "rgba(74,222,128,0.06)",
+                              borderRadius: "999px",
+                              padding: "4px 10px",
+                              whiteSpace: "nowrap",
+                              margin: 0,
+                            }}
+                          >
+                            {label === "Email" ? copyToastMessage : downloadToastMessage}
+                          </motion.p>
+                        )}
+                      </AnimatePresence>
+                    )}
+                  </div>
                 </div>
                 <span
                   style={{
@@ -290,8 +350,8 @@ export function Contact() {
             intensity={5}
             style={{
               borderRadius: "8px",
-              border: "1px solid rgba(255,255,255,0.07)",
-              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.11)",
+              background: "rgba(255,255,255,0.025)",
               padding: isMobile ? "1.2rem" : "2.5rem",
             }}
           >
@@ -539,12 +599,6 @@ export function Contact() {
           AI Engineer — Bangalore, India
         </span>
       </div>
-
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800&family=DM+Sans:wght@400;600&family=DM+Mono:wght@400&display=swap"
-        rel="stylesheet"
-      />
     </section>
   );
 }

@@ -1,0 +1,166 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "type": "person",
+      "id": "Ashwin Gupta"
+    },
+    {
+      "type": "person",
+      "id": "Raja Sekhar Amirapu"
+    },
+    {
+      "type": "skill",
+      "id": "inference systems"
+    },
+    {
+      "type": "skill",
+      "id": "latency optimization"
+    },
+    {
+      "type": "skill",
+      "id": "monitoring"
+    },
+    {
+      "type": "skill",
+      "id": "pipeline automation"
+    },
+    {
+      "type": "skill",
+      "id": "production ai"
+    },
+    {
+      "type": "skill",
+      "id": "real time inference"
+    },
+    {
+      "type": "person",
+      "id": "Snehasish Chakraborty"
+    },
+    {
+      "type": "skill",
+      "id": "cloud infrastructure"
+    },
+    {
+      "type": "skill",
+      "id": "gcp"
+    },
+    {
+      "type": "skill",
+      "id": "observability"
+    },
+    {
+      "type": "skill",
+      "id": "scalable systems"
+    },
+    {
+      "type": "person",
+      "id": "Kartik Mehta"
+    },
+    {
+      "type": "person",
+      "id": "Tulsi Patro"
+    },
+    {
+      "type": "person",
+      "id": "Thejaswin S"
+    },
+    {
+      "type": "person",
+      "id": "Kalp Jain"
+    },
+    {
+      "type": "person",
+      "id": "Yash Yadav"
+    }
+  ],
+  "edges": [
+    {
+      "relation": "recommended",
+      "source": "Ashwin Gupta",
+      "target": "Raja Sekhar Amirapu"
+    },
+    {
+      "relation": "skill",
+      "source": "Ashwin Gupta",
+      "target": "inference systems"
+    },
+    {
+      "relation": "skill",
+      "source": "Ashwin Gupta",
+      "target": "latency optimization"
+    },
+    {
+      "relation": "skill",
+      "source": "Ashwin Gupta",
+      "target": "monitoring"
+    },
+    {
+      "relation": "skill",
+      "source": "Ashwin Gupta",
+      "target": "pipeline automation"
+    },
+    {
+      "relation": "skill",
+      "source": "Ashwin Gupta",
+      "target": "production ai"
+    },
+    {
+      "relation": "skill",
+      "source": "Ashwin Gupta",
+      "target": "real time inference"
+    },
+    {
+      "relation": "recommended",
+      "source": "Ashwin Gupta",
+      "target": "Snehasish Chakraborty"
+    },
+    {
+      "relation": "skill",
+      "source": "Ashwin Gupta",
+      "target": "cloud infrastructure"
+    },
+    {
+      "relation": "skill",
+      "source": "Ashwin Gupta",
+      "target": "gcp"
+    },
+    {
+      "relation": "skill",
+      "source": "Ashwin Gupta",
+      "target": "observability"
+    },
+    {
+      "relation": "skill",
+      "source": "Ashwin Gupta",
+      "target": "scalable systems"
+    },
+    {
+      "relation": "recommended",
+      "source": "Ashwin Gupta",
+      "target": "Kartik Mehta"
+    },
+    {
+      "relation": "recommended",
+      "source": "Ashwin Gupta",
+      "target": "Tulsi Patro"
+    },
+    {
+      "relation": "recommended",
+      "source": "Ashwin Gupta",
+      "target": "Thejaswin S"
+    },
+    {
+      "relation": "recommended",
+      "source": "Ashwin Gupta",
+      "target": "Kalp Jain"
+    },
+    {
+      "relation": "recommended",
+      "source": "Ashwin Gupta",
+      "target": "Yash Yadav"
+    }
+  ]
+}

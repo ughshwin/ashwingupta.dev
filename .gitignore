@@ -142,3 +142,14 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+portfolio-6f25a0fe97f53dfae20e21b03e571fb773979618
+records
+reference
+data/*.pdf
+data/*.html
+data/*/
+playground/
+Ashwinportfolio
+.claude
+ashwingupta.dev
+src/assets/Ashwin_Gupta_Senior_AI_Engineer.docx

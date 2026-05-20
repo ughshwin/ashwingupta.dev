@@ -1,0 +1,65 @@
+:root {
+  --room-black: #000000;
+  --holo-text: rgba(249, 246, 238, 0.95);
+  --holo-glow: rgba(167, 226, 255, 0.2);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--room-black);
+  overflow-x: clip;
+}
+
+.spatial-scene {
+  position: relative;
+  min-height: 100dvh;
+  background: var(--room-black);
+}
+
+.spatial-environment {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: #000;
+}
+
+.spatial-environment::before {
+  content: none;
+}
+
+.spatial-environment::after {
+  content: none;
+}
+
+.hologram-interface {
+  position: relative;
+  z-index: 3;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: clip;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.hologram-interface::before {
+  content: none;
+}
+
+.hologram-content {
+  color: var(--holo-text);
+  text-shadow: 0 0 14px var(--holo-glow);
+}
+
+@media (max-width: 768px) {
+  .hologram-content {
+    text-shadow: 0 0 10px rgba(167, 226, 255, 0.16);
+  }
+}

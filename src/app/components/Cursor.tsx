@@ -8,25 +8,36 @@ export function Cursor() {
   const pos = useRef({ x: 0, y: 0 });
   const ringPos = useRef({ x: 0, y: 0 });
   const raf = useRef<number>(0);
+  const rafActive = useRef(false);
 
   useEffect(() => {
     // Don't set up cursor on touch devices
     if (isTouchDevice) return;
+
+    const lerp = () => {
+      const dx = pos.current.x - ringPos.current.x;
+      const dy = pos.current.y - ringPos.current.y;
+      ringPos.current.x += dx * 0.1;
+      ringPos.current.y += dy * 0.1;
+      if (ring.current) {
+        ring.current.style.transform = `translate(${ringPos.current.x - 20}px, ${ringPos.current.y - 20}px)`;
+      }
+      if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
+        raf.current = requestAnimationFrame(lerp);
+      } else {
+        rafActive.current = false;
+      }
+    };
 
     const move = (e: MouseEvent) => {
       pos.current = { x: e.clientX, y: e.clientY };
       if (dot.current) {
         dot.current.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`;
       }
-    };
-
-    const lerp = () => {
-      ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.1;
-      ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.1;
-      if (ring.current) {
-        ring.current.style.transform = `translate(${ringPos.current.x - 20}px, ${ringPos.current.y - 20}px)`;
+      if (!rafActive.current) {
+        rafActive.current = true;
+        raf.current = requestAnimationFrame(lerp);
       }
-      raf.current = requestAnimationFrame(lerp);
     };
 
     const onEnter = () => {
@@ -53,7 +64,6 @@ export function Cursor() {
       el.addEventListener("mouseenter", onEnter);
       el.addEventListener("mouseleave", onLeave);
     });
-    raf.current = requestAnimationFrame(lerp);
 
     return () => {
       document.removeEventListener("mousemove", move);

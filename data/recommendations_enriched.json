@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Raja Sekhar Amirapu",
+    "text": "Ashwin is a good team player I worked with him on the conversation analytics project\nAshwin's primary role involved developing the telephony ingestion layer, where he used PJSIP to build highly stable and low-latency SIP call-handling components. His specific achievements now include expertise in infrastructure automation:\n\nPJSIP & SIP Protocols: Building reliable, high-throughput SIP session management, call capture, and media handling components.\n\nPipeline Integration: Seamlessly integrating the PJSIP pipeline with downstream speech-to-text, NLP, and sentiment-analysis modules.\n\nPerformance Tuning: Optimizing media paths to support ML and GenAI-driven analytics models.\n\nDebugging: Demonstrating excellent debugging skills, particularly in complex SIP/RTP scenarios.\n\nStrengths and Recommendation\nAshwin is described as technically strong, dependable, and proactive. He consistently delivered production-ready code, demonstrated strong technical ownership, and enhanced the development workflow through automation.\n\nHe is highly recommended for roles in VoIP engineering, telephony platforms, real-time media systems, or conversational-AI initiatives due to his deep expertise in PJSIP, SIP, call-center analytics integration,",
+    "skills": [
+      "inference systems",
+      "latency optimization",
+      "monitoring",
+      "pipeline automation",
+      "production ai",
+      "real time inference"
+    ]
+  },
+  {
+    "name": "Snehasish Chakraborty",
+    "text": "I had the pleasure of working with Ashwin on a highly complex GCP infrastructure setup, where his expertise in scalability, testing, and debugging proved invaluable. He played a crucial role in designing and implementing the scalability logic, ensuring that our infrastructure could handle increasing workloads efficiently. He structured approach to testing the infra setup helped identify potential bottlenecks early, saving us from critical failures down the line.",
+    "skills": [
+      "cloud infrastructure",
+      "gcp",
+      "monitoring",
+      "observability",
+      "scalable systems"
+    ]
+  },
+  {
+    "name": "Kartik Mehta",
+    "text": "Ashwin has been working with me for one innovation based initiative.\nHe was always someone who would keep an open mind, welcome challenges or suggestions, and think to deliver end to end solution.\n\nI rate Ashwin highly, not just for his knowledge and skills, but his attitude to continue trying improvisations under pressure and delivering for the same.\n\nI wish him all the best for all his future endevors and am sure, he will be adding a great value wherever he works, through his expertise.",
+    "skills": []
+  },
+  {
+    "name": "Tulsi Patro",
+    "text": "I have had the pleasure of working closely with Ashwin and without hesitation, I can say he is a true all-rounder in every sense. His unwavering willingness to embrace new challenges and explore uncharted territories is truly inspiring.\nAshwin is a risk-taker, never shying away from trying innovative approaches, and what sets him apart is his ability to convert these risks into successful implementations.\nHis commitment to meeting deadlines while upholding the quality of work is a testament to his professionalism and dedication.\nIt's a privilege to work alongside someone like Ashwin whose passion for learning and fearlessness in taking on challenges inspires the entire team to push boundaries and strive for excellence.",
+    "skills": []
+  },
+  {
+    "name": "Thejaswin S",
+    "text": "I highly recommend Ashwin for his exceptional work ethic and task efficiency. He's a dedicated and helpful professional, showcasing extensive expertise in ML and Generative AI. A valuable team member, Ashwin consistently delivers outstanding results",
+    "skills": [
+      "production ai"
+    ]
+  },
+  {
+    "name": "Kalp Jain",
+    "text": "I had the privilege of working alongside Ashwin Gupta for several months as part of BMSCE IEEE, and I can confidently say that he is an exceptional individual. Ashwin puts in a tremendous amount of effort into every task he undertakes, ensuring that everything is executed with perfection.\n\nAshwin's positive attitude and enthusiasm to learn new things made him an invaluable member of our team. He is approachable and was always willing to go the extra mile to help others and ensure everyone was on the same page. His communication skills are excellent, and he articulates his ideas with clarity and precision.\n\nWhat impressed me the most about Ashwin was his ability to remain calm and composed under pressure. He managed complex tasks with ease. I highly recommend Ashwin Gupta to any organization seeking a dedicated, hardworking, and dependable individual.",
+    "skills": []
+  },
+  {
+    "name": "Yash Yadav",
+    "text": "Ashwin has been one of the most useful part of the team Spartificial for past few months. He is self-motivated and gets the work done whatever he gets assigned to. His ML understanding and the ability to clearly elaborate his work are two of his top skills among many more!",
+    "skills": []
+  }
+]

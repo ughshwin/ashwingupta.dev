@@ -1,47 +1,67 @@
-import { Hero } from "./components/Hero";
-import { About } from "./components/About";
-import { Skills } from "./components/Skills";
-import { Projects } from "./components/Projects";
-import { Contact } from "./components/Contact";
 import { Cursor } from "./components/Cursor";
+import { EnvironmentLayer } from "./components/EnvironmentLayer";
+import { AIBackground } from "./components/AIBackground";
 import { useIsMobile } from "../hooks/useMediaQuery";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 export default function App() {
   const isMobile = useIsMobile();
 
   return (
     <div
-      style={{
-        background: "#0a0a0a",
-        position: "relative",
-        minHeight: "100vh",
-        cursor: isMobile ? "auto" : "none",
-        overflowX: "hidden",
-      }}
+      className="spatial-scene"
+      style={{ cursor: isMobile ? "auto" : "none" }}
     >
+      <EnvironmentLayer />
+      <AIBackground />
       <Cursor />
-      {/* Grain texture */}
+
       <div
         style={{
           position: "fixed",
           inset: 0,
-          zIndex: 0,
-          pointerEvents: "none",
-          opacity: 0.04,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-          backgroundSize: isMobile ? "150px 150px" : "200px 200px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "1rem",
+          zIndex: 10,
+          padding: "2rem",
+          textAlign: "center",
         }}
-      />
-      <div style={{ position: "relative", zIndex: 1 }}>
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Contact />
+      >
+        <p
+          style={{
+            fontFamily: '"DM Mono", monospace',
+            fontSize: "0.65rem",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.35)",
+            margin: 0,
+          }}
+        >
+          ashwingupta.dev
+        </p>
+        <p
+          style={{
+            fontFamily: '"Playfair Display", Georgia, serif',
+            fontSize: "clamp(1.1rem, 3vw, 1.6rem)",
+            fontWeight: 700,
+            color: "rgba(255,255,255,0.82)",
+            margin: 0,
+            lineHeight: 1.5,
+            maxWidth: "520px",
+          }}
+        >
+          Down for a complete overhaul.
+          <br />
+          Something great is going to be here soon — very soon.
+        </p>
       </div>
+
       <Analytics />
+      <SpeedInsights />
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { motion } from "motion/react";
-import { TiltCard } from "./TiltCard";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 
 const FONT_SERIF = '"Playfair Display", Georgia, serif';
@@ -9,39 +8,58 @@ const FONT_SANS = '"DM Sans", sans-serif';
 // Directly from the doc — Core Capabilities
 const capabilities = [
   {
-    title: "AI Systems Architecture",
-    desc: "Designing production-grade, observable, and scalable intelligent systems under latency, cost, and regulatory constraints.",
-    tags: ["LLM Deployment", "Observability", "SLA Design", "Cost Modeling"],
-  },
-  {
-    title: "Distributed Inference & Real-Time ML",
-    desc: "Concurrency scaling, SLA preservation, cost modeling, low-latency pipelines.",
-    tags: ["vLLM", "Batching", "Concurrency", "Low-latency"],
-  },
-  {
-    title: "Retrieval-Augmented Systems (RAG)",
-    desc: "Index design, chunking strategy, embedding pipelines, HNSW-based vector search, grounding and hallucination mitigation.",
+    title: "Production AI Infrastructure",
+    desc: "Operated inference under 300ms latency SLOs, 1,600+ concurrent sessions, and cost ceilings where token spend maps directly to monthly burn — $118K → $8K/month.",
     tags: [
-      "FAISS / HNSW",
-      "Chunking",
-      "Embeddings",
-      "Hallucination Mitigation",
+      "latency budgets",
+      "SLA design",
+      "cost modeling",
+      "service observability",
     ],
   },
   {
-    title: "Model Monitoring & Drift Detection",
-    desc: "Metric design (BLEU, ROUGE-L, cosine similarity, METEOR), time-series anomaly detection, governance and rollout safety.",
-    tags: ["BLEU / ROUGE-L", "MACD Anomaly", "METEOR", "Rollout Safety"],
+    title: "Distributed Inference Systems",
+    desc: "GIL'd threading caused memory ballooning — replaced with CPU-pinned parallel processes to escape GIL and asyncio + uvloop to replace the threading layer. 20 → 140+ concurrent calls per VM under sustained production load. Latency profiled at 99th percentile, not average.",
+    tags: [
+      "async runtimes",
+      "batching",
+      "capacity planning",
+      "tail-latency control",
+    ],
   },
   {
-    title: "Graph-Based Recommendation Systems",
-    desc: "Weighted directed graphs, hierarchy modeling, heuristic scoring, optimized traversal for real-time inference.",
-    tags: ["Graph ML", "Heuristic Scoring", "Edge Traversal", "sub-50ms"],
+    title: "Retrieval & Indexing Infrastructure",
+    desc: "HNSW indexing with dense embeddings, configurable Top-K (3–4), and 1024–1536 token context windows tuned for recall vs. coherence. Reproducible index artifacts for air-gapped operation.",
+    tags: [
+      "FAISS/HNSW",
+      "chunking strategies",
+      "embedding maintenance",
+      "retrieval grounding",
+    ],
   },
   {
-    title: "Physics-Informed Machine Learning",
-    desc: "PDE/ODE-constrained learning (PINNs), loss balancing, boundary condition modeling, regime-aware representations.",
-    tags: ["PINNs", "PDEs/ODEs", "PHYSCLIP", "Contrastive Learning"],
+    title: "Monitoring, Telemetry & Failure Isolation",
+    desc: "250K+ log lines reconstructed in <5s via GCP Logging APIs. MTTR: 1–2 hours → ~5 minutes. Trace correlation built into the stack — not bolted on after the incident.",
+    tags: [
+      "SLA monitoring",
+      "log correlation",
+      "telemetry pipelines",
+      "failure domain isolation",
+    ],
+  },
+  {
+    title: "Graph-Based Retrieval Systems",
+    desc: "Weighted directed graph encoding multi-level skill hierarchies as typed edges with dynamic weight updates. Sub-50ms inference on NVIDIA T4 under production concurrency. 30% relevance improvement over flat matching.",
+    tags: ["graph traversal", "weighted scoring", "sub-50ms inference loops"],
+  },
+  {
+    title: "Scientific ML Systems",
+    desc: "Dual-loss PINN framework embedding PDE/ODE constraints directly into the optimization objective. Stable convergence validated across 6 physics benchmarks with limited labeled data — fluid, structural, and thermal domains.",
+    tags: [
+      "physics-informed models",
+      "physics-constrained training",
+      "regime classification",
+    ],
   },
 ];
 
@@ -72,7 +90,7 @@ export function Skills() {
       id="skills"
       style={{
         padding: isMobile ? "4rem 4vw" : "10rem 6vw",
-        background: "rgba(255,255,255,0.012)",
+        background: "transparent",
         position: "relative",
       }}
     >
@@ -116,15 +134,14 @@ export function Skills() {
         <div
           style={{
             position: isMobile ? "relative" : "sticky",
-            top: "6rem",
+            top: isMobile ? "0" : "6rem",
             marginBottom: isMobile ? "2rem" : "0",
           }}
         >
           <div style={{ overflow: "hidden" }}>
             <motion.h2
               initial={{ y: "100%" }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true }}
+              animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
               style={{
                 fontFamily: FONT_SERIF,
@@ -138,13 +155,12 @@ export function Skills() {
                 margin: "0 0 1.2rem",
               }}
             >
-              The stack behind the systems.
+              What runs in production.
             </motion.h2>
           </div>
           <motion.p
             initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
             style={{
               fontFamily: FONT_SANS,
@@ -155,7 +171,7 @@ export function Skills() {
               marginBottom: "2.5rem",
             }}
           >
-            Built for production — not notebooks.
+            Profiled under load. Not just imported.
           </motion.p>
 
           <p
@@ -172,23 +188,13 @@ export function Skills() {
           </p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
             style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}
           >
-            {techStack.map((t, i) => (
+            {techStack.map((t) => (
               <motion.span
                 key={t}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.03 * i }}
-                whileHover={{
-                  color: "#e8e0d0",
-                  borderColor: "rgba(255,255,255,0.42)",
-                  y: -2,
-                }}
                 style={{
                   fontFamily: FONT_MONO,
                   fontSize: "0.6rem",
@@ -209,21 +215,22 @@ export function Skills() {
         </div>
 
         {/* RIGHT — 3D capability cards from doc */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+          }}
+        >
           {capabilities.map((cap, gi) => (
-            <motion.div
-              key={gi}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: gi * 0.08 }}
+            <div
+              key={cap.title}
             >
-              <TiltCard
-                intensity={7}
+              <div
                 style={{
                   borderRadius: "10px",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  background: "rgba(255,255,255,0.02)",
+                  border: "1px solid rgba(255,255,255,0.11)",
+                  background: "rgba(255,255,255,0.025)",
                   padding: "1.8rem 2rem",
                 }}
               >
@@ -288,17 +295,12 @@ export function Skills() {
                     </span>
                   ))}
                 </div>
-              </TiltCard>
-            </motion.div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
 
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800&family=DM+Sans:wght@400;600&family=DM+Mono:wght@400&display=swap"
-        rel="stylesheet"
-      />
     </section>
   );
 }

@@ -1,0 +1,61 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import App from "../app/App";
+import "../styles/index.css";
+import profilePictureUrl from "../assets/profilePicture.webp?url";
+
+const canonical = "https://www.ashwingupta.dev/";
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Ashwin Gupta",
+  "url": "https://www.ashwingupta.dev",
+  "jobTitle": "AI Systems Researcher",
+  "worksFor": { "@type": "Organization", "name": "Coforge" },
+  "alumniOf": [
+    { "@type": "EducationalOrganization", "name": "IIIT Bangalore" },
+    { "@type": "EducationalOrganization", "name": "BMS College of Engineering" }
+  ],
+  "knowsAbout": [
+    "Inference Orchestration",
+    "Physics-Informed ML",
+    "RAG Systems",
+    "LLM Inference",
+    "Distributed Systems",
+    "Scientific Machine Learning",
+    "AsyncIO Concurrency",
+    "Vector Search"
+  ],
+  "sameAs": [
+    "https://github.com/ughshwin",
+    "https://www.linkedin.com/in/ashwingupta3012/",
+    "https://www.kaggle.com/ashwingupta3012"
+  ],
+  "email": "ashwingupta3012@gmail.com",
+  "description": "I design how AI systems behave under real-world constraints — from decision layers and inference routing to physics-informed models.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bangalore",
+    "addressCountry": "IN"
+  }
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Ashwin Gupta — AI Systems Researcher",
+  "url": "https://www.ashwingupta.dev",
+  "author": { "@type": "Person", "name": "Ashwin Gupta" }
+};
+---
+
+<BaseLayout
+  title="Ashwin Gupta — AI Systems Researcher | Inference, Orchestration, Scientific ML"
+  description="Ashwin Gupta designs how AI systems behave under real-world constraints — inference routing, orchestration layers, and physics-informed models. AI Engineer at Coforge. Based in Bangalore."
+  canonical={canonical}
+  jsonLd={[personSchema, websiteSchema]}
+>
+  <link slot="head" rel="preload" as="image" href={profilePictureUrl} fetchpriority="high" type="image/webp" />
+  <App client:idle />
+</BaseLayout>
