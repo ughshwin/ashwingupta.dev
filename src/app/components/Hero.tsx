@@ -1,8 +1,10 @@
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, FileDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useRef, useCallback, useState } from "react";
 import { useIsMobile, useIsTouchDevice } from "../../hooks/useMediaQuery";
 import profilePicture from "../../assets/profilePicture.webp?url";
+// @ts-ignore
+import resumeUrl from "../../assets/Ashwin_Gupta_Senior_AI_Engineer.pdf?url";
 
 const PROFILE_IMAGE = profilePicture;
 const CONTACT_EMAIL = "ashwingupta3012@gmail.com";
@@ -14,18 +16,25 @@ export function Hero() {
   const layerPhoto = useRef<HTMLDivElement>(null);
   const layerPills = useRef<HTMLDivElement>(null);
   const pendingRaf = useRef(0);
-  const [copyToastMessage, setCopyToastMessage] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = useCallback((msg: string, duration = 1600) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), duration);
+  }, []);
 
   const copyEmailToClipboard = useCallback(async () => {
     try {
       await globalThis.navigator.clipboard.writeText(CONTACT_EMAIL);
-      setCopyToastMessage("Email copied to clipboard!");
-      setTimeout(() => setCopyToastMessage(null), 1600);
+      showToast("Email copied to clipboard!");
     } catch {
-      setCopyToastMessage("Could not copy email");
-      setTimeout(() => setCopyToastMessage(null), 1800);
+      showToast("Could not copy email", 1800);
     }
-  }, []);
+  }, [showToast]);
+
+  const handleResumeDownload = useCallback(() => {
+    showToast("Resume downloaded!");
+  }, [showToast]);
 
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
     if (pendingRaf.current) return;
@@ -361,77 +370,45 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.7 }}
             style={{
-              display: "flex",
-              flexDirection: isMobile ? "column" : "row",
-              alignItems: isMobile ? "flex-start" : "center",
-              gap: isMobile ? "1rem" : "1.5rem",
+              display: "inline-flex",
+              flexDirection: "column",
+              alignItems: "stretch",
+              gap: "0.65rem",
+              position: "relative",
             }}
           >
-            {/* Status pill */}
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "8px 14px",
-                border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: "4px",
-              }}
-            >
-              <div
-                style={{
-                  width: "6px",
-                  height: "6px",
-                  borderRadius: "50%",
-                  background: "#facc15",
-                  boxShadow: "0 0 8px #facc15",
-                  animation: "pulse 2s infinite",
-                  flexShrink: 0,
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: '"DM Mono", monospace',
-                  fontSize: "0.62rem",
-                  letterSpacing: "0.12em",
-                  color: "rgba(255,255,255,0.55)",
-                  textTransform: "uppercase",
-                }}
-              >
-                Building, not Browsing
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                gap: "12px",
-                alignItems: "center",
-              }}
-            >
-              <AnimatePresence mode="wait">
-                {copyToastMessage && (
-                  <motion.div
-                    key={copyToastMessage}
-                    initial={{ opacity: 0, x: -8, scale: 0.98 }}
-                    animate={{ opacity: 1, x: 0, scale: 1 }}
-                    exit={{ opacity: 0, x: -4, scale: 0.98 }}
-                    transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-                    style={{
-                      fontFamily: '"DM Sans", sans-serif',
-                      fontSize: "0.78rem",
-                      color: "#4ade80",
-                      border: "1px solid rgba(74,222,128,0.35)",
-                      background: "rgba(74,222,128,0.06)",
-                      borderRadius: "999px",
-                      padding: "6px 12px",
-                      whiteSpace: "nowrap",
-                      boxShadow: "0 6px 20px rgba(0,0,0,0.25)",
-                    }}
-                  >
-                    {copyToastMessage}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+            {/* Toast — absolutely positioned so it never affects row width */}
+            <AnimatePresence mode="wait">
+              {toastMessage && (
+                <motion.div
+                  key={toastMessage}
+                  initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                  transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 10px)",
+                    left: 0,
+                    fontFamily: '"DM Sans", sans-serif',
+                    fontSize: "0.78rem",
+                    color: "#4ade80",
+                    border: "1px solid rgba(74,222,128,0.35)",
+                    background: "rgba(74,222,128,0.06)",
+                    borderRadius: "999px",
+                    padding: "6px 12px",
+                    whiteSpace: "nowrap",
+                    boxShadow: "0 6px 20px rgba(0,0,0,0.25)",
+                    pointerEvents: "none",
+                  }}
+                >
+                  {toastMessage}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Row 1 — icon buttons (+ Download Resume on desktop) */}
+            <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
               {[
                 {
                   href: `mailto:${CONTACT_EMAIL}`,
@@ -490,6 +467,8 @@ export function Hero() {
                     color: "rgba(255,255,255,0.65)",
                     textDecoration: "none",
                     transition: "all 0.2s",
+                    flexShrink: 0,
+                    cursor: isMobile ? "auto" : "none",
                   }}
                   onMouseEnter={(e) => {
                     const el = e.currentTarget as HTMLElement;
@@ -505,6 +484,134 @@ export function Hero() {
                   {icon}
                 </motion.a>
               ))}
+              {/* Download Resume — desktop only in this row */}
+              {!isMobile && (
+                <motion.a
+                  href={resumeUrl}
+                  download="Ashwin_Gupta_Senior_AI_Engineer.pdf"
+                  onClick={handleResumeDownload}
+                  whileHover={{ y: -2 }}
+                  style={{
+                    height: "38px",
+                    padding: "0 14px",
+                    borderRadius: "999px",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "7px",
+                    color: "rgba(255,255,255,0.65)",
+                    textDecoration: "none",
+                    transition: "all 0.2s",
+                    cursor: "none",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.borderColor = "#e8e0d0";
+                    el.style.color = "#e8e0d0";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.borderColor = "rgba(255,255,255,0.12)";
+                    el.style.color = "rgba(255,255,255,0.65)";
+                  }}
+                >
+                  <FileDown size={14} strokeWidth={1.5} />
+                  <span
+                    style={{
+                      fontFamily: '"DM Mono", monospace',
+                      fontSize: "0.62rem",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Download Resume
+                  </span>
+                </motion.a>
+              )}
+            </div>
+
+            {/* Row 2 — Download Resume, mobile only */}
+            {isMobile && (
+              <motion.a
+                href={resumeUrl}
+                download="Ashwin_Gupta_Senior_AI_Engineer.pdf"
+                onClick={handleResumeDownload}
+                whileHover={{ y: -2 }}
+                style={{
+                  height: "38px",
+                  borderRadius: "999px",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "7px",
+                  color: "rgba(255,255,255,0.65)",
+                  textDecoration: "none",
+                  transition: "all 0.2s",
+                  cursor: "auto",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.borderColor = "#e8e0d0";
+                  el.style.color = "#e8e0d0";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.borderColor = "rgba(255,255,255,0.12)";
+                  el.style.color = "rgba(255,255,255,0.65)";
+                }}
+              >
+                <FileDown size={14} strokeWidth={1.5} />
+                <span
+                  style={{
+                    fontFamily: '"DM Mono", monospace',
+                    fontSize: "0.62rem",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Download Resume
+                </span>
+              </motion.a>
+            )}
+
+            {/* Row 3 (Row 2 on desktop) — Building not Browsing, full width */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                padding: "8px 14px",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "4px",
+              }}
+            >
+              <div
+                style={{
+                  width: "6px",
+                  height: "6px",
+                  borderRadius: "50%",
+                  background: "#facc15",
+                  boxShadow: "0 0 8px #facc15",
+                  animation: "pulse 2s infinite",
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: '"DM Mono", monospace',
+                  fontSize: "0.62rem",
+                  letterSpacing: "0.12em",
+                  color: "rgba(255,255,255,0.55)",
+                  textTransform: "uppercase",
+                }}
+              >
+                Building, not Browsing
+              </span>
             </div>
           </motion.div>
         </div>

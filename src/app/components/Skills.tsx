@@ -19,7 +19,7 @@ const capabilities = [
   },
   {
     title: "Distributed Inference Systems",
-    desc: "asyncio + uvloop replacing thread-blocked GIL-contended workers. 20 → 140+ concurrent calls per VM under sustained production load. Latency profiled at 99th percentile, not average.",
+    desc: "GIL'd threading caused memory ballooning — replaced with CPU-pinned parallel processes to escape GIL and asyncio + uvloop to replace the threading layer. 20 → 140+ concurrent calls per VM under sustained production load. Latency profiled at 99th percentile, not average.",
     tags: [
       "async runtimes",
       "batching",

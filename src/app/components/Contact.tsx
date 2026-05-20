@@ -1,8 +1,10 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { TiltCard } from "./TiltCard";
-import { Mail, Github, Linkedin, MapPin, Send } from "lucide-react";
+import { Mail, Github, Linkedin, MapPin, Send, FileDown } from "lucide-react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
+// @ts-ignore
+import resumeUrl from "../../assets/Ashwin_Gupta_Senior_AI_Engineer.pdf?url";
 
 const KaggleIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -20,6 +22,7 @@ export function Contact() {
     "idle" | "sending" | "success" | "error"
   >("idle");
   const [copyToastMessage, setCopyToastMessage] = useState<string | null>(null);
+  const [downloadToastMessage, setDownloadToastMessage] = useState<string | null>(null);
 
   const copyEmailToClipboard = async () => {
     try {
@@ -32,6 +35,11 @@ export function Contact() {
       setCopyToastMessage("Could not copy email");
       setTimeout(() => setCopyToastMessage(null), 1800);
     }
+  };
+
+  const handleResumeDownload = () => {
+    setDownloadToastMessage("Resume downloaded!");
+    setTimeout(() => setDownloadToastMessage(null), 1600);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -60,6 +68,13 @@ export function Contact() {
   };
 
   const links = [
+    {
+      label: "Resume",
+      value: "Ashwin_Gupta_Senior_AI_Engineer.pdf",
+      href: resumeUrl,
+      icon: <FileDown size={14} />,
+      download: "Ashwin_Gupta_Senior_AI_Engineer.pdf",
+    },
     {
       label: "Email",
       value: "ashwingupta3012@gmail.com",
@@ -179,13 +194,14 @@ export function Contact() {
           </motion.p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
-            {links.map(({ label, value, href, icon }, i) => (
+            {links.map(({ label, value, href, icon, download }, i) => (
               <motion.a
                 key={i}
                 href={href}
-                target={href.startsWith("http") ? "_blank" : undefined}
+                download={download ?? undefined}
+                target={!download && href.startsWith("http") ? "_blank" : undefined}
                 rel={
-                  href.startsWith("http") ? "noopener noreferrer" : undefined
+                  !download && href.startsWith("http") ? "noopener noreferrer" : undefined
                 }
                 whileHover={{ x: 4 }}
                 onClick={
@@ -194,6 +210,8 @@ export function Contact() {
                         e.preventDefault();
                         void copyEmailToClipboard();
                       }
+                    : label === "Resume"
+                    ? () => handleResumeDownload()
                     : undefined
                 }
                 style={{
@@ -230,45 +248,44 @@ export function Contact() {
                   >
                     {label}
                   </p>
-                  <p
-                    style={{
-                      fontFamily: FONT_SANS,
-                      fontSize: "0.85rem",
-                      color: "rgba(255,255,255,0.5)",
-                    }}
-                  >
-                    {value}
-                  </p>
-                  {label === "Email" && (
-                    <AnimatePresence mode="wait">
-                      {copyToastMessage && (
-                        <motion.p
-                          key={copyToastMessage}
-                          initial={{ opacity: 0, y: 6, scale: 0.98 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -4, scale: 0.98 }}
-                          transition={{
-                            duration: 0.75,
-                            ease: [0.22, 1, 0.36, 1],
-                          }}
-                          style={{
-                            fontFamily: FONT_SANS,
-                            fontSize: "0.78rem",
-                            color: "#4ade80",
-                            border: "1px solid rgba(74,222,128,0.35)",
-                            background: "rgba(74,222,128,0.06)",
-                            borderRadius: "999px",
-                            padding: "4px 10px",
-                            marginTop: "8px",
-                            display: "inline-block",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {copyToastMessage}
-                        </motion.p>
-                      )}
-                    </AnimatePresence>
-                  )}
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <p
+                      style={{
+                        fontFamily: FONT_SANS,
+                        fontSize: "0.85rem",
+                        color: "rgba(255,255,255,0.5)",
+                        margin: 0,
+                      }}
+                    >
+                      {value}
+                    </p>
+                    {(label === "Email" || label === "Resume") && (
+                      <AnimatePresence mode="wait">
+                        {(label === "Email" ? copyToastMessage : downloadToastMessage) && (
+                          <motion.p
+                            key={label === "Email" ? copyToastMessage! : downloadToastMessage!}
+                            initial={{ opacity: 0, x: -6, scale: 0.98 }}
+                            animate={{ opacity: 1, x: 0, scale: 1 }}
+                            exit={{ opacity: 0, x: -4, scale: 0.98 }}
+                            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                            style={{
+                              fontFamily: FONT_SANS,
+                              fontSize: "0.78rem",
+                              color: "#4ade80",
+                              border: "1px solid rgba(74,222,128,0.35)",
+                              background: "rgba(74,222,128,0.06)",
+                              borderRadius: "999px",
+                              padding: "4px 10px",
+                              whiteSpace: "nowrap",
+                              margin: 0,
+                            }}
+                          >
+                            {label === "Email" ? copyToastMessage : downloadToastMessage}
+                          </motion.p>
+                        )}
+                      </AnimatePresence>
+                    )}
+                  </div>
                 </div>
                 <span
                   style={{

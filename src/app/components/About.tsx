@@ -18,8 +18,10 @@ const experience = [
     to: "Present",
     role: "AI Engineer",
     company: "Coforge",
+    partTime: false,
+    workTitles: ["Integration Engineer", "Infrastructure Engineer"],
     detail:
-      "Owns the inference and concurrency architecture for HSBC voice AI — redesigned from thread pool to asyncio event loop, eliminating GIL contention across the full SIP/STT/LLM pipeline · 7× session capacity · $1.3M annualized savings · MTTR 1–2hr → ~5min via cross-stack log correlation",
+      "Owns the inference and concurrency architecture for HSBC voice AI — replaced GIL'd threading (memory ballooning) with CPU-pinned parallel processes and asyncio + uvloop, eliminating GIL contention across the full SIP/STT/LLM pipeline · 7× session capacity · $1.3M annualized savings · MTTR 1–2hr → ~5min via cross-stack log correlation",
     logo: coforgeLogoImg,
     logoH: 55,
     awards: [
@@ -40,6 +42,8 @@ const experience = [
     to: "May 2024",
     role: "Data Scientist",
     company: "Gida Technologies",
+    partTime: false,
+    workTitles: ["Chatbot Developer", "Recommendation Engineer", "Product Engineer"],
     detail: "163+ language RAG systems, sub-50ms recommenders",
     logo: gidaLogoImg,
     logoH: 55,
@@ -49,6 +53,7 @@ const experience = [
     to: "Sep 2022",
     role: "Head of Machine Learning",
     company: "IISc",
+    partTime: true,
     detail:
       "Founded & led the ML team at NMCAD Lab, Aerospace Engg. — eVTOL design optimisation using ML/DL under Dr Dineshkumar Harursampath. 5 projects delivered in 8 months.",
     logo: iiscLogoImg,
@@ -59,6 +64,7 @@ const experience = [
     to: "Dec 2021",
     role: "AI Product Developer",
     company: "CellStrat",
+    partTime: true,
     detail:
       "Built production-ready AI products based on OpenAI research for cellstrathub.com — 11k+ global AI developers at time of deployment.",
     logo: cellstratLogoImg,
@@ -69,6 +75,7 @@ const experience = [
     to: "Oct 2022",
     role: "Graphic Designer",
     company: "OutLawed",
+    partTime: true,
     detail:
       "Designed social media content and teaching aids to empower underprivileged students through grassroots teaching programs.",
     logo: outlawedLogoImg,
@@ -245,10 +252,10 @@ export function About() {
             }}
           >
             Controla is inference infrastructure that gets smarter the longer it
-            runs. ScholarOS is
-            structured research execution. PHYSCLIP aligns symbolic physics with
-            observed behavior. The PINNs work embeds PDEs into training. These
-            are not tools — they are systems with decision logic.
+            runs. ScholarOS is structured research execution. PHYSCLIP aligns
+            symbolic physics with observed behavior. The PINNs work embeds PDEs
+            into training. These are not tools — they are systems with decision
+            logic.
           </motion.p>
 
           <div
@@ -323,7 +330,20 @@ export function About() {
           </p>
           <div>
             {experience.map(
-              ({ from, to, role, company, detail, logo, awards }, i) => (
+              (
+                {
+                  from,
+                  to,
+                  role,
+                  company,
+                  partTime = false,
+                  workTitles,
+                  detail,
+                  logo,
+                  awards,
+                },
+                i,
+              ) => (
                 <div
                   key={i}
                   style={{
@@ -416,8 +436,22 @@ export function About() {
                             fontWeight: 400,
                           }}
                         >
-                          @ {company}
+                          @ {company} •{" "}
+                          {partTime ? "Part-time" : "Full-time"}
                         </span>
+                        {workTitles && (
+                          <span
+                            style={{
+                              display: "block",
+                              fontWeight: 400,
+                              fontSize: "0.78rem",
+                              color: "rgba(255,255,255,0.65)",
+                              marginTop: "2px",
+                            }}
+                          >
+                            {workTitles.join(" · ")}
+                          </span>
+                        )}
                       </p>
                     </div>
                     {detail && (
@@ -428,6 +462,7 @@ export function About() {
                           color: "rgba(255,255,255,0.48)",
                           lineHeight: 1.5,
                           paddingLeft: logo ? "62px" : "0",
+                          marginTop: "0.55rem",
                           marginBottom: awards ? "0.6rem" : 0,
                         }}
                       >

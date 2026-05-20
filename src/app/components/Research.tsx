@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type React from "react";
 import {
   useIsMobile,
@@ -21,8 +21,7 @@ function renderBullet(text: string): React.ReactNode {
     ),
   );
 }
-// @ts-ignore
-import pinnsPdfUrl from "../../assets/PINNs whitepaper.pdf?url";
+const pinnsPdfUrl = "/PINNs_whitepaper.pdf";
 
 const FONT_SERIF = '"Playfair Display", Georgia, serif';
 const FONT_MONO = '"DM Mono", monospace';
@@ -93,7 +92,7 @@ const items: ResearchItem[] = [
     type: "whitepaper",
     name: "PINNs White Paper",
     title: "Physics-Informed Inference for Partial Observability",
-    link: pinnsPdfUrl as string,
+    link: pinnsPdfUrl,
     bullets: [
       "**Partially observed internal state** creates a blind-control problem — sparse telemetry leaves conventional numerical solvers guessing what sensors never see.",
       "**PDE constraints are embedded inside the training objective** — the network fits observed telemetry while satisfying governing dynamics simultaneously.",
@@ -400,16 +399,38 @@ function ResearchCard({ item }: { item: ResearchItem }) {
 export function Research() {
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
+  const [isStuck, setIsStuck] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const root = document.querySelector(
+      ".hologram-interface",
+    ) as HTMLElement | null;
+    if (!root) return;
+    const check = () => {
+      const top = sectionRef.current?.offsetTop ?? 0;
+      setIsStuck((prev) => {
+        if (!prev && root.scrollTop > top + 10) return true;
+        if (prev && root.scrollTop < top + 7) return false;
+        return prev;
+      });
+    };
+    root.addEventListener("scroll", check, { passive: true });
+    return () => root.removeEventListener("scroll", check);
+  }, []);
+
   const maxPerRow = isMobile ? 1 : isTablet ? 2 : 3;
   const rows = useEqualRows(items.length, maxPerRow);
 
   return (
     <section
+      ref={sectionRef}
       id="research"
       style={{
         padding: isMobile ? "5rem 4vw" : "10rem 6vw",
         background: "transparent",
         position: "relative",
+        overflowAnchor: "none",
       }}
     >
       {/* Sticky heading block */}
@@ -422,8 +443,8 @@ export function Research() {
           marginRight: isMobile ? "-4vw" : "-6vw",
           paddingLeft: isMobile ? "4vw" : "6vw",
           paddingRight: isMobile ? "4vw" : "6vw",
-          paddingTop: "1.5rem",
-          paddingBottom: "1.5rem",
+          paddingTop: "0.85rem",
+          paddingBottom: "0.85rem",
           background:
             "linear-gradient(to right, rgba(5,5,8,0.52) 0%, rgba(5,5,8,0.52) 45%, rgba(5,5,8,0) 88%)",
           backdropFilter: "blur(6px)",
@@ -437,16 +458,17 @@ export function Research() {
             display: "flex",
             alignItems: "center",
             gap: "2rem",
-            marginBottom: "2rem",
+            marginBottom: "1rem",
           }}
         >
           <span
             style={{
               fontFamily: FONT_MONO,
-              fontSize: "0.62rem",
+              fontSize: isStuck ? "0.5rem" : "0.62rem",
               letterSpacing: "0.2em",
               color: "rgba(255,255,255,0.4)",
               textTransform: "uppercase",
+              transition: "font-size 0.3s ease",
             }}
           >
             03 — Research & Systems Thinking
@@ -468,14 +490,19 @@ export function Research() {
             transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
             style={{
               fontFamily: FONT_SERIF,
-              fontSize: isMobile
-                ? "clamp(1.8rem, 7vw, 4rem)"
-                : "clamp(3rem, 6vw, 5.5rem)",
+              fontSize: isStuck
+                ? isMobile
+                  ? "clamp(1.26rem, 4.9vw, 2.8rem)"
+                  : "clamp(1.8rem, 3.6vw, 3.3rem)"
+                : isMobile
+                  ? "clamp(1.8rem, 7vw, 4rem)"
+                  : "clamp(3rem, 6vw, 5.5rem)",
               fontWeight: 800,
               lineHeight: 1.1,
               letterSpacing: "-0.04em",
               color: "#fafaf8",
               margin: 0,
+              transition: "font-size 0.30s ease",
             }}
           >
             Observe. Abstract. Construct.

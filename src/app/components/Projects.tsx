@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   useIsMobile,
   useIsTablet,
@@ -164,7 +164,7 @@ export const projects: Project[] = [
     status: "Client Delivery",
     tags: [
       "SIP/Voice Orchestration (PJSIP · RFC 3261)",
-      "asyncio + uvloop Concurrency",
+      "CPU-Pinned Processes · asyncio + uvloop",
       "GCP Infrastructure (Packer · GCE · HPA)",
       "Cross-Stack Observability",
       "LLM Inference Pipeline",
@@ -173,15 +173,15 @@ export const projects: Project[] = [
     impact:
       "1,600+ concurrent sessions · 7× VM capacity · ~$1.3M annualized savings · MTTR ~1–2 hrs → ~5 min",
     summary: [
-      "Voice infrastructure was **thread-bound at 20 calls per VM**, documentation took **10–15 minutes**, and incident recovery demanded **1–2 hours**.",
-      "Redesigned around **asyncio + uvloop** — each SIP session became a coroutine across SBC, STT, and LLM stages, removing thread contention.",
+      "Voice infrastructure ran on **GIL'd threading causing memory ballooning** — capped at **20 calls per VM**; documentation took **10–15 minutes**; incident recovery demanded **1–2 hours**.",
+      "Replaced with **CPU-pinned parallel processes** to escape GIL and **asyncio + uvloop** to replace the threading layer — each SIP session a coroutine across SBC, STT, and LLM stages.",
       "Built **cross-stack log correlation**, SIPp load testing, and secure media transport — capacity, observability, and cost treated as one system.",
       "**7× per-VM capacity** · **1,600+ sessions** sustained · **$118K → $8K/month** · MTTR **1–2 hr → ~5 min** · docs **10–15 min → 2–3 min**.",
     ],
     bullets: [
-      "**Thread-based GIL contention** concurrent sessions saturated at 20 per VM — before packet loss rose above 10%; available hardware capacity was highly under-utilised; post-call documentation required **10–15 minutes of manual effort** per interaction with no automated path; fragmented cross-service logs with no correlation layer meant incidents required **1–2 hours of manual reconstruction** to identify root cause.",
-      "HSBC voice AI was thread-based, capped at **20 concurrent calls per VM**. Post-call documentation: **10–15 min per interaction**. Inference cost: **~$118K/month**. Incident recovery: **1–2 hours** — fragmented logs, no unified observability layer.",
-      "Led a **4-engineer team**. Owned **Packer automation across all project modules** — standardizing GCE image builds for the full SIP stack **(SBC → STT → LLM inference)**. Refactored thread-based GIL'ed real time SIP integration pipeline to distributed systems like CPU pinned parallel **asyncio + uvloop** processes, eliminating GIL contention. Built **SIPp load test suite** (2,000 concurrent users). Architected **cross-stack log-correlation** over GCP Logging APIs — **250K+ log lines in under 5 seconds**.",
+      "**GIL'd threading caused memory ballooning** — concurrent sessions saturated at 20 per VM before packet loss rose above 10%; available hardware capacity was highly under-utilised; post-call documentation required **10–15 minutes of manual effort** per interaction with no automated path; fragmented cross-service logs with no correlation layer meant incidents required **1–2 hours of manual reconstruction** to identify root cause.",
+      "HSBC voice AI ran on GIL'd threading with **memory ballooning**, capped at **20 concurrent calls per VM**. Post-call documentation: **10–15 min per interaction**. Inference cost: **~$118K/month**. Incident recovery: **1–2 hours** — fragmented logs, no unified observability layer.",
+      "Led a **4-engineer team**. Owned **Packer automation across all project modules** — standardizing GCE image builds for the full SIP stack **(SBC → STT → LLM inference)**. Replaced GIL'd threading (memory ballooning) with **CPU-pinned parallel processes** to escape GIL, and rewrote the concurrency layer with **asyncio + uvloop** to replace threading — eliminating GIL contention across the full pipeline. Built **SIPp load test suite** (2,000 concurrent users). Architected **cross-stack log-correlation** over GCP Logging APIs — **250K+ log lines in under 5 seconds**.",
       "**<2s E2E transcription latency**, <5% packet loss at 1,600+ concurrent sessions. libsrtp + DTLS/SRTP for in-transit security. Grafana-Prometheus with MACD triggers. Migrated **n2-standard-32 → c4-standard-8**, improving transcript length **30–40% under load**.",
       "**7× per-VM capacity (20 → 140–160 calls)**. **1,600+ sessions** sustained. Documentation: **10–15 min → 2–3 min**. Compute: **$118K → $8K/month (~$1.3M annualized savings)**. MTTR: **1–2 hours → ~5 minutes**.",
     ],
@@ -731,6 +731,25 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
 export function Projects() {
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
+  const [isStuck, setIsStuck] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const root = document.querySelector(
+      ".hologram-interface",
+    ) as HTMLElement | null;
+    if (!root) return;
+    const check = () => {
+      const top = sectionRef.current?.offsetTop ?? 0;
+      setIsStuck((prev) => {
+        if (!prev && root.scrollTop > top + 10) return true;
+        if (prev && root.scrollTop < top + 7) return false;
+        return prev;
+      });
+    };
+    root.addEventListener("scroll", check, { passive: true });
+    return () => root.removeEventListener("scroll", check);
+  }, []);
 
   const visibleProjects = projects.filter(
     (p) =>
@@ -750,11 +769,13 @@ export function Projects() {
 
   return (
     <section
+      ref={sectionRef}
       id="projects"
       style={{
         padding: isMobile ? "2.75rem 4vw 4rem" : "6.5rem 6vw 10rem",
         background: "transparent",
         position: "relative",
+        overflowAnchor: "none",
       }}
     >
       {/* Sticky heading block */}
@@ -767,8 +788,8 @@ export function Projects() {
           marginRight: isMobile ? "-4vw" : "-6vw",
           paddingLeft: isMobile ? "4vw" : "6vw",
           paddingRight: isMobile ? "4vw" : "6vw",
-          paddingTop: "1.5rem",
-          paddingBottom: "1.5rem",
+          paddingTop: "0.85rem",
+          paddingBottom: "0.85rem",
           background:
             "linear-gradient(to right, rgba(5,5,8,0.52) 0%, rgba(5,5,8,0.52) 45%, rgba(5,5,8,0) 88%)",
           backdropFilter: "blur(6px)",
@@ -781,16 +802,17 @@ export function Projects() {
             display: "flex",
             alignItems: "center",
             gap: "2rem",
-            marginBottom: "2rem",
+            marginBottom: "1rem",
           }}
         >
           <span
             style={{
               fontFamily: FONT_MONO,
-              fontSize: "0.62rem",
+              fontSize: isStuck ? "0.5rem" : "0.62rem",
               letterSpacing: "0.2em",
               color: "rgba(255,255,255,0.4)",
               textTransform: "uppercase",
+              transition: "font-size 0.3s ease",
             }}
           >
             04 — Projects
@@ -812,14 +834,19 @@ export function Projects() {
             transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
             style={{
               fontFamily: FONT_SERIF,
-              fontSize: isMobile
-                ? "clamp(1.8rem, 7vw, 4rem)"
-                : "clamp(3rem, 6vw, 5.5rem)",
+              fontSize: isStuck
+                ? isMobile
+                  ? "clamp(1.26rem, 4.9vw, 2.8rem)"
+                  : "clamp(1.8rem, 3.6vw, 3.3rem)"
+                : isMobile
+                  ? "clamp(1.8rem, 7vw, 4rem)"
+                  : "clamp(3rem, 6vw, 5.5rem)",
               fontWeight: 800,
               lineHeight: 1.1,
               letterSpacing: "-0.04em",
               color: "#fafaf8",
               margin: 0,
+              transition: "font-size 0.30s ease",
             }}
           >
             Delivered, Scaled.

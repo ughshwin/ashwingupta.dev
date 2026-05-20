@@ -5,14 +5,18 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url><loc>https://www.ashwingupta.dev/</loc></url>
-  <url><loc>https://www.ashwingupta.dev/projects/01/</loc></url>
-  <url><loc>https://www.ashwingupta.dev/projects/02/</loc></url>
-  <url><loc>https://www.ashwingupta.dev/projects/03/</loc></url>
-  <url><loc>https://www.ashwingupta.dev/projects/04/</loc></url>
-  <url><loc>https://www.ashwingupta.dev/projects/05/</loc></url>
-  <url><loc>https://www.ashwingupta.dev/projects/06/</loc></url>
-  <url><loc>https://www.ashwingupta.dev/projects/07/</loc></url>
-  <url><loc>https://www.ashwingupta.dev/projects/08/</loc></url>
-  <url><loc>https://www.ashwingupta.dev/projects/09/</loc></url>
-  <url><loc>https://www.ashwingupta.dev/projects/10/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/ashwingupta-dev/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/pageindexollama/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/research-it/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/hsbc-voice/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/azure-infra-docs/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/airline-contract-intelligence/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/here-app/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/laminar-metamorph-polymorph/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/skill-recommendation-engine/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/pinns/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/scholaros/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/projects/controla/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/research/scholaros/</loc></url>
+  <url><loc>https://www.ashwingupta.dev/research/controla/</loc></url>
 </urlset>

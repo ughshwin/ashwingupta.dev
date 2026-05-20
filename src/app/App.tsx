@@ -21,7 +21,7 @@ export default function App() {
   useHashScroll();
 
   useEffect(() => {
-    const el = document.querySelector(".hologram-interface");
+    const el = document.querySelector(".hologram-interface") as HTMLElement | null;
     if (!el) return;
     const onScroll = () => setShowTop(el.scrollTop > el.clientHeight * 0.6);
     el.addEventListener("scroll", onScroll, { passive: true });
