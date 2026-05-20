@@ -1,32 +1,12 @@
-import { lazy, Suspense, useEffect, useState } from "react";
-import { Hero } from "./components/Hero";
 import { Cursor } from "./components/Cursor";
 import { EnvironmentLayer } from "./components/EnvironmentLayer";
 import { AIBackground } from "./components/AIBackground";
-import { HologramInterface } from "./components/HologramInterface";
 import { useIsMobile } from "../hooks/useMediaQuery";
-import { useHashScroll } from "../hooks/useHashScroll";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import { motion, AnimatePresence } from "motion/react";
-const About = lazy(() => import("./components/About").then((m) => ({ default: m.About })));
-const Skills = lazy(() => import("./components/Skills").then((m) => ({ default: m.Skills })));
-const Research = lazy(() => import("./components/Research").then((m) => ({ default: m.Research })));
-const Projects = lazy(() => import("./components/Projects").then((m) => ({ default: m.Projects })));
-const Contact = lazy(() => import("./components/Contact").then((m) => ({ default: m.Contact })));
 
 export default function App() {
   const isMobile = useIsMobile();
-  const [showTop, setShowTop] = useState(false);
-  useHashScroll();
-
-  useEffect(() => {
-    const el = document.querySelector(".hologram-interface") as HTMLElement | null;
-    if (!el) return;
-    const onScroll = () => setShowTop(el.scrollTop > el.clientHeight * 0.6);
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <div
@@ -36,61 +16,52 @@ export default function App() {
       <EnvironmentLayer />
       <AIBackground />
       <Cursor />
-      <HologramInterface>
-        <Hero />
-        <Suspense fallback={null}>
-          <About />
-          <Skills />
-          <Research />
-          <Projects />
-          <Contact />
-        </Suspense>
-      </HologramInterface>
+
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "1rem",
+          zIndex: 10,
+          padding: "2rem",
+          textAlign: "center",
+        }}
+      >
+        <p
+          style={{
+            fontFamily: '"DM Mono", monospace',
+            fontSize: "0.65rem",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.35)",
+            margin: 0,
+          }}
+        >
+          ashwingupta.dev
+        </p>
+        <p
+          style={{
+            fontFamily: '"Playfair Display", Georgia, serif',
+            fontSize: "clamp(1.1rem, 3vw, 1.6rem)",
+            fontWeight: 700,
+            color: "rgba(255,255,255,0.82)",
+            margin: 0,
+            lineHeight: 1.5,
+            maxWidth: "520px",
+          }}
+        >
+          Down for a complete overhaul.
+          <br />
+          Something great is going to be here soon — very soon.
+        </p>
+      </div>
+
       <Analytics />
       <SpeedInsights />
-
-      {/* Back to top */}
-      <AnimatePresence>
-        {showTop && (
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.25 }}
-            onClick={() => document.querySelector(".hologram-interface")?.scrollTo({ top: 0, behavior: "smooth" })}
-            style={{
-              position: "fixed",
-              bottom: "2rem",
-              right: "2rem",
-              zIndex: 100,
-              width: "2.6rem",
-              height: "2.6rem",
-              borderRadius: "4px",
-              border: "none",
-              background: "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.04) 60%, rgba(255,255,255,0) 100%)",
-              color: "rgba(255,255,255,0.45)",
-              fontSize: "1rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: isMobile ? "pointer" : "none",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              transition: "background 0.2s, color 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "linear-gradient(to top, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 60%, rgba(255,255,255,0) 100%)";
-              (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.95)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.04) 60%, rgba(255,255,255,0) 100%)";
-              (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)";
-            }}
-          >
-            ↑
-          </motion.button>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
