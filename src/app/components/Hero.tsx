@@ -585,18 +585,18 @@ export function Hero() {
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "10px",
-                padding: "8px 14px",
+                padding: "10px 16px",
                 border: "1px solid rgba(255,255,255,0.1)",
                 borderRadius: "4px",
               }}
             >
               <div
                 style={{
-                  width: "6px",
-                  height: "6px",
+                  width: "7px",
+                  height: "7px",
                   borderRadius: "50%",
-                  background: "#facc15",
-                  boxShadow: "0 0 8px #facc15",
+                  background: "#ef4444",
+                  boxShadow: "0 0 8px #ef4444",
                   animation: "pulse 2s infinite",
                   flexShrink: 0,
                 }}
@@ -604,13 +604,13 @@ export function Hero() {
               <span
                 style={{
                   fontFamily: '"DM Mono", monospace',
-                  fontSize: "0.62rem",
+                  fontSize: "0.72rem",
                   letterSpacing: "0.12em",
                   color: "rgba(255,255,255,0.55)",
                   textTransform: "uppercase",
                 }}
               >
-                Building, not Browsing
+                Optimising: Residuals · Not: Roles
               </span>
             </div>
           </motion.div>

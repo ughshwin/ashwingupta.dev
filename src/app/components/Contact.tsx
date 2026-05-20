@@ -175,6 +175,44 @@ export function Contact() {
             </motion.h2>
           </div>
 
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "10px",
+              padding: "10px 16px",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: "4px",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <div
+              style={{
+                width: "7px",
+                height: "7px",
+                borderRadius: "50%",
+                background: "#ef4444",
+                boxShadow: "0 0 8px #ef4444",
+                animation: "pulse 2s infinite",
+                flexShrink: 0,
+              }}
+            />
+            <span
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.72rem",
+                letterSpacing: "0.12em",
+                color: "rgba(255,255,255,0.55)",
+                textTransform: "uppercase",
+              }}
+            >
+              Optimising: Residuals · Not: Roles
+            </span>
+          </motion.div>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -188,9 +226,10 @@ export function Contact() {
               marginBottom: "2.5rem",
             }}
           >
-            Open to full-time AI/ML engineering roles, research collaborations,
-            and interesting problems at the intersection of LLMs, distributed
-            systems, and scientific ML.
+            Heads-down building right now — not looking for roles. But if you've
+            got a hard problem, a wild idea, or just want to talk shop about
+            LLMs, distributed systems, scientific ML, or why this site is
+            unreasonably over-engineered for a portfolio, I'm always up for that.
           </motion.p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
