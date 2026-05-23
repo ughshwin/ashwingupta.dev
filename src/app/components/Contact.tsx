@@ -175,9 +175,9 @@ export function Contact() {
             />
             <span
               style={{
-                fontFamily: FONT_MONO,
-                fontSize: "0.72rem",
-                letterSpacing: "0.12em",
+                fontFamily: '"DM Mono", monospace',
+                fontSize: "0.6rem",
+                letterSpacing: "0.0em",
                 color: "rgba(255,255,255,0.55)",
                 textTransform: "uppercase",
               }}
