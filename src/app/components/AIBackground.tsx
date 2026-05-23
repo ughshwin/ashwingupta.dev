@@ -57,8 +57,8 @@ const NODE_BRIGHT = "rgba(255,255,255,";
 const EDGE_COLOR = "255,255,255";
 const PARTICLE_COLOR = "255,255,255";
 
-const getNodeCount = (isMobile: boolean) => (isMobile ? 40 : 90);
-const getParticleCount = (isMobile: boolean) => (isMobile ? 30 : 70);
+const getNodeCount = (isMobile: boolean) => (isMobile ? 40 : 100);
+const getParticleCount = (isMobile: boolean) => (isMobile ? 40 : 70);
 const getConnectionDist = (isMobile: boolean) => (isMobile ? 80 : 400);
 const getDustMoteCount = (isMobile: boolean) => (isMobile ? 80 : 500);
 
