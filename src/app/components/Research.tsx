@@ -337,7 +337,9 @@ export function Research() {
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
   const sectionRef = useRef<HTMLElement>(null);
-  const [scrollOffset, setScrollOffset] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef(0);
+  const headerGapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isMobile) return;
@@ -358,8 +360,20 @@ export function Research() {
       cachedTop = acc + (parseFloat(getComputedStyle(section).paddingTop) || 0);
     };
     const onScroll = () => {
-      if (cachedTop === null) measureTop();
-      setScrollOffset(Math.max(0, scroller.scrollTop - (cachedTop ?? 0)));
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        if (cachedTop === null) measureTop();
+        const offset = Math.max(0, scroller.scrollTop - (cachedTop ?? 0));
+        if (contentRef.current) {
+          contentRef.current.style.clipPath =
+            offset > 0 ? `inset(${offset}px 0 0 0)` : "none";
+        }
+        const compressRatio = Math.min(1, offset / 100);
+        const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
+        if (headerGapRef.current) {
+          headerGapRef.current.style.marginBottom = `${gapPx}px`;
+        }
+      });
     };
     requestAnimationFrame(() => {
       measureTop();
@@ -373,11 +387,11 @@ export function Research() {
       },
       { passive: true },
     );
-    return () => scroller.removeEventListener("scroll", onScroll);
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, [isMobile]);
-
-  const compressRatio = isMobile ? 0 : Math.min(1, scrollOffset / 100);
-  const headerGapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
 
   const maxPerRow = isMobile ? 1 : isTablet ? 2 : 3;
   const rows = useEqualRows(items.length, maxPerRow);
@@ -404,16 +418,16 @@ export function Research() {
           paddingRight: isMobile ? "4vw" : "6vw",
           paddingTop: "0.85rem",
           paddingBottom: "2rem",
-          marginBottom: isMobile ? "3rem" : "5rem",
         }}
       >
         {/* Section label */}
         <div
+          ref={headerGapRef}
           style={{
             display: "flex",
             alignItems: "center",
             gap: "1rem",
-            marginBottom: isMobile ? "2rem" : headerGapPx,
+            marginBottom: isMobile ? "2rem" : "80px",
           }}
         >
           <span
@@ -458,8 +472,7 @@ export function Research() {
           </motion.h2>
         </div>
       </div>
-
-      <div style={{ clipPath: `inset(${scrollOffset}px 0 0 0)` }}>
+      <div ref={contentRef}>
         <EqualGridRenderer
           rows={rows}
           renderCard={(idx) => <ResearchCard item={items[idx]} />}

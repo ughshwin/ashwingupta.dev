@@ -148,7 +148,9 @@ export function Recommendations() {
   const isMobile = useIsMobile();
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLElement>(null);
-  const [scrollOffset, setScrollOffset] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef(0);
+  const headerGapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isMobile) return;
@@ -164,13 +166,28 @@ export function Recommendations() {
       cachedTop = acc + (parseFloat(getComputedStyle(section).paddingTop) || 0);
     };
     const onScroll = () => {
-      if (cachedTop === null) measureTop();
-      setScrollOffset(Math.max(0, scroller.scrollTop - (cachedTop ?? 0)));
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        if (cachedTop === null) measureTop();
+        const offset = Math.max(0, scroller.scrollTop - (cachedTop ?? 0));
+        if (contentRef.current) {
+          contentRef.current.style.clipPath =
+            offset > 0 ? `inset(${offset}px 0 0 0)` : "none";
+        }
+        const compressRatio = Math.min(1, offset / 100);
+        const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
+        if (headerGapRef.current) {
+          headerGapRef.current.style.marginBottom = `${gapPx}px`;
+        }
+      });
     };
     requestAnimationFrame(() => { measureTop(); onScroll(); });
     scroller.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", () => { cachedTop = null; }, { passive: true });
-    return () => scroller.removeEventListener("scroll", onScroll);
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, [isMobile]);
 
   useEffect(() => {
@@ -208,15 +225,15 @@ export function Recommendations() {
           marginRight: isMobile ? "-4vw" : "-6vw",
           paddingLeft: isMobile ? "4vw" : "6vw",
           paddingRight: isMobile ? "4vw" : "6vw",
-          marginBottom: isMobile ? "2.5rem" : "4rem",
         }}
       >
         <div
+          ref={headerGapRef}
           style={{
             display: "flex",
             alignItems: "center",
             gap: "1rem",
-            marginBottom: isMobile ? "2rem" : (80 * (1 - Math.min(1, scrollOffset / 100)) + 20 * Math.min(1, scrollOffset / 100)),
+            marginBottom: isMobile ? "2rem" : "80px",
           }}
         >
           <span
@@ -261,18 +278,19 @@ export function Recommendations() {
         </div>
       </div>
 
-      {/* Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-          gap: isMobile ? "1.2rem" : "1.5rem",
-          clipPath: `inset(${scrollOffset}px 0 0 0)`,
-        }}
-      >
-        {recs.map((rec, i) => (
-          <RecCard key={rec.name} rec={rec} index={i} isVisible={isVisible} />
-        ))}
+      <div ref={contentRef}>
+        {/* Grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+            gap: isMobile ? "1.2rem" : "1.5rem",
+          }}
+        >
+          {recs.map((rec, i) => (
+            <RecCard key={rec.name} rec={rec} index={i} isVisible={isVisible} />
+          ))}
+        </div>
       </div>
     </section>
   );

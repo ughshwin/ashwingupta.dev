@@ -18,7 +18,9 @@ const FONT_SANS = '"DM Sans", sans-serif';
 export function Contact() {
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
-  const [scrollOffset, setScrollOffset] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef(0);
+  const headerGapRef = useRef<HTMLDivElement>(null);
   const [copyToastMessage, setCopyToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -40,8 +42,20 @@ export function Contact() {
       cachedTop = acc + (parseFloat(getComputedStyle(section).paddingTop) || 0);
     };
     const onScroll = () => {
-      if (cachedTop === null) measureTop();
-      setScrollOffset(Math.max(0, scroller.scrollTop - (cachedTop ?? 0)));
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        if (cachedTop === null) measureTop();
+        const offset = Math.max(0, scroller.scrollTop - (cachedTop ?? 0));
+        if (contentRef.current) {
+          contentRef.current.style.clipPath =
+            offset > 0 ? `inset(${offset}px 0 0 0)` : "none";
+        }
+        const compressRatio = Math.min(1, offset / 100);
+        const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
+        if (headerGapRef.current) {
+          headerGapRef.current.style.marginBottom = `${gapPx}px`;
+        }
+      });
     };
     requestAnimationFrame(() => {
       measureTop();
@@ -55,11 +69,12 @@ export function Contact() {
       },
       { passive: true },
     );
-    return () => scroller.removeEventListener("scroll", onScroll);
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, [isMobile]);
 
-  const compressRatio = isMobile ? 0 : Math.min(1, scrollOffset / 100);
-  const headerGapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
   const [downloadToastMessage, setDownloadToastMessage] = useState<
     string | null
   >(null);
@@ -144,15 +159,15 @@ export function Contact() {
           marginRight: isMobile ? "-4vw" : "-6vw",
           paddingLeft: isMobile ? "4vw" : "6vw",
           paddingRight: isMobile ? "4vw" : "6vw",
-          marginBottom: isMobile ? "2.5rem" : "4rem",
         }}
       >
         <div
+          ref={headerGapRef}
           style={{
             display: "flex",
             alignItems: "center",
             gap: "1rem",
-            marginBottom: isMobile ? "2rem" : headerGapPx,
+            marginBottom: isMobile ? "2rem" : "80px",
           }}
         >
           <span
@@ -196,7 +211,7 @@ export function Contact() {
         </div>
       </div>
 
-      <div style={{ clipPath: `inset(${scrollOffset}px 0 0 0)` }}>
+      <div ref={contentRef}>
       <div
         style={{
           display: "grid",

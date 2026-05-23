@@ -517,6 +517,12 @@ export function ExperienceTimeline() {
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef(0);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<
+    Array<{ x: number; y: number; vx: number; vy: number; life: number; size: number }>
+  >([]);
+  const prevScanYRef = useRef<number | null>(null);
+  const particleRafRef = useRef<number>(0);
 
   const [vpW, setVpW] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth : 1440,
@@ -596,6 +602,69 @@ export function ExperienceTimeline() {
       cancelAnimationFrame(rafRef.current);
     };
   }, [isMobile, dims.maxOffset]);
+
+  // Resize canvas to match strip
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    canvas.width = vpW;
+    canvas.height = dims.STRIP_H;
+  }, [vpW, dims]);
+
+  // Particle draw loop — runs forever once mounted
+  useEffect(() => {
+    if (isMobile) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+    let last = performance.now();
+    const draw = (now: number) => {
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesRef.current = particlesRef.current.filter((p) => p.life > 0);
+      for (const p of particlesRef.current) {
+        p.life -= dt / 0.5;
+        if (p.life <= 0) continue;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        ctx.globalAlpha = p.life * 0.9;
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, Math.max(0.3, p.size * p.life), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      particleRafRef.current = requestAnimationFrame(draw);
+    };
+    particleRafRef.current = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(particleRafRef.current);
+  }, [isMobile]);
+
+  // Emit particles on scroll
+  useEffect(() => {
+    if (isMobile || dims.maxOffset === 0) return;
+    const { SPINE_X, STRIP_H, maxOffset } = dims;
+    const scanY = (chartOffset / maxOffset) * STRIP_H;
+    const prev = prevScanYRef.current;
+    prevScanYRef.current = scanY;
+    if (prev === null) return;
+    const delta = scanY - prev;
+    if (Math.abs(delta) < 0.3) return;
+    const sign = delta > 0 ? -1 : 1;
+    const speed = Math.min(Math.abs(delta) * 130, 180);
+    const count = Math.max(1, Math.min(6, Math.round(Math.abs(delta))));
+    for (let i = 0; i < count; i++) {
+      particlesRef.current.push({
+        x: SPINE_X + (Math.random() - 0.5) * 6,
+        y: scanY + (Math.random() - 0.5) * 4,
+        vx: (Math.random() - 0.5) * 30,
+        vy: sign * speed * (0.4 + Math.random() * 0.6),
+        life: 1,
+        size: 0.8 + Math.random() * 1.5,
+      });
+    }
+  }, [chartOffset, dims, isMobile]);
 
   if (isMobile)
     return (
@@ -760,7 +829,7 @@ export function ExperienceTimeline() {
       style={{ position: "relative", height: sectionH }}
     >
       <div
-        style={{ position: "sticky", top: 0, height: vpH, overflow: "hidden" }}
+        style={{ position: "sticky", top: 0, height: vpH, overflow: "hidden", display: "flex", flexDirection: "column" }}
       >
         {/* Header */}
         <div
@@ -818,14 +887,10 @@ export function ExperienceTimeline() {
             {
               position: "relative",
               width: "100%",
-              height: STRIP_H,
+              flex: 1,
               overflow: "hidden",
               opacity: visible ? 1 : 0,
               transition: "opacity 0.5s ease 0.1s",
-              WebkitMaskImage:
-                "linear-gradient(to bottom, black 0%, black 88%, rgba(0,0,0,0.5) 94%, transparent 100%)",
-              maskImage:
-                "linear-gradient(to bottom, black 0%, black 88%, rgba(0,0,0,0.5) 94%, transparent 100%)",
             } as React.CSSProperties
           }
         >
@@ -986,45 +1051,35 @@ export function ExperienceTimeline() {
             })}
           </div>
 
-          {/* Scroll-progress comet — lives outside translateY so it stays fixed in viewport */}
+          {/* Particle canvas — fixed in strip viewport coords */}
+          <canvas
+            ref={canvasRef}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              pointerEvents: "none",
+              zIndex: 2,
+            }}
+          />
+          {/* Comet head */}
           {(() => {
             const scanY =
               maxOffset > 0 ? (chartOffset / maxOffset) * STRIP_H : 0;
-            const TAIL_LEN = STRIP_H * 0.5;
-            const tailTop = Math.max(0, scanY - TAIL_LEN);
-            const tailH = scanY - tailTop;
             return (
-              <>
-                {/* Comet tail */}
-                <div
-                  style={{
-                    position: "absolute",
-                    left: SPINE_X,
-                    top: tailTop,
-                    width: 1,
-                    height: tailH,
-                    background:
-                      "linear-gradient(to bottom, transparent, rgba(255,255,255,0.82))",
-                    pointerEvents: "none",
-                    zIndex: 2,
-                  }}
-                />
-                {/* Comet head — circle */}
-                <div
-                  style={{
-                    position: "absolute",
-                    left: SPINE_X - 4,
-                    top: scanY - 4,
-                    width: 9,
-                    height: 9,
-                    borderRadius: "50%",
-                    background: "rgba(255,255,255,0.96)",
-                    boxShadow: "0 0 10px 4px rgba(255,255,255,0.45)",
-                    pointerEvents: "none",
-                    zIndex: 3,
-                  }}
-                />
-              </>
+              <div
+                style={{
+                  position: "absolute",
+                  left: SPINE_X - 4,
+                  top: scanY - 4,
+                  width: 9,
+                  height: 9,
+                  borderRadius: "50%",
+                  background: "#ffffff",
+                  pointerEvents: "none",
+                  zIndex: 3,
+                }}
+              />
             );
           })()}
         </div>

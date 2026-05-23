@@ -900,7 +900,9 @@ export function Projects() {
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
   const sectionRef = useRef<HTMLElement>(null);
-  const [scrollOffset, setScrollOffset] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef(0);
+  const headerGapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isMobile) return;
@@ -921,8 +923,20 @@ export function Projects() {
       cachedTop = acc + (parseFloat(getComputedStyle(section).paddingTop) || 0);
     };
     const onScroll = () => {
-      if (cachedTop === null) measureTop();
-      setScrollOffset(Math.max(0, scroller.scrollTop - (cachedTop ?? 0)));
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        if (cachedTop === null) measureTop();
+        const offset = Math.max(0, scroller.scrollTop - (cachedTop ?? 0));
+        if (contentRef.current) {
+          contentRef.current.style.clipPath =
+            offset > 0 ? `inset(${offset}px 0 0 0)` : "none";
+        }
+        const compressRatio = Math.min(1, offset / 100);
+        const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
+        if (headerGapRef.current) {
+          headerGapRef.current.style.marginBottom = `${gapPx}px`;
+        }
+      });
     };
     requestAnimationFrame(() => {
       measureTop();
@@ -936,11 +950,11 @@ export function Projects() {
       },
       { passive: true },
     );
-    return () => scroller.removeEventListener("scroll", onScroll);
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, [isMobile]);
-
-  const compressRatio = isMobile ? 0 : Math.min(1, scrollOffset / 100);
-  const headerGapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
 
   const secondaryProjects = projects.filter(
     (p) =>
@@ -982,15 +996,15 @@ export function Projects() {
           paddingRight: isMobile ? "4vw" : "6vw",
           paddingTop: "0.85rem",
           paddingBottom: "2rem",
-          marginBottom: "3rem",
         }}
       >
         <div
+          ref={headerGapRef}
           style={{
             display: "flex",
             alignItems: "center",
             gap: "1rem",
-            marginBottom: isMobile ? "2rem" : headerGapPx,
+            marginBottom: isMobile ? "2rem" : "80px",
           }}
         >
           <span
@@ -1036,7 +1050,7 @@ export function Projects() {
         </div>
       </div>
 
-      <div style={{ clipPath: `inset(${scrollOffset}px 0 0 0)` }}>
+      <div ref={contentRef}>
         {/* Secondary grid */}
         <div style={{ marginBottom: "2rem" }}>
           <p
