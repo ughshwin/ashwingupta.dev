@@ -1062,24 +1062,40 @@ export function ExperienceTimeline() {
               zIndex: 2,
             }}
           />
-          {/* Comet head */}
           {(() => {
             const scanY =
               maxOffset > 0 ? (chartOffset / maxOffset) * STRIP_H : 0;
             return (
-              <div
-                style={{
-                  position: "absolute",
-                  left: SPINE_X - 4,
-                  top: scanY - 4,
-                  width: 9,
-                  height: 9,
-                  borderRadius: "50%",
-                  background: "#ffffff",
-                  pointerEvents: "none",
-                  zIndex: 3,
-                }}
-              />
+              <>
+                {/* Painted spine highlight — grows down on scroll, shrinks on reverse */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: SPINE_X,
+                    top: 0,
+                    width: 1,
+                    height: scanY,
+                    background: "#ffffff",
+                    opacity: 0.9,
+                    pointerEvents: "none",
+                    zIndex: 1,
+                  }}
+                />
+                {/* Comet head */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: SPINE_X - 4,
+                    top: scanY - 4,
+                    width: 9,
+                    height: 9,
+                    borderRadius: "50%",
+                    background: "#ffffff",
+                    pointerEvents: "none",
+                    zIndex: 3,
+                  }}
+                />
+              </>
             );
           })()}
         </div>

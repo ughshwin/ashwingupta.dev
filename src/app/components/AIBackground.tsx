@@ -47,6 +47,8 @@ interface DustMote {
   size: number;
   baseOpacity: number;
   isNear: boolean;
+  mouseOffX: number;
+  mouseOffY: number;
 }
 
 // ── Black monochrome palette with white accents ─────────────────────────────
@@ -56,9 +58,9 @@ const EDGE_COLOR = "255,255,255";
 const PARTICLE_COLOR = "255,255,255";
 
 const getNodeCount = (isMobile: boolean) => (isMobile ? 40 : 90);
-const getParticleCount = (isMobile: boolean) => (isMobile ? 20 : 60);
+const getParticleCount = (isMobile: boolean) => (isMobile ? 30 : 70);
 const getConnectionDist = (isMobile: boolean) => (isMobile ? 80 : 400);
-const getDustMoteCount = (isMobile: boolean) => (isMobile ? 60 : 400);
+const getDustMoteCount = (isMobile: boolean) => (isMobile ? 80 : 500);
 
 const PACKET_INTERVAL = 20;
 const PACKET_SPEED_MIN = 0.001;
@@ -250,6 +252,8 @@ export function AIBackground() {
             ? 0.33 + Math.random() * 0.36
             : 0.2 + Math.random() * 0.28,
           isNear,
+          mouseOffX: 0,
+          mouseOffY: 0,
         };
       });
     };
@@ -346,11 +350,34 @@ export function AIBackground() {
         const pos = breezePosition(mote, pathProgress, W, H);
         const opacity = shimmerOpacity(shimmerProgress);
 
+        // Mouse repulsion — spring offset decays back to zero
+        if (!isTouchDevice) {
+          const mdx = pos.x - mouseRef.current.x;
+          const mdy = pos.y - mouseRef.current.y;
+          const mDistSq = mdx * mdx + mdy * mdy;
+          const MOUSE_R = 120;
+          if (mDistSq < MOUSE_R * MOUSE_R && mDistSq > 0) {
+            const mDist = Math.sqrt(mDistSq);
+            const force = ((MOUSE_R - mDist) / MOUSE_R) * 18;
+            mote.mouseOffX += (mdx / mDist) * force;
+            mote.mouseOffY += (mdy / mDist) * force;
+          }
+        }
+        mote.mouseOffX *= 0.91;
+        mote.mouseOffY *= 0.91;
+        // cap displacement so motes don't fly off screen
+        const CAP = 180;
+        if (mote.mouseOffX > CAP) mote.mouseOffX = CAP;
+        if (mote.mouseOffX < -CAP) mote.mouseOffX = -CAP;
+        if (mote.mouseOffY > CAP) mote.mouseOffY = CAP;
+        if (mote.mouseOffY < -CAP) mote.mouseOffY = -CAP;
+        const drawX = pos.x + mote.mouseOffX;
+        const drawY = pos.y + mote.mouseOffY;
+
         // Skip if offscreen
-        if (pos.x < -50 || pos.x > W + 50 || pos.y < -50 || pos.y > H + 50)
+        if (drawX < -50 || drawX > W + 50 || drawY < -50 || drawY > H + 50)
           continue;
 
-        // ctx.shadowBlur directly replicates CSS box-shadow — zero gradient allocations
         ctx.save();
         ctx.globalAlpha = opacity;
         ctx.shadowBlur = mote.isNear ? 24 : 14;
@@ -359,7 +386,7 @@ export function AIBackground() {
           : "rgba(229,236,252,0.34)";
         ctx.fillStyle = "rgba(248,250,255,0.97)";
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, mote.size * 0.5, 0, Math.PI * 2);
+        ctx.arc(drawX, drawY, mote.size * 0.5, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       }
