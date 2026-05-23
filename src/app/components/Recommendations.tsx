@@ -148,6 +148,30 @@ export function Recommendations() {
   const isMobile = useIsMobile();
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLElement>(null);
+  const [scrollOffset, setScrollOffset] = useState(0);
+
+  useEffect(() => {
+    if (isMobile) return;
+    const scroller = document.querySelector(".hologram-interface") as HTMLElement | null;
+    if (!scroller) return;
+    let cachedTop: number | null = null;
+    const measureTop = () => {
+      const section = ref.current;
+      if (!section) return;
+      let acc = 0;
+      let el: HTMLElement | null = section;
+      while (el && el !== scroller) { acc += el.offsetTop; el = el.offsetParent as HTMLElement | null; }
+      cachedTop = acc + (parseFloat(getComputedStyle(section).paddingTop) || 0);
+    };
+    const onScroll = () => {
+      if (cachedTop === null) measureTop();
+      setScrollOffset(Math.max(0, scroller.scrollTop - (cachedTop ?? 0)));
+    };
+    requestAnimationFrame(() => { measureTop(); onScroll(); });
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => { cachedTop = null; }, { passive: true });
+    return () => scroller.removeEventListener("scroll", onScroll);
+  }, [isMobile]);
 
   useEffect(() => {
     const el = ref.current;
@@ -172,60 +196,69 @@ export function Recommendations() {
         position: "relative",
       }}
     >
-      {/* Section label */}
+      {/* Sticky header: section label + heading */}
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "1rem",
+          position: isMobile ? "relative" : "sticky",
+          top: 0,
+          zIndex: 10,
+          paddingTop: "0.85rem",
+          paddingBottom: "2rem",
+          marginLeft: isMobile ? "-4vw" : "-6vw",
+          marginRight: isMobile ? "-4vw" : "-6vw",
+          paddingLeft: isMobile ? "4vw" : "6vw",
+          paddingRight: isMobile ? "4vw" : "6vw",
           marginBottom: isMobile ? "2.5rem" : "4rem",
         }}
       >
-        <span
-          style={{
-            fontFamily: FONT_MONO,
-            fontSize: "0.62rem",
-            letterSpacing: "0.2em",
-            color: "rgba(255,255,255,0.4)",
-            textTransform: "uppercase",
-          }}
-        >
-          Recommendations
-        </span>
         <div
           style={{
-            flex: 1,
-            height: "1px",
-            background: "rgba(255,255,255,0.07)",
-          }}
-        />
-      </div>
-
-      {/* Section header */}
-      <div
-        style={{
-          overflow: "hidden",
-          marginBottom: isMobile ? "2.5rem" : "4rem",
-        }}
-      >
-        <motion.h2
-          initial={{ y: "100%" }}
-          animate={isVisible ? { y: 0 } : { y: "100%" }}
-          transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-          style={{
-            fontFamily: FONT_SERIF,
-            fontSize: isMobile
-              ? "clamp(1.8rem, 7vw, 4rem)"
-              : "clamp(2.6rem, 4.5vw, 4rem)",
-            fontWeight: 800,
-            lineHeight: 1.05,
-            letterSpacing: "0.02em",
-            color: "#fafaf8",
-            margin: 0,
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+            marginBottom: isMobile ? "2rem" : (80 * (1 - Math.min(1, scrollOffset / 100)) + 20 * Math.min(1, scrollOffset / 100)),
           }}
         >
-          In their words.
-        </motion.h2>
+          <span
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.62rem",
+              letterSpacing: "0.2em",
+              color: "rgba(255,255,255,0.4)",
+              textTransform: "uppercase",
+            }}
+          >
+            Recommendations
+          </span>
+          <div
+            style={{
+              flex: 1,
+              height: "1px",
+              background: "rgba(255,255,255,0.07)",
+            }}
+          />
+        </div>
+
+        <div style={{ overflow: "hidden" }}>
+          <motion.h2
+            initial={{ y: "100%" }}
+            animate={isVisible ? { y: 0 } : { y: "100%" }}
+            transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+            style={{
+              fontFamily: FONT_SERIF,
+              fontSize: isMobile
+                ? "clamp(1.8rem, 7vw, 4rem)"
+                : "clamp(2.6rem, 4.5vw, 4rem)",
+              fontWeight: 800,
+              lineHeight: 1.05,
+              letterSpacing: "0.02em",
+              color: "#fafaf8",
+              margin: 0,
+            }}
+          >
+            In their words.
+          </motion.h2>
+        </div>
       </div>
 
       {/* Grid */}
@@ -234,6 +267,7 @@ export function Recommendations() {
           display: "grid",
           gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
           gap: isMobile ? "1.2rem" : "1.5rem",
+          clipPath: `inset(${scrollOffset}px 0 0 0)`,
         }}
       >
         {recs.map((rec, i) => (

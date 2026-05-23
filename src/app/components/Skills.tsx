@@ -170,7 +170,7 @@ export function Skills() {
             textTransform: "uppercase",
           }}
         >
-          02 — Stack
+          Stack
         </span>
         <div
           style={{
@@ -214,7 +214,7 @@ export function Skills() {
                 margin: "0 0 1.2rem",
               }}
             >
-              What I've run in production.
+              What I run in production.
             </motion.h2>
           </div>
           <motion.p

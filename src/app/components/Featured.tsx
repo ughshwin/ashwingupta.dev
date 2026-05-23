@@ -387,21 +387,47 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
 export function Featured() {
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
-  const [isStuck, setIsStuck] = useState(false);
+  const [scrollOffset, setScrollOffset] = useState(0);
 
   useEffect(() => {
-    const root = document.querySelector(
+    if (isMobile) return;
+    const scroller = document.querySelector(
       ".hologram-interface",
     ) as HTMLElement | null;
-    if (!root || isMobile) return;
-    const check = () => {
-      const el = sectionRef.current;
-      if (!el) return;
-      setIsStuck(root.scrollTop > el.offsetTop + 40);
+    if (!scroller) return;
+    let cachedTop: number | null = null;
+    const measureTop = () => {
+      const section = sectionRef.current;
+      if (!section) return;
+      let acc = 0;
+      let el: HTMLElement | null = section;
+      while (el && el !== scroller) {
+        acc += el.offsetTop;
+        el = el.offsetParent as HTMLElement | null;
+      }
+      cachedTop = acc + (parseFloat(getComputedStyle(section).paddingTop) || 0);
     };
-    root.addEventListener("scroll", check, { passive: true });
-    return () => root.removeEventListener("scroll", check);
+    const onScroll = () => {
+      if (cachedTop === null) measureTop();
+      setScrollOffset(Math.max(0, scroller.scrollTop - (cachedTop ?? 0)));
+    };
+    requestAnimationFrame(() => {
+      measureTop();
+      onScroll();
+    });
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener(
+      "resize",
+      () => {
+        cachedTop = null;
+      },
+      { passive: true },
+    );
+    return () => scroller.removeEventListener("scroll", onScroll);
   }, [isMobile]);
+
+  const compressRatio = isMobile ? 0 : Math.min(1, scrollOffset / 100);
+  const headerGapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
 
   const maxPerRow = isMobile ? 1 : 3;
   const rows = useEqualRows(ITEMS.length, maxPerRow);
@@ -419,7 +445,7 @@ export function Featured() {
       {/* Sticky heading block */}
       <div
         style={{
-          position: "sticky",
+          position: isMobile ? "relative" : "sticky",
           top: 0,
           zIndex: 10,
           marginLeft: isMobile ? "-4vw" : "-6vw",
@@ -427,13 +453,7 @@ export function Featured() {
           paddingLeft: isMobile ? "4vw" : "6vw",
           paddingRight: isMobile ? "4vw" : "6vw",
           paddingTop: "0.85rem",
-          paddingBottom: "0.85rem",
-          background: isStuck
-            ? "linear-gradient(to right, rgba(5,5,8,0.52) 0%, rgba(5,5,8,0.52) 45%, rgba(5,5,8,0) 88%)"
-            : "transparent",
-          backdropFilter: isStuck ? "blur(6px)" : "none",
-          WebkitBackdropFilter: isStuck ? "blur(6px)" : "none",
-          transition: "background 0.3s ease",
+          paddingBottom: "2rem",
           marginBottom: "3rem",
         }}
       >
@@ -442,22 +462,20 @@ export function Featured() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "2rem",
-            marginBottom: isStuck ? "1rem" : "5rem",
-            transition: "margin-bottom 0.3s ease",
+            gap: "1rem",
+            marginBottom: isMobile ? "2rem" : headerGapPx,
           }}
         >
           <span
             style={{
               fontFamily: FONT_MONO,
-              fontSize: isStuck ? "0.5rem" : "0.62rem",
+              fontSize: "0.62rem",
               letterSpacing: "0.2em",
               color: "rgba(255,255,255,0.4)",
               textTransform: "uppercase",
-              transition: "font-size 0.3s ease",
             }}
           >
-            04 — Featured
+            Featured
           </span>
           <div
             style={{
@@ -469,26 +487,21 @@ export function Featured() {
         </div>
 
         {/* Section heading */}
-        <div style={{ overflow: "hidden", background: "transparent" }}>
+        <div style={{ overflow: "hidden" }}>
           <motion.h2
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
             style={{
               fontFamily: FONT_SERIF,
-              fontSize: isStuck
-                ? isMobile
-                  ? "clamp(1.26rem, 4.9vw, 2.8rem)"
-                  : "clamp(1.8rem, 3.6vw, 3.3rem)"
-                : isMobile
-                  ? "clamp(1.8rem, 7vw, 4rem)"
-                  : "clamp(2.6rem, 4.5vw, 4rem)",
+              fontSize: isMobile
+                ? "clamp(1.8rem, 7vw, 4rem)"
+                : "clamp(2.6rem, 4.5vw, 4rem)",
               fontWeight: 800,
               lineHeight: 1.1,
               letterSpacing: "0.02em",
               color: "#fafaf8",
               margin: 0,
-              transition: "font-size 0.3s ease",
             }}
           >
             What the arc produced.
@@ -496,10 +509,12 @@ export function Featured() {
         </div>
       </div>
 
-      <EqualGridRenderer
-        rows={rows}
-        renderCard={(idx) => <FeaturedCard item={ITEMS[idx]} />}
-      />
+      <div style={{ clipPath: `inset(${scrollOffset}px 0 0 0)` }}>
+        <EqualGridRenderer
+          rows={rows}
+          renderCard={(idx) => <FeaturedCard item={ITEMS[idx]} />}
+        />
+      </div>
     </section>
   );
 }

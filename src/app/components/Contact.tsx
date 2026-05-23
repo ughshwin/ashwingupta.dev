@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Mail, Github, Linkedin, MapPin, FileDown } from "lucide-react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 // @ts-ignore
@@ -17,7 +17,49 @@ const FONT_SANS = '"DM Sans", sans-serif';
 
 export function Contact() {
   const isMobile = useIsMobile();
+  const sectionRef = useRef<HTMLElement>(null);
+  const [scrollOffset, setScrollOffset] = useState(0);
   const [copyToastMessage, setCopyToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isMobile) return;
+    const scroller = document.querySelector(
+      ".hologram-interface",
+    ) as HTMLElement | null;
+    if (!scroller) return;
+    let cachedTop: number | null = null;
+    const measureTop = () => {
+      const section = sectionRef.current;
+      if (!section) return;
+      let acc = 0;
+      let el: HTMLElement | null = section;
+      while (el && el !== scroller) {
+        acc += el.offsetTop;
+        el = el.offsetParent as HTMLElement | null;
+      }
+      cachedTop = acc + (parseFloat(getComputedStyle(section).paddingTop) || 0);
+    };
+    const onScroll = () => {
+      if (cachedTop === null) measureTop();
+      setScrollOffset(Math.max(0, scroller.scrollTop - (cachedTop ?? 0)));
+    };
+    requestAnimationFrame(() => {
+      measureTop();
+      onScroll();
+    });
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener(
+      "resize",
+      () => {
+        cachedTop = null;
+      },
+      { passive: true },
+    );
+    return () => scroller.removeEventListener("scroll", onScroll);
+  }, [isMobile]);
+
+  const compressRatio = isMobile ? 0 : Math.min(1, scrollOffset / 100);
+  const headerGapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
   const [downloadToastMessage, setDownloadToastMessage] = useState<
     string | null
   >(null);
@@ -82,6 +124,7 @@ export function Contact() {
 
   return (
     <section
+      ref={sectionRef}
       id="contact"
       style={{
         padding: isMobile ? "4rem 4vw 3rem" : "10rem 6vw 8rem",
@@ -89,34 +132,71 @@ export function Contact() {
         position: "relative",
       }}
     >
+      {/* Sticky header: section label + heading */}
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "1rem",
-          marginBottom: "5rem",
+          position: isMobile ? "relative" : "sticky",
+          top: 0,
+          zIndex: 10,
+          paddingTop: "0.85rem",
+          paddingBottom: "2rem",
+          marginLeft: isMobile ? "-4vw" : "-6vw",
+          marginRight: isMobile ? "-4vw" : "-6vw",
+          paddingLeft: isMobile ? "4vw" : "6vw",
+          paddingRight: isMobile ? "4vw" : "6vw",
+          marginBottom: isMobile ? "2.5rem" : "4rem",
         }}
       >
-        <span
-          style={{
-            fontFamily: FONT_MONO,
-            fontSize: "0.62rem",
-            letterSpacing: "0.2em",
-            color: "rgba(255,255,255,0.4)",
-            textTransform: "uppercase",
-          }}
-        >
-          07 — Contact
-        </span>
         <div
           style={{
-            flex: 1,
-            height: "1px",
-            background: "rgba(255,255,255,0.07)",
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+            marginBottom: isMobile ? "2rem" : headerGapPx,
           }}
-        />
+        >
+          <span
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.62rem",
+              letterSpacing: "0.2em",
+              color: "rgba(255,255,255,0.4)",
+              textTransform: "uppercase",
+            }}
+          >
+            Contact
+          </span>
+          <div
+            style={{
+              flex: 1,
+              height: "1px",
+              background: "rgba(255,255,255,0.07)",
+            }}
+          />
+        </div>
+        <div style={{ overflow: "hidden" }}>
+          <motion.h2
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+            style={{
+              fontFamily: FONT_SERIF,
+              fontSize: isMobile
+                ? "clamp(1.8rem, 7vw, 4rem)"
+                : "clamp(2.6rem, 4.5vw, 4rem)",
+              fontWeight: 800,
+              lineHeight: 1.05,
+              letterSpacing: "0.02em",
+              color: "#fafaf8",
+              margin: 0,
+            }}
+          >
+            Hard problems welcome.
+          </motion.h2>
+        </div>
       </div>
 
+      <div style={{ clipPath: `inset(${scrollOffset}px 0 0 0)` }}>
       <div
         style={{
           display: "grid",
@@ -125,29 +205,8 @@ export function Contact() {
           alignItems: "start",
         }}
       >
-        {/* LEFT — header + description */}
+        {/* LEFT — description */}
         <div>
-          <div style={{ overflow: "hidden", marginBottom: "2rem" }}>
-            <motion.h2
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-              style={{
-                fontFamily: FONT_SERIF,
-                fontSize: isMobile
-                  ? "clamp(1.8rem, 7vw, 4rem)"
-                  : "clamp(2.6rem, 4.5vw, 4rem)",
-                fontWeight: 800,
-                lineHeight: 1.05,
-                letterSpacing: "0.02em",
-                color: "#fafaf8",
-                margin: 0,
-              }}
-            >
-              Hard problems welcome.
-            </motion.h2>
-          </div>
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -358,6 +417,7 @@ export function Contact() {
         >
           © 2026 Ashwin Gupta · AI Engineer · Bangalore, India
         </span>
+      </div>
       </div>
     </section>
   );

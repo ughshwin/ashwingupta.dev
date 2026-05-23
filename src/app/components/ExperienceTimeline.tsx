@@ -31,20 +31,19 @@ type Entry = {
   bullets: string[];
 };
 
-// ── Layout constants (matching the CSS exactly) ────────────────────────────
-const PAD_X = 14; // horizontal inner padding (each side)
-const PAD_TOP = 12; // top inner padding
-const PAD_BOTTOM = 16; // bottom inner padding (constant across all bars)
-const BULLET_MARK = 14; // px width consumed by ▪ + gap
-const ROLE_H = 20; // role line height
-const COMPANY_H = 12; // company line height
-const DIVIDER_H = 15; // divider line + vertical margins
-const BAR_HDR_H = PAD_TOP + ROLE_H + COMPANY_H + DIVIDER_H; // 48px
-const BULLET_GAP = 4; // gap between bullet rows
-const FONT_PX = 13.2; // 0.825rem at 16px base
-const FONT_LH = 1.48; // line-height
+// ── Bar content layout constants ───────────────────────────────────────────
+const PAD_X = 14;
+const PAD_TOP = 12;
+const PAD_BOTTOM = 16;
+const BULLET_MARK = 14;
+const ROLE_H = 20;
+const COMPANY_H = 12;
+const DIVIDER_H = 15;
+const BAR_HDR_H = PAD_TOP + ROLE_H + COMPANY_H + DIVIDER_H;
+const BULLET_GAP = 4;
+const FONT_PX = 13.2;
+const FONT_LH = 1.48;
 
-// Canvas-based text-wrap measurement — correct for each bar's actual width
 const _measureCache = new Map<string, number>();
 
 function measureBarH(e: Entry, barWidth: number): number {
@@ -59,7 +58,6 @@ function measureBarH(e: Entry, barWidth: number): number {
       const ctx = document.createElement("canvas").getContext("2d")!;
       ctx.font = `${FONT_PX}px "DM Sans", sans-serif`;
       const lineH = FONT_PX * FONT_LH;
-
       e.bullets.forEach((bullet, bi) => {
         const words = bullet.split(" ");
         let lines = 0,
@@ -99,6 +97,8 @@ const ENTRIES: Entry[] = [
     start: new Date(2019, 7),
     end: new Date(2023, 4),
     bullets: [
+      "Founder & mentor — Augment.AI, BMSCE's AI club",
+      "Sponsorship Head, UTSAV '22 — signed MoUs · raised >50% of total budget in 14 days",
       "IEEE Joint Secretary · 75+ events · chapter ranked #2 globally · co-founded CS chapter",
       "Best Outgoing Project '23 — PINNs across fluid, structural & thermal simulation",
       "Published: MCQ generation via graph + LLMs — NCISCT 2022",
@@ -192,6 +192,7 @@ const ENTRIES: Entry[] = [
     start: new Date(2025, 9),
     end: new Date(2027, 2),
     bullets: [
+      "Dual specialisation — MLOps, GenAI & Agentic AI",
       "Concurrent with Coforge — formalising the theory behind production systems",
       "Structural ML · probabilistic reasoning · optimisation · MLOps at scale",
     ],
@@ -214,9 +215,8 @@ function toMonths(d: Date): number {
 }
 const TOTAL_MONTHS = toMonths(AXIS_END);
 
-const PROJ_ROWS = [...ENTRIES].sort(
-  (a, b) => a.start.getTime() - b.start.getTime(),
-);
+const PRO_PROJ = [...PRO].sort((a, b) => a.start.getTime() - b.start.getTime());
+const EDU_PROJ = [...EDU].sort((a, b) => a.start.getTime() - b.start.getTime());
 
 function assignLanes(entries: Entry[]): Map<EntryId, number> {
   const sorted = [...entries].sort(
@@ -236,158 +236,146 @@ function assignLanes(entries: Entry[]): Map<EntryId, number> {
 
 const PRO_LANE = assignLanes(PRO);
 const EDU_LANE = assignLanes(EDU);
-
-// Projection rows — same greedy lane logic as bars so non-overlapping entries
-// share a row (e.g. CellStrat + IISc share row 1, Gida + Coforge share row 0).
-const PRO_PROJ = [...PRO].sort((a, b) => a.start.getTime() - b.start.getTime());
-const EDU_PROJ = [...EDU].sort((a, b) => a.start.getTime() - b.start.getTime());
-const PRO_PROJ_LANE = assignLanes(PRO); // reuse bar lanes — same non-overlap logic
+const PRO_PROJ_LANE = assignLanes(PRO);
 const EDU_PROJ_LANE = assignLanes(EDU);
-const N_PRO_PROJ_ROWS = new Set(PRO_PROJ_LANE.values()).size; // 2
-const N_EDU_PROJ_ROWS = new Set(EDU_PROJ_LANE.values()).size; // 1
 
-// Chart geometry
-const CHART_PAD_L = 72;
-const CHART_PAD_R = 120;
-const CHART_MULT = 2.1;
-const HEADER_H = 220; // 0.85rem top + label-row + 5rem gap + ~5.5rem heading
-const LANE_GAP = 14;
-const PROJ_H = 5;
-const PROJ_GAP = 4;
-const INNER_GAP = 6; // gap between pro projection band and spine (pro side unchanged)
-const AXIS_PAD = 22; // constant gap applied between every edu-side element:
-//   spine → year labels → edu proj rows → edu bars
+// ── Vertical chart layout constants ──────────────────────────────────────
+const HEADER_H = 220;
+const CHART_PAD_T = 60;
+const CHART_PAD_B = 80;
+const CHART_EDGE_L = 40;
+const CHART_EDGE_R = 40;
+const CHART_MULT_V = 2.8;
+const SPINE_RATIO = 0.5;
+const PRO_SPINE_X_GAP = 40; // zone on spine side for year labels
+const EDU_SPINE_X_GAP = 40;
+const PROJ_W = 5; // width of each projection strip
+const PROJ_X_GAP = 16; // gap between parallel strips in the band
+const BAR_X_GAP = 22; // gap from projection band edge to card column
+const MAX_PRO_LANE_W = 320;
+const MAX_EDU_LANE_W = 380;
 
-// Projection band heights
-const PRO_PROJ_H =
-  N_PRO_PROJ_ROWS * PROJ_H + Math.max(0, N_PRO_PROJ_ROWS - 1) * PROJ_GAP;
-const EDU_PROJ_H =
-  N_EDU_PROJ_ROWS * PROJ_H + Math.max(0, N_EDU_PROJ_ROWS - 1) * PROJ_GAP;
-const YEAR_LABEL_H = 10; // approximate px height of rendered year label
-
-// Pro side: bar bottoms at spine - PRO_SPINE_GAP
-const PRO_SPINE_GAP = PRO_PROJ_H + INNER_GAP * 2;
-// Edu side: spine → AXIS_PAD → year labels → AXIS_PAD → edu proj → AXIS_PAD → edu bars
-const EDU_SPINE_GAP =
-  AXIS_PAD + YEAR_LABEL_H + AXIS_PAD + EDU_PROJ_H + AXIS_PAD;
+const N_PRO_PROJ_ROWS = new Set(assignLanes(PRO).values()).size;
+const N_EDU_PROJ_ROWS = new Set(assignLanes(EDU).values()).size;
 
 function buildDims(vpW: number, vpH: number) {
-  const chartW = Math.max(vpW * CHART_MULT, 2600);
-  const monthPx = (chartW - CHART_PAD_L - CHART_PAD_R) / TOTAL_MONTHS;
+  const chartH = Math.max(vpH * CHART_MULT_V, 2400);
+  const monthPx = (chartH - CHART_PAD_T - CHART_PAD_B) / TOTAL_MONTHS;
   const STRIP_H = vpH - HEADER_H;
+  const SPINE_X = Math.round(vpW * SPINE_RATIO);
 
-  const toPx = (d: Date) => CHART_PAD_L + toMonths(d) * monthPx;
-  const bW = (s: Date, e: Date | "present") =>
-    Math.max(
-      monthPx * 0.8,
-      (toMonths(e === "present" ? TODAY : (e as Date)) - toMonths(s)) * monthPx,
-    );
+  // recent = small Y (top), old = large Y (bottom)
+  const toPy = (d: Date) =>
+    CHART_PAD_T + (TOTAL_MONTHS - toMonths(d)) * monthPx;
 
-  // Measure actual bar heights via canvas text wrapping
-  const entryH: Partial<Record<EntryId, number>> = {};
-  for (const e of ENTRIES) entryH[e.id] = measureBarH(e, bW(e.start, e.end));
+  // Duration height for projection strips — time-proportional
+  const bH = (s: Date, e: Date | "present") => {
+    const endM = e === "present" ? toMonths(TODAY) : toMonths(e as Date);
+    return Math.max(monthPx * 2, (endM - toMonths(s)) * monthPx);
+  };
 
-  // ── Pro bar tops — overlap-based, no slot-max gap ──────────────────────
-  // Compute in relative coords where SPINE = 0 (negative = above spine).
-  // Lane 0: bottom at -PRO_SPINE_GAP.
-  // Lane 1+: each bar placed just above its temporally-overlapping lane-below
-  //          neighbor, not above the tallest bar in that lane.
-  const relTop: Partial<Record<EntryId, number>> = {};
-
-  for (const e of PRO) {
-    if ((PRO_LANE.get(e.id) ?? 0) === 0) {
-      relTop[e.id] = -(PRO_SPINE_GAP + entryH[e.id]!);
-    }
-  }
-  // Lane 1 (CellStrat, IISc) — find overlapping lane-0 neighbors
-  for (const e of PRO) {
-    const lane = PRO_LANE.get(e.id) ?? 0;
-    if (lane === 0) continue;
-    const eS = toMonths(e.start);
-    const eE = toMonths(e.end === "present" ? TODAY : (e.end as Date));
-    // topmost (most-negative Y) lane-(lane-1) bar that overlaps in time
-    let ref = -PRO_SPINE_GAP;
-    for (const o of PRO) {
-      if ((PRO_LANE.get(o.id) ?? 0) !== lane - 1) continue;
-      const oS = toMonths(o.start);
-      const oE = toMonths(o.end === "present" ? TODAY : (o.end as Date));
-      if (oE > eS && oS < eE) ref = Math.min(ref, relTop[o.id]!);
-    }
-    relTop[e.id] = ref - LANE_GAP - entryH[e.id]!;
-  }
-
-  // Total height above spine = distance from topmost bar's top to spine
-  const totalProH = -Math.min(...(Object.values(relTop) as number[]));
-
-  // Edu bars (single lane, top-down from spine)
-  const eduLaneH: number[] = [];
-  for (const e of EDU) {
-    const k = EDU_LANE.get(e.id) ?? 0;
-    eduLaneH[k] = Math.max(eduLaneH[k] ?? 0, entryH[e.id]!);
-  }
-  const totalEduH =
-    EDU_SPINE_GAP +
-    eduLaneH.reduce((a, h) => a + h, 0) +
-    Math.max(0, eduLaneH.length - 1) * LANE_GAP;
-
-  const vPad = Math.max(10, (STRIP_H - totalProH - totalEduH) * 0.7);
-  const SPINE = vPad + totalProH;
-
-  // Absolute bar positions
-  const proBarTop = (id: EntryId) => SPINE + relTop[id]!;
-
-  const eduLaneTop: number[] = [SPINE + EDU_SPINE_GAP];
-  for (let k = 1; k < eduLaneH.length; k++) {
-    eduLaneTop[k] = eduLaneTop[k - 1] + eduLaneH[k - 1] + LANE_GAP;
-  }
-  const eduBarTop = (id: EntryId) => eduLaneTop[EDU_LANE.get(id) ?? 0];
-
-  // Projection positions — row comes from greedy lane assignment so
-  // non-overlapping entries share the same row (same Y on the spine).
-  // Pro: row 0 nearest spine, higher rows further above.
-  // Edu: row 0 nearest spine, higher rows further below.
-  const proProj_top = (e: Entry) => {
+  // ── Pro side: all strips in one band near spine, all cards in one column ─
+  const proProjBandW =
+    N_PRO_PROJ_ROWS * PROJ_W + Math.max(0, N_PRO_PROJ_ROWS - 1) * PROJ_X_GAP;
+  const proCardLeft = SPINE_X + PRO_SPINE_X_GAP + proProjBandW + BAR_X_GAP;
+  const proLaneW = Math.min(
+    MAX_PRO_LANE_W,
+    Math.max(100, vpW - CHART_EDGE_R - proCardLeft),
+  );
+  // Every pro card starts at the same X
+  const proBarLeft = (_id: EntryId) => proCardLeft;
+  // Strip row 0 nearest spine, row 1 further
+  const proProj_left = (e: Entry) => {
     const row = PRO_PROJ_LANE.get(e.id) ?? 0;
-    return SPINE - INNER_GAP - (row + 1) * PROJ_H - row * PROJ_GAP;
+    return SPINE_X + PRO_SPINE_X_GAP + row * (PROJ_W + PROJ_X_GAP);
   };
-  const eduProj_top = (e: Entry) => {
+
+  // ── Edu side: all strips in one band near spine, all cards in one column ─
+  const eduProjBandW =
+    N_EDU_PROJ_ROWS * PROJ_W + Math.max(0, N_EDU_PROJ_ROWS - 1) * PROJ_X_GAP;
+  const eduCardRight = SPINE_X - EDU_SPINE_X_GAP - eduProjBandW - BAR_X_GAP;
+  const eduLaneW = Math.min(
+    MAX_EDU_LANE_W,
+    Math.max(100, eduCardRight - CHART_EDGE_L),
+  );
+  // Every edu card ends at the same X (right-aligned against the strip band)
+  const eduBarLeft = (_id: EntryId) => eduCardRight - eduLaneW;
+  // Strip row 0 nearest spine, row 1 further left
+  const eduProj_left = (e: Entry) => {
     const row = EDU_PROJ_LANE.get(e.id) ?? 0;
-    // After spine gap + year label zone, then rows stacked downward
-    return (
-      SPINE + AXIS_PAD + YEAR_LABEL_H + AXIS_PAD + row * (PROJ_H + PROJ_GAP)
-    );
+    return SPINE_X - EDU_SPINE_X_GAP - PROJ_W - row * (PROJ_W + PROJ_X_GAP);
   };
 
-  // Year labels: first element below spine, AXIS_PAD below the line
-  const YEAR_LABEL_Y = SPINE + AXIS_PAD;
-
-  // Track labels
-  const proLabelY =
-    SPINE +
-    relTop[
-      PRO.reduce((a, b) => ((relTop[a.id] ?? 0) < (relTop[b.id] ?? 0) ? a : b))
-        .id
-    ]! -
-    18;
-  const eduLabelY = eduLaneTop[0] + (eduLaneH[0] ?? 0) + 6;
+  // ── Content heights — cards sized to fit their text ────────────────────
+  const entryH: Partial<Record<EntryId, number>> = {};
+  for (const e of ENTRIES) {
+    const laneW = e.track === "professional" ? proLaneW : eduLaneW;
+    entryH[e.id] = measureBarH(e, laneW);
+  }
 
   return {
-    chartW,
+    chartH,
     monthPx,
     STRIP_H,
-    SPINE,
+    SPINE_X,
+    toPy,
+    bH,
+    proBarLeft,
+    eduBarLeft,
+    proLaneW,
+    eduLaneW,
     entryH: entryH as Record<EntryId, number>,
-    toPx,
-    bW,
-    proBarTop,
-    eduBarTop,
-    proProj_top,
-    eduProj_top,
-    YEAR_LABEL_Y,
-    proLabelY,
-    eduLabelY,
-    maxOffset: Math.max(0, chartW - vpW),
+    proProj_left,
+    eduProj_left,
+    maxOffset: Math.max(0, chartH - STRIP_H),
   };
+}
+
+// ── Smart vertical centering ──────────────────────────────────────────────
+// For entries that have no concurrent entries in other lanes: centre on their
+// own strip. For entries whose strip overlaps with sibling lanes (e.g.
+// Outlawed overlapping with CellStrat + IISc): centre in the largest
+// sub-range of the strip that is free of concurrent cards.
+function cardCenterY(
+  e: Entry,
+  lane: number,
+  allEntries: Entry[],
+  laneMap: Map<EntryId, number>,
+  monthPx: number,
+): number {
+  const eS = toMonths(e.start);
+  const eE = toMonths(e.end === "present" ? TODAY : (e.end as Date));
+  const midY = (mA: number, mB: number) =>
+    CHART_PAD_T + (TOTAL_MONTHS - (mA + mB) / 2) * monthPx;
+
+  // Gather time-ranges of concurrent sibling-lane entries
+  const blocked: Array<[number, number]> = [];
+  for (const o of allEntries) {
+    if (o.id === e.id || (laneMap.get(o.id) ?? 0) === lane) continue;
+    const oS = toMonths(o.start);
+    const oE = toMonths(o.end === "present" ? TODAY : (o.end as Date));
+    if (oE > eS && oS < eE) blocked.push([Math.max(oS, eS), Math.min(oE, eE)]);
+  }
+
+  if (blocked.length === 0) return midY(eS, eE);
+
+  // Merge and find gaps
+  blocked.sort((a, b) => a[0] - b[0]);
+  const gaps: Array<[number, number]> = [];
+  if (blocked[0][0] > eS) gaps.push([eS, blocked[0][0]]);
+  for (let i = 0; i < blocked.length - 1; i++) {
+    if (blocked[i][1] < blocked[i + 1][0])
+      gaps.push([blocked[i][1], blocked[i + 1][0]]);
+  }
+  if (blocked[blocked.length - 1][1] < eE)
+    gaps.push([blocked[blocked.length - 1][1], eE]);
+
+  // No free gap → fall back to full-strip centre
+  if (gaps.length === 0) return midY(eS, eE);
+
+  // Centre in the largest free sub-range
+  const best = gaps.reduce((a, b) => (b[1] - b[0] > a[1] - a[0] ? b : a));
+  return midY(best[0], best[1]);
 }
 
 // ── Mobile ────────────────────────────────────────────────────────────────
@@ -411,7 +399,7 @@ function MobileView() {
             textTransform: "uppercase",
           }}
         >
-          03 — Experience & Education
+          Experience & Education
         </span>
         <div
           style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.07)" }}
@@ -561,7 +549,6 @@ export function ExperienceTimeline() {
     return () => obs.disconnect();
   }, []);
 
-  // Memoised — only recalculates when viewport dimensions change
   const dims = useMemo(() => buildDims(vpW, vpH), [vpW, vpH]);
 
   useEffect(() => {
@@ -618,38 +605,29 @@ export function ExperienceTimeline() {
     );
 
   const {
-    chartW,
+    chartH,
     STRIP_H,
-    SPINE,
+    SPINE_X,
+    toPy,
+    bH,
+    proBarLeft,
+    eduBarLeft,
+    proLaneW,
+    eduLaneW,
     entryH,
-    toPx,
-    bW,
-    proBarTop,
-    eduBarTop,
-    proProj_top,
-    eduProj_top,
-    YEAR_LABEL_Y,
-    proLabelY,
-    eduLabelY,
+    proProj_left,
+    eduProj_left,
+    monthPx,
     maxOffset,
   } = dims;
+
   const sectionH = vpH + maxOffset;
 
-  const visStart =
-    ORIGIN.getFullYear() +
-    Math.floor(Math.floor(chartOffset / dims.monthPx) / 12);
-  const visEnd =
-    ORIGIN.getFullYear() +
-    Math.floor(Math.floor((chartOffset + vpW) / dims.monthPx) / 12);
+  // Header compresses over the first 100px of scroll — heading slides up to sit tight against the section line
+  const compressRatio = maxOffset > 0 ? Math.min(1, chartOffset / 100) : 0;
+  const headerGapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
 
-  // Render a bar — height is measured, padding is constant
-  const renderBar = (
-    e: Entry,
-    top: number,
-    left: number,
-    width: number,
-    ongoing: boolean,
-  ) => {
+  const renderBar = (e: Entry, top: number, left: number, width: number) => {
     const clr = CLR[e.id];
     const h = entryH[e.id];
     return (
@@ -659,21 +637,20 @@ export function ExperienceTimeline() {
           position: "absolute",
           left,
           top,
-          width: ongoing ? width + 32 : width,
+          width,
           height: h,
           background: `linear-gradient(180deg, ${clr}0e 0%, ${clr}05 100%)`,
           borderLeft: `2px solid ${clr}`,
           borderTop: `1px solid ${clr}28`,
           borderBottom: `1px solid ${clr}28`,
-          borderRight: ongoing ? "none" : `1px solid ${clr}28`,
-          borderRadius: ongoing ? "3px 0 0 3px" : "3px",
+          borderRight: `1px solid ${clr}28`,
+          borderRadius: "3px",
           boxSizing: "border-box",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
         }}
       >
-        {/* Header — constant padding */}
         <div style={{ padding: `${PAD_TOP}px ${PAD_X}px 0`, flexShrink: 0 }}>
           <div
             style={{
@@ -699,20 +676,18 @@ export function ExperienceTimeline() {
             >
               {e.role}
             </span>
-            {width > 160 && (
-              <span
-                style={{
-                  fontFamily: FONT_MONO,
-                  fontSize: "0.44rem",
-                  color: "rgba(255,255,255,0.26)",
-                  letterSpacing: "0.06em",
-                  flexShrink: 0,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {e.period}
-              </span>
-            )}
+            <span
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.44rem",
+                color: "rgba(255,255,255,0.26)",
+                letterSpacing: "0.06em",
+                flexShrink: 0,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {e.period}
+            </span>
           </div>
           <span
             style={{
@@ -735,8 +710,6 @@ export function ExperienceTimeline() {
             }}
           />
         </div>
-
-        {/* Bullets — constant padding, no overflow clipping */}
         <div
           style={{
             padding: `0 ${PAD_X}px ${PAD_BOTTOM}px`,
@@ -789,21 +762,20 @@ export function ExperienceTimeline() {
       <div
         style={{ position: "sticky", top: 0, height: vpH, overflow: "hidden" }}
       >
-        {/* Header — compact top (matches Research sticky header), 5rem gap label→heading */}
+        {/* Header */}
         <div
           style={{
-            padding: "0.85rem 6vw 0",
+            padding: "0.85rem 6vw 2rem",
             opacity: visible ? 1 : 0,
             transition: "opacity 0.5s",
           }}
         >
-          {/* Section label row */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: "1rem",
-              marginBottom: "5rem",
+              marginBottom: headerGapPx,
             }}
           >
             <span
@@ -815,7 +787,7 @@ export function ExperienceTimeline() {
                 textTransform: "uppercase",
               }}
             >
-              03 — Experience & Education
+              Experience & Education
             </span>
             <div
               style={{
@@ -825,7 +797,6 @@ export function ExperienceTimeline() {
               }}
             />
           </div>
-          {/* Section heading */}
           <h2
             style={{
               fontFamily: FONT_SERIF,
@@ -841,7 +812,7 @@ export function ExperienceTimeline() {
           </h2>
         </div>
 
-        {/* Chart — left/right 15% fade masks */}
+        {/* Chart strip */}
         <div
           style={
             {
@@ -852,9 +823,9 @@ export function ExperienceTimeline() {
               opacity: visible ? 1 : 0,
               transition: "opacity 0.5s ease 0.1s",
               WebkitMaskImage:
-                "linear-gradient(to right, transparent 1%, rgba(0,0,0,0.05) 4%, rgba(0,0,0,0.22) 6.5%, rgba(0,0,0,0.54) 8.5%, rgba(0,0,0,0.86) 10%, black 11%, black 89%, rgba(0,0,0,0.86) 90%, rgba(0,0,0,0.54) 91.5%, rgba(0,0,0,0.22) 93.5%, rgba(0,0,0,0.05) 96%, transparent 99%)",
+                "linear-gradient(to bottom, black 0%, black 88%, rgba(0,0,0,0.5) 94%, transparent 100%)",
               maskImage:
-                "linear-gradient(to right, transparent 1%, rgba(0,0,0,0.05) 4%, rgba(0,0,0,0.22) 6.5%, rgba(0,0,0,0.54) 8.5%, rgba(0,0,0,0.86) 10%, black 11%, black 89%, rgba(0,0,0,0.86) 90%, rgba(0,0,0,0.54) 91.5%, rgba(0,0,0,0.22) 93.5%, rgba(0,0,0,0.05) 96%, transparent 99%)",
+                "linear-gradient(to bottom, black 0%, black 88%, rgba(0,0,0,0.5) 94%, transparent 100%)",
             } as React.CSSProperties
           }
         >
@@ -863,119 +834,82 @@ export function ExperienceTimeline() {
               position: "absolute",
               top: 0,
               left: 0,
-              width: chartW,
-              height: STRIP_H,
-              transform: `translateX(-${chartOffset}px)`,
+              width: "100%",
+              height: chartH,
+              transform: `translateY(-${chartOffset}px)`,
             }}
           >
-            {/* Year grid */}
+            {/* Faint year grid */}
             {YEAR_MARKS.map((y) => (
               <div
                 key={y}
                 style={{
                   position: "absolute",
-                  left: toPx(new Date(y, 0, 1)),
-                  top: 0,
-                  width: 1,
-                  height: STRIP_H,
+                  top: toPy(new Date(y, 0, 1)),
+                  left: 0,
+                  right: 0,
+                  height: 1,
                   background: "rgba(255,255,255,0.04)",
                 }}
               />
             ))}
 
-            {/* Track labels */}
-            <span
-              style={{
-                position: "absolute",
-                left: 8,
-                top: proLabelY,
-                fontFamily: FONT_MONO,
-                fontSize: "0.36rem",
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.18)",
-              }}
-            >
-              Professional
-            </span>
-            <span
-              style={{
-                position: "absolute",
-                left: 8,
-                top: eduLabelY,
-                fontFamily: FONT_MONO,
-                fontSize: "0.36rem",
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.18)",
-              }}
-            >
-              Education
-            </span>
+            {/* Spine — segmented so year labels appear to cut through it */}
+            {(() => {
+              const GAP = 11;
+              const markYs = YEAR_MARKS.map((y) =>
+                toPy(new Date(y, 0, 1)),
+              ).sort((a, b) => a - b);
+              const segs: Array<{ top: number; height: number }> = [];
+              let prev = 0;
+              for (const my of markYs) {
+                const h = my - GAP - prev;
+                if (h > 0) segs.push({ top: prev, height: h });
+                prev = my + GAP;
+              }
+              const tail = chartH - prev;
+              if (tail > 0) segs.push({ top: prev, height: tail });
+              return segs.map((s, i) => (
+                <div
+                  key={i}
+                  style={{
+                    position: "absolute",
+                    left: SPINE_X,
+                    top: s.top,
+                    height: s.height,
+                    width: 1,
+                    background: "rgba(255,255,255,0.15)",
+                  }}
+                />
+              ));
+            })()}
 
-            {/* Spine */}
-            <div
-              style={{
-                position: "absolute",
-                left: 0,
-                right: 0,
-                top: SPINE,
-                height: 1,
-                background: "rgba(255,255,255,0.15)",
-              }}
-            />
-
-            {/* Today */}
-            <div
-              style={{
-                position: "absolute",
-                left: toPx(TODAY),
-                top: 0,
-                width: 1,
-                height: STRIP_H,
-                borderLeft: "1px dashed rgba(74,222,128,0.45)",
-              }}
-            />
-            <span
-              style={{
-                position: "absolute",
-                left: toPx(TODAY) + 5,
-                top: 6,
-                fontFamily: FONT_MONO,
-                fontSize: "0.42rem",
-                letterSpacing: "0.1em",
-                color: "#4ade80",
-                textTransform: "uppercase",
-              }}
-            >
-              Now
-            </span>
-
-            {/* Year ticks — span full height of projection bands */}
+            {/* Year ticks + labels centred on spine */}
             {YEAR_MARKS.map((y) => {
-              const x = toPx(new Date(y, 0, 1));
+              const yPos = toPy(new Date(y, 0, 1));
               return (
                 <div key={y}>
-                  {/* Tick: from 5px above spine down to year label */}
                   <div
                     style={{
                       position: "absolute",
-                      left: x,
-                      top: SPINE - 5,
-                      width: 1,
-                      height: AXIS_PAD + 5,
+                      top: yPos,
+                      left: SPINE_X - 5,
+                      width: 11,
+                      height: 1,
                       background: "rgba(255,255,255,0.22)",
                     }}
                   />
                   <span
                     style={{
                       position: "absolute",
-                      left: x - 20,
-                      top: YEAR_LABEL_Y,
+                      top: yPos - 9,
+                      left: SPINE_X,
+                      transform: "translateX(-50%)",
                       fontFamily: FONT_MONO,
                       fontSize: "0.58rem",
                       letterSpacing: "0.06em",
                       color: "rgba(255,255,255,0.50)",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {y}
@@ -984,62 +918,115 @@ export function ExperienceTimeline() {
               );
             })}
 
-            {/* Professional bars */}
-            {PRO.map((e) =>
-              renderBar(
+            {/* Pro projection strips — time-proportional duration indicator */}
+            {PRO_PROJ.map((e) => {
+              const endDate = e.end === "present" ? TODAY : (e.end as Date);
+              const stripTop = toPy(endDate);
+              const stripH = bH(e.start, e.end);
+              return (
+                <div
+                  key={`pp-${e.id}`}
+                  style={{
+                    position: "absolute",
+                    top: e.end === "present" ? stripTop - 20 : stripTop,
+                    left: proProj_left(e),
+                    width: PROJ_W,
+                    height: e.end === "present" ? stripH + 20 : stripH,
+                    background: CLR[e.id],
+                    borderRadius: 2,
+                    opacity: 0.82,
+                  }}
+                />
+              );
+            })}
+
+            {/* Edu projection strips */}
+            {EDU_PROJ.map((e) => {
+              const stripTop = toPy(e.end as Date);
+              const stripH = bH(e.start, e.end as Date);
+              return (
+                <div
+                  key={`ep-${e.id}`}
+                  style={{
+                    position: "absolute",
+                    top: stripTop,
+                    left: eduProj_left(e),
+                    width: PROJ_W,
+                    height: stripH,
+                    background: CLR[e.id],
+                    borderRadius: 2,
+                    opacity: 0.82,
+                  }}
+                />
+              );
+            })}
+
+            {/* Professional cards — each centred in its strip's largest free sub-range */}
+            {PRO.map((e) => {
+              const lane = PRO_LANE.get(e.id) ?? 0;
+              const cy = cardCenterY(e, lane, PRO, PRO_LANE, monthPx);
+              return renderBar(
                 e,
-                proBarTop(e.id),
-                toPx(e.start),
-                bW(e.start, e.end),
-                e.end === "present",
-              ),
-            )}
+                cy - entryH[e.id] / 2,
+                proBarLeft(e.id),
+                proLaneW,
+              );
+            })}
 
-            {/* Pro projection rows — above spine (+Y), row = greedy lane */}
-            {PRO_PROJ.map((e) => (
-              <div
-                key={`pp-${e.id}`}
-                style={{
-                  position: "absolute",
-                  left: toPx(e.start),
-                  top: proProj_top(e),
-                  width: bW(e.start, e.end) + (e.end === "present" ? 32 : 0),
-                  height: PROJ_H,
-                  background: CLR[e.id],
-                  borderRadius: 2,
-                  opacity: 0.82,
-                }}
-              />
-            ))}
-
-            {/* Edu projection rows — below spine (-Y), row = greedy lane */}
-            {EDU_PROJ.map((e) => (
-              <div
-                key={`ep-${e.id}`}
-                style={{
-                  position: "absolute",
-                  left: toPx(e.start),
-                  top: eduProj_top(e),
-                  width: bW(e.start, e.end),
-                  height: PROJ_H,
-                  background: CLR[e.id],
-                  borderRadius: 2,
-                  opacity: 0.82,
-                }}
-              />
-            ))}
-
-            {/* Education bars */}
-            {EDU.map((e) =>
-              renderBar(
+            {/* Education cards */}
+            {EDU.map((e) => {
+              const lane = EDU_LANE.get(e.id) ?? 0;
+              const cy = cardCenterY(e, lane, EDU, EDU_LANE, monthPx);
+              return renderBar(
                 e,
-                eduBarTop(e.id),
-                toPx(e.start),
-                bW(e.start, e.end),
-                false,
-              ),
-            )}
+                cy - entryH[e.id] / 2,
+                eduBarLeft(e.id),
+                eduLaneW,
+              );
+            })}
           </div>
+
+          {/* Scroll-progress comet — lives outside translateY so it stays fixed in viewport */}
+          {(() => {
+            const scanY =
+              maxOffset > 0 ? (chartOffset / maxOffset) * STRIP_H : 0;
+            const TAIL_LEN = STRIP_H * 0.5;
+            const tailTop = Math.max(0, scanY - TAIL_LEN);
+            const tailH = scanY - tailTop;
+            return (
+              <>
+                {/* Comet tail */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: SPINE_X,
+                    top: tailTop,
+                    width: 1,
+                    height: tailH,
+                    background:
+                      "linear-gradient(to bottom, transparent, rgba(255,255,255,0.82))",
+                    pointerEvents: "none",
+                    zIndex: 2,
+                  }}
+                />
+                {/* Comet head — circle */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: SPINE_X - 4,
+                    top: scanY - 4,
+                    width: 9,
+                    height: 9,
+                    borderRadius: "50%",
+                    background: "rgba(255,255,255,0.96)",
+                    boxShadow: "0 0 10px 4px rgba(255,255,255,0.45)",
+                    pointerEvents: "none",
+                    zIndex: 3,
+                  }}
+                />
+              </>
+            );
+          })()}
         </div>
       </div>
     </div>
