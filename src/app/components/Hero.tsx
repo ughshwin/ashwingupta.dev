@@ -449,7 +449,7 @@ export function Hero() {
                   : "clamp(3.8rem, 10vw, 8.5rem)",
                 fontWeight: 800,
                 lineHeight: 0.9,
-                letterSpacing: "-0.04em",
+                letterSpacing: "0.02em",
                 color: "#fafaf8",
                 margin: 0,
               }}
@@ -479,7 +479,7 @@ export function Hero() {
                   : "clamp(3.8rem, 10vw, 8.5rem)",
                 fontWeight: 800,
                 lineHeight: 1.1,
-                letterSpacing: "-0.04em",
+                letterSpacing: "0.02em",
                 color: "#fafaf8",
                 margin: 0,
                 display: "block",
@@ -548,7 +548,7 @@ export function Hero() {
               >
                 Coforge
                 <br />
-                Jun 2024 – Mar 2026
+                Jun 2024 – Present
               </p>
             </div>
           </motion.div>

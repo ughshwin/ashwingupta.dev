@@ -18,7 +18,9 @@ const FONT_SANS = '"DM Sans", sans-serif';
 export function Contact() {
   const isMobile = useIsMobile();
   const [copyToastMessage, setCopyToastMessage] = useState<string | null>(null);
-  const [downloadToastMessage, setDownloadToastMessage] = useState<string | null>(null);
+  const [downloadToastMessage, setDownloadToastMessage] = useState<
+    string | null
+  >(null);
 
   const copyEmailToClipboard = async () => {
     try {
@@ -137,7 +139,7 @@ export function Contact() {
                   : "clamp(2.6rem, 4.5vw, 4rem)",
                 fontWeight: 800,
                 lineHeight: 1.05,
-                letterSpacing: "-0.03em",
+                letterSpacing: "0.02em",
                 color: "#fafaf8",
                 margin: 0,
               }}
@@ -194,12 +196,15 @@ export function Contact() {
               lineHeight: 1.7,
               color: "rgba(255,255,255,0.6)",
               maxWidth: "400px",
+              textAlign: "justify",
+              textJustify: "inter-word",
             }}
           >
             Heads-down building right now — not looking for roles. But if you've
             got a hard problem, a wild idea, or just want to talk shop about
             LLMs, distributed systems, scientific ML, or why this site is
-            unreasonably over-engineered for a portfolio, I'm always up for that.
+            unreasonably over-engineered for a portfolio, I'm always up for
+            that.
           </motion.p>
         </div>
 
@@ -215,9 +220,13 @@ export function Contact() {
               key={i}
               href={href}
               download={download ?? undefined}
-              target={!download && href.startsWith("http") ? "_blank" : undefined}
+              target={
+                !download && href.startsWith("http") ? "_blank" : undefined
+              }
               rel={
-                !download && href.startsWith("http") ? "noopener noreferrer" : undefined
+                !download && href.startsWith("http")
+                  ? "noopener noreferrer"
+                  : undefined
               }
               whileHover={{ x: 4 }}
               onClick={
@@ -227,8 +236,8 @@ export function Contact() {
                       void copyEmailToClipboard();
                     }
                   : label === "Resume"
-                  ? () => handleResumeDownload()
-                  : undefined
+                    ? () => handleResumeDownload()
+                    : undefined
               }
               style={{
                 display: "flex",
@@ -264,7 +273,9 @@ export function Contact() {
                 >
                   {label}
                 </p>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "12px" }}
+                >
                   <p
                     style={{
                       fontFamily: FONT_SANS,
@@ -277,13 +288,22 @@ export function Contact() {
                   </p>
                   {(label === "Email" || label === "Resume") && (
                     <AnimatePresence mode="wait">
-                      {(label === "Email" ? copyToastMessage : downloadToastMessage) && (
+                      {(label === "Email"
+                        ? copyToastMessage
+                        : downloadToastMessage) && (
                         <motion.p
-                          key={label === "Email" ? copyToastMessage! : downloadToastMessage!}
+                          key={
+                            label === "Email"
+                              ? copyToastMessage!
+                              : downloadToastMessage!
+                          }
                           initial={{ opacity: 0, x: -6, scale: 0.98 }}
                           animate={{ opacity: 1, x: 0, scale: 1 }}
                           exit={{ opacity: 0, x: -4, scale: 0.98 }}
-                          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                          transition={{
+                            duration: 0.75,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
                           style={{
                             fontFamily: FONT_SANS,
                             fontSize: "0.78rem",
@@ -296,7 +316,9 @@ export function Contact() {
                             margin: 0,
                           }}
                         >
-                          {label === "Email" ? copyToastMessage : downloadToastMessage}
+                          {label === "Email"
+                            ? copyToastMessage
+                            : downloadToastMessage}
                         </motion.p>
                       )}
                     </AnimatePresence>

@@ -157,7 +157,7 @@ export const projects: Project[] = [
   {
     index: "04",
     slug: "hsbc-voice",
-    title: "Real-Time AI Voice Infrastructure for Banking",
+    title: "Conversational Analytics — HSBC",
     company: "HSBC",
     logo: "https://cdn.simpleicons.org/hsbc/DB0011",
     logoHeight: 22,
@@ -180,7 +180,7 @@ export const projects: Project[] = [
     ],
     bullets: [
       "**GIL'd threading caused memory ballooning** — concurrent sessions saturated at 20 per VM before packet loss rose above 10%; available hardware capacity was highly under-utilised; post-call documentation required **10–15 minutes of manual effort** per interaction with no automated path; fragmented cross-service logs with no correlation layer meant incidents required **1–2 hours of manual reconstruction** to identify root cause.",
-      "HSBC voice AI ran on GIL'd threading with **memory ballooning** on a **32-core VM** — capped at **20 concurrent calls**, 31 cores idle. Post-call documentation: **10–15 min per interaction**. Inference cost: **~$118K/month**. Incident recovery: **1–2 hours** — fragmented logs, no unified observability layer.",
+      "The platform ran on GIL'd threading with **memory ballooning** on a **32-core VM** — capped at **20 concurrent calls**, 31 cores idle. Post-call documentation: **10–15 min per interaction**. Inference cost: **~$118K/month**. Incident recovery: **1–2 hours** — fragmented logs, no unified observability layer.",
       "Led a **4-engineer team**. Owned **Packer automation across all project modules** — standardizing GCE image builds for the full SIP stack **(SBC → STT → LLM inference)**. Migrated from **32-core n2-standard-32** to **8-core c4-standard-8**; deployed **8 CPU-pinned parallel instances** via <code>taskset</code> — one per core, escaping GIL entirely. Rewrote concurrency with **asyncio + uvloop**, eliminating memory ballooning. Built **SIPp load test suite** (2,000 concurrent users). Architected **cross-stack log-correlation** over GCP Logging APIs — **250K+ log lines in under 5 seconds**.",
       "**<2s E2E transcription latency**, <5% packet loss at 1,600+ concurrent sessions. libsrtp + DTLS/SRTP for in-transit security. Grafana-Prometheus with MACD triggers. Migrated **n2-standard-32 → c4-standard-8**, improving transcript length **30–40% under load**.",
       "**7× per-VM capacity (20 → 140–160 calls)**. **1,600+ sessions** sustained. Documentation: **10–15 min → 2–3 min**. Compute: **$118K → $8K/month (~$1.3M annualized savings)**. MTTR: **1–2 hours → ~10 minutes**.",
@@ -419,6 +419,16 @@ export const projects: Project[] = [
   },
 ];
 
+const PROJECT_DETAIL_PATHS: Partial<Record<string, string>> = {
+  "ashwingupta-dev": "/work/ashwingupta-dev",
+  pageindexollama: "/work/pageindexollama",
+  "research-it": "/work/research-it",
+  "azure-infra-docs": "/work/azure-infra-docs",
+  "airline-contract-intelligence": "/work/airline-contract-intelligence",
+  "laminar-metamorph-polymorph": "/work/laminar-metamorph-polymorph",
+  "skill-recommendation-engine": "/work/skill-recommendation-engine",
+};
+
 const SUMMARY_LABELS = ["Problem", "System", "Design", "Outcome"];
 
 // Featured card for HSBC / Controla
@@ -542,7 +552,7 @@ function FeaturedCard({
               color: "#fafaf8",
               lineHeight: 1.2,
               margin: "0 0 1rem",
-              letterSpacing: "-0.02em",
+              letterSpacing: "0.02em",
             }}
           >
             {p.title}
@@ -626,6 +636,8 @@ function FeaturedCard({
                   fontSize: "0.85rem",
                   lineHeight: 1.65,
                   color: "rgba(255,255,255,0.55)",
+                  textAlign: "justify",
+                  textJustify: "inter-word",
                 }}
               >
                 {renderBullet(bullet)}
@@ -712,7 +724,8 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
           setRevealed(true);
           return;
         }
-        window.location.href = `/projects/${p.slug}`;
+        window.location.href =
+          PROJECT_DETAIL_PATHS[p.slug] ?? `/projects/${p.slug}`;
       }}
       style={{
         display: "flex",
@@ -849,6 +862,8 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
                   fontSize: "0.82rem",
                   lineHeight: 1.55,
                   color: "rgba(255,255,255,0.5)",
+                  textAlign: "justify",
+                  textJustify: "inter-word",
                 }}
               >
                 {renderBullet(bullet)}
@@ -1000,7 +1015,7 @@ export function Projects() {
                   : "clamp(2.6rem, 4.5vw, 4rem)",
               fontWeight: 800,
               lineHeight: 1.1,
-              letterSpacing: "-0.04em",
+              letterSpacing: "0.02em",
               color: "#fafaf8",
               margin: 0,
               transition: "font-size 0.30s ease",

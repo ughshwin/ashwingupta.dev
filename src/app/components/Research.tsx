@@ -92,7 +92,7 @@ const items: ResearchItem[] = [
     type: "whitepaper",
     name: "PINNs White Paper",
     title: "Physics-Informed Inference for Partial Observability",
-    link: pinnsPdfUrl,
+    link: "/research/pinns-whitepaper",
     bullets: [
       "**Partial observability** creates a blind-control problem — sparse telemetry leaves conventional solvers unable to reconstruct what sensors never captured.",
       "**PDE constraints embedded in the training objective** — network fits telemetry while satisfying governing dynamics; physics regularizes, not post-processes.",
@@ -165,140 +165,146 @@ function ResearchCard({ item }: { item: ResearchItem }) {
           transition: "max-height 0.5s cubic-bezier(0.76, 0, 0.24, 1)",
           ...(!showOutcome
             ? {
-                WebkitMaskImage: "linear-gradient(to bottom, black 75%, transparent 100%)",
-                maskImage: "linear-gradient(to bottom, black 75%, transparent 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, black 75%, transparent 100%)",
+                maskImage:
+                  "linear-gradient(to bottom, black 75%, transparent 100%)",
               }
             : {}),
         }}
       >
-      {/* Name + badge row */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: isDesktop ? "row" : "column",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: "0.5rem",
-        }}
-      >
-        <p
+        {/* Name + badge row */}
+        <div
           style={{
-            fontFamily: FONT_SERIF,
-            fontWeight: 800,
-            fontSize: "1.75rem",
-            color: "#fafaf8",
-            lineHeight: 1.2,
-            margin: 0,
-            minWidth: 0,
+            display: "flex",
+            flexDirection: isDesktop ? "row" : "column",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: "0.5rem",
           }}
         >
-          {item.name}
-        </p>
-        <span
-          style={{
-            fontFamily: FONT_MONO,
-            fontSize: "0.52rem",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            whiteSpace: "nowrap",
-            padding: "3px 9px",
-            borderRadius: "20px",
-            flexShrink: 0,
-            alignSelf: "flex-start",
-            color: TYPE_META[item.type].color,
-            border: `1px solid ${TYPE_META[item.type].border}`,
-            background: TYPE_META[item.type].bg,
-            boxShadow: TYPE_META[item.type].glow,
-          }}
-        >
-          {TYPE_META[item.type].label}
-        </span>
-      </div>
+          <p
+            style={{
+              fontFamily: FONT_SERIF,
+              fontWeight: 800,
+              fontSize: "1.75rem",
+              color: "#fafaf8",
+              lineHeight: 1.2,
+              margin: 0,
+              minWidth: 0,
+            }}
+          >
+            {item.name}
+          </p>
+          <span
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.52rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+              padding: "3px 9px",
+              borderRadius: "20px",
+              flexShrink: 0,
+              alignSelf: "flex-start",
+              color: TYPE_META[item.type].color,
+              border: `1px solid ${TYPE_META[item.type].border}`,
+              background: TYPE_META[item.type].bg,
+              boxShadow: TYPE_META[item.type].glow,
+            }}
+          >
+            {TYPE_META[item.type].label}
+          </span>
+        </div>
 
-      {/* Title (former subtitle) */}
-      <p
-        style={{
-          fontFamily: FONT_SANS,
-          fontWeight: 400,
-          fontSize: "0.85rem",
-          color: "rgba(255,255,255,0.55)",
-          lineHeight: 1.45,
-          margin: 0,
-          textAlign: "justify",
-          textJustify: "inter-word",
-        }}
-      >
-        {item.title}
-      </p>
-
-      {/* Subtitle */}
-      {item.subtitle && (
+        {/* Title (former subtitle) */}
         <p
           style={{
-            fontFamily: FONT_MONO,
-            fontSize: "0.7rem",
-            color: "rgba(255,255,255,0.28)",
+            fontFamily: FONT_SANS,
+            fontWeight: 400,
+            fontSize: "0.85rem",
+            color: "rgba(255,255,255,0.55)",
+            lineHeight: 1.45,
             margin: 0,
-            letterSpacing: "0.05em",
             textAlign: "justify",
             textJustify: "inter-word",
           }}
         >
-          {item.subtitle}
+          {item.title}
         </p>
-      )}
 
-      {/* Divider */}
-      <div
-        style={{
-          height: "1px",
-          background: "rgba(255,255,255,0.06)",
-        }}
-      />
-
-      {/* All 4 bullets — always rendered; mask fades bullet[3] until hover */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.75rem",
-        }}
-      >
-        {item.bullets.map((bullet, i) => (
-          <div
-            key={i}
-            style={{ display: "flex", gap: "0.65rem", alignItems: "flex-start" }}
+        {/* Subtitle */}
+        {item.subtitle && (
+          <p
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.7rem",
+              color: "rgba(255,255,255,0.28)",
+              margin: 0,
+              letterSpacing: "0.02em",
+              textAlign: "justify",
+              textJustify: "inter-word",
+            }}
           >
-            <span
+            {item.subtitle}
+          </p>
+        )}
+
+        {/* Divider */}
+        <div
+          style={{
+            height: "1px",
+            background: "rgba(255,255,255,0.06)",
+          }}
+        />
+
+        {/* All 4 bullets — always rendered; mask fades bullet[3] until hover */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.75rem",
+          }}
+        >
+          {item.bullets.map((bullet, i) => (
+            <div
+              key={i}
               style={{
-                fontFamily: FONT_MONO,
-                fontSize: "0.62rem",
-                color: "rgba(255,255,255,0.22)",
-                marginTop: "4px",
-                flexShrink: 0,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                width: isMobile ? "56px" : "76px",
-                lineHeight: 1.5,
+                display: "flex",
+                gap: "0.65rem",
+                alignItems: "flex-start",
               }}
             >
-              {RESEARCH_LABELS[i]}
-            </span>
-            <span
-              style={{
-                fontFamily: FONT_SANS,
-                fontSize: "0.88rem",
-                lineHeight: 1.65,
-                color: "rgba(255,255,255,0.56)",
-                textAlign: "justify",
-                textJustify: "inter-word",
-              }}
-            >
-              {renderBullet(bullet)}
-            </span>
-          </div>
-        ))}
-      </div>
+              <span
+                style={{
+                  fontFamily: FONT_MONO,
+                  fontSize: "0.62rem",
+                  color: "rgba(255,255,255,0.22)",
+                  marginTop: "4px",
+                  flexShrink: 0,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  width: isMobile ? "56px" : "76px",
+                  lineHeight: 1.5,
+                }}
+              >
+                {RESEARCH_LABELS[i]}
+              </span>
+              <span
+                style={{
+                  fontFamily: FONT_SANS,
+                  fontSize: "0.88rem",
+                  lineHeight: 1.65,
+                  color: "rgba(255,255,255,0.56)",
+                  textAlign: "justify",
+                  textJustify: "inter-word",
+                }}
+              >
+                {renderBullet(bullet)}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Arrow — outside masked div, always fully visible */}
@@ -314,7 +320,9 @@ function ResearchCard({ item }: { item: ResearchItem }) {
           style={{
             fontFamily: FONT_MONO,
             fontSize: "0.72rem",
-            color: hovered ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.35)",
+            color: hovered
+              ? "rgba(255,255,255,0.95)"
+              : "rgba(255,255,255,0.35)",
             transition: "color 0.2s",
           }}
         >
@@ -430,7 +438,7 @@ export function Research() {
                   : "clamp(2.6rem, 4.5vw, 4rem)",
               fontWeight: 800,
               lineHeight: 1.1,
-              letterSpacing: "-0.04em",
+              letterSpacing: "0.02em",
               color: "#fafaf8",
               margin: 0,
               transition: "font-size 0.30s ease",

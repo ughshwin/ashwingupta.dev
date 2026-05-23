@@ -32,16 +32,16 @@ type Entry = {
 };
 
 // ── Layout constants (matching the CSS exactly) ────────────────────────────
-const PAD_X = 10; // horizontal inner padding (each side)
-const PAD_TOP = 8; // top inner padding
-const PAD_BOTTOM = 12; // bottom inner padding (constant across all bars)
+const PAD_X = 14; // horizontal inner padding (each side)
+const PAD_TOP = 12; // top inner padding
+const PAD_BOTTOM = 16; // bottom inner padding (constant across all bars)
 const BULLET_MARK = 14; // px width consumed by ▪ + gap
 const ROLE_H = 20; // role line height
 const COMPANY_H = 12; // company line height
-const DIVIDER_H = 8; // divider line + vertical margins
+const DIVIDER_H = 15; // divider line + vertical margins
 const BAR_HDR_H = PAD_TOP + ROLE_H + COMPANY_H + DIVIDER_H; // 48px
 const BULLET_GAP = 4; // gap between bullet rows
-const FONT_PX = 11.2; // 0.70rem at 16px base
+const FONT_PX = 13.2; // 0.825rem at 16px base
 const FONT_LH = 1.48; // line-height
 
 // Canvas-based text-wrap measurement — correct for each bar's actual width
@@ -76,7 +76,7 @@ function measureBarH(e: Entry, barWidth: number): number {
         if (bi < e.bullets.length - 1) bulletsH += BULLET_GAP;
       });
     } catch {
-      bulletsH = e.bullets.length * 22;
+      bulletsH = e.bullets.length * 26;
     }
   } else {
     bulletsH = e.bullets.length * 22;
@@ -169,15 +169,17 @@ const ENTRIES: Entry[] = [
     weight: "recent",
     role: "AI Engineer",
     company: "Coforge — HSBC",
-    period: "Jun 2024 – Mar 2026",
+    period: "Jun 2024 – Present",
     start: new Date(2024, 5),
-    end: new Date(2026, 2),
+    end: "present",
     bullets: [
-      "HSBC Voice AI — SBC→STT→LLM on GCP/RHEL · authored LLD + orchestration architecture",
+      "Conversational Analytics (HSBC) — SBC→STT→LLM on GCP/RHEL · authored LLD + orchestration architecture",
       "GIL fix: CPU-pinned procs + asyncio/uvloop · 20→140–160 sessions/VM · 1,600+ concurrent",
       "Packer GCE automation · GCP log correlator: 250K lines <5s · MTTR 1–2hr→~10min",
       "Compute: $118K→$8K/month (~$1.3M/yr) · Azure infra intelligence · Amex GBT RAG",
-      "Best Team Award · Java Spring AI trainer · 130+ participants · NPS +50",
+      "Best Team Award - HSBC Account",
+      "Pat on Back — Think Customer · individual delivery innovation & excellence",
+      "Java Spring AI trainer · 130+ participants · 81% voted-preferred · NPS +50",
     ],
   },
   {
@@ -464,7 +466,7 @@ function MobileView() {
                   fontSize: "0.50rem",
                   color: "rgba(255,255,255,0.28)",
                   margin: "2px 0 0",
-                  letterSpacing: "0.05em",
+                  letterSpacing: "0.02em",
                   textTransform: "uppercase",
                 }}
               >
@@ -478,6 +480,7 @@ function MobileView() {
               display: "flex",
               flexDirection: "column",
               gap: "0.3rem",
+              maxWidth: "88%",
             }}
           >
             {e.bullets.map((b, i) => (
@@ -503,9 +506,11 @@ function MobileView() {
                 <span
                   style={{
                     fontFamily: FONT_SANS,
-                    fontSize: "0.82rem",
+                    fontSize: "0.94rem",
                     lineHeight: 1.5,
                     color: "rgba(255,255,255,0.58)",
+                    textAlign: "justify",
+                    textJustify: "inter-word",
                   }}
                 >
                   {b}
@@ -726,7 +731,7 @@ export function ExperienceTimeline() {
               height: 1,
               background: `${clr}20`,
               marginTop: 5,
-              marginBottom: 3,
+              marginBottom: 9,
             }}
           />
         </div>
@@ -762,6 +767,8 @@ export function ExperienceTimeline() {
                   fontSize: `${FONT_PX}px`,
                   lineHeight: FONT_LH,
                   color: "rgba(255,255,255,0.62)",
+                  textAlign: "justify",
+                  textJustify: "inter-word",
                 }}
               >
                 {b}
@@ -825,7 +832,7 @@ export function ExperienceTimeline() {
               fontWeight: 800,
               fontSize: "clamp(2.6rem, 4.5vw, 4rem)",
               lineHeight: 1.1,
-              letterSpacing: "-0.04em",
+              letterSpacing: "0.02em",
               color: "#fafaf8",
               margin: 0,
             }}

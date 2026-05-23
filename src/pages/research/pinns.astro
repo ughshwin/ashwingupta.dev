@@ -1,0 +1,204 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/research/pinns";
+const pdfUrl = "/PINNs_whitepaper.pdf";
+---
+
+<BaseLayout
+  title="Physics-Informed Neural Networks — Dual-Loss Framework | Ashwin Gupta"
+  description="Dual-loss PINN framework for multi-domain physics simulation. Best Outgoing Project — BMSCE 2022–23. 6 validated benchmarks across fluid, structural, and thermal domains."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/#featured" class="back-link">← Back to featured</a>
+
+        <header class="th-header">
+          <div class="th-badge">Best Outgoing Project '23 · BMS College of Engineering</div>
+          <h1 class="th-title">Physics-Informed Neural Networks — Dual-Loss Framework for Multi-Domain Simulation</h1>
+          <p class="th-subtitle">Physics constraints as regularizers. Sparse data made sufficient through governing equations.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Problem With Data-Driven Physics</h2>
+          <p class="th-body">
+            Purely data-driven physics simulation is fragile under sparse data. A model trained only on observations can satisfy the data loss while violating the governing equations — producing solutions that are mathematically consistent with the loss function but physically implausible. You need labeled datasets that are expensive or impossible to generate experimentally, and even with enough data, there is no guarantee the model learned the right structure.
+          </p>
+          <p class="th-body">
+            The standard response — more data, more compute — does not address the structural problem. The model has no reason to respect conservation laws, boundary conditions, or governing PDEs. It fits the examples it was given, and nothing more.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Framework</h2>
+          <p class="th-body">
+            The dual-loss PINN framework embeds governing PDE and ODE constraints directly into the optimization objective alongside data loss. The network minimises both simultaneously — fitting observations while satisfying the physics. The constraints act as a regularizer, preventing physically implausible solutions from emerging even when training data is sparse.
+          </p>
+          <p class="th-body">
+            This makes sparse data sufficient in a way that purely data-driven approaches cannot achieve. The governing equations carry structural information about the solution that would otherwise require thousands of labeled examples to approximate. Embedding PDEs into the objective is what makes the sparse-data regime tractable.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Validation Across Six Benchmarks</h2>
+          <p class="th-body">
+            The framework was validated across six benchmarks spanning three physics domains: fluid dynamics (Burgers' equation), structural mechanics (fixed-fixed column deflection, cantilever tip deflection), and heat transfer (1D heat conduction via pin fin, 1D transient cooling under Neumann flux and Dirichlet boundary conditions).
+          </p>
+          <p class="th-body">
+            Neumann and Dirichlet boundary condition variants were tested explicitly to validate generalizability across constraint types and problem geometries — not just across domains. Stable convergence was achieved across all six with limited labeled data.
+          </p>
+          <p class="th-body">
+            Applied use cases explored: HVAC thermal feedback and server cooling — both domains where labeled simulation data is expensive and sparse data is the realistic operating constraint.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">What This Means in Practice</h2>
+          <p class="th-body">
+            Physics-informed training shifts the question from "do I have enough data?" to "do I know the governing equations?" For most engineering problems, the governing equations are known. The data is sparse because experiments are expensive. PINNs make that the right trade-off to exploit.
+          </p>
+          <p class="th-body">
+            The key consequence: extrapolation under a physics-constrained model stays bounded by governing structure, not just by training coverage. Generalization depends on dynamics, not data density alone. The model cannot satisfy data loss by producing solutions that violate physics — the constraint eliminates that entire solution class.
+          </p>
+        </section>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .th-header { margin-bottom: 2.5rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .th-section { margin-bottom: 3.5rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    text-decoration: none;
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 4px;
+    padding: 8px 14px;
+    transition: background 0.2s;
+  }
+  .cta-link:hover { background: rgba(34, 211, 238, 0.08); }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

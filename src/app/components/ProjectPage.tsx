@@ -9,7 +9,13 @@ const FONT_SANS = '"DM Sans", sans-serif';
 
 const BULLET_ICONS = ["⚡", "⚠️", "⚙️", "🛡️", "🚀"] as const;
 
-export function ProjectPage({ slug, backHref = "/#projects" }: { slug: string; backHref?: string }) {
+export function ProjectPage({
+  slug,
+  backHref = "/#projects",
+}: {
+  slug: string;
+  backHref?: string;
+}) {
   const isMobile = useIsMobile();
   const p = projects.find((pr) => pr.slug === slug);
   const backSection = backHref.replace("/#", "");
@@ -59,9 +65,9 @@ export function ProjectPage({ slug, backHref = "/#projects" }: { slug: string; b
     <div
       style={{
         minHeight: "100vh",
-        width: "80vw",
+        width: "max(320px, 60vw)",
         margin: "0 auto",
-        padding: "4rem 0 8rem",
+        padding: "7rem 0 8rem",
       }}
     >
       {/* Back */}
@@ -84,10 +90,12 @@ export function ProjectPage({ slug, backHref = "/#projects" }: { slug: string; b
           transition: "color 0.2s",
         }}
         onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.9)";
+          (e.currentTarget as HTMLElement).style.color =
+            "rgba(255,255,255,0.9)";
         }}
         onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.35)";
+          (e.currentTarget as HTMLElement).style.color =
+            "rgba(255,255,255,0.35)";
         }}
       >
         ← Back to {backSection}
@@ -98,7 +106,12 @@ export function ProjectPage({ slug, backHref = "/#projects" }: { slug: string; b
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-        style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "3rem" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+          marginBottom: "3rem",
+        }}
       >
         {/* Status badge */}
         <div>
@@ -125,10 +138,12 @@ export function ProjectPage({ slug, backHref = "/#projects" }: { slug: string; b
           style={{
             fontFamily: FONT_SERIF,
             fontWeight: 800,
-            fontSize: isMobile ? "clamp(1.6rem, 6vw, 2.8rem)" : "clamp(2rem, 3.5vw, 3rem)",
+            fontSize: isMobile
+              ? "clamp(1.6rem, 6vw, 2.8rem)"
+              : "clamp(2rem, 3.5vw, 3rem)",
             color: "#fafaf8",
             lineHeight: 1.15,
-            letterSpacing: "-0.03em",
+            letterSpacing: "0.02em",
             margin: 0,
           }}
         >
@@ -166,14 +181,25 @@ export function ProjectPage({ slug, backHref = "/#projects" }: { slug: string; b
       </motion.div>
 
       {/* Divider */}
-      <div style={{ height: "1px", background: "rgba(255,255,255,0.07)", marginBottom: "3rem" }} />
+      <div
+        style={{
+          height: "1px",
+          background: "rgba(255,255,255,0.07)",
+          marginBottom: "3rem",
+        }}
+      />
 
       {/* Full bullets */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.15, duration: 0.4 }}
-        style={{ display: "flex", flexDirection: "column", gap: "0", marginBottom: "3rem" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "0",
+          marginBottom: "3rem",
+        }}
       >
         {p.bullets.map((b, i) => (
           <motion.div
@@ -203,6 +229,8 @@ export function ProjectPage({ slug, backHref = "/#projects" }: { slug: string; b
                 fontSize: isMobile ? "0.88rem" : "0.93rem",
                 lineHeight: 1.8,
                 color: "rgba(255,255,255,0.65)",
+                textAlign: "justify",
+                textJustify: "inter-word",
               }}
             >
               {renderBullet(b)}
@@ -220,7 +248,7 @@ export function ProjectPage({ slug, backHref = "/#projects" }: { slug: string; b
           fontFamily: FONT_MONO,
           fontSize: "0.65rem",
           color: "#e8e0d0",
-          letterSpacing: "0.05em",
+          letterSpacing: "0.02em",
           background: "rgba(232,224,208,0.07)",
           border: "1px solid rgba(232,224,208,0.15)",
           borderRadius: "4px",
@@ -237,7 +265,12 @@ export function ProjectPage({ slug, backHref = "/#projects" }: { slug: string; b
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.55, duration: 0.35 }}
-        style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "2.5rem" }}
+        style={{
+          display: "flex",
+          gap: "6px",
+          flexWrap: "wrap",
+          marginBottom: "2.5rem",
+        }}
       >
         {p.tags.map((t) => (
           <span
@@ -281,12 +314,15 @@ export function ProjectPage({ slug, backHref = "/#projects" }: { slug: string; b
             transition: "border-color 0.2s, color 0.2s",
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)";
+            (e.currentTarget as HTMLElement).style.borderColor =
+              "rgba(255,255,255,0.3)";
             (e.currentTarget as HTMLElement).style.color = "#fafaf8";
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.12)";
-            (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)";
+            (e.currentTarget as HTMLElement).style.borderColor =
+              "rgba(255,255,255,0.12)";
+            (e.currentTarget as HTMLElement).style.color =
+              "rgba(255,255,255,0.45)";
           }}
         >
           <ArrowUpRight size={13} />

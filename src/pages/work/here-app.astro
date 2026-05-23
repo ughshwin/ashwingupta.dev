@@ -1,0 +1,270 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/work/here-app";
+
+const metrics = [
+  { value: "~97%", label: "Factual accuracy on spec queries" },
+  { value: "163", label: "Languages supported" },
+  { value: "1", label: "Structured source of truth" },
+  { value: "↓", label: "Manual escalation on spec queries" },
+];
+---
+
+<BaseLayout
+  title="163-Language Vehicle Intelligence — HDFC ERGO | Ashwin Gupta"
+  description="Multilingual RAG for vehicle intelligence at HDFC ERGO. ~97% factual accuracy across 163 languages. Case study."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="hologram-interface case-study-scroll">
+      <div class="case-study-body">
+
+        <a href="/#featured" class="back-link">← Back to featured</a>
+
+        <header class="cs-header">
+          <div class="cs-context-badge">Client Delivery · Gida Technologies / HDFC ERGO</div>
+          <h1 class="cs-title">163-Language Vehicle Intelligence — Multilingual RAG at Enterprise Scale</h1>
+          <p class="cs-subtitle">
+            Vehicle specification queries answered accurately across 163 languages. QA-gated retrieval grounded in a single structured source of truth.
+          </p>
+        </header>
+
+        <div class="cs-divider"></div>
+
+        <div class="metrics-grid">
+          {metrics.map(({ value, label }) => (
+            <div class="metric-block">
+              <span class="metric-value">{value}</span>
+              <span class="metric-label">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="cs-divider"></div>
+
+        <section class="cs-section">
+          <h2 class="cs-section-title">The Problem</h2>
+          <p class="cs-body">
+            HDFC ERGO needed vehicle intelligence that could answer precise specification queries across their entire product catalogue — and answer them correctly, in the user's language, every time. Standard chatbot approaches failed: the same query in different languages returned contradictory results, creating a trust problem at scale.
+          </p>
+          <p class="cs-body">
+            Manual escalation was the only reliable fallback. Every spec-heavy query the chatbot got wrong became a support ticket. At HDFC ERGO's scale — one of India's largest general insurers — this was a volume bottleneck with a measurable cost.
+          </p>
+        </section>
+
+        <section class="cs-section">
+          <h2 class="cs-section-title">Why Standard RAG Fails at 163 Languages</h2>
+          <p class="cs-body">
+            The naive approach to multilingual RAG is post-hoc translation: generate a response in one language, then translate it. This works for general prose but fails for structured specification data, where terminology must be exact. A wheel size or engine displacement doesn't translate — it must be retrieved correctly in the target language from the start.
+          </p>
+          <p class="cs-body">
+            The system treats all 163 languages as first-class targets throughout the retrieval and generation pipeline. Language-aware chunking and per-language factual validation are built into the retrieval process itself, not bolted on afterward.
+          </p>
+        </section>
+
+        <section class="cs-section">
+          <h2 class="cs-section-title">The System</h2>
+          <p class="cs-body">
+            A RAG-based vehicle intelligence assistant grounded in a curated specification database with image-linked attributes. Every response is anchored to a single structured source of truth — no speculative answers on spec queries, no hallucinated specifications.
+          </p>
+          <p class="cs-body">
+            QA-gated retrieval validates lookup quality before generation. If retrieval doesn't meet quality thresholds, the generation step doesn't run. This gate is what makes the ~97% accuracy number hold at scale — errors are caught before they become delivered answers.
+          </p>
+          <p class="cs-body">
+            Dynamic data lookup operates across all 163 languages with localised responses grounded in the same structured data. The specification database acts as a single canonical source regardless of which language the query arrives in.
+          </p>
+        </section>
+
+        <section class="cs-section">
+          <h2 class="cs-section-title">Outcomes</h2>
+          <div class="outcomes-list">
+            <div class="outcome-item">
+              <span class="outcome-metric">~97% factual accuracy</span>
+              <span class="outcome-detail">Across vehicle specification queries in all 163 languages</span>
+            </div>
+            <div class="outcome-item">
+              <span class="outcome-metric">163 languages</span>
+              <span class="outcome-detail">As first-class retrieval targets — not post-processed translation</span>
+            </div>
+            <div class="outcome-item">
+              <span class="outcome-metric">Reduced manual escalation</span>
+              <span class="outcome-detail">Autonomous spec-query resolution at HDFC ERGO scale</span>
+            </div>
+            <div class="outcome-item">
+              <span class="outcome-metric">QA-gated retrieval</span>
+              <span class="outcome-detail">Errors caught before generation — not after delivery</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="cs-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .case-study-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .case-study-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .case-study-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .cs-header { margin-bottom: 2.5rem; }
+
+  .cs-context-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .cs-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 1rem;
+  }
+
+  .cs-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .cs-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.2rem;
+    margin: 2rem 0;
+  }
+
+  .metric-block { display: flex; flex-direction: column; gap: 4px; }
+
+  .metric-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    color: #22d3ee;
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    line-height: 1.4;
+  }
+
+  .cs-section { margin-bottom: 3.5rem; }
+
+  .cs-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .cs-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .cs-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .outcomes-list { display: flex; flex-direction: column; gap: 0; }
+
+  .outcome-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .outcome-metric {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e8e0d0;
+  }
+
+  .outcome-detail {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.07em;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .cs-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

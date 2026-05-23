@@ -209,12 +209,12 @@ export function Skills() {
                   : "clamp(2.6rem, 4.5vw, 4rem)",
                 fontWeight: 800,
                 lineHeight: 1.05,
-                letterSpacing: "-0.03em",
+                letterSpacing: "0.02em",
                 color: "#fafaf8",
                 margin: "0 0 1.2rem",
               }}
             >
-              What runs in production.
+              What I've run in production.
             </motion.h2>
           </div>
           <motion.p

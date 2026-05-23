@@ -1,0 +1,235 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/work/ashwingupta-dev";
+const githubUrl = "https://github.com/ughshwin/ashwingupta.dev";
+
+const metrics = [
+  { value: "90%", label: "Image size reduction" },
+  { value: "72%", label: "JS bundle cut" },
+  { value: "400", label: "Animated DOM nodes eliminated" },
+  { value: "4–6ms", label: "Canvas frame time (was 18–25ms)" },
+];
+---
+
+<BaseLayout
+  title="ashwingupta.dev — Design Handoff to Production | Ashwin Gupta"
+  description="Three-layer spatial portfolio rebuilt for performance. 90% image reduction, 72% JS cut, 400 animated DOM nodes eliminated, stable 60fps under CPU throttle."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/#projects" class="back-link">← Back to projects</a>
+
+        <header class="th-header">
+          <div class="th-badge">Shipped · Personal</div>
+          <h1 class="th-title">ashwingupta.dev — Design Handoff to Production</h1>
+          <p class="th-subtitle">A portfolio site is its own proof unit. The original claimed performance engineering while shipping every symptom of the opposite.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <div class="metrics-grid">
+          {metrics.map(({ value, label }) => (
+            <div class="metric-block">
+              <span class="metric-value">{value}</span>
+              <span class="metric-label">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="th-divider"></div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Problem With Self-Defeating Baselines</h2>
+          <p class="th-body">
+            The designer baseline shipped 400 CSS-animated DOM particles, a 2 MB JPEG hero, Google Fonts loaded per-component, and 72 unvetted dependencies. Every technical visitor's first data point was a performance failure on the site claiming performance engineering. The standard response — clean it up, swap some images — doesn't address the structural problem. The site needed to signal systems thinking, and it was doing the opposite at the source.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Architecture</h2>
+          <p class="th-body">
+            Rebuilt end-to-end as a three-layer spatial interface: environment shell, Canvas 2D particle field, hologram surface. All visual effects collapsed into a single Canvas RAF loop, eliminating 400 CSS-animated DOM nodes entirely. Images converted to WebP with <strong>fetchpriority</strong> preload on the hero. Below-fold sections split via React.lazy and Suspense so the initial bundle only contains what the first viewport needs.
+          </p>
+          <p class="th-body">
+            Scanline texture pre-rendered to an offscreen canvas — 1 drawImage per frame instead of 270 fillRect calls. Edge cache rebuilt every 3 frames. RAF paused on visibility change. Mouse tracking gated behind RAF. Each technique eliminates work at the source rather than hiding it. Optimization is structural, not cosmetic.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Outcomes</h2>
+          <p class="th-body">
+            Image: <strong>2 MB → 211 KB (90% reduction)</strong>. JS bundle: <strong>72% cut</strong>. DOM nodes: <strong>400 CSS-animated nodes eliminated</strong>. Font requests: 3 → 0. Canvas frame time: <strong>18–25 ms → 4–6 ms</strong>. Stable 60 FPS under CPU throttle.
+          </p>
+        </section>
+
+        <div style="margin-bottom: 3.5rem;">
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="cta-link">
+            ↗ View on GitHub
+          </a>
+        </div>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .th-header { margin-bottom: 2.5rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.2rem;
+    margin: 2rem 0;
+  }
+
+  .metric-block { display: flex; flex-direction: column; gap: 4px; }
+
+  .metric-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    color: #22d3ee;
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    line-height: 1.4;
+  }
+
+  .th-section { margin-bottom: 3.5rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    text-decoration: none;
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 4px;
+    padding: 8px 14px;
+    transition: background 0.2s;
+  }
+  .cta-link:hover { background: rgba(34, 211, 238, 0.08); }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

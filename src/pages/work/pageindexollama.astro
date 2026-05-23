@@ -1,0 +1,194 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/work/pageindexollama";
+const githubUrl = "https://github.com/ughshwin/PageIndexOllama";
+---
+
+<BaseLayout
+  title="PageIndexOllama — Local-First Fork of PageIndex | Ashwin Gupta"
+  description="Provider-agnostic tree-RAG. Offline execution via Ollama, llama.cpp, and vLLM. Finish-reason normalization eliminates silent traversal corruption on provider switch."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/#projects" class="back-link">← Back to projects</a>
+
+        <header class="th-header">
+          <div class="th-badge">Shipped · Open Source</div>
+          <h1 class="th-title">PageIndexOllama — Local-First Fork of PageIndex</h1>
+          <p class="th-subtitle">Tree-RAG freed from provider lock-in. Offline execution across Ollama, llama.cpp, and vLLM — finish-reason normalization makes traversal correctness independent of which runtime answers.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Problem</h2>
+          <p class="th-body">
+            PageIndex's tree-RAG was hardwired to OpenAI's API contract — inline prompt strings, non-normalized completion handling. Any provider switch corrupted recursive traversal silently, with errors surfacing only at collapse. All inference required a live API key, blocking offline or air-gapped execution entirely. Token encoding differences across providers produced inconsistent chunk boundaries with no visible signal.
+          </p>
+          <p class="th-body">
+            The failure mode was particularly dangerous: traversal would proceed, produce output, and only reveal the corruption at the final collapse stage. There was no early signal that the provider difference had invalidated the intermediate steps.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Approach</h2>
+          <p class="th-body">
+            Forked and refactored with a <strong>provider-routing abstraction</strong> resolved via environment variables. A <strong>finish-reason normalization layer</strong> stabilizes recursive traversal across model outputs — traversal depends on stable internal contracts, not whichever runtime answered. Prompts externalized into a registry loader, removing the coupling between prompt content and provider expectations.
+          </p>
+          <p class="th-body">
+            The key insight: tree-RAG correctness depends on finish-reason semantics, not provider identity. Normalizing finish reasons before they enter traversal logic makes the rest of the pipeline provider-agnostic. Bounded async concurrency across TOC generation and summarization prevents resource saturation on constrained hardware. Hierarchical fallback handles cases where the primary chunking strategy exceeds available VRAM.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Outcomes</h2>
+          <p class="th-body">
+            Fully offline tree-RAG with Ollama — no API keys. Seamless provider switching across Ollama, llama.cpp, and vLLM via stable internal contracts, with no traversal corruption on change. Vendor lock-in eliminated. Fallback chunk policies handle constrained VRAM and RAM without requiring manual tuning.
+          </p>
+        </section>
+
+        <div style="margin-bottom: 3.5rem;">
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="cta-link">
+            ↗ View on GitHub
+          </a>
+        </div>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .th-header { margin-bottom: 2.5rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .th-section { margin-bottom: 3.5rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    text-decoration: none;
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 4px;
+    padding: 8px 14px;
+    transition: background 0.2s;
+  }
+  .cta-link:hover { background: rgba(34, 211, 238, 0.08); }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

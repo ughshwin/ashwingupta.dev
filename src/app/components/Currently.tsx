@@ -88,6 +88,8 @@ export function Currently() {
                 lineHeight: 1.55,
                 color: "rgba(255,255,255,0.5)",
                 margin: 0,
+                textAlign: "justify",
+                textJustify: "inter-word",
               }}
             >
               <span

@@ -1,0 +1,210 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/work/skill-recommendation-engine";
+
+const metrics = [
+  { value: "+30%", label: "Recommendation relevance" },
+  { value: "<50ms", label: "Inference latency (99th percentile)" },
+  { value: "0", label: "Batch retraining on taxonomy expansion" },
+];
+---
+
+<BaseLayout
+  title="Graph-Based Skill Recommendation Engine — Prismforce | Ashwin Gupta"
+  description="+30% recommendation relevance. Sub-50ms inference on a single NVIDIA T4. Weighted directed graph over multi-level skill hierarchies with dynamic node updates."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/#projects" class="back-link">← Back to projects</a>
+
+        <header class="th-header">
+          <div class="th-badge">Client Delivery · Prismforce</div>
+          <h1 class="th-title">Graph-Based Skill Recommendation Engine</h1>
+          <p class="th-subtitle">+30% relevance, sub-50ms inference. Weighted directed graph over multi-level skill hierarchies — dynamic node updates without batch retraining, deterministic traversal under production load.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <div class="metrics-grid">
+          {metrics.map(({ value, label }) => (
+            <div class="metric-block">
+              <span class="metric-value">{value}</span>
+              <span class="metric-label">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="th-divider"></div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Problem</h2>
+          <p class="th-body">
+            The recommendation system treated related skills as independent nodes with no structural modeling — hierarchical relationships were ignored entirely. Every taxonomy expansion triggered full batch retraining, blocking updates until recompute completed. Inference latency under production concurrency exceeded the sub-50ms SLA required for live platform use.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The System</h2>
+          <p class="th-body">
+            Real-time recommendation engine using a <strong>weighted directed graph</strong> encoding multi-level skill hierarchy relationships as typed edges with dynamic weight updates. Lightweight mathematical scoring heuristics minimize computational overhead per inference call — no neural inference at query time. The update model handles dynamic node additions without full graph recomputation: adding a new skill inserts a node and its edges; existing traversal paths are unaffected.
+          </p>
+          <p class="th-body">
+            Deterministic traversal logic produces consistent outputs under frequent profile and taxonomy updates. The graph structure constrains traversal depth, so worst-case latency is knowable before deployment. Latency profiled at the <strong>99th percentile</strong> under realistic production concurrency on NVIDIA T4 — not average latency under ideal conditions.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Outcomes</h2>
+          <p class="th-body">
+            <strong>+30% improvement in recommendation relevance</strong> from structural hierarchy modeling. <strong>Sub-50ms inference</strong> on a single NVIDIA T4 under production load — 99th percentile SLA met. Dynamic taxonomy expansion no longer triggers batch retraining. Consistent outputs maintained under frequent profile and taxonomy changes.
+          </p>
+        </section>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .th-header { margin-bottom: 2.5rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.2rem;
+    margin: 2rem 0;
+  }
+
+  .metric-block { display: flex; flex-direction: column; gap: 4px; }
+
+  .metric-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    color: #22d3ee;
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    line-height: 1.4;
+  }
+
+  .th-section { margin-bottom: 3.5rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

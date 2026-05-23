@@ -8,15 +8,15 @@ const FONT_SANS = '"DM Sans", sans-serif';
 const pillars = [
   {
     title: "Inference as a System",
-    desc: "Most teams treat inference as a function call. They ship a demo that looks like a product. The real questions — can it handle 10× load, what's the p95 latency, what happens when a backend goes down — are architecture questions, not DevOps questions. I answer them before the first model goes live.",
+    desc: "Most teams ship inference as a function call. The real questions — p95 latency, 10× load, what happens when a backend goes down — are architecture questions. I answer them before the first model goes live.",
   },
   {
     title: "Execution Under Constraints",
-    desc: "A system that performs in demos often doesn't survive contact with production. Real constraints — latency budgets, VRAM ceilings, cost per token — aren't discovered at launch, they're known at design time. Most people build first and optimize later. I build the constraint model first.",
+    desc: "Systems that perform in demos often don't survive production. Real constraints — latency budgets, VRAM ceilings, cost per token — are known at design time, not discovered at launch. I build the constraint model first.",
   },
   {
     title: "Physics-Informed Scientific ML",
-    desc: "Data-driven models for physical systems aren't data problems — they're structure problems. If the governing equations exist, ignoring them means your model has to discover physics from examples it may never have enough of. Embedding PDEs into the training objective isn't complexity for its own sake. It's the constraint that makes sparse data sufficient.",
+    desc: "Data-driven physics models aren't data problems — they're structure problems. Ignoring governing equations forces the model to rediscover physics from data it may never have enough of. Embedding PDEs into the objective is what makes sparse data sufficient.",
   },
 ];
 
@@ -68,7 +68,12 @@ export function About() {
       </div>
 
       {/* Section heading — full-width above both columns so both start level */}
-      <div style={{ overflow: "hidden", marginBottom: isMobile ? "2.5rem" : "4rem" }}>
+      <div
+        style={{
+          overflow: "hidden",
+          marginBottom: isMobile ? "2.5rem" : "4rem",
+        }}
+      >
         <motion.h2
           initial={{ y: "100%" }}
           animate={{ y: 0 }}
@@ -80,14 +85,33 @@ export function About() {
               : "clamp(2.6rem, 4.5vw, 4rem)",
             fontWeight: 800,
             lineHeight: 1.05,
-            letterSpacing: "-0.03em",
+            letterSpacing: "0.02em",
             color: "#fafaf8",
             margin: 0,
           }}
         >
-          Most people find out it's broken at 2am. I find it first.
+          Inference is easy. Everything around it isn't.
         </motion.h2>
       </div>
+
+      {/* Brand thesis — full width, above grid so both columns start level */}
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        style={{
+          fontFamily: FONT_SANS,
+          fontSize: isMobile ? "1rem" : "1.05rem",
+          lineHeight: 1.65,
+          color: "#e8e0d0",
+          marginBottom: isMobile ? "2rem" : "2.5rem",
+          borderLeft: "2px solid rgba(232,224,208,0.3)",
+          paddingLeft: "1rem",
+          maxWidth: "520px",
+        }}
+      >
+        Honest where it matters. Available when it's hard.
+      </motion.p>
 
       {/* Two-column grid — both columns start at the same level */}
       <div
@@ -98,7 +122,7 @@ export function About() {
           alignItems: "start",
         }}
       >
-        {/* LEFT — sticky: thesis + story */}
+        {/* LEFT — sticky: story paragraphs */}
         <div
           style={{
             position: isMobile ? "relative" : "sticky",
@@ -106,25 +130,6 @@ export function About() {
             alignSelf: "start",
           }}
         >
-          {/* Brand thesis */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            style={{
-              fontFamily: FONT_SANS,
-              fontSize: isMobile ? "1rem" : "1.05rem",
-              lineHeight: 1.65,
-              color: "#e8e0d0",
-              marginBottom: "1.5rem",
-              maxWidth: "500px",
-              borderLeft: "2px solid rgba(232,224,208,0.3)",
-              paddingLeft: "1rem",
-            }}
-          >
-            Honest where it matters. Available when it's hard.
-          </motion.p>
-
           {/* Para 1 — origin */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -136,7 +141,9 @@ export function About() {
               lineHeight: 1.8,
               color: "rgba(255,255,255,0.62)",
               marginBottom: "1.2rem",
-              maxWidth: "500px",
+              maxWidth: "520px",
+              textAlign: "justify",
+              textJustify: "inter-word",
             }}
           >
             Mechanical engineering by training — which meant learning to ask why
@@ -160,7 +167,9 @@ export function About() {
               lineHeight: 1.8,
               color: "rgba(255,255,255,0.62)",
               marginBottom: "1.2rem",
-              maxWidth: "500px",
+              maxWidth: "520px",
+              textAlign: "justify",
+              textJustify: "inter-word",
             }}
           >
             Production changed the picture fast. At Gida and then Coforge, the
@@ -182,22 +191,26 @@ export function About() {
               lineHeight: 1.8,
               color: "rgba(255,255,255,0.62)",
               marginBottom: 0,
-              maxWidth: "500px",
+              maxWidth: "520px",
+              textAlign: "justify",
+              textJustify: "inter-word",
             }}
           >
-            At Coforge on the HSBC voice AI project, I was the youngest on the
-            team and three months in when I became the de facto integration lead
-            — having solved in one week a problem another technology partner
-            hadn't resolved in eight months at the same client. GIL'd threading
-            replaced with CPU-pinned parallel instances, asyncio + uvloop across
-            the full pipeline, cross-stack observability built before the second
-            incident happened. 7× session capacity. $1.3M annualised savings.
-            MTTR from over an hour to ten minutes.
+            At Coforge on the HSBC Conversational Analytics project, I was the
+            youngest on the team and three months in when I became the de facto
+            integration lead — having solved in one week a problem another
+            technology partner hadn't resolved in eight months at the same
+            client. GIL'd threading replaced with CPU-pinned parallel instances,
+            asyncio + uvloop across the full pipeline, cross-stack observability
+            built before the second incident happened. 7× session capacity.
+            $1.3M annualised savings. MTTR from ~1hr to ~10mins.
           </motion.p>
         </div>
 
         {/* RIGHT — pillars + What I Don't Do */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
+        >
           {pillars.map(({ title, desc }, i) => (
             <motion.div
               key={i}
@@ -246,6 +259,8 @@ export function About() {
                       fontSize: "0.83rem",
                       lineHeight: 1.65,
                       color: "rgba(255,255,255,0.58)",
+                      textAlign: "justify",
+                      textJustify: "inter-word",
                     }}
                   >
                     {desc}
@@ -265,7 +280,6 @@ export function About() {
               padding: "1.2rem 1.5rem",
               border: "1px solid rgba(255,255,255,0.07)",
               borderRadius: "6px",
-              marginTop: "0.2rem",
             }}
           >
             <p
@@ -296,6 +310,8 @@ export function About() {
                     lineHeight: 1.5,
                     color: "rgba(255,255,255,0.45)",
                     margin: 0,
+                    textAlign: "justify",
+                    textJustify: "inter-word",
                   }}
                 >
                   — {line}

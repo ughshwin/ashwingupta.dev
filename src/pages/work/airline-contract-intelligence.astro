@@ -1,0 +1,213 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/work/airline-contract-intelligence";
+
+const metrics = [
+  { value: "~96%", label: "Extraction accuracy" },
+  { value: "2", label: "PDF formats handled (image + programmatic)" },
+  { value: "0", label: "Per-carrier fine-tuning required" },
+];
+---
+
+<BaseLayout
+  title="Airline Contract Intelligence — Amex GBT | Ashwin Gupta"
+  description="~96% extraction accuracy across airline PDF contracts. Camelot + Ghostscript table extraction, GPT-4o one-shot normalization across varied carrier schemas."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/#projects" class="back-link">← Back to projects</a>
+
+        <header class="th-header">
+          <div class="th-badge">Client Delivery · Amex GBT</div>
+          <h1 class="th-title">Airline Contract Intelligence System</h1>
+          <p class="th-subtitle">~96% extraction accuracy across airline contract Q&A. Camelot and Ghostscript handle both PDF formats. GPT-4o normalizes across carrier schemas without per-carrier tuning.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <div class="metrics-grid">
+          {metrics.map(({ value, label }) => (
+            <div class="metric-block">
+              <span class="metric-value">{value}</span>
+              <span class="metric-label">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="th-divider"></div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Problem</h2>
+          <p class="th-body">
+            Airline contract tables were reviewed manually — slow, error-prone, and unable to scale to the volume of carrier agreements that AMEX GBT handles. Template drift across carriers meant each format required separate handling logic. Sales and support queries on contract terms had no real-time resolution path — every spec question required a human to locate and parse the relevant section.
+          </p>
+          <p class="th-body">
+            The source documents compounded the difficulty: airline PDFs mixed image-embedded and programmatic table formats, sometimes within the same document. A single extraction strategy couldn't handle both.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The System</h2>
+          <p class="th-body">
+            Document intelligence pipeline: <strong>Camelot and Ghostscript</strong> extract tables from both image-embedded and readable PDF sources. <strong>GPT-4o with one-shot prompting</strong> normalizes across diverse contract formats — clause normalization, table structuring, schema-consistent output for every carrier. One-shot prompting maintains contextual coherence across carrier templates without per-carrier fine-tuning. New carriers are handled automatically, not by writing carrier-specific logic.
+          </p>
+          <p class="th-body">
+            Camelot handles programmatic PDFs with high precision. Ghostscript renders image-embedded pages to a format Camelot can then process. Together they eliminate the format gap that blocked previous single-strategy approaches — covering the full range from scan-quality images to nested programmatic tables in a single pass.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Outcomes</h2>
+          <p class="th-body">
+            <strong>~96% extraction accuracy</strong> across airline contract Q&A — image and programmatic PDF formats. Automated normalization replaced manual review across varied airline PDF schemas. Real-time query resolution for sales and customer support. Zero per-carrier tuning required.
+          </p>
+        </section>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .th-header { margin-bottom: 2.5rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.2rem;
+    margin: 2rem 0;
+  }
+
+  .metric-block { display: flex; flex-direction: column; gap: 4px; }
+
+  .metric-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    color: #22d3ee;
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    line-height: 1.4;
+  }
+
+  .th-section { margin-bottom: 3.5rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

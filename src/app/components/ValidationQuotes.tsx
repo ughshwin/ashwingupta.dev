@@ -81,6 +81,8 @@ export function ValidationQuotes() {
                 color: "rgba(255,255,255,0.68)",
                 margin: 0,
                 fontStyle: "normal",
+                textAlign: "justify",
+                textJustify: "inter-word",
               }}
             >
               "{quote.text}"

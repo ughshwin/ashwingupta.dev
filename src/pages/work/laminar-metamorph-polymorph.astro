@@ -1,0 +1,210 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/work/laminar-metamorph-polymorph";
+
+const metrics = [
+  { value: "3", label: "Interlinked AI tools shipped" },
+  { value: "163+", label: "Languages for content generation" },
+  { value: "20+", label: "Languages for API conversion" },
+];
+---
+
+<BaseLayout
+  title="Laminar · Metamorph · Polymorph — AI Delivery Toolchain | Ashwin Gupta"
+  description="Three interlinked AI tools replacing three fragmented workflows. 163-language content generation, no-code chatbot builder, cURL-to-20+ language API converter."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/#projects" class="back-link">← Back to projects</a>
+
+        <header class="th-header">
+          <div class="th-badge">Client Delivery · Gida Technologies</div>
+          <h1 class="th-title">Laminar · Metamorph · Polymorph — AI Delivery Toolchain</h1>
+          <p class="th-subtitle">Three fragmented client workflows unified into one AI toolchain. Each tool ships deployable artifacts — not drafts that require further engineering to reach production.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <div class="metrics-grid">
+          {metrics.map(({ value, label }) => (
+            <div class="metric-block">
+              <span class="metric-value">{value}</span>
+              <span class="metric-label">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="th-divider"></div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Problem</h2>
+          <p class="th-body">
+            Content generation, bot deployment, and API conversion each required separate tools and manual handoff steps. Output quality was inconsistent across every client engagement. Multilingual content at scale had no standardized generation path. Chatbot delivery required engineering involvement for every new deployment or update — a bottleneck that blocked non-technical teams from iterating independently.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Toolchain</h2>
+          <p class="th-body">
+            Three interlinked AI tools: <strong>Laminar</strong> — AI CMS for multilingual content generation across 163+ languages with AI-generated visuals and multi-format export. <strong>Metamorph</strong> — no-code chatbot builder from prompts or documentation, deployable without engineering. <strong>Polymorph</strong> — cURL-to-20+ language API converter with endpoint scaffolding and code generation.
+          </p>
+          <p class="th-body">
+            The tools are designed to interoperate — content from Laminar can feed directly into Metamorph bots; API contracts from Polymorph integrate with the same deployment infrastructure. Standardized output artifacts across all three tools produce what's needed for deployment directly.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Outcomes</h2>
+          <p class="th-body">
+            Three fragmented workflows replaced by a unified toolchain. <strong>163-language content generation at scale</strong> — consistent quality without per-language customization. No-code bot deployment removed the engineering dependency from chatbot delivery. <strong>20+ language API conversion</strong> via automated scaffolding across every major backend language.
+          </p>
+        </section>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .th-header { margin-bottom: 2.5rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.2rem;
+    margin: 2rem 0;
+  }
+
+  .metric-block { display: flex; flex-direction: column; gap: 4px; }
+
+  .metric-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    color: #22d3ee;
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    line-height: 1.4;
+  }
+
+  .th-section { margin-bottom: 3.5rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

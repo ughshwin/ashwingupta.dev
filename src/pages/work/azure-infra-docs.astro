@@ -1,0 +1,210 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/work/azure-infra-docs";
+
+const metrics = [
+  { value: "2–3 hrs", label: "Documentation turnaround (was 2–3 days)" },
+  { value: "104", label: "Resource groups per engagement" },
+  { value: "0", label: "Fabricated components" },
+];
+---
+
+<BaseLayout
+  title="Azure Infrastructure Documentation Engine — Coforge | Ashwin Gupta"
+  description="Live-state Azure documentation pipeline. 2–3 days to 2–3 hours. Auto-generated SDDs and PlantUML from live subscription state. Zero fabricated components."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/#projects" class="back-link">← Back to projects</a>
+
+        <header class="th-header">
+          <div class="th-badge">Client Delivery · Coforge</div>
+          <h1 class="th-title">Azure Infrastructure Documentation Engine</h1>
+          <p class="th-subtitle">Live-state extraction pipeline for enterprise Azure infrastructure. Auto-generated SDDs and PlantUML from the actual subscription state — not stale manual exports.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <div class="metrics-grid">
+          {metrics.map(({ value, label }) => (
+            <div class="metric-block">
+              <span class="metric-value">{value}</span>
+              <span class="metric-label">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="th-divider"></div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Problem</h2>
+          <p class="th-body">
+            Azure infrastructure documentation required manual extraction from subscription exports — 2–3 days per project. PlantUML diagrams were authored by hand from memory or stale exports. Documented architecture drifted from live infrastructure with no mechanism to detect or correct divergence. At 104 resource groups per engagement, the manual approach couldn't scale — every new deployment meant the documentation was already out of date before it was finished.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The System</h2>
+          <p class="th-body">
+            Live-state extraction pipeline: the engine accepts a subscription ID and automatically produces system design documents and PlantUML diagrams via automated inventory extraction, network flow mapping, security configuration analysis, and dependency graph construction. <strong>Few-shot LLM prompting</strong> grounds architecture rationale in extracted inventory — every generated component maps to a verified live resource.
+          </p>
+          <p class="th-body">
+            Validation guardrails cross-check every generated component against extracted inventory before the document is produced. Hallucinated topology cannot reach governance documents — the guardrail layer rejects any component without a matching live resource match. Outputs are regenerated from live subscription state each run, with no cached snapshots.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Outcomes</h2>
+          <p class="th-body">
+            Documentation turnaround: <strong>2–3 days → ~2–3 hours</strong>. Average 104 resource groups per engagement handled automatically via subscription scan. Manual PlantUML authoring eliminated. <strong>Zero fabricated components</strong> — live-state grounding replaced manual transcription across every generated artifact.
+          </p>
+        </section>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .th-header { margin-bottom: 2.5rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.2rem;
+    margin: 2rem 0;
+  }
+
+  .metric-block { display: flex; flex-direction: column; gap: 4px; }
+
+  .metric-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    color: #22d3ee;
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    line-height: 1.4;
+  }
+
+  .th-section { margin-bottom: 3.5rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

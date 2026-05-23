@@ -5,8 +5,16 @@ import { HologramInterface } from "./components/HologramInterface";
 import { ProjectPage } from "./components/ProjectPage";
 import { useIsMobile } from "../hooks/useMediaQuery";
 
-export default function ProjectDetailApp({ slug, backHref }: Readonly<{ slug: string; backHref?: string }>) {
+export default function ProjectDetailApp({ slug }: Readonly<{ slug: string }>) {
   const isMobile = useIsMobile();
+
+  const backHref = (() => {
+    if (typeof window === "undefined") return "/#projects";
+    const from = new URLSearchParams(window.location.search).get("from");
+    if (from === "featured") return "/#featured";
+    if (from === "research") return "/#research";
+    return "/#projects";
+  })();
 
   return (
     <div className="spatial-scene" style={{ cursor: isMobile ? "auto" : "none" }}>

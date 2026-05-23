@@ -1,0 +1,254 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/research/scholaros";
+const githubUrl = "https://github.com/ughshwin/ScholarOS";
+
+const metrics = [
+  { value: "5,479", label: "Chunks processed" },
+  { value: "180", label: "Claims extracted" },
+  { value: "76", label: "Contradictions detected" },
+  { value: "100%", label: "Determinism rate" },
+];
+---
+
+<BaseLayout
+  title="ScholarOS — Structured Research Execution Platform | Ashwin Gupta"
+  description="Research as structured execution — five deterministic MCP services over a DAG orchestrator. Evidence-bound outputs, bounded hypothesis critique, fully local."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/#research" class="back-link">← Back to research</a>
+
+        <header class="th-header">
+          <div class="th-badge">In Development · Personal</div>
+          <h1 class="th-title">ScholarOS — Research as Structured Execution</h1>
+          <p class="th-subtitle">Five deterministic MCP services over a DAG orchestrator. Every claim bound to source evidence. No hallucinated synthesis in governance outputs.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <div class="metrics-grid">
+          {metrics.map(({ value, label }) => (
+            <div class="metric-block">
+              <span class="metric-value">{value}</span>
+              <span class="metric-label">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="th-divider"></div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Problem With Research Copilots</h2>
+          <p class="th-body">
+            Generic AI tools applied to academic research produce fluent text with no evidence traceability. Hallucinated synthesis is structurally indistinguishable from grounded synthesis — you cannot tell from the output alone whether a claim was derived from the literature or confabulated. Every research workflow — literature review, contradiction detection, hypothesis validation, evidence extraction, proposal drafting — requires a separate manual process with no shared execution model.
+          </p>
+          <p class="th-body">
+            Hypothesis stress-testing is the worst case: the same model that generated the hypothesis is asked to critique it. No adversarial challenge, no convergence gate, no provenance on the resulting claim. The output looks like analysis but carries none of the guarantees.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Architecture</h2>
+          <p class="th-body">
+            ScholarOS is a structured research execution platform — five capabilities delivered as a DAG-executed MCP workflow, not a chatbox. Every output is bound to source evidence. Nine services process research artifacts with rule-based, schema-defined, reproducible logic. No service imports another service — all data flows through the orchestrator via MCP tool invocations, eliminating hidden state.
+          </p>
+          <p class="th-body">
+            The five capabilities: <strong>Literature Mapping</strong> (HDBSCAN clustering, LLM cluster labeling, paper ranking); <strong>Contradiction & Consensus</strong> (claim extraction, metric normalization, polarity/value divergence detection, Belief Engine confidence assignment); <strong>Hypothesis & Critique</strong> (bounded Hypothesis/Critic loop, max 5 iterations, grounded to source claim identifiers); <strong>Multimodal Evidence Extraction</strong> (tables, figures, metrics from PDFs to structured output); <strong>Proposal Assistant</strong> (validated hypotheses to Markdown/LaTeX with citation assembly).
+          </p>
+          <p class="th-body">
+            Data layer: Chroma (vector), SQLite (metadata), Redis (session). Local inference: Ollama qwen2.5:32b, sentence-transformers all-MiniLM-L6-v2.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Pipeline</h2>
+          <p class="th-body">
+            The MCP Orchestrator executes workflows as DAGs with pause/resume, session management, and full trace logging. Only hypothesis critique is agentic — bounded to five iterations with required grounding to source claim identifiers. All other stages are deterministic with provenance tracked through typed artifacts.
+          </p>
+          <p class="th-body">
+            100% determinism rate means identical inputs produce identical outputs. No stochastic processes in the deterministic pipeline. Nine independently testable services with no global state. Agent reasoning is explicitly bounded: convergence detection terminates the hypothesis loop before it runs unconstrained.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Outputs & Current State</h2>
+          <p class="th-body">
+            Five output artifact types: ClusterMap (JSON), Contradiction Report (JSON), Validated Hypotheses (JSON), Research Proposals (Markdown · LaTeX), Extracted Evidence (CSV · JSON). Fully local and self-hostable — no external API dependency for any deterministic pipeline stage.
+          </p>
+          <p class="th-body">
+            March 2026 validation run: 5,479 chunks processed, 180 claims extracted, 76 contradictions detected. Each claim is bound to source evidence. Contradiction detection marks where consensus breaks — keeping outputs falsifiable and useful beyond individual sessions.
+          </p>
+        </section>
+
+        <div style="margin-bottom: 3.5rem;">
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="cta-link">
+            ↗ View on GitHub
+          </a>
+        </div>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .th-header { margin-bottom: 2.5rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.2rem;
+    margin: 2rem 0;
+  }
+
+  .metric-block { display: flex; flex-direction: column; gap: 4px; }
+
+  .metric-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    color: #22d3ee;
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    line-height: 1.4;
+  }
+
+  .th-section { margin-bottom: 3.5rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    text-decoration: none;
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 4px;
+    padding: 8px 14px;
+    transition: background 0.2s;
+  }
+  .cta-link:hover { background: rgba(34, 211, 238, 0.08); }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

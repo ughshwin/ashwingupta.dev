@@ -66,7 +66,9 @@ function RecCard({
       animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
       style={{
-        padding: isMobile ? "1.4rem 1.4rem 1.4rem 1.6rem" : "1.6rem 1.6rem 1.6rem 1.8rem",
+        padding: isMobile
+          ? "1.4rem 1.4rem 1.4rem 1.6rem"
+          : "1.6rem 1.6rem 1.6rem 1.8rem",
         borderLeft: "2px solid rgba(232,224,208,0.18)",
         display: "flex",
         flexDirection: "column",
@@ -118,6 +120,8 @@ function RecCard({
           margin: 0,
           fontStyle: "normal",
           flex: 1,
+          textAlign: "justify",
+          textJustify: "inter-word",
         }}
       >
         "{rec.text}"
@@ -198,7 +202,12 @@ export function Recommendations() {
       </div>
 
       {/* Section header */}
-      <div style={{ overflow: "hidden", marginBottom: isMobile ? "2.5rem" : "4rem" }}>
+      <div
+        style={{
+          overflow: "hidden",
+          marginBottom: isMobile ? "2.5rem" : "4rem",
+        }}
+      >
         <motion.h2
           initial={{ y: "100%" }}
           animate={isVisible ? { y: 0 } : { y: "100%" }}
@@ -210,7 +219,7 @@ export function Recommendations() {
               : "clamp(2.6rem, 4.5vw, 4rem)",
             fontWeight: 800,
             lineHeight: 1.05,
-            letterSpacing: "-0.03em",
+            letterSpacing: "0.02em",
             color: "#fafaf8",
             margin: 0,
           }}

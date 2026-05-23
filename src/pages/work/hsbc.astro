@@ -15,8 +15,8 @@ const metrics = [
 ---
 
 <BaseLayout
-  title="Real-Time AI Voice Infrastructure — HSBC | Ashwin Gupta"
-  description="Production voice AI for banking. 1,600+ concurrent sessions. $1.3M annualized savings. Case study."
+  title="Conversational Analytics — HSBC | Ashwin Gupta"
+  description="Conversational analytics platform for banking at scale. 1,600+ concurrent sessions. $1.3M annualized savings. Case study."
   canonical={canonical}
 >
   <div class="spatial-scene">
@@ -24,14 +24,14 @@ const metrics = [
       <div class="case-study-body">
 
         <!-- Back link -->
-        <a href="/#projects" class="back-link">← Back to projects</a>
+        <a href="/#featured" class="back-link">← Back to featured</a>
 
         <!-- Hero -->
         <header class="cs-header">
           <div class="cs-context-badge">Client Delivery · Coforge</div>
-          <h1 class="cs-title">Real-Time AI Voice Infrastructure — HSBC</h1>
+          <h1 class="cs-title">Conversational Analytics — HSBC</h1>
           <p class="cs-subtitle">
-            Production voice AI for banking. 1,600+ concurrent sessions. $1.3M annualized savings.
+            Conversational analytics platform for banking at scale. 1,600+ concurrent sessions. $1.3M annualized savings.
           </p>
         </header>
 
@@ -174,14 +174,14 @@ const metrics = [
   }
 
   .case-study-body {
-    max-width: 700px;
+    width: max(320px, 60vw);
     margin: 0 auto;
-    padding: 5rem 1.5rem 8rem;
+    padding: 5rem 0 8rem;
   }
 
   @media (min-width: 640px) {
     .case-study-body {
-      padding: 7rem 2rem 8rem;
+      padding: 7rem 0 8rem;
     }
   }
 
@@ -220,7 +220,7 @@ const metrics = [
     font-size: clamp(1.8rem, 5vw, 2.8rem);
     font-weight: 800;
     line-height: 1.1;
-    letter-spacing: -0.03em;
+    letter-spacing: 0.05em;
     color: #fafaf8;
     margin: 0 0 1rem;
   }
@@ -231,6 +231,7 @@ const metrics = [
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.55);
     margin: 0;
+    text-align: justify;
   }
 
   .cs-divider {
@@ -279,7 +280,7 @@ const metrics = [
     font-weight: 800;
     color: #fafaf8;
     margin: 0 0 1.2rem;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.05em;
   }
 
   .cs-body {
@@ -288,6 +289,7 @@ const metrics = [
     line-height: 1.8;
     color: rgba(255, 255, 255, 0.62);
     margin: 0 0 1rem;
+    text-align: justify;
   }
 
   .cs-body code {

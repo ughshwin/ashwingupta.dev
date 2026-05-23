@@ -1,10 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect, useRef } from "react";
 import type React from "react";
-import {
-  useIsMobile,
-  useIsDesktop,
-} from "../../hooks/useMediaQuery";
+import { useIsMobile, useIsDesktop } from "../../hooks/useMediaQuery";
 import { useEqualRows } from "../../hooks/useCollageGrid";
 import { EqualGridRenderer } from "./CollageRenderer";
 
@@ -22,18 +19,18 @@ function renderBullet(text: string): React.ReactNode {
 }
 
 const FONT_SERIF = '"Playfair Display", Georgia, serif';
-const FONT_MONO  = '"DM Mono", monospace';
-const FONT_SANS  = '"DM Sans", sans-serif';
+const FONT_MONO = '"DM Mono", monospace';
+const FONT_SANS = '"DM Sans", sans-serif';
 
 type ItemType = "production" | "patent" | "thesis" | "open-source";
 
 type FeaturedItem = {
-  type    : ItemType;
-  name    : string;
-  title   : string;
+  type: ItemType;
+  name: string;
+  title: string;
   subtitle: string;
-  link    : string | null;
-  bullets : [string, string, string, string];
+  link: string | null;
+  bullets: [string, string, string, string];
 };
 
 const TYPE_META: Record<
@@ -41,32 +38,32 @@ const TYPE_META: Record<
   { label: string; color: string; border: string; bg: string; glow: string }
 > = {
   production: {
-    label : "Client Delivery",
-    color : "#4ade80",
+    label: "Client Delivery",
+    color: "#4ade80",
     border: "rgba(74,222,128,0.45)",
-    bg    : "rgba(74,222,128,0.10)",
-    glow  : "0 0 4px rgba(74,222,128,0.28)",
+    bg: "rgba(74,222,128,0.10)",
+    glow: "0 0 4px rgba(74,222,128,0.28)",
   },
   patent: {
-    label : "Patent Pending · In Development",
-    color : "#ffffff",
+    label: "Patent Pending · In Development",
+    color: "#ffffff",
     border: "rgba(139,92,246,0.55)",
-    bg    : "rgba(93,33,182,0.22)",
-    glow  : "0 0 8px rgba(139,92,246,0.35)",
+    bg: "rgba(93,33,182,0.22)",
+    glow: "0 0 8px rgba(139,92,246,0.35)",
   },
   thesis: {
-    label : "Best Outgoing Project '23",
-    color : "#EAB308",
+    label: "Best Outgoing Project '23",
+    color: "#EAB308",
     border: "rgba(234,179,8,0.45)",
-    bg    : "rgba(234,179,8,0.10)",
-    glow  : "0 0 4px rgba(234,179,8,0.28)",
+    bg: "rgba(234,179,8,0.10)",
+    glow: "0 0 4px rgba(234,179,8,0.28)",
   },
   "open-source": {
-    label : "Open Source",
-    color : "#60A5FA",
+    label: "Open Source",
+    color: "#60A5FA",
     border: "rgba(96,165,250,0.45)",
-    bg    : "rgba(96,165,250,0.10)",
-    glow  : "0 0 4px rgba(96,165,250,0.28)",
+    bg: "rgba(96,165,250,0.10)",
+    glow: "0 0 4px rgba(96,165,250,0.28)",
   },
 };
 
@@ -74,12 +71,13 @@ const LABELS = ["Context", "Approach", "System", "Outcome"];
 
 const ITEMS: FeaturedItem[] = [
   {
-    type    : "production",
-    name    : "HSBC Voice AI",
-    title   : "Real-Time Conversational AI — SIP Voice Infrastructure at Production Scale",
-    subtitle: "Coforge — HSBC · Jun 2024 – Mar 2026",
-    link    : "/work/hsbc",
-    bullets : [
+    type: "production",
+    name: "Conversational Analytics",
+    title:
+      "Real-Time Conversational AI — SIP Voice Infrastructure at Production Scale",
+    subtitle: "Coforge — HSBC · Jun 2024 – Present",
+    link: "/work/hsbc",
+    bullets: [
       "GIL-bound threading serialised all audio onto one core on a **32-core VM** — **20 concurrent calls**, 31 cores idle, CPU utilisation capped below **20%**.",
       "**CPU-pinned** parallel processes via Linux **taskset** escaped the GIL; **asyncio + uvloop** replaced threading — each SIP session became a coroutine across SBC, STT, and LLM stages.",
       "Packer automated GCE image builds; **SIPp** validated **2,000** concurrent users; n2-standard-32 → c4-standard-8 gave **30–40%** longer transcripts; GCP log correlator scanned **250K+** lines in <5s, cutting MTTR to ~10 min.",
@@ -87,12 +85,13 @@ const ITEMS: FeaturedItem[] = [
     ],
   },
   {
-    type    : "patent",
-    name    : "controla",
-    title   : "Local-First Self-Improving Inference OS — Routing That Compounds With Every Deployment",
+    type: "patent",
+    name: "controla",
+    title:
+      "Local-First Self-Improving Inference OS — Routing That Compounds With Every Deployment",
     subtitle: "Personal · Patent Pending · In Active Development",
-    link    : "/research/controla",
-    bullets : [
+    link: "/research/controla",
+    bullets: [
       "Local inference routing is **stateless** — prior outcomes ignored, blind dispatch repeated indefinitely; no unified API surface across modalities.",
       "**19 backends** across **7 modalities** — text, STT, TTS, image gen, embeddings, vision, reasoning — under one **OpenAI-compatible API**; not a proxy, a control plane.",
       "Every request classified, scored across **6 dimensions** (capability, performance, resource, load, reliability, context), queued in Redis, dispatched, observed. **EWMA** weights per (backend, task_type, complexity) persist across restarts.",
@@ -100,12 +99,13 @@ const ITEMS: FeaturedItem[] = [
     ],
   },
   {
-    type    : "production",
-    name    : "Here.app",
-    title   : "163-Language Vehicle Intelligence — Multilingual RAG at Enterprise Scale",
+    type: "production",
+    name: "Here.app",
+    title:
+      "163-Language Vehicle Intelligence — Multilingual RAG at Enterprise Scale",
     subtitle: "Gida Technologies / HDFC ERGO · 2023–2024",
-    link    : "/projects/here-app",
-    bullets : [
+    link: "/work/here-app",
+    bullets: [
       "Standard chatbots failed on structured vehicle spec data — inconsistent answers drove manual escalation at **HDFC ERGO**, one of India's largest general insurers.",
       "Multilingual **RAG** pipeline with structured retrieval, language-aware chunking, and per-language factual validation — **163 languages** as first-class targets, not as post-processing.",
       "**QA-gated retrieval** validates lookup quality before generation; structured vehicle database with image-linked attributes as single source of truth across **163 languages**.",
@@ -113,12 +113,13 @@ const ITEMS: FeaturedItem[] = [
     ],
   },
   {
-    type    : "thesis",
-    name    : "PINNs",
-    title   : "Physics-Informed Neural Networks — Dual-Loss Framework for Multi-Domain Simulation",
+    type: "thesis",
+    name: "PINNs",
+    title:
+      "Physics-Informed Neural Networks — Dual-Loss Framework for Multi-Domain Simulation",
     subtitle: "BMS College of Engineering · Final Year Thesis · 2022–23",
-    link    : "/PINNs_whitepaper.pdf",
-    bullets : [
+    link: "/research/pinns",
+    bullets: [
       "Purely data-driven physics simulation demanded large labeled datasets — sparse data let models ignore governing equations, producing physically implausible solutions.",
       "Dual-loss **PINN** framework embedding **PDE/ODE** constraints directly into the optimization objective beside data loss — physics constraints act as the regularizer.",
       "Validated across **6 benchmarks**: Burgers' equation, **1D heat conduction**, fixed-fixed column deflection, cantilever deflection, transient cooling under Neumann and Dirichlet conditions.",
@@ -126,12 +127,13 @@ const ITEMS: FeaturedItem[] = [
     ],
   },
   {
-    type    : "open-source",
-    name    : "PHYSCLIP",
-    title   : "Contrastive Regime Classification — Symbolic and Observed Space Alignment",
+    type: "open-source",
+    name: "PHYSCLIP",
+    title:
+      "Contrastive Regime Classification — Symbolic and Observed Space Alignment",
     subtitle: "Personal · Open Source",
-    link    : "https://github.com/ughshwin/PHYSCLIP",
-    bullets : [
+    link: "/research/physclip",
+    bullets: [
       "Physics-informed models assume the governing equation is known — the harder upstream problem is **regime classification**: which regime applies to the observed field.",
       "Dual encoders map symbolic descriptions (**PDE**) and field observations into a shared latent space; regime recognition emerges from cross-modal alignment, not hand-coded rules.",
       "Contrastive objective pulls matched (description, observation) pairs together, pushes mismatched apart — **PHYSCLIP** as a perception layer upstream of **PINN**-style enforcement.",
@@ -142,10 +144,10 @@ const ITEMS: FeaturedItem[] = [
 
 // ── Card ──────────────────────────────────────────────────────────────────
 function FeaturedCard({ item }: { item: FeaturedItem }) {
-  const [hovered, setHovered]   = useState(false);
+  const [hovered, setHovered] = useState(false);
   const [revealed, setRevealed] = useState(false);
-  const isMobile   = useIsMobile();
-  const isDesktop  = useIsDesktop();
+  const isMobile = useIsMobile();
+  const isDesktop = useIsDesktop();
   const showOutcome = hovered || revealed;
 
   const meta = TYPE_META[item.type];
@@ -156,16 +158,18 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
       {/* Masked content — name, title, subtitle, divider, all 4 bullets */}
       <div
         style={{
-          display      : "flex",
+          display: "flex",
           flexDirection: "column",
-          gap          : "1rem",
-          overflow     : "hidden",
-          maxHeight    : showOutcome ? "1000px" : "17rem",
-          transition   : "max-height 0.5s cubic-bezier(0.76, 0, 0.24, 1)",
+          gap: "1rem",
+          overflow: "hidden",
+          maxHeight: showOutcome ? "1000px" : "17rem",
+          transition: "max-height 0.5s cubic-bezier(0.76, 0, 0.24, 1)",
           ...(!showOutcome
             ? {
-                WebkitMaskImage: "linear-gradient(to bottom, black 75%, transparent 100%)",
-                maskImage      : "linear-gradient(to bottom, black 75%, transparent 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, black 75%, transparent 100%)",
+                maskImage:
+                  "linear-gradient(to bottom, black 75%, transparent 100%)",
               }
             : {}),
         }}
@@ -173,41 +177,41 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
         {/* Name + badge */}
         <div
           style={{
-            display       : "flex",
-            flexDirection : isDesktop ? "row" : "column",
-            alignItems    : "flex-start",
+            display: "flex",
+            flexDirection: isDesktop ? "row" : "column",
+            alignItems: "flex-start",
             justifyContent: "space-between",
-            gap           : "0.5rem",
+            gap: "0.5rem",
           }}
         >
           <p
             style={{
               fontFamily: FONT_SERIF,
               fontWeight: 800,
-              fontSize  : "1.75rem",
-              color     : "#fafaf8",
+              fontSize: "1.75rem",
+              color: "#fafaf8",
               lineHeight: 1.2,
-              margin    : 0,
-              minWidth  : 0,
+              margin: 0,
+              minWidth: 0,
             }}
           >
             {item.name}
           </p>
           <span
             style={{
-              fontFamily   : FONT_MONO,
-              fontSize     : "0.52rem",
+              fontFamily: FONT_MONO,
+              fontSize: "0.52rem",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
-              whiteSpace   : "nowrap",
-              padding      : "3px 9px",
-              borderRadius : "20px",
-              flexShrink   : 0,
-              alignSelf    : "flex-start",
-              color        : meta.color,
-              border       : `1px solid ${meta.border}`,
-              background   : meta.bg,
-              boxShadow    : meta.glow,
+              whiteSpace: "nowrap",
+              padding: "3px 9px",
+              borderRadius: "20px",
+              flexShrink: 0,
+              alignSelf: "flex-start",
+              color: meta.color,
+              border: `1px solid ${meta.border}`,
+              background: meta.bg,
+              boxShadow: meta.glow,
             }}
           >
             {meta.label}
@@ -217,13 +221,13 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
         {/* Title */}
         <p
           style={{
-            fontFamily : FONT_SANS,
-            fontWeight : 400,
-            fontSize   : "0.85rem",
-            color      : "rgba(255,255,255,0.55)",
-            lineHeight : 1.45,
-            margin     : 0,
-            textAlign  : "justify",
+            fontFamily: FONT_SANS,
+            fontWeight: 400,
+            fontSize: "0.85rem",
+            color: "rgba(255,255,255,0.55)",
+            lineHeight: 1.45,
+            margin: 0,
+            textAlign: "justify",
             textJustify: "inter-word",
           }}
         >
@@ -233,11 +237,13 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
         {/* Subtitle */}
         <p
           style={{
-            fontFamily   : FONT_MONO,
-            fontSize     : "0.7rem",
-            color        : "rgba(255,255,255,0.28)",
-            margin       : 0,
-            letterSpacing: "0.05em",
+            fontFamily: FONT_MONO,
+            fontSize: "0.7rem",
+            color: "rgba(255,255,255,0.28)",
+            margin: 0,
+            letterSpacing: "0.02em",
+            textAlign: "justify",
+            textJustify: "inter-word",
           }}
         >
           {item.subtitle}
@@ -247,34 +253,40 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
         <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
 
         {/* All 4 bullets — always rendered; mask fades bullet[3] until hover */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
+        >
           {item.bullets.map((bullet, i) => (
             <div
               key={i}
-              style={{ display: "flex", gap: "0.65rem", alignItems: "flex-start" }}
+              style={{
+                display: "flex",
+                gap: "0.65rem",
+                alignItems: "flex-start",
+              }}
             >
               <span
                 style={{
-                  fontFamily   : FONT_MONO,
-                  fontSize     : "0.62rem",
-                  color        : "rgba(255,255,255,0.22)",
-                  marginTop    : "4px",
-                  flexShrink   : 0,
+                  fontFamily: FONT_MONO,
+                  fontSize: "0.62rem",
+                  color: "rgba(255,255,255,0.22)",
+                  marginTop: "4px",
+                  flexShrink: 0,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  width        : isMobile ? "56px" : "76px",
-                  lineHeight   : 1.5,
+                  width: isMobile ? "56px" : "76px",
+                  lineHeight: 1.5,
                 }}
               >
                 {LABELS[i]}
               </span>
               <span
                 style={{
-                  fontFamily : FONT_SANS,
-                  fontSize   : "0.88rem",
-                  lineHeight : 1.65,
-                  color      : "rgba(255,255,255,0.56)",
-                  textAlign  : "justify",
+                  fontFamily: FONT_SANS,
+                  fontSize: "0.88rem",
+                  lineHeight: 1.65,
+                  color: "rgba(255,255,255,0.56)",
+                  textAlign: "justify",
                   textJustify: "inter-word",
                 }}
               >
@@ -289,17 +301,19 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
       {isLink && (
         <div
           style={{
-            marginTop  : "auto",
-            paddingTop : "0.5rem",
-            display    : "flex",
+            marginTop: "auto",
+            paddingTop: "0.5rem",
+            display: "flex",
             justifyContent: "flex-end",
           }}
         >
           <span
             style={{
               fontFamily: FONT_MONO,
-              fontSize  : "0.72rem",
-              color     : hovered ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.35)",
+              fontSize: "0.72rem",
+              color: hovered
+                ? "rgba(255,255,255,0.95)"
+                : "rgba(255,255,255,0.35)",
               transition: "color 0.2s",
             }}
           >
@@ -311,18 +325,18 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
   );
 
   const sharedStyle: React.CSSProperties = {
-    display       : "flex",
-    flexDirection : "column",
-    padding       : "1.6rem",
-    borderRadius  : "8px",
-    border        : `1px solid ${hovered ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.15)"}`,
-    background    : "transparent",
-    transition    : "border-color 0.2s",
+    display: "flex",
+    flexDirection: "column",
+    padding: "1.6rem",
+    borderRadius: "8px",
+    border: `1px solid ${hovered ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.15)"}`,
+    background: "transparent",
+    transition: "border-color 0.2s",
     textDecoration: "none",
-    color         : "inherit",
-    minWidth      : 0,
-    overflow      : "hidden",
-    cursor        : isLink ? "pointer" : "default",
+    color: "inherit",
+    minWidth: 0,
+    overflow: "hidden",
+    cursor: isLink ? "pointer" : "default",
   };
 
   if (isLink) {
@@ -338,7 +352,12 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
         transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1] }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        onClick={(e) => { if (isMobile && !revealed) { e.preventDefault(); setRevealed(true); } }}
+        onClick={(e) => {
+          if (isMobile && !revealed) {
+            e.preventDefault();
+            setRevealed(true);
+          }
+        }}
         style={sharedStyle}
       >
         {inner}
@@ -354,7 +373,9 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
       transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => { if (isMobile) setRevealed(r => !r); }}
+      onClick={() => {
+        if (isMobile) setRevealed((r) => !r);
+      }}
       style={sharedStyle}
     >
       {inner}
@@ -364,12 +385,14 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
 
 // ── Section ───────────────────────────────────────────────────────────────
 export function Featured() {
-  const isMobile  = useIsMobile();
+  const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
   const [isStuck, setIsStuck] = useState(false);
 
   useEffect(() => {
-    const root = document.querySelector(".hologram-interface") as HTMLElement | null;
+    const root = document.querySelector(
+      ".hologram-interface",
+    ) as HTMLElement | null;
     if (!root || isMobile) return;
     const check = () => {
       const el = sectionRef.current;
@@ -381,62 +404,68 @@ export function Featured() {
   }, [isMobile]);
 
   const maxPerRow = isMobile ? 1 : 3;
-  const rows      = useEqualRows(ITEMS.length, maxPerRow);
+  const rows = useEqualRows(ITEMS.length, maxPerRow);
 
   return (
     <section
       ref={sectionRef}
       id="featured"
       style={{
-        padding   : isMobile ? "5rem 4vw" : "10rem 6vw",
+        padding: isMobile ? "5rem 4vw" : "10rem 6vw",
         background: "transparent",
-        position  : "relative",
+        position: "relative",
       }}
     >
       {/* Sticky heading block */}
       <div
         style={{
-          position           : "sticky",
-          top                : 0,
-          zIndex             : 10,
-          marginLeft         : isMobile ? "-4vw" : "-6vw",
-          marginRight        : isMobile ? "-4vw" : "-6vw",
-          paddingLeft        : isMobile ? "4vw" : "6vw",
-          paddingRight       : isMobile ? "4vw" : "6vw",
-          paddingTop         : "0.85rem",
-          paddingBottom      : "0.85rem",
-          background         : isStuck
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
+          marginLeft: isMobile ? "-4vw" : "-6vw",
+          marginRight: isMobile ? "-4vw" : "-6vw",
+          paddingLeft: isMobile ? "4vw" : "6vw",
+          paddingRight: isMobile ? "4vw" : "6vw",
+          paddingTop: "0.85rem",
+          paddingBottom: "0.85rem",
+          background: isStuck
             ? "linear-gradient(to right, rgba(5,5,8,0.52) 0%, rgba(5,5,8,0.52) 45%, rgba(5,5,8,0) 88%)"
             : "transparent",
-          backdropFilter     : isStuck ? "blur(6px)" : "none",
+          backdropFilter: isStuck ? "blur(6px)" : "none",
           WebkitBackdropFilter: isStuck ? "blur(6px)" : "none",
-          transition         : "background 0.3s ease",
-          marginBottom       : "3rem",
+          transition: "background 0.3s ease",
+          marginBottom: "3rem",
         }}
       >
         {/* Section label */}
         <div
           style={{
-            display      : "flex",
-            alignItems   : "center",
-            gap          : "2rem",
-            marginBottom : isStuck ? "1rem" : "5rem",
-            transition   : "margin-bottom 0.3s ease",
+            display: "flex",
+            alignItems: "center",
+            gap: "2rem",
+            marginBottom: isStuck ? "1rem" : "5rem",
+            transition: "margin-bottom 0.3s ease",
           }}
         >
           <span
             style={{
-              fontFamily   : FONT_MONO,
-              fontSize     : isStuck ? "0.5rem" : "0.62rem",
+              fontFamily: FONT_MONO,
+              fontSize: isStuck ? "0.5rem" : "0.62rem",
               letterSpacing: "0.2em",
-              color        : "rgba(255,255,255,0.4)",
+              color: "rgba(255,255,255,0.4)",
               textTransform: "uppercase",
-              transition   : "font-size 0.3s ease",
+              transition: "font-size 0.3s ease",
             }}
           >
             04 — Featured
           </span>
-          <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.07)" }} />
+          <div
+            style={{
+              flex: 1,
+              height: "1px",
+              background: "rgba(255,255,255,0.07)",
+            }}
+          />
         </div>
 
         {/* Section heading */}
@@ -446,16 +475,20 @@ export function Featured() {
             animate={{ y: 0 }}
             transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
             style={{
-              fontFamily  : FONT_SERIF,
-              fontSize    : isStuck
-                ? isMobile ? "clamp(1.26rem, 4.9vw, 2.8rem)" : "clamp(1.8rem, 3.6vw, 3.3rem)"
-                : isMobile ? "clamp(1.8rem, 7vw, 4rem)"       : "clamp(2.6rem, 4.5vw, 4rem)",
-              fontWeight  : 800,
-              lineHeight  : 1.1,
-              letterSpacing: "-0.04em",
-              color       : "#fafaf8",
-              margin      : 0,
-              transition  : "font-size 0.3s ease",
+              fontFamily: FONT_SERIF,
+              fontSize: isStuck
+                ? isMobile
+                  ? "clamp(1.26rem, 4.9vw, 2.8rem)"
+                  : "clamp(1.8rem, 3.6vw, 3.3rem)"
+                : isMobile
+                  ? "clamp(1.8rem, 7vw, 4rem)"
+                  : "clamp(2.6rem, 4.5vw, 4rem)",
+              fontWeight: 800,
+              lineHeight: 1.1,
+              letterSpacing: "0.02em",
+              color: "#fafaf8",
+              margin: 0,
+              transition: "font-size 0.3s ease",
             }}
           >
             What the arc produced.

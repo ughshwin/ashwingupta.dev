@@ -1,0 +1,197 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/research/physclip";
+const githubUrl = "https://github.com/ughshwin/PHYSCLIP";
+---
+
+<BaseLayout
+  title="PHYSCLIP — Contrastive Regime Classification | Ashwin Gupta"
+  description="Contrastive learning for physics regime classification. Dual encoders aligning symbolic PDE descriptions and field observations upstream of PINN enforcement."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/#featured" class="back-link">← Back to featured</a>
+
+        <header class="th-header">
+          <div class="th-badge">Open Source · Personal</div>
+          <h1 class="th-title">PHYSCLIP — Contrastive Regime Classification for Physics-Informed Models</h1>
+          <p class="th-subtitle">Regime recognition from cross-modal alignment between symbolic physics and observed fields — the perception layer upstream of physics-constrained solving.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Upstream Problem</h2>
+          <p class="th-body">
+            Physics-informed models — PINNs and their variants — assume the governing equation is already known. That assumption is often the weakest link in the pipeline. The harder, upstream problem is regime classification: given an observed field, which governing equation applies? This question has to be answered before physics-constrained training can begin, and it is rarely discussed.
+          </p>
+          <p class="th-body">
+            Traditional approaches hand-code regime boundaries or rely on domain expert annotation. Neither scales. The regime identification step becomes a bottleneck for any physics-informed pipeline operating on real-world, partially observed data — the exact setting where PINNs are most useful.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Approach</h2>
+          <p class="th-body">
+            PHYSCLIP uses dual encoders to map two modalities into a shared latent space: symbolic physics descriptions (PDEs, governing equations expressed in text form) and field observations (numerical data, measurements). Regime recognition emerges from cross-modal alignment — not from hand-coded classification rules or expert-labeled boundaries.
+          </p>
+          <p class="th-body">
+            The contrastive objective pulls matched (description, observation) pairs together in the latent space and pushes mismatched pairs apart. The same mechanism that makes CLIP work for vision-language alignment — applied to the physics-symbolic and physics-observational modalities instead.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Position in the Pipeline</h2>
+          <p class="th-body">
+            PHYSCLIP is designed as a perception layer upstream of PINN-style enforcement, not as a standalone model. The intended flow: observation → regime identification via PHYSCLIP → physics-constrained solving with the identified governing equation. This makes the full pipeline end-to-end without requiring domain expert intervention at the classification step.
+          </p>
+          <p class="th-body">
+            Latent proximity carries physical meaning. Nearby embeddings in the shared space indicate similar physics regimes — enabling interpretable regime identification under partial observability, where the full field is never observed and hard analytic boundaries cannot be computed. Partial observations produce embeddings that cluster near the correct regime even when the complete solution is unknown.
+          </p>
+        </section>
+
+        <div style="margin-bottom: 3.5rem;">
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="cta-link">
+            ↗ View on GitHub
+          </a>
+        </div>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .th-header { margin-bottom: 2.5rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .th-section { margin-bottom: 3.5rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    text-decoration: none;
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 4px;
+    padding: 8px 14px;
+    transition: background 0.2s;
+  }
+  .cta-link:hover { background: rgba(34, 211, 238, 0.08); }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

@@ -1,0 +1,213 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/research/pinns-whitepaper";
+const pdfUrl = "/PINNs_whitepaper.pdf";
+---
+
+<BaseLayout
+  title="Physics-Informed Inference for Partial Observability — White Paper | Ashwin Gupta"
+  description="Enterprise deployment proposition for physics-informed neural networks. Where PINNs fit in industrial and operational settings constrained by sparse telemetry."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/#research" class="back-link">← Back to research</a>
+
+        <header class="th-header">
+          <div class="th-badge">White Paper · Enterprise</div>
+          <h1 class="th-title">Physics-Informed Inference for Partial Observability</h1>
+          <p class="th-subtitle">A deployment proposition for physics-informed neural networks in enterprise settings — where governing equations are known but sensor coverage is not, and conventional data-driven inference breaks down.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Partial Observability Problem in Enterprise</h2>
+          <p class="th-body">
+            Enterprise systems are governed by well-understood physics — heat transfer in data centres, structural dynamics in industrial machinery, fluid flow in process pipelines. The governing equations are not in question. What's in question is coverage: sensors are placed where they can be placed, not where they're needed, and telemetry is sparse by operational constraint rather than theoretical limit.
+          </p>
+          <p class="th-body">
+            Conventional data-driven inference fails here because it requires dense coverage to reconstruct system state. Sparse telemetry leaves blind regions that the model cannot interpolate across — not because the physics is unknown, but because the model has no mechanism to exploit it. The result is a blind-control problem: the system operator makes decisions on partial state with no principled way to bound what's being missed.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The PINN Approach</h2>
+          <p class="th-body">
+            Physics-informed neural networks embed governing PDE constraints directly into the training objective. The network fits sparse telemetry while simultaneously satisfying the governing dynamics — physics acts as a regularizer, not a post-processing step. This means the model cannot produce a solution that satisfies the data loss while violating conservation laws or boundary conditions. The entire class of physically implausible solutions is eliminated structurally.
+          </p>
+          <p class="th-body">
+            Staged training rebalances telemetry fidelity against PDE adherence across epochs. Convergence is validated via residual consistency, boundary behavior, and physical plausibility — not just loss curves. Extrapolation stays bounded by governing structure rather than training coverage, which is precisely what matters in operational settings where the test distribution is always partially outside the training domain.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Areas of Deployment</h2>
+          <p class="th-body">
+            <strong>Thermal management in data centres and HVAC systems.</strong> Heat diffusion and convection follow well-characterized PDEs. Full instrumentation is economically impractical at scale. PINNs reconstruct full thermal fields from sparse sensor placements and enable control decisions grounded in the complete inferred state, not just the measured points.
+          </p>
+          <p class="th-body">
+            <strong>Server and hardware thermal feedback loops.</strong> Component-level temperature reconstruction from board-level sensors. Governing heat equations for specific hardware architectures are known from manufacturer specifications. A physics-informed model can provide spatially resolved thermal state at inference time without requiring per-component instrumentation.
+          </p>
+          <p class="th-body">
+            <strong>Industrial process control and structural monitoring.</strong> Fluid dynamics in process pipelines, structural stress distributions in load-bearing systems, pressure fields in confined geometries — all governed by PDEs with known boundary conditions. Sparse sensor networks provide boundary measurements; PINNs reconstruct interior fields without additional instrumentation.
+          </p>
+          <p class="th-body">
+            <strong>Predictive maintenance under partial observability.</strong> Structural mechanics equations govern degradation dynamics. Vibration, load, and displacement sensors sample coarsely. Physics-constrained inference propagates what's measured into what's physically implied — enabling degradation estimates at unmeasured points and extending the actionable horizon for maintenance scheduling.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Deployment Proposition</h2>
+          <p class="th-body">
+            The right question for enterprise physics-informed deployment is not "do we have enough data?" but "do we know the governing equations?" For the operational settings above, the answer to the second question is yes — and always has been. The data is sparse because dense instrumentation is expensive, not because the physics is uncertain.
+          </p>
+          <p class="th-body">
+            PINNs make sparse data sufficient in a way that purely data-driven approaches cannot. The governing equations carry structural information about the solution that would otherwise require orders of magnitude more labeled examples to approximate. Enterprise is not a harder setting for physics-informed methods — it is a better-suited one, because the physics is better-known and the data is more reliably sparse.
+          </p>
+        </section>
+
+        <div style="margin-bottom: 3.5rem;">
+          <a href={pdfUrl} target="_blank" rel="noopener noreferrer" class="cta-link">
+            ↓ Download White Paper
+          </a>
+        </div>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .th-header { margin-bottom: 2.5rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    text-align: justify;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .th-section { margin-bottom: 3.5rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+    text-align: justify;
+  }
+
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    text-decoration: none;
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 4px;
+    padding: 8px 14px;
+    transition: background 0.2s;
+  }
+  .cta-link:hover { background: rgba(34, 211, 238, 0.08); }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>
