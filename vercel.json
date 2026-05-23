@@ -9,5 +9,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    { "source": "/about",           "destination": "/" },
+    { "source": "/stack",           "destination": "/" },
+    { "source": "/experience",      "destination": "/" },
+    { "source": "/recommendations", "destination": "/" },
+    { "source": "/featured",        "destination": "/" },
+    { "source": "/research",        "destination": "/" },
+    { "source": "/projects",        "destination": "/" },
+    { "source": "/contact",         "destination": "/" }
   ]
 }

@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { useState, useEffect, useRef } from "react";
 import {
   useIsMobile,
@@ -72,10 +72,10 @@ export const projects: Project[] = [
     impact:
       "Live at ashwingupta.dev · 90% image reduction · 72% JS bundle cut · 400 CSS DOM nodes eliminated",
     summary: [
-      "The original portfolio claimed performance engineering while shipping **400 animated DOM nodes** and a **2 MB hero** — self-defeating on load.",
-      "Rebuilt as a **three-layer spatial interface** — environment shell, Canvas particle field, hologram surface — collapsing visual effects into one system.",
-      "**Offscreen pre-rendering**, visibility-gated RAF, lazy loading, and asset compression cut work at the source, making optimization structural not cosmetic.",
-      "**90% image reduction** · **72% JS cut** · frame time **18–25ms → 4–6ms** · **60fps under throttle** · **400 animated DOM nodes removed**.",
+      "The original portfolio claimed performance engineering while shipping **400 animated DOM nodes** and a **2 MB JPEG hero** — self-defeating on load.",
+      "Rebuilt as a **three-layer spatial interface** — environment shell, Canvas particle field, hologram surface — collapsing all visual effects into one system.",
+      "**Offscreen pre-rendering**, visibility-gated RAF, lazy loading, and WebP + fetchpriority preloads cut work at the source, making optimization structural not cosmetic.",
+      "**90% image reduction** · **72% JS cut** · frame time **18–25ms → 4–6ms** · stable **60fps** under throttle · **400 animated DOM nodes** removed.",
     ],
     bullets: [
       "A portfolio site is its own proof unit. The designer baseline was self-defeating — the first thing a hiring manager measured was a **performance failure on the site claiming performance engineering**.",
@@ -106,10 +106,10 @@ export const projects: Project[] = [
     impact:
       "Fully offline tree-RAG execution · vendor lock-in eliminated · provider-agnostic runtime",
     summary: [
-      "Tree-RAG was **hardwired to one provider contract** — completion differences silently corrupted recursive traversal, and failures surfaced only after collapse.",
-      "Added a **provider-routing layer** with **finish-reason normalization**, so traversal depends on stable internal contracts rather than whichever runtime answered.",
-      "Prompt externalization, bounded concurrency, and hierarchical fallback keep long-document runs stable on **local models** with uneven outputs and limited memory.",
-      "**Fully offline tree-RAG** across Ollama, llama.cpp, and vLLM — provider switching became transparent, with no external API dependency in execution.",
+      "Tree-RAG was **hardwired to one provider contract** — completion differences silently corrupted recursive traversal; failures surface only at collapse.",
+      "Added a **provider-routing layer** with **finish-reason normalization**, so traversal depends on stable internal contracts, not whichever runtime answered.",
+      "Prompt externalization, bounded concurrency, and hierarchical fallback stabilize long-document runs on **local models** with uneven outputs and limited memory.",
+      "**Fully offline tree-RAG** across Ollama, llama.cpp, and vLLM — provider switching is transparent, with no external API keys required.",
     ],
     bullets: [
       "All inference required a **live OpenAI API key** — offline or air-gapped execution was blocked entirely; **provider switches corrupted traversal silently** with no error surface; token encoding differences across providers produced inconsistent chunk boundaries with no visible signal.",
@@ -141,8 +141,8 @@ export const projects: Project[] = [
       "Fully offline academic document QA · reproducible HNSW indexes · zero API dependency",
     summary: [
       "Academic RAG assumed **cloud inference by default** — air-gapped institutions and low-VRAM machines had no private path from ingestion to QA.",
-      "Built a **local-first retrieval stack**: LEANN/HNSW indexes, dense embeddings, Ollama inference, and normalized ingestion across PDFs, HTML, and paper folders.",
-      "Chunk overlap, tuned **Top-K** and context windows, plus PyMuPDF and BeautifulSoup cleanup fix retrieval quality before errors reach query time.",
+      "Built a **local-first retrieval stack**: LEANN/HNSW indexes, dense embeddings, Ollama inference, and normalized ingestion across PDFs, HTML, and paper dirs.",
+      "Chunk overlap, tuned **Top-K** and context windows; PyMuPDF and BeautifulSoup cleanup fix retrieval quality, before errors reach query time.",
       "**API-free academic QA** on **sub-1GB quantized models** · reproducible HNSW artifacts for air-gapped use · ingestion and retrieval run without cloud credentials.",
     ],
     bullets: [
@@ -171,26 +171,26 @@ export const projects: Project[] = [
       "Cost Engineering",
     ],
     impact:
-      "1,600+ concurrent sessions · 7× VM capacity · ~$1.3M annualized savings · MTTR ~1–2 hrs → ~5 min",
+      "1,600+ concurrent sessions · 7× VM capacity · ~$1.3M annualized savings · MTTR ~1–2 hrs → ~10 min",
     summary: [
-      "Voice infrastructure ran on **GIL'd threading causing memory ballooning** — capped at **20 calls per VM**; documentation took **10–15 minutes**; incident recovery demanded **1–2 hours**.",
-      "Replaced with **CPU-pinned parallel processes** to escape GIL and **asyncio + uvloop** to replace the threading layer — each SIP session a coroutine across SBC, STT, and LLM stages.",
+      "GIL'd threading on a **32-core VM** left 31 cores idle — memory ballooning capped sessions at **20 per VM**; documentation **10–15 min**; incident recovery **1–2 hours**.",
+      "Migrated to **8-core VM**; **8 CPU-pinned parallel instances** via taskset escaped GIL; **asyncio + uvloop** replaced threading — each SIP session a coroutine across SBC, STT, and LLM.",
       "Built **cross-stack log correlation**, SIPp load testing, and secure media transport — capacity, observability, and cost treated as one system.",
-      "**7× per-VM capacity** · **1,600+ sessions** sustained · **$118K → $8K/month** · MTTR **1–2 hr → ~5 min** · docs **10–15 min → 2–3 min**.",
+      "**7× per-VM capacity** · **1,600+ sessions** sustained · **$118K → $8K/month** · MTTR **1–2 hr → ~10 min** · docs **10–15 min → 2–3 min**.",
     ],
     bullets: [
       "**GIL'd threading caused memory ballooning** — concurrent sessions saturated at 20 per VM before packet loss rose above 10%; available hardware capacity was highly under-utilised; post-call documentation required **10–15 minutes of manual effort** per interaction with no automated path; fragmented cross-service logs with no correlation layer meant incidents required **1–2 hours of manual reconstruction** to identify root cause.",
-      "HSBC voice AI ran on GIL'd threading with **memory ballooning**, capped at **20 concurrent calls per VM**. Post-call documentation: **10–15 min per interaction**. Inference cost: **~$118K/month**. Incident recovery: **1–2 hours** — fragmented logs, no unified observability layer.",
-      "Led a **4-engineer team**. Owned **Packer automation across all project modules** — standardizing GCE image builds for the full SIP stack **(SBC → STT → LLM inference)**. Replaced GIL'd threading (memory ballooning) with **CPU-pinned parallel processes** to escape GIL, and rewrote the concurrency layer with **asyncio + uvloop** to replace threading — eliminating GIL contention across the full pipeline. Built **SIPp load test suite** (2,000 concurrent users). Architected **cross-stack log-correlation** over GCP Logging APIs — **250K+ log lines in under 5 seconds**.",
+      "HSBC voice AI ran on GIL'd threading with **memory ballooning** on a **32-core VM** — capped at **20 concurrent calls**, 31 cores idle. Post-call documentation: **10–15 min per interaction**. Inference cost: **~$118K/month**. Incident recovery: **1–2 hours** — fragmented logs, no unified observability layer.",
+      "Led a **4-engineer team**. Owned **Packer automation across all project modules** — standardizing GCE image builds for the full SIP stack **(SBC → STT → LLM inference)**. Migrated from **32-core n2-standard-32** to **8-core c4-standard-8**; deployed **8 CPU-pinned parallel instances** via <code>taskset</code> — one per core, escaping GIL entirely. Rewrote concurrency with **asyncio + uvloop**, eliminating memory ballooning. Built **SIPp load test suite** (2,000 concurrent users). Architected **cross-stack log-correlation** over GCP Logging APIs — **250K+ log lines in under 5 seconds**.",
       "**<2s E2E transcription latency**, <5% packet loss at 1,600+ concurrent sessions. libsrtp + DTLS/SRTP for in-transit security. Grafana-Prometheus with MACD triggers. Migrated **n2-standard-32 → c4-standard-8**, improving transcript length **30–40% under load**.",
-      "**7× per-VM capacity (20 → 140–160 calls)**. **1,600+ sessions** sustained. Documentation: **10–15 min → 2–3 min**. Compute: **$118K → $8K/month (~$1.3M annualized savings)**. MTTR: **1–2 hours → ~5 minutes**.",
+      "**7× per-VM capacity (20 → 140–160 calls)**. **1,600+ sessions** sustained. Documentation: **10–15 min → 2–3 min**. Compute: **$118K → $8K/month (~$1.3M annualized savings)**. MTTR: **1–2 hours → ~10 minutes**.",
     ],
     github: null,
   },
   {
     index: "05",
     slug: "azure-infra-docs",
-    title: "AI-Powered Azure Infrastructure Documentation Engine",
+    title: "Azure Infrastructure Documentation Engine",
     company: "Coforge",
     logo: COFORGE_LOGO,
     logoHeight: 18,
@@ -206,10 +206,10 @@ export const projects: Project[] = [
     impact:
       "~2–3 days → ~2–3 hours documentation turnaround · 104 resource groups/project · zero fabricated components",
     summary: [
-      "Azure documentation relied on **manual exports and hand-drawn diagrams** — every project took **2–3 days** and drifted from live state.",
-      "Built a **live-state extraction pipeline** — subscription scan, topology mapping, and security analysis generate documents from current resource evidence.",
-      "**Few-shot prompting** grounds generation in extracted inventory; guardrails reject any component without a matching live resource in the estate.",
-      "**2–3 days → ~2–3 hours** · **104 resource groups** per engagement · **zero fabricated components** · manual PlantUML authoring removed from delivery.",
+      "Azure docs relied on **manual exports and hand-drawn diagrams** — every project took **2–3 days** and drifted from live state.",
+      "Built a **live-state extraction pipeline** — subscription scan, topology mapping, and security config analysis auto-generate SDDs and PlantUML from live resource evidence.",
+      "**Few-shot prompting** grounds generation in extracted inventory; guardrails reject any component without a matching live resource — fabrication blocked from governance docs.",
+      "**2–3 days → ~2–3 hours** · **104 resource groups** per engagement · **zero fabricated components** · manual PlantUML authoring removed.",
     ],
     bullets: [
       "Infrastructure documentation required **manual extraction from Azure** — 2–3 days per project; **PlantUML diagrams were authored by hand** from memory or stale exports; documented architecture drifted from live infrastructure state with **no mechanism to detect or correct divergence**.",
@@ -223,7 +223,7 @@ export const projects: Project[] = [
   {
     index: "06",
     slug: "airline-contract-intelligence",
-    title: "AI Contract Intelligence System for Airline Agreements",
+    title: "Airline Contract Intelligence System",
     company: "Amex GBT",
     logo: "https://cdn.simpleicons.org/americanexpress/2E77BC",
     logoHeight: 18,
@@ -238,10 +238,10 @@ export const projects: Project[] = [
     impact:
       "~96% extraction accuracy · automated normalization across varied airline PDF schemas",
     summary: [
-      "Airline agreements mixed **scan-quality and readable PDF tables**, and carrier template drift made manual review the only reliable extraction path.",
-      "**Camelot + Ghostscript** extracted tables from both formats; **GPT-4o one-shot normalization** mapped varied carrier layouts into one contract view.",
-      "The pipeline preserves context without per-carrier tuning — low-quality scans, nested tables, and layout drift are handled inside one extraction flow.",
-      "**~96% extraction accuracy** across mixed airline PDFs · automated normalization replaced manual review · commercial term queries gained a real-time support path.",
+      "Airline contracts mixed **scan-quality and readable PDF tables**; carrier template drift made manual review the only reliable extraction path.",
+      "**Camelot + Ghostscript** extracted tables from both formats; **GPT-4o one-shot normalization** mapped carrier layouts into a schema-consistent output.",
+      "One-shot prompting preserves coherence across carrier templates — no per-carrier tuning; covers full format range from scan images to nested tables.",
+      "**~96% extraction accuracy** across airline contract Q&A · automated normalization replaced manual review · real-time query resolution, sales and support.",
     ],
     bullets: [
       "Airline contract tables were **reviewed manually** — slow, error-prone, and couldn't scale to the volume of carrier agreements; **template drift across carriers** meant each format required separate handling logic; sales and support queries on contract terms had **no real-time resolution path**.",
@@ -304,10 +304,10 @@ export const projects: Project[] = [
     impact:
       "Three interlinked AI tools · 163-language content generation · cURL-to-20+ language API conversion",
     summary: [
-      "Content generation, chatbot delivery, and API conversion lived in **separate tools with manual handoffs** — output drifted across every project.",
-      "Designed a **three-part AI toolchain**: Laminar for multilingual content, Metamorph for no-code chatbots, and Polymorph for API conversion scaffolds.",
-      "Each tool ships **standardized deployable artifacts** — brand-consistent visuals, multilingual content at scale, and cURL-derived code across 20+ languages.",
-      "**Three fragmented workflows unified** · **163-language content generation** at scale · no-code bot delivery cut engineering dependency · API work accelerated.",
+      "Content generation, chatbot delivery, and API conversion required **separate tools with manual handoffs** — output drifted across every project.",
+      "Built **three-part AI toolchain**: Laminar for multilingual content, Metamorph for no-code chatbots, Polymorph for API conversion scaffolds.",
+      "Each tool ships **standardized deployable artifacts** — brand-consistent visuals, multilingual content at scale, cURL-derived code across 20+ languages.",
+      "**Three fragmented workflows unified** · **163-language content generation** at scale · no-code bot delivery removed engineering dependency · API work accelerated.",
     ],
     bullets: [
       "Content generation, bot deployment, and API conversion each required **separate tools and manual handoff steps** — inconsistent output quality across every client engagement; **multilingual content at scale** had no standardized generation path; chatbot delivery required **engineering involvement** for every new deployment or update.",
@@ -337,10 +337,10 @@ export const projects: Project[] = [
     impact:
       "+30% recommendation relevance · sub-50ms latency · single NVIDIA T4 under production load",
     summary: [
-      "Skill recommendations ignored **hierarchical relationships**, taxonomy changes forced **full batch retraining**, and live inference missed the **sub-50ms** target.",
-      "Built a **weighted directed graph** over multi-level skill hierarchies with typed edges and lightweight scoring — structure, not retraining, drives relevance.",
+      "Skill recommendations ignored **hierarchical relationships**, taxonomy changes forced **full batch retraining**, and live inference missed the **sub-50ms** SLA.",
+      "Built a **weighted directed graph** over multilevel skill hierarchies with typed edges, lightweight scoring — structure, not retraining, drives relevance.",
       "Dynamic node insertion and deterministic traversal keep the graph current; latency was profiled at the **99th percentile** under production load.",
-      "**+30% relevance** · **sub-50ms inference** on a single **NVIDIA T4** · taxonomy expansion no longer required batch retraining · live updates stayed current.",
+      "**+30% relevance** · **sub-50ms inference** on one **NVIDIA T4** · taxonomy expansion no longer required batch retraining · live updates stayed current.",
     ],
     bullets: [
       "The recommendation system **ignored hierarchical skill relationships** — related skills treated as independent nodes with no structural modeling; **every taxonomy expansion triggered full batch retraining**, blocking updates until recompute completed; inference latency under production concurrency **exceeded the sub-50ms SLA** required for live platform use.",
@@ -417,43 +417,257 @@ export const projects: Project[] = [
     ],
     github: "https://github.com/ughshwin/ScholarOS",
   },
-  {
-    index: "11",
-    slug: "controla",
-    title: "controla — Local-First Self-Improving Inference OS",
-    company: "Personal",
-    logo: "https://cdn.simpleicons.org/github/ffffff",
-    logoHeight: 18,
-    status: "In Development",
-    tags: [
-      "Local-First Inference OS",
-      "19 Backends · 7 Modalities",
-      "Closed Learning Loop (EWMA)",
-      "Redis-Backed Priority Scheduler",
-      "VRAM-Aware Routing",
-      "Policy Versioning · Replay Validation",
-    ],
-    impact:
-      "19 backends · 7 modalities · closed learning loop · routing accuracy compounds with every deployment",
-    summary: [
-      "**Local inference routing is stateless by default** — prior outcomes are ignored, so each request repeats the same blind dispatch mistakes.",
-      "Every request feeds **contextual EWMA weight learning**, so routing adapts to workload; the system **improves as it runs** without retuning.",
-      "**Policy updates are replay-validated before promotion** — candidate routes degrading latency, accuracy, or SLA coverage are blocked before reaching live traffic.",
-      "Inference becomes a **managed workload** — routing is versioned policy, feedback is structured reward signal, and learning compounds without operator retuning.",
-    ],
-    bullets: [
-      "**Static routing** in local inference stacks assigns every request to the same backend regardless of task type, VRAM headroom, or load history — no task-aware dispatch, no hardware state, no learning from prior outcomes; **modality coverage is fragmented** across disjoint infrastructure with no unified API surface; learning state is **in-memory only** — a process restart erases every routing insight accumulated; **no policy validation mechanism** means routing changes go live blind with no regression gate against historical performance data.",
-      "controla is a **local-first inference OS** — 19 backends across 7 modalities (text gen, STT, TTS, image generation, embeddings, vision, reasoning) under one OpenAI-compatible API. Every request is classified, scored against **6 dimensions**, scheduled, dispatched, and observed. Routing policy learns from execution telemetry — **contextual EWMA weights per `(backend, task_type, complexity)`** persist across restarts via Redis. Not a gateway. Not a proxy. A **self-improving control plane** that treats inference as a managed system workload.",
-      "**FeatureExtractor** classifies task type across 10 categories and 3 complexity levels before dispatch. **ScoringEngine** evaluates every candidate across capability, performance, resource, load, reliability, and context — VRAM-aware routing applies **−15 if model cannot fit, +1.5 when already loaded**. **Redis-backed priority queue** with per-user fairness enforcement, deadline-aware dispatch via `x-latency-budget` header, and starvation prevention. **ExecutionPlanner** decomposes high-complexity reasoning into typed step chains. **329 passing tests**.",
-      "The **scoring engine is stateless and deterministic** — same inputs, same score; all learning lives above it in a versioned **RoutingPolicy** layer. **ReplayEngine** validates every policy candidate against historical data before promotion — gated on p95 latency regression and failure rate delta. **ε-greedy exploration** runs under hard guardrails: capability-matched and VRAM-safe backends only, within configured latency ceilings, on designated traffic buckets.",
-      "**19 backends across 7 modalities** — text gen (vLLM · Ollama · TensorRT-LLM · NVIDIA NIM · ExLlamaV2 · LocalAI · AirLLM), STT (faster-whisper · Parakeet · Voxtral · WhisperX), TTS (Kokoro · Fish Audio), image generation (ComfyUI · Automatic1111 · InvokeAI), embeddings (Infinity · TEI), vision (Koboldcpp). Learning state **persists across restarts** via Redis. Routing accuracy compounds with usage.",
-    ],
-    github: "https://github.com/ughshwin/controla",
-  },
 ];
 
 const SUMMARY_LABELS = ["Problem", "System", "Design", "Outcome"];
 
+// Featured card for HSBC / Controla
+function FeaturedCard({
+  p,
+  caseStudyHref,
+  caseStudyLabel,
+}: {
+  p: Project;
+  caseStudyHref: string;
+  caseStudyLabel: string;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const isMobile = useIsMobile();
+
+  const isHSBC = p.slug === "hsbc-voice";
+  const accentColor = isHSBC ? "#22d3ee" : "#e8e0d0";
+  const accentBorder = isHSBC
+    ? "rgba(34,211,238,0.4)"
+    : "rgba(232,224,208,0.25)";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        padding: isMobile ? "1.6rem" : "2.4rem",
+        borderRadius: "8px",
+        border: `1px solid ${hovered ? accentBorder : "rgba(255,255,255,0.12)"}`,
+        background: "transparent",
+        transition: "border-color 0.25s",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Accent top line */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "2px",
+          background: accentColor,
+          opacity: hovered ? 0.7 : 0.3,
+          transition: "opacity 0.25s",
+        }}
+      />
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+          gap: isMobile ? "1.5rem" : "3vw",
+          alignItems: "start",
+        }}
+      >
+        {/* Left: header info */}
+        <div>
+          {/* Company + status */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              marginBottom: "1.2rem",
+            }}
+          >
+            <img
+              src={p.logo}
+              alt={p.company}
+              style={{
+                height: `${p.logoHeight}px`,
+                width: "auto",
+                maxWidth: "60px",
+                objectFit: "contain",
+                opacity: 0.85,
+              }}
+              onError={(e) =>
+                ((e.currentTarget as HTMLImageElement).style.display = "none")
+              }
+            />
+            <span
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.62rem",
+                letterSpacing: "0.09em",
+                color: "rgba(255,255,255,0.35)",
+              }}
+            >
+              {p.company}
+            </span>
+            <span
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.52rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                padding: "2px 8px",
+                borderRadius: "20px",
+                color: accentColor,
+                border: `1px solid ${accentBorder}`,
+                background: isHSBC
+                  ? "rgba(34,211,238,0.06)"
+                  : "rgba(232,224,208,0.04)",
+              }}
+            >
+              {p.status}
+            </span>
+          </div>
+
+          <h3
+            style={{
+              fontFamily: FONT_SERIF,
+              fontWeight: 800,
+              fontSize: isMobile ? "1.4rem" : "1.7rem",
+              color: "#fafaf8",
+              lineHeight: 1.2,
+              margin: "0 0 1rem",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {p.title}
+          </h3>
+
+          <p
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.62rem",
+              letterSpacing: "0.06em",
+              color: accentColor,
+              opacity: 0.9,
+              marginBottom: "1.5rem",
+              lineHeight: 1.6,
+            }}
+          >
+            {p.impact}
+          </p>
+
+          {/* CTA link */}
+          <a
+            href={caseStudyHref}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontFamily: FONT_MONO,
+              fontSize: "0.62rem",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: accentColor,
+              textDecoration: "none",
+              border: `1px solid ${accentBorder}`,
+              borderRadius: "4px",
+              padding: "8px 14px",
+              transition: "background 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.background = isHSBC
+                ? "rgba(34,211,238,0.08)"
+                : "rgba(232,224,208,0.06)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.background = "transparent";
+            }}
+          >
+            {caseStudyLabel} →
+          </a>
+        </div>
+
+        {/* Right: summary bullets */}
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}
+        >
+          {p.summary.slice(0, 3).map((bullet, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                gap: "0.65rem",
+                alignItems: "flex-start",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: FONT_MONO,
+                  fontSize: "0.58rem",
+                  color: "rgba(255,255,255,0.2)",
+                  marginTop: "4px",
+                  flexShrink: 0,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  width: "70px",
+                }}
+              >
+                {SUMMARY_LABELS[i]}
+              </span>
+              <span
+                style={{
+                  fontFamily: FONT_SANS,
+                  fontSize: "0.85rem",
+                  lineHeight: 1.65,
+                  color: "rgba(255,255,255,0.55)",
+                }}
+              >
+                {renderBullet(bullet)}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tags */}
+      <div
+        style={{
+          display: "flex",
+          gap: "5px",
+          flexWrap: "wrap",
+          marginTop: "1.5rem",
+          paddingTop: "1.2rem",
+          borderTop: "1px solid rgba(255,255,255,0.05)",
+        }}
+      >
+        {p.tags.map((t) => (
+          <span
+            key={t}
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.52rem",
+              letterSpacing: "0.07em",
+              color: "rgba(255,255,255,0.35)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: "2px",
+              padding: "3px 7px",
+            }}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+// Compact secondary card
 function ProjectCard({ p, index }: { p: Project; index: number }) {
   const [hovered, setHovered] = useState(false);
   const [revealed, setRevealed] = useState(false);
@@ -489,7 +703,7 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      whileHover={{ y: -6, scale: 1.025 }}
+      whileHover={{ y: -4, scale: 1.015 }}
       transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -503,221 +717,160 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: "1rem",
-        padding: "1.6rem",
+        padding: "1.4rem",
         borderRadius: "8px",
-        border: `1px solid ${hovered ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.15)"}`,
+        border: `1px solid ${hovered ? "rgba(255,255,255,0.28)" : "rgba(255,255,255,0.1)"}`,
         background: "transparent",
-        transition: "border-color 0.2s, color 0.2s",
+        transition: "border-color 0.2s",
         cursor: "pointer",
       }}
     >
-      {/* Title + badge row */}
       <div
         style={{
-          display: "flex",
-          flexDirection: isDesktop ? "row" : "column",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: isDesktop ? "0.75rem" : "0.5rem",
-        }}
-      >
-        <p
-          style={{
-            fontFamily: FONT_SERIF,
-            fontWeight: 800,
-            fontSize: "1.75rem",
-            color: "#fafaf8",
-            lineHeight: 1.2,
-            margin: 0,
-            flex: 1,
-          }}
-        >
-          {p.title}
-        </p>
-        <span
-          style={{
-            fontFamily: FONT_MONO,
-            fontSize: "0.52rem",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            whiteSpace: "nowrap",
-            padding: "3px 9px",
-            borderRadius: "20px",
-            flexShrink: 0,
-            alignSelf: "flex-start",
-            marginTop: isDesktop ? "3px" : 0,
-            color: statusColor,
-            border: `1px solid ${statusBorder}`,
-            background: statusBg,
-          }}
-        >
-          {p.status}
-          {isAward && " 🏆"}
-        </span>
-      </div>
-
-      {/* Company */}
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <img
-          src={p.logo}
-          alt={p.company}
-          style={{
-            height: `${p.logoHeight}px`,
-            width: "auto",
-            maxWidth: "72px",
-            objectFit: "contain",
-            opacity: 0.85,
-          }}
-          onError={(e) =>
-            ((e.currentTarget as HTMLImageElement).style.display = "none")
-          }
-        />
-        <span
-          style={{
-            fontFamily: FONT_MONO,
-            fontSize: "0.7rem",
-            letterSpacing: "0.09em",
-            color: "rgba(255,255,255,0.35)",
-          }}
-        >
-          {p.company}
-        </span>
-      </div>
-
-      {/* Divider */}
-      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-
-      {/* Bullets — first 3 always visible; 4th (Outcome) revealed on hover */}
-      <div
-        style={{
-          position: "relative",
           display: "flex",
           flexDirection: "column",
-          gap: "0.65rem",
+          gap: "0.85rem",
+          overflow: "hidden",
+          maxHeight: showOutcome ? "1000px" : "14rem",
+          transition: "max-height 0.5s cubic-bezier(0.76, 0, 0.24, 1)",
+          ...(!showOutcome
+            ? {
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, black 75%, transparent 100%)",
+                maskImage:
+                  "linear-gradient(to bottom, black 75%, transparent 100%)",
+              }
+            : {}),
         }}
       >
-        {(p.summary as string[]).slice(0, 3).map((bullet, i) => (
-          <div
-            key={i}
+        {/* Title + badge row */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: isDesktop ? "row" : "column",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: "0.5rem",
+          }}
+        >
+          <p
             style={{
-              display: "flex",
-              gap: "0.65rem",
-              alignItems: "flex-start",
-              ...(i === 2 && !showOutcome
-                ? {
-                    WebkitMaskImage:
-                      "linear-gradient(to bottom, black 20%, transparent 100%)",
-                    maskImage:
-                      "linear-gradient(to bottom, black 20%, transparent 100%)",
-                  }
-                : {}),
+              fontFamily: FONT_SERIF,
+              fontWeight: 800,
+              fontSize: "1.35rem",
+              color: "#fafaf8",
+              lineHeight: 1.2,
+              margin: 0,
+              flex: 1,
             }}
           >
-            <span
-              style={{
-                fontFamily: FONT_MONO,
-                fontSize: "0.62rem",
-                color: "rgba(255,255,255,0.22)",
-                marginTop: "4px",
-                flexShrink: 0,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                width: "76px",
-                lineHeight: 1.5,
-              }}
-            >
-              {SUMMARY_LABELS[i]}
-            </span>
-            <span
-              style={{
-                fontFamily: FONT_SANS,
-                fontSize: "0.88rem",
-                lineHeight: 1.65,
-                color: "rgba(255,255,255,0.56)",
-                textAlign: "justify",
-                textJustify: "inter-word",
-              }}
-            >
-              {renderBullet(bullet)}
-            </span>
-          </div>
-        ))}
+            {p.title}
+          </p>
+          <span
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.5rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+              padding: "3px 8px",
+              borderRadius: "20px",
+              flexShrink: 0,
+              alignSelf: "flex-start",
+              color: statusColor,
+              border: `1px solid ${statusBorder}`,
+              background: statusBg,
+            }}
+          >
+            {p.status}
+          </span>
+        </div>
 
-        {/* 4th bullet (Outcome) — fades in on hover */}
-        <AnimatePresence>
-          {showOutcome && (
-            <motion.div
-              key="outcome"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
+        {/* Company */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <img
+            src={p.logo}
+            alt={p.company}
+            style={{
+              height: `${Math.min(p.logoHeight, 32)}px`,
+              width: "auto",
+              maxWidth: "56px",
+              objectFit: "contain",
+              opacity: 0.8,
+            }}
+            onError={(e) =>
+              ((e.currentTarget as HTMLImageElement).style.display = "none")
+            }
+          />
+          <span
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.62rem",
+              letterSpacing: "0.09em",
+              color: "rgba(255,255,255,0.3)",
+            }}
+          >
+            {p.company}
+          </span>
+        </div>
+
+        <div style={{ height: "1px", background: "rgba(255,255,255,0.05)" }} />
+
+        {/* All bullets — always rendered; mask fades last bullet until hover */}
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+        >
+          {p.summary.map((bullet, i) => (
+            <div
+              key={i}
               style={{
                 display: "flex",
-                gap: "0.65rem",
+                gap: "0.55rem",
                 alignItems: "flex-start",
               }}
             >
               <span
                 style={{
                   fontFamily: FONT_MONO,
-                  fontSize: "0.62rem",
-                  color: "rgba(255,255,255,0.22)",
-                  marginTop: "4px",
+                  fontSize: "0.56rem",
+                  color: "rgba(255,255,255,0.2)",
+                  marginTop: "3px",
                   flexShrink: 0,
-                  letterSpacing: "0.08em",
+                  letterSpacing: "0.07em",
                   textTransform: "uppercase",
-                  width: "76px",
-                  lineHeight: 1.5,
+                  width: "58px",
                 }}
               >
-                {SUMMARY_LABELS[3]}
+                {SUMMARY_LABELS[i]}
               </span>
               <span
                 style={{
                   fontFamily: FONT_SANS,
-                  fontSize: "0.88rem",
-                  lineHeight: 1.65,
-                  color: "rgba(255,255,255,0.56)",
-                  textAlign: "justify",
-                  textJustify: "inter-word",
+                  fontSize: "0.82rem",
+                  lineHeight: 1.55,
+                  color: "rgba(255,255,255,0.5)",
                 }}
               >
-                {renderBullet(p.summary[3])}
+                {renderBullet(bullet)}
               </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Footer: index + arrow */}
+      {/* Arrow — outside masked div, always fully visible */}
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          justifyContent: "flex-end",
           marginTop: "auto",
-          paddingTop: "0.25rem",
         }}
       >
         <span
           style={{
             fontFamily: FONT_MONO,
-            fontSize: "0.62rem",
-            color: "rgba(255,255,255,0.18)",
-            letterSpacing: "0.1em",
-          }}
-        >
-          {p.index}
-        </span>
-        <span
-          style={{
-            fontFamily: FONT_MONO,
-            fontSize: "0.72rem",
-            color: hovered
-              ? "rgba(255,255,255,0.95)"
-              : "rgba(255,255,255,0.35)",
+            fontSize: "0.65rem",
+            color: hovered ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.3)",
             transition: "color 0.2s",
           }}
         >
@@ -751,13 +904,15 @@ export function Projects() {
     return () => root.removeEventListener("scroll", check);
   }, []);
 
-  const visibleProjects = projects.filter(
+  const secondaryProjects = projects.filter(
     (p) =>
-      p.title !== "ScholarOS — Structured Research Execution Platform" &&
-      p.title !== "controla — Local-First Self-Improving Inference OS",
+      p.slug !== "hsbc-voice" &&
+      p.slug !== "here-app" &&
+      p.slug !== "pinns" &&
+      p.slug !== "scholaros",
   );
 
-  const orderedProjects = [...visibleProjects].sort((a, b) => {
+  const orderedSecondary = [...secondaryProjects].sort((a, b) => {
     const aIsAward = a.status === "Best Outgoing Project · 2022–23";
     const bIsAward = b.status === "Best Outgoing Project · 2022–23";
     if (aIsAward === bIsAward) return 0;
@@ -765,7 +920,7 @@ export function Projects() {
   });
 
   const maxPerRow = isMobile ? 1 : isTablet ? 2 : 3;
-  const rows = useEqualRows(orderedProjects.length, maxPerRow);
+  const rows = useEqualRows(orderedSecondary.length, maxPerRow);
 
   return (
     <section
@@ -795,7 +950,7 @@ export function Projects() {
           backdropFilter: isStuck ? "blur(6px)" : "none",
           WebkitBackdropFilter: isStuck ? "blur(6px)" : "none",
           transition: "background 0.3s ease",
-          marginBottom: "5rem",
+          marginBottom: "3rem",
         }}
       >
         <div
@@ -803,7 +958,8 @@ export function Projects() {
             display: "flex",
             alignItems: "center",
             gap: "2rem",
-            marginBottom: "1rem",
+            marginBottom: isStuck ? "1rem" : "5rem",
+            transition: "margin-bottom 0.3s ease",
           }}
         >
           <span
@@ -816,7 +972,7 @@ export function Projects() {
               transition: "font-size 0.3s ease",
             }}
           >
-            04 — Projects
+            06 — Projects
           </span>
           <div
             style={{
@@ -841,7 +997,7 @@ export function Projects() {
                   : "clamp(1.8rem, 3.6vw, 3.3rem)"
                 : isMobile
                   ? "clamp(1.8rem, 7vw, 4rem)"
-                  : "clamp(3rem, 6vw, 5.5rem)",
+                  : "clamp(2.6rem, 4.5vw, 4rem)",
               fontWeight: 800,
               lineHeight: 1.1,
               letterSpacing: "-0.04em",
@@ -850,28 +1006,30 @@ export function Projects() {
               transition: "font-size 0.30s ease",
             }}
           >
-            Delivered, Scaled.
+            Systems that had to hold.
           </motion.h2>
-        </div>
-        {/* Hint */}
-        <div style={{ textAlign: "right", marginTop: "0.6rem" }}>
-          <span
-            style={{
-              fontFamily: FONT_MONO,
-              fontSize: "0.58rem",
-              letterSpacing: "0.1em",
-              color: "rgba(255,255,255,0.28)",
-            }}
-          >
-            Tap to dive deeper
-          </span>
         </div>
       </div>
 
+      {/* Secondary grid */}
+      <div style={{ marginBottom: "2rem" }}>
+        <p
+          style={{
+            fontFamily: FONT_MONO,
+            fontSize: "0.55rem",
+            letterSpacing: "0.2em",
+            color: "rgba(255,255,255,0.28)",
+            textTransform: "uppercase",
+            marginBottom: "1.5rem",
+          }}
+        >
+          All projects
+        </p>
+      </div>
       <EqualGridRenderer
         rows={rows}
         renderCard={(idx) => (
-          <ProjectCard p={orderedProjects[idx]} index={idx} />
+          <ProjectCard p={orderedSecondary[idx]} index={idx} />
         )}
       />
     </section>

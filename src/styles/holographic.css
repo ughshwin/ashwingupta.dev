@@ -19,7 +19,6 @@ body {
 .spatial-scene {
   position: relative;
   min-height: 100dvh;
-  background: var(--room-black);
 }
 
 .spatial-environment {

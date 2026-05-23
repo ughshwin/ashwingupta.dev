@@ -5,81 +5,140 @@ const FONT_SERIF = '"Playfair Display", Georgia, serif';
 const FONT_MONO = '"DM Mono", monospace';
 const FONT_SANS = '"DM Sans", sans-serif';
 
-// Directly from the doc — Core Capabilities
 const capabilities = [
   {
+    title: "Concurrency Architecture & GIL Escape",
+    desc: "Replaced GIL'd threading on a 32-core VM with 8 CPU-pinned parallel instances via taskset — one per core — and rewrote the threading layer as asyncio + uvloop coroutines. Memory ballooning eliminated. 20 concurrent SIP sessions → 140–160 per VM under sustained load. Latency profiled at 99th percentile, not average.",
+    tags: [
+      "asyncio · uvloop",
+      "CPU-pinned processes",
+      "GIL escape",
+      "memory ballooning",
+      "tail-latency profiling",
+    ],
+  },
+  {
+    title: "Inference Routing & Adaptive Scheduling",
+    desc: "controla routes across 19 backends and 7 modalities using 6-dimension scoring (capability, performance, resource state, load, reliability, context). A versioned RoutingPolicy carries per-(backend, task_type, complexity) EWMA observations persisted to Redis across restarts. ε-greedy exploration is constrained to VRAM-safe, capability-matched backends. Policy candidates are replay-validated against historical traffic before promotion.",
+    tags: [
+      "EWMA weight learning",
+      "VRAM-aware dispatch",
+      "Redis priority queues",
+      "ε-greedy exploration",
+      "policy replay validation",
+      "6D scoring",
+    ],
+  },
+  {
+    title: "RAG & Retrieval Infrastructure",
+    desc: "HNSW/LEANN indexes with dense embeddings (facebook/contriever), Top-K (3–4) and context windows (1024–1536 tokens) tuned for recall vs. coherence. Tree-RAG provider abstraction with finish-reason normalization stabilizes recursive traversal across Ollama, llama.cpp, and vLLM — provider switching is transparent. QA-gated retrieval validates lookup quality before generation; reproducible index artifacts enable air-gapped operation.",
+    tags: [
+      "HNSW · LEANN indexing",
+      "tree-RAG",
+      "dense embeddings",
+      "finish-reason normalization",
+      "air-gapped retrieval",
+      "QA-gated generation",
+    ],
+  },
+  {
     title: "Production AI Infrastructure",
-    desc: "Operated inference under 300ms latency SLOs, 1,600+ concurrent sessions, and cost ceilings where token spend maps directly to monthly burn — $118K → $8K/month.",
+    desc: "Led a 4-engineer team. Owned Packer automation for all GCE image builds across the full SIP stack — SBC → STT → LLM inference. Sustained 1,600+ concurrent sessions at <2s E2E transcription latency and <5% packet loss. Monthly compute: $118K → $8K/month (~$1.3M annualized savings). HPA for capacity; libsrtp + DTLS/SRTP for in-transit security.",
     tags: [
-      "latency budgets",
-      "SLA design",
-      "cost modeling",
-      "service observability",
+      "GCP (Packer · GCE · HPA)",
+      "SIP/PJSIP stack",
+      "cost engineering",
+      "SLA delivery",
+      "libsrtp · DTLS/SRTP",
     ],
   },
   {
-    title: "Distributed Inference Systems",
-    desc: "GIL'd threading caused memory ballooning — replaced with CPU-pinned parallel processes to escape GIL and asyncio + uvloop to replace the threading layer. 20 → 140+ concurrent calls per VM under sustained production load. Latency profiled at 99th percentile, not average.",
+    title: "Observability & Incident Recovery",
+    desc: "Architected cross-stack log correlation over GCP Logging APIs — 250K+ log lines reconstructed in under 5 seconds. MTTR: 1–2 hours → ~10 minutes. SIPp load test suite at 2,000 concurrent users. Prometheus/Grafana monitoring with MACD-triggered alerts. Trace correlation built into the stack, not bolted on after the incident.",
     tags: [
-      "async runtimes",
-      "batching",
-      "capacity planning",
-      "tail-latency control",
+      "GCP Logging APIs",
+      "cross-stack trace correlation",
+      "SIPp load testing",
+      "Prometheus · Grafana",
+      "MTTR reduction",
     ],
   },
   {
-    title: "Retrieval & Indexing Infrastructure",
-    desc: "HNSW indexing with dense embeddings, configurable Top-K (3–4), and 1024–1536 token context windows tuned for recall vs. coherence. Reproducible index artifacts for air-gapped operation.",
+    title: "Physics-Informed Neural Networks",
+    desc: "Dual-loss PINN framework embedding PDE/ODE constraints directly into the optimization objective alongside data loss — physics acts as a regularizer preventing physically implausible solutions when data is sparse. Validated across 6 benchmarks: Burgers' equation, 1D heat conduction, fixed-fixed column deflection, cantilever tip deflection, 1D transient cooling under Neumann and Dirichlet boundary conditions. Applied to HVAC thermal feedback and server cooling use cases.",
     tags: [
-      "FAISS/HNSW",
-      "chunking strategies",
-      "embedding maintenance",
-      "retrieval grounding",
+      "dual-loss optimization",
+      "PDE · ODE constraints",
+      "Neumann · Dirichlet BCs",
+      "partial observability",
+      "physics regularization",
     ],
   },
   {
-    title: "Monitoring, Telemetry & Failure Isolation",
-    desc: "250K+ log lines reconstructed in <5s via GCP Logging APIs. MTTR: 1–2 hours → ~5 minutes. Trace correlation built into the stack — not bolted on after the incident.",
+    title: "Graph Systems & Heuristic Scoring",
+    desc: "Weighted directed graph encoding multi-level skill hierarchies as typed edges with dynamic weight updates. Dynamic node insertion without full graph recomputation. Deterministic traversal produces consistent outputs under concurrent updates — latency profiled on NVIDIA T4 before deployment. +30% recommendation relevance and sub-50ms inference under production load.",
     tags: [
-      "SLA monitoring",
-      "log correlation",
-      "telemetry pipelines",
-      "failure domain isolation",
+      "weighted directed graph",
+      "typed edge hierarchies",
+      "dynamic node updates",
+      "sub-50ms inference",
+      "mathematical scoring heuristics",
     ],
   },
   {
-    title: "Graph-Based Retrieval Systems",
-    desc: "Weighted directed graph encoding multi-level skill hierarchies as typed edges with dynamic weight updates. Sub-50ms inference on NVIDIA T4 under production concurrency. 30% relevance improvement over flat matching.",
-    tags: ["graph traversal", "weighted scoring", "sub-50ms inference loops"],
+    title: "Local LLM Deployment & Provider Abstraction",
+    desc: "Fully offline RAG and inference across Ollama, llama.cpp, and vLLM — no external API keys at any pipeline stage. Provider-routing abstraction resolved via env vars with finish-reason normalization across runtime outputs. Sub-1GB quantized model support for CPU-only and low-VRAM hardware. VRAM accounting at runtime accounts for concurrent load, not just startup state.",
+    tags: [
+      "Ollama · llama.cpp · vLLM",
+      "provider-routing abstraction",
+      "quantized model deployment",
+      "VRAM-aware loading",
+      "zero API dependency",
+    ],
   },
   {
-    title: "Scientific ML Systems",
-    desc: "Dual-loss PINN framework embedding PDE/ODE constraints directly into the optimization objective. Stable convergence validated across 6 physics benchmarks with limited labeled data — fluid, structural, and thermal domains.",
+    title: "Deterministic Pipeline Architecture (MCP)",
+    desc: "ScholarOS executes research workflows as DAGs over 9 deterministic MCP services — no service imports another; all data flows through the orchestrator via typed tool invocations. Hypothesis critique is agentic and bounded to 5 iterations with required grounding to source claim identifiers. 100% determinism rate: identical inputs produce identical outputs. March 2026 validation: 5,479 chunks, 180 claims extracted, 76 contradictions detected.",
     tags: [
-      "physics-informed models",
-      "physics-constrained training",
-      "regime classification",
+      "MCP orchestrator",
+      "DAG execution",
+      "bounded agent loops",
+      "typed artifact provenance",
+      "evidence-bound outputs",
+      "100% determinism",
+    ],
+  },
+  {
+    title: "Document Intelligence & Live-State Extraction",
+    desc: "Camelot + Ghostscript extract tables from both scan-quality and programmatic PDFs; GPT-4o one-shot normalization maps diverse carrier templates to schema-consistent output — ~96% extraction accuracy. Azure Resource Graph API subscription scans auto-generate SDDs and PlantUML diagrams; fabrication guardrails cross-check every generated component against extracted inventory, eliminating hallucinated topology from governance docs. Turnaround: 2–3 days → ~2–3 hours.",
+    tags: [
+      "Camelot · Ghostscript",
+      "one-shot · few-shot prompting",
+      "fabrication guardrails",
+      "Azure Resource Graph API",
+      "live-state grounding",
     ],
   },
 ];
 
 const techStack = [
-  "PyTorch",
-  "LangChain",
-  "Hugging Face",
-  "Ollama",
-  "FastAPI",
-  "GCP",
-  "Azure",
-  "Docker",
-  "Kubernetes",
-  "W&B",
-  "MLflow",
-  "FAISS",
-  "Redis",
-  "SQL",
-  "Terraform",
   "Python",
+  "PyTorch",
+  "asyncio · uvloop",
+  "GCP (Packer · GCE · HPA)",
+  "Azure Resource Graph",
+  "Redis",
+  "Ollama · llama.cpp · vLLM",
+  "HNSW · FAISS",
+  "Chroma",
+  "Hugging Face",
+  "PJSIP · SIPp",
+  "Camelot · Ghostscript",
+  "Prometheus · Grafana",
+  "PyMuPDF",
+  "SQLite",
+  "MCP",
+  "Docker",
 ];
 
 export function Skills() {
@@ -87,7 +146,7 @@ export function Skills() {
 
   return (
     <section
-      id="skills"
+      id="stack"
       style={{
         padding: isMobile ? "4rem 4vw" : "10rem 6vw",
         background: "transparent",
@@ -111,7 +170,7 @@ export function Skills() {
             textTransform: "uppercase",
           }}
         >
-          02 — Core Capabilities
+          02 — Stack
         </span>
         <div
           style={{
@@ -146,8 +205,8 @@ export function Skills() {
               style={{
                 fontFamily: FONT_SERIF,
                 fontSize: isMobile
-                  ? "clamp(1.6rem, 7vw, 3.2rem)"
-                  : "clamp(2.2rem, 3.5vw, 3.2rem)",
+                  ? "clamp(1.8rem, 7vw, 4rem)"
+                  : "clamp(2.6rem, 4.5vw, 4rem)",
                 fontWeight: 800,
                 lineHeight: 1.05,
                 letterSpacing: "-0.03em",
@@ -214,7 +273,7 @@ export function Skills() {
           </motion.div>
         </div>
 
-        {/* RIGHT — 3D capability cards from doc */}
+        {/* RIGHT — capability cards */}
         <div
           style={{
             display: "flex",
@@ -223,9 +282,7 @@ export function Skills() {
           }}
         >
           {capabilities.map((cap, gi) => (
-            <div
-              key={cap.title}
-            >
+            <div key={cap.title}>
               <div
                 style={{
                   borderRadius: "10px",
@@ -263,7 +320,7 @@ export function Skills() {
                       whiteSpace: "nowrap",
                     }}
                   >
-                    0{gi + 1}
+                    {String(gi + 1).padStart(2, "0")}
                   </span>
                 </div>
                 <p
@@ -300,7 +357,6 @@ export function Skills() {
           ))}
         </div>
       </div>
-
     </section>
   );
 }

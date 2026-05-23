@@ -1,19 +1,29 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Hero } from "./components/Hero";
-import { Cursor } from "./components/Cursor";
-import { EnvironmentLayer } from "./components/EnvironmentLayer";
-import { AIBackground } from "./components/AIBackground";
 import { HologramInterface } from "./components/HologramInterface";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import { useHashScroll } from "../hooks/useHashScroll";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { motion, AnimatePresence } from "motion/react";
+
 const About = lazy(() =>
   import("./components/About").then((m) => ({ default: m.About })),
 );
+const Recommendations = lazy(() =>
+  import("./components/Recommendations").then((m) => ({ default: m.Recommendations })),
+);
+const Currently = lazy(() =>
+  import("./components/Currently").then((m) => ({ default: m.Currently })),
+);
 const Skills = lazy(() =>
   import("./components/Skills").then((m) => ({ default: m.Skills })),
+);
+const ExperienceTimeline = lazy(() =>
+  import("./components/ExperienceTimeline").then((m) => ({ default: m.ExperienceTimeline })),
+);
+const Featured = lazy(() =>
+  import("./components/Featured").then((m) => ({ default: m.Featured })),
 );
 const Research = lazy(() =>
   import("./components/Research").then((m) => ({ default: m.Research })),
@@ -21,6 +31,7 @@ const Research = lazy(() =>
 const Projects = lazy(() =>
   import("./components/Projects").then((m) => ({ default: m.Projects })),
 );
+
 const Contact = lazy(() =>
   import("./components/Contact").then((m) => ({ default: m.Contact })),
 );
@@ -41,18 +52,15 @@ export default function App() {
   }, []);
 
   return (
-    <div
-      className="spatial-scene"
-      style={{ cursor: isMobile ? "auto" : "none" }}
-    >
-      <EnvironmentLayer />
-      <AIBackground />
-      <Cursor />
+    <div className="spatial-scene">
       <HologramInterface>
         <Hero />
         <Suspense fallback={null}>
           <About />
           <Skills />
+          <ExperienceTimeline />
+          <Recommendations />
+          <Featured />
           <Research />
           <Projects />
           <Contact />

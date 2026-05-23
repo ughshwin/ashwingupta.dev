@@ -1,4 +1,6 @@
 ---
+import { ClientRouter } from "astro:transitions";
+import { PageBackground } from "../app/components/PageBackground";
 import "@fontsource/playfair-display/800.css";
 import "@fontsource/playfair-display/400-italic.css";
 import "@fontsource/dm-sans/400.css";
@@ -43,7 +45,7 @@ const {
     <meta property="og:image" content={image} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Ashwin Gupta — AI Systems Researcher" />
+    <meta property="og:image:alt" content="Ashwin Gupta — AI Systems Engineer" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:locale" content="en_US" />
 
@@ -58,9 +60,11 @@ const {
       <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     ))}
 
+    <ClientRouter />
     <slot name="head" />
   </head>
   <body>
+    <PageBackground client:load transition:persist="site-bg" />
     <slot />
   </body>
 </html>

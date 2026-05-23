@@ -1,0 +1,314 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/research/controla";
+---
+
+<BaseLayout
+  title="controla — Local Inference That Learns | Ashwin Gupta"
+  description="Routing that compounds with every deployment. controla is a local-first inference OS with contextual EWMA weight learning. Patent pending."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <!-- Back link -->
+        <a href="/#research" class="back-link">← Back to research</a>
+
+        <!-- Header -->
+        <header class="th-header">
+          <div class="th-badge">Patent Pending · Commercial Software · In Development</div>
+          <h1 class="th-title">controla — Local Inference That Learns</h1>
+          <p class="th-subtitle">Routing that compounds with every deployment.</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <!-- Section 1: What's Wrong With How Everyone Does Inference Routing -->
+        <section class="th-section">
+          <h2 class="th-section-title">What's Wrong With Inference Routing Today</h2>
+          <p class="th-body">
+            Every local inference stack has a routing problem and almost none of them know it.
+          </p>
+          <p class="th-body">
+            Stateless routing — sending each request to a backend based on round-robin, availability, or a static config file — ignores everything the system has learned about its own hardware and workload. A backend that handled a reasoning task well this morning gets the same assignment probability at midnight under a different load profile. The system has no memory. Every request starts from zero.
+          </p>
+          <p class="th-body">
+            You pick a model. It doesn't fit the task. You pick a backend. It doesn't match your hardware under current load. You add a second modality — speech to text, image generation, embeddings — and you add a second system. None of them aware of each other, none of them aware of the shared GPU budget.
+          </p>
+          <p class="th-body">
+            Static configuration files do not adapt. A backend that performed well yesterday may be degraded today — VRAM usage shifted, a thermal event slowed throughput — but your router keeps sending traffic to it anyway. The routing decision in month twelve is identical to the routing decision on day one, regardless of what the actual performance data shows.
+          </p>
+        </section>
+
+        <!-- Section 2: Why Statefulness Matters -->
+        <section class="th-section">
+          <h2 class="th-section-title">Why Statefulness Matters</h2>
+          <p class="th-body">
+            A stateless router treats every request as independent. A stateful router accumulates context. The difference compounds over time.
+          </p>
+          <p class="th-body">
+            controla's scoring engine is stateless and deterministic — same inputs, same score, every time. But above the scoring layer sits a versioned <strong>RoutingPolicy</strong> that carries learned performance observations: per <code>(backend, task_type, complexity)</code> tuple, an exponentially weighted moving average of observed latency, failure rate, and throughput. These weights persist across restarts via Redis. A process restart does not erase what the system has learned.
+          </p>
+          <p class="th-body">
+            The operational consequence: a controla deployment that has been running for three months is measurably more accurate in its routing decisions than it was on day one — on the same hardware, without any configuration changes. Two controla instances on different hardware converge to different optimal policies. Both correct for their respective deployments. This is deployment-specific knowledge that no static configuration can replicate.
+          </p>
+          <p class="th-body">
+            Without statefulness, you repeat the same blind dispatch mistakes indefinitely. With it, each deployment builds an increasingly precise model of its own hardware and workload. The router improves as it runs.
+          </p>
+        </section>
+
+        <!-- Section 3: The System -->
+        <section class="th-section">
+          <h2 class="th-section-title">The System</h2>
+          <p class="th-body">
+            controla is a local inference OS — 19 backends across 7 modalities (text generation, STT, TTS, image generation, embeddings, vision, reasoning) under a single OpenAI-compatible API. Every request passes through a sequential pipeline:
+          </p>
+          <div class="pipeline-list">
+            <div class="pipeline-step">
+              <span class="pipeline-label">Analysis</span>
+              <span class="pipeline-desc">Task type classified across 10 categories and 3 complexity levels. Capabilities required — multimodal content, tool calls, structured output — extracted before dispatch.</span>
+            </div>
+            <div class="pipeline-step">
+              <span class="pipeline-label">Scoring</span>
+              <span class="pipeline-desc">Every VRAM-safe candidate backend evaluated across 6 dimensions: capability, performance, resource state, current load, reliability, and context. VRAM-aware: −15 if model cannot fit, +1.5 if already loaded. Scoring is deterministic — learning lives above it.</span>
+            </div>
+            <div class="pipeline-step">
+              <span class="pipeline-label">Scheduling</span>
+              <span class="pipeline-desc">Redis-backed priority queue with per-user fairness windows, deadline-aware dispatch via x-latency-budget header, and starvation prevention. High-priority requests are never blocked behind batch work.</span>
+            </div>
+            <div class="pipeline-step">
+              <span class="pipeline-label">Execution</span>
+              <span class="pipeline-desc">Top-ranked backend receives the request. For high-complexity reasoning, the ExecutionPlanner decomposes into typed inference step chains dispatched separately.</span>
+            </div>
+            <div class="pipeline-step">
+              <span class="pipeline-label">Feedback</span>
+              <span class="pipeline-desc">Every completed request generates a performance record: latency, queue delay, backend used, task type, failure outcome. The weight learner updates per-context EWMA aggregates. These persist to Redis.</span>
+            </div>
+            <div class="pipeline-step">
+              <span class="pipeline-label">Policy</span>
+              <span class="pipeline-desc">Candidate policy updates are replay-validated against historical traffic before promotion. If the candidate would have degraded p95 latency or increased failure rate over the prior window, it is rejected. Policy promotion is safe by construction.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 4: What Building It Revealed -->
+        <section class="th-section">
+          <h2 class="th-section-title">What Building It Revealed</h2>
+          <p class="th-body">
+            The hardest part wasn't the learning loop — it was making the scoring layer provably deterministic so that the learning layer could be trusted. If the scoring engine has any non-determinism, the replay validation is meaningless: you can't know whether a policy improvement comes from better weights or from stochastic scoring variation.
+          </p>
+          <p class="th-body">
+            The VRAM accounting problem is more complex than it appears. A backend that fits at idle may fail under concurrent load as VRAM usage climbs. Getting VRAM-aware routing right required real-time monitoring of per-backend VRAM headroom, not just static capacity checks at startup.
+          </p>
+          <p class="th-body">
+            The multi-modal problem compounds the scheduling problem. When text generation, STT, and image generation compete for GPU memory, you need a scheduling layer that treats VRAM as a shared resource with explicit allocation tracking — not just a check at dispatch time. The first design had a subtle race condition where two requests could both pass the VRAM check and then both fail to load.
+          </p>
+          <p class="th-body">
+            The ε-greedy exploration had to be designed very carefully. Exploration that sends traffic to untested backends is necessary for learning — but in a production environment, even exploration traffic must be capability-matched and VRAM-safe. Unconstrained exploration would learn things you don't want to learn, at the cost of actual production requests.
+          </p>
+        </section>
+
+        <!-- Section 5: Where It Is Now -->
+        <section class="th-section">
+          <h2 class="th-section-title">Where It Is Now</h2>
+          <p class="th-body">
+            controla has 329 passing tests across the core routing, scoring, scheduling, and learning components. The system is in active development. A patent application is filed.
+          </p>
+          <p class="th-body">
+            It is not open-sourced. It will be released under a commercial license. Redistribution and embedding in commercial products are covered under a separate license tier.
+          </p>
+          <p class="th-body">
+            The setup wizard, hardware-adaptive configuration matrix, and deployment documentation are being completed in parallel with the core system.
+          </p>
+          <p class="th-body cs-subtle">
+            If you're building on local inference at scale and the routing problem is real for you — contact me directly.
+          </p>
+        </section>
+
+        <!-- Footer -->
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .environment-placeholder {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 60% 30%, rgba(20, 15, 45, 0.6) 0%, #060608 65%);
+    z-index: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 2rem 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .th-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(139, 92, 246, 0.8);
+    margin-bottom: 1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #fafaf8;
+    margin: 0 0 0.75rem;
+  }
+
+  .th-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+  }
+
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .th-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: -0.01em;
+  }
+
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+  }
+
+  .th-body code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  .th-body strong {
+    color: #e8e0d0;
+    font-weight: 600;
+  }
+
+  .cs-subtle {
+    color: rgba(255, 255, 255, 0.38);
+    font-style: italic;
+  }
+
+  .pipeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .pipeline-step {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .pipeline-step:last-child {
+    border-bottom: none;
+  }
+
+  .pipeline-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(139, 92, 246, 0.7);
+    padding-top: 2px;
+  }
+
+  .pipeline-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.83rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

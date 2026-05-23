@@ -1,7 +1,8 @@
 import { Github, Linkedin, Mail, FileDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { useIsMobile, useIsTouchDevice } from "../../hooks/useMediaQuery";
+import { scrollToSection } from "../../hooks/useHashScroll";
 import profilePicture from "../../assets/profilePicture.webp?url";
 // @ts-ignore
 import resumeUrl from "../../assets/Ashwin_Gupta_Senior_AI_Engineer.pdf?url";
@@ -17,6 +18,29 @@ export function Hero() {
   const layerPills = useRef<HTMLDivElement>(null);
   const pendingRaf = useRef(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [workOpen, setWorkOpen] = useState(false);
+  const workRef = useRef<HTMLDivElement>(null);
+  const workTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openWork = useCallback(() => {
+    if (workTimerRef.current) clearTimeout(workTimerRef.current);
+    setWorkOpen(true);
+  }, []);
+
+  const scheduleCloseWork = useCallback(() => {
+    workTimerRef.current = setTimeout(() => setWorkOpen(false), 140);
+  }, []);
+
+  useEffect(() => {
+    if (!workOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (workRef.current && !workRef.current.contains(e.target as Node)) {
+        setWorkOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [workOpen]);
 
   const showToast = useCallback((msg: string, duration = 1600) => {
     setToastMessage(msg);
@@ -71,6 +95,53 @@ export function Hero() {
     });
   }, []);
 
+  const navBeforeWork: {
+    label: string;
+    href: string;
+    section: string | null;
+  }[] = [
+    { label: "About", href: "/about", section: "about" },
+    { label: "Stack", href: "/stack", section: "stack" },
+    { label: "Experience", href: "/experience", section: "experience" },
+    {
+      label: "Recommendations",
+      href: "/recommendations",
+      section: "recommendations",
+    },
+  ];
+
+  const workItems = [
+    { label: "Featured", href: "/featured", section: "featured" },
+    { label: "Research", href: "/research", section: "research" },
+    { label: "Projects", href: "/projects", section: "projects" },
+  ];
+
+  const navAfterWork: {
+    label: string;
+    href: string;
+    section: string | null;
+  }[] = [
+    { label: "Notes", href: "/notes", section: null },
+    { label: "Contact", href: "/contact", section: "contact" },
+  ];
+
+  const navLinkStyle = {
+    fontFamily: '"DM Mono", monospace',
+    fontSize: isMobile ? "0.42rem" : "0.58rem",
+    letterSpacing: isMobile ? "0" : "0.13em",
+    textTransform: "uppercase" as const,
+    color: "rgba(255,255,255,0.35)",
+    textDecoration: "none",
+    background: "transparent",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: isMobile ? "0.5rem 0.3rem" : "0.65rem 0.4rem",
+    cursor: isMobile ? "auto" : "none",
+    transition: "color 0.2s, background 0.2s",
+    borderRadius: "3px",
+  } as const;
+
   return (
     <section
       id="hero"
@@ -116,36 +187,178 @@ export function Hero() {
           left: isMobile ? "5.5vw" : "5%",
           right: isMobile ? "5.5vw" : "5%",
           display: "grid",
-          gridTemplateColumns: "repeat(5, 1fr)",
+          gridTemplateColumns: `repeat(${navBeforeWork.length + 1 + navAfterWork.length}, 1fr)`,
           zIndex: 5,
         }}
       >
-        {[
-          { label: "About", href: "#about" },
-          { label: "Capabilities", href: "#skills" },
-          { label: "Research", href: "#research" },
-          { label: "Projects", href: "#projects" },
-          { label: "Contact", href: "#contact" },
-        ].map(({ label, href }) => (
+        {/* Flat links — before Work dropdown */}
+        {navBeforeWork.map(({ label, href, section }) => (
           <a
             key={href}
             href={href}
+            onClick={(e) => {
+              if (section) {
+                e.preventDefault();
+                scrollToSection(section);
+                history.pushState(null, "", href);
+              }
+            }}
+            style={navLinkStyle}
+            onMouseEnter={
+              isMobile
+                ? undefined
+                : (e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = "rgba(255,255,255,0.9)";
+                    el.style.background =
+                      "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
+                  }
+            }
+            onMouseLeave={
+              isMobile
+                ? undefined
+                : (e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = "rgba(255,255,255,0.35)";
+                    el.style.background = "transparent";
+                  }
+            }
+          >
+            {label}
+          </a>
+        ))}
+
+        {/* Work ▾ dropdown */}
+        <div
+          ref={workRef}
+          onMouseEnter={openWork}
+          onMouseLeave={scheduleCloseWork}
+          style={{ position: "relative", display: "flex" }}
+        >
+          <div
             style={{
+              flex: 1,
               fontFamily: '"DM Mono", monospace',
-              fontSize: isMobile ? "0.48rem" : "0.6rem",
-              letterSpacing: isMobile ? "0" : "0.15em",
-              textTransform: "uppercase",
+              fontSize: isMobile ? "0.42rem" : "0.58rem",
+              letterSpacing: isMobile ? "0" : "0.13em",
+              textTransform: "uppercase" as const,
               color: "rgba(255,255,255,0.35)",
-              textDecoration: "none",
               background: "transparent",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              padding: isMobile ? "0.5rem 0" : "0.65rem 0",
+              gap: "3px",
+              padding: isMobile ? "0.5rem 0.3rem" : "0.65rem 0.4rem",
               cursor: isMobile ? "auto" : "none",
               transition: "color 0.2s, background 0.2s",
               borderRadius: "3px",
             }}
+            onMouseEnter={
+              isMobile
+                ? undefined
+                : (e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = "rgba(255,255,255,0.9)";
+                    el.style.background =
+                      "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
+                  }
+            }
+            onMouseLeave={
+              isMobile
+                ? undefined
+                : (e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.color = "rgba(255,255,255,0.35)";
+                    el.style.background = "transparent";
+                  }
+            }
+          >
+            <span>Work</span>
+            <span
+              style={{ fontSize: "0.75em", opacity: 0.65, marginTop: "0.05em" }}
+            >
+              ▾
+            </span>
+          </div>
+
+          <AnimatePresence>
+            {workOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.15 }}
+                onMouseEnter={openWork}
+                onMouseLeave={scheduleCloseWork}
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 2px)",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  background: "rgba(8,8,8,0.95)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: "4px",
+                  padding: "0.3rem 0",
+                  minWidth: "130px",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                  zIndex: 20,
+                }}
+              >
+                {workItems.map(({ label, href, section }) => (
+                  <a
+                    key={href}
+                    href={href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setWorkOpen(false);
+                      scrollToSection(section);
+                      history.pushState(null, "", href);
+                    }}
+                    style={{
+                      display: "block",
+                      fontFamily: '"DM Mono", monospace',
+                      fontSize: isMobile ? "0.42rem" : "0.55rem",
+                      letterSpacing: "0.13em",
+                      textTransform: "uppercase" as const,
+                      color: "rgba(255,255,255,0.4)",
+                      textDecoration: "none",
+                      padding: "0.5rem 1rem",
+                      cursor: isMobile ? "auto" : "none",
+                      transition: "color 0.15s, background 0.15s",
+                    }}
+                    onMouseEnter={(e) => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.color = "rgba(255,255,255,0.9)";
+                      el.style.background = "rgba(255,255,255,0.05)";
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.color = "rgba(255,255,255,0.4)";
+                      el.style.background = "transparent";
+                    }}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Flat links — after Work dropdown */}
+        {navAfterWork.map(({ label, href, section }) => (
+          <a
+            key={href}
+            href={href}
+            onClick={(e) => {
+              if (section) {
+                e.preventDefault();
+                scrollToSection(section);
+                history.pushState(null, "", href);
+              }
+            }}
+            style={navLinkStyle}
             onMouseEnter={
               isMobile
                 ? undefined
@@ -185,7 +398,7 @@ export function Hero() {
       >
         {/* LEFT — typography */}
         <div ref={layerText} style={{ willChange: "transform" }}>
-          {/* Eyebrow */}
+          {/* Eyebrow — tagline */}
           <div style={{ overflow: "hidden", marginBottom: "2rem" }}>
             <motion.div
               initial={{ y: 30, opacity: 0 }}
@@ -207,13 +420,13 @@ export function Hero() {
               <span
                 style={{
                   fontFamily: '"DM Mono", monospace',
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.2em",
+                  fontSize: isMobile ? "0.58rem" : "0.65rem",
+                  letterSpacing: "0.12em",
                   color: "#e8e0d0",
-                  textTransform: "uppercase",
                 }}
               >
-                Inference · Orchestration · Scientific ML
+                Not what a model outputs — how the system decides, executes, and
+                holds under load.
               </span>
             </motion.div>
           </div>
@@ -276,7 +489,7 @@ export function Hero() {
             </motion.h1>
           </div>
 
-          {/* Role + description */}
+          {/* Role + Company */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -309,9 +522,7 @@ export function Hero() {
                   lineHeight: 1.5,
                 }}
               >
-                AI Systems Researcher
-                <br />
-                Inference · Orchestration · Scientific ML
+                AI Systems Engineer
               </p>
             </div>
             <div>
@@ -337,32 +548,10 @@ export function Hero() {
               >
                 Coforge
                 <br />
-                Jun 2024 – Present
+                Jun 2024 – Mar 2026
               </p>
             </div>
           </motion.div>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.7 }}
-            style={{
-              fontFamily: '"DM Sans", sans-serif',
-              fontSize: isMobile ? "0.9rem" : "0.95rem",
-              lineHeight: 1.7,
-              color: "rgba(255,255,255,0.65)",
-              maxWidth: isMobile ? "100%" : "420px",
-              marginBottom: isMobile ? "2rem" : "2.5rem",
-            }}
-          >
-            I design how AI systems behave under real-world constraints — from
-            decision layers and inference routing to physics-informed models.
-            Not what a model outputs, but{" "}
-            <span style={{ color: "#e8e0d0" }}>how the system decides</span>,{" "}
-            <span style={{ color: "#e8e0d0" }}>executes</span>, and{" "}
-            <span style={{ color: "#e8e0d0" }}>holds under load</span>.
-          </motion.p>
 
           {/* Status + socials row */}
           <motion.div
@@ -424,20 +613,6 @@ export function Hero() {
                   href: "https://www.linkedin.com/in/ashwingupta3012/",
                   icon: <Linkedin size={15} />,
                   label: "LinkedIn",
-                },
-                {
-                  href: "https://www.kaggle.com/ashwingupta3012",
-                  icon: (
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.505c-.236 0-.354-.117-.354-.352V.353c0-.233.118-.353.354-.353h2.431c.234 0 .351.12.351.353v14.343l6.203-6.272c.165-.165.33-.246.495-.246h3.239c.144 0 .236.06.285.18.046.149.034.255-.036.315l-6.555 6.344 6.836 8.507c.095.104.117.208.07.334" />
-                    </svg>
-                  ),
-                  label: "Kaggle",
                 },
               ].map(({ href, icon, label }) => (
                 <motion.a
@@ -578,7 +753,7 @@ export function Hero() {
               </motion.a>
             )}
 
-            {/* Row 3 (Row 2 on desktop) — Building not Browsing, full width */}
+            {/* Building not Browsing status */}
             <div
               style={{
                 display: "flex",
@@ -704,8 +879,6 @@ export function Hero() {
           </div>
         </motion.div>
       </div>
-
-      {/* Bottom rule */}
 
       {/* Scroll indicator */}
       <div

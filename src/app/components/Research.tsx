@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { useState, useEffect, useRef } from "react";
 import type React from "react";
 import {
@@ -64,7 +64,7 @@ const TYPE_META: Record<
     glow: "0 0 2px rgba(96,165,250,0.35)",
   },
   commercial: {
-    label: "Commercial Software (In Development)",
+    label: "Patent Pending · In Development",
     color: "#ffffff",
     border: "rgba(139,92,246,0.55)",
     bg: "rgba(93,33,182,0.22)",
@@ -82,10 +82,10 @@ const items: ResearchItem[] = [
     subtitle: "Published Research · IJISET · Vol. 9 Special Issue",
     link: "https://ijiset.com/conference/NCISCT-2022/IJISET-NCISCT-220520.pdf",
     bullets: [
-      "MCQ generation fails when distractors are merely wrong — they must be **semantically plausible** enough to separate genuine understanding from guessing.",
-      "**BERT** surfaces salient spans, **proper nouns anchor pivots**, and **WordNet / ConceptNet** generate nearby alternatives through hierarchical sense fallback.",
-      "WordNet supplies **hypernym→hyponym chains** with sense disambiguation; ConceptNet adds **part-of structure** when lexical coverage thins, keeping selection grounded.",
-      "**Semantic distance** is the governing constraint — distractors must stay within the same conceptual neighborhood without matching the tested sense.",
+      "MCQ distractors must be **semantically plausible** — factually wrong alone fails to separate understanding from guessing",
+      "**BERT** surfaces salient spans as pivots; **proper nouns anchor pivots**; **WordNet** and **ConceptNet** generate nearby alternatives through sense traversal",
+      "WordNet supplies **hypernym→hyponym chains** with sense disambiguation; ConceptNet adds **part-of** and **related-to** structure when coverage thins; fallback ensures distractor coverage",
+      "**Semantic distance** governs selection — distractors must occupy the same conceptual neighbourhood without matching the tested senses; proximity without identity is the key constraint",
     ],
   },
   {
@@ -94,23 +94,10 @@ const items: ResearchItem[] = [
     title: "Physics-Informed Inference for Partial Observability",
     link: pinnsPdfUrl,
     bullets: [
-      "**Partially observed internal state** creates a blind-control problem — sparse telemetry leaves conventional numerical solvers guessing what sensors never see.",
-      "**PDE constraints are embedded inside the training objective** — the network fits observed telemetry while satisfying governing dynamics simultaneously.",
-      "**Staged training** rebalances telemetry fidelity against PDE adherence; convergence is read through **residual consistency**, boundary behavior, and physical plausibility.",
-      "Physics becomes the regularizer under uncertainty — extrapolation stays bounded by governing structure, so generalization depends on dynamics over coverage.",
-    ],
-  },
-  {
-    type: "github",
-    name: "PHYSCLIP",
-    title:
-      "Contrastive Regime Classification — Symbolic and Observed Space Alignment",
-    link: "https://github.com/ughshwin/PHYSCLIP",
-    bullets: [
-      "Physics-informed models assume the governing equation is known — the harder upstream problem is deciding **which regime applies** first.",
-      "**Dual encoders** map symbolic descriptions and field states into a **shared latent space**, so regime recognition emerges from cross-modal alignment.",
-      "A **contrastive objective** pulls matched pairs together and pushes mismatched apart, making PHYSCLIP a perception layer **before PINN-style enforcement**.",
-      "**Latent proximity** carries physical meaning — nearby embeddings reflect regime similarity, enabling interpretable regime identification under partial observability over opaque labels.",
+      "**Partial observability** creates a blind-control problem — sparse telemetry leaves conventional solvers unable to reconstruct what sensors never captured.",
+      "**PDE constraints embedded in the training objective** — network fits telemetry while satisfying governing dynamics; physics regularizes, not post-processes.",
+      "**Staged training** rebalances telemetry fidelity against PDE adherence; convergence via **residual consistency**, boundary behavior, and physical plausibility.",
+      "Physics acts as regularizer under uncertainty — extrapolation stays bounded by governing structure; generalization depends on dynamics, not coverage, alone.",
     ],
   },
   {
@@ -120,23 +107,10 @@ const items: ResearchItem[] = [
       "Research as Structured Execution — Deterministic Services Over Autonomous Generation",
     link: "/research/scholaros",
     bullets: [
-      "Research copilots generate **fluent text without evidence traceability** — grounded synthesis and hallucination look identical, so no claim can be audited.",
-      "**Five locked MCP services** cover literature mapping, contradiction detection, hypothesis critique, evidence extraction, and assembly through **schema-defined interfaces**.",
-      "Only hypothesis critique remains agentic — **bounded to five iterations**; all other stages are deterministic with provenance preserved through **typed artifacts**.",
+      "Research copilots generate **fluent text without evidence traceability** — grounded synthesis and hallucination look identical; no claim can be audited back.",
+      "**Five locked MCP services** cover literature mapping, contradiction detection, hypothesis critique, evidence extraction, and assembly via **schema-defined interfaces**.",
+      "Only hypothesis critique is agentic — **bounded to five iterations**; all other stages are deterministic with provenance tracked through **typed artifacts**.",
       "Each claim is **bound to source evidence**; contradiction detection marks where consensus breaks, keeping outputs falsifiable and useful beyond sessions.",
-    ],
-  },
-  {
-    type: "commercial",
-    name: "controla",
-    title:
-      "Local Inference That Learns — Routing That Compounds With Every Deployment",
-    link: "/research/controla",
-    bullets: [
-      "**Local inference routing is stateless by default** — prior outcomes are ignored, so each request repeats the same blind dispatch mistakes.",
-      "Every request feeds **contextual EWMA weight learning**, so routing adapts to workload; the system **improves as it runs** without retuning.",
-      "**Policy updates are replay-validated before promotion** — candidate routes degrading latency, accuracy, or SLA coverage are blocked before reaching live traffic.",
-      "Inference becomes a **managed workload** — routing is versioned policy, feedback is structured reward signal, and learning compounds without operator retuning.",
     ],
   },
 ];
@@ -169,7 +143,6 @@ function ResearchCard({ item }: { item: ResearchItem }) {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: "1rem",
         padding: "1.6rem",
         borderRadius: "8px",
         border: `1px solid ${hovered ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.15)"}`,
@@ -182,6 +155,22 @@ function ResearchCard({ item }: { item: ResearchItem }) {
         overflow: "hidden",
       }}
     >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+          overflow: "hidden",
+          maxHeight: showOutcome ? "1000px" : "17rem",
+          transition: "max-height 0.5s cubic-bezier(0.76, 0, 0.24, 1)",
+          ...(!showOutcome
+            ? {
+                WebkitMaskImage: "linear-gradient(to bottom, black 75%, transparent 100%)",
+                maskImage: "linear-gradient(to bottom, black 75%, transparent 100%)",
+              }
+            : {}),
+        }}
+      >
       {/* Name + badge row */}
       <div
         style={{
@@ -267,31 +256,18 @@ function ResearchCard({ item }: { item: ResearchItem }) {
         }}
       />
 
-      {/* Bullets — first 3 always visible; 4th (Insight) revealed on hover */}
+      {/* All 4 bullets — always rendered; mask fades bullet[3] until hover */}
       <div
         style={{
-          position: "relative",
           display: "flex",
           flexDirection: "column",
           gap: "0.75rem",
         }}
       >
-        {item.bullets.slice(0, 3).map((bullet, i) => (
+        {item.bullets.map((bullet, i) => (
           <div
             key={i}
-            style={{
-              display: "flex",
-              gap: "0.65rem",
-              alignItems: "flex-start",
-              ...(i === 2 && !showOutcome
-                ? {
-                    WebkitMaskImage:
-                      "linear-gradient(to bottom, black 20%, transparent 100%)",
-                    maskImage:
-                      "linear-gradient(to bottom, black 20%, transparent 100%)",
-                  }
-                : {}),
-            }}
+            style={{ display: "flex", gap: "0.65rem", alignItems: "flex-start" }}
           >
             <span
               style={{
@@ -322,55 +298,10 @@ function ResearchCard({ item }: { item: ResearchItem }) {
             </span>
           </div>
         ))}
-
-        {/* 4th bullet (Insight) — fades in on hover */}
-        <AnimatePresence>
-          {showOutcome && (
-            <motion.div
-              key="insight"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-              style={{
-                display: "flex",
-                gap: "0.65rem",
-                alignItems: "flex-start",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: FONT_MONO,
-                  fontSize: "0.62rem",
-                  color: "rgba(255,255,255,0.22)",
-                  marginTop: "4px",
-                  flexShrink: 0,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  width: isMobile ? "56px" : "76px",
-                  lineHeight: 1.5,
-                }}
-              >
-                {RESEARCH_LABELS[3]}
-              </span>
-              <span
-                style={{
-                  fontFamily: FONT_SANS,
-                  fontSize: "0.88rem",
-                  lineHeight: 1.65,
-                  color: "rgba(255,255,255,0.56)",
-                  textAlign: "justify",
-                  textJustify: "inter-word",
-                }}
-              >
-                {renderBullet(item.bullets[3])}
-              </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      </div>
       </div>
 
-      {/* Link arrow */}
+      {/* Arrow — outside masked div, always fully visible */}
       <div
         style={{
           marginTop: "auto",
@@ -383,9 +314,7 @@ function ResearchCard({ item }: { item: ResearchItem }) {
           style={{
             fontFamily: FONT_MONO,
             fontSize: "0.72rem",
-            color: hovered
-              ? "rgba(255,255,255,0.95)"
-              : "rgba(255,255,255,0.35)",
+            color: hovered ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.35)",
             transition: "color 0.2s",
           }}
         >
@@ -459,7 +388,8 @@ export function Research() {
             display: "flex",
             alignItems: "center",
             gap: "2rem",
-            marginBottom: "1rem",
+            marginBottom: isStuck ? "1rem" : "5rem",
+            transition: "margin-bottom 0.3s ease",
           }}
         >
           <span
@@ -472,7 +402,7 @@ export function Research() {
               transition: "font-size 0.3s ease",
             }}
           >
-            03 — Research & Systems Thinking
+            05 — Research & Systems Thinking
           </span>
           <div
             style={{
@@ -497,7 +427,7 @@ export function Research() {
                   : "clamp(1.8rem, 3.6vw, 3.3rem)"
                 : isMobile
                   ? "clamp(1.8rem, 7vw, 4rem)"
-                  : "clamp(3rem, 6vw, 5.5rem)",
+                  : "clamp(2.6rem, 4.5vw, 4rem)",
               fontWeight: 800,
               lineHeight: 1.1,
               letterSpacing: "-0.04em",
@@ -506,21 +436,8 @@ export function Research() {
               transition: "font-size 0.30s ease",
             }}
           >
-            Observe. Abstract. Construct.
+            Problems worth losing sleep over.
           </motion.h2>
-        </div>
-        {/* Hint */}
-        <div style={{ textAlign: "right", marginTop: "0.6rem" }}>
-          <span
-            style={{
-              fontFamily: FONT_MONO,
-              fontSize: "0.58rem",
-              letterSpacing: "0.1em",
-              color: "rgba(255,255,255,0.28)",
-            }}
-          >
-            Tap to dive deeper
-          </span>
         </div>
       </div>
 

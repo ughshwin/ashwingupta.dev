@@ -1,0 +1,375 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/work/hsbc";
+
+const metrics = [
+  { value: "7×", label: "Per-VM session capacity" },
+  { value: "1,600+", label: "Concurrent sessions sustained" },
+  { value: "$1.3M", label: "Annualized compute savings" },
+  { value: "~10 min", label: "MTTR (from 1–2 hours)" },
+  { value: "$8K", label: "Monthly token cost (from $118K)" },
+  { value: "<300ms", label: "Latency SLO held at peak load" },
+];
+---
+
+<BaseLayout
+  title="Real-Time AI Voice Infrastructure — HSBC | Ashwin Gupta"
+  description="Production voice AI for banking. 1,600+ concurrent sessions. $1.3M annualized savings. Case study."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="hologram-interface case-study-scroll">
+      <div class="case-study-body">
+
+        <!-- Back link -->
+        <a href="/#projects" class="back-link">← Back to projects</a>
+
+        <!-- Hero -->
+        <header class="cs-header">
+          <div class="cs-context-badge">Client Delivery · Coforge</div>
+          <h1 class="cs-title">Real-Time AI Voice Infrastructure — HSBC</h1>
+          <p class="cs-subtitle">
+            Production voice AI for banking. 1,600+ concurrent sessions. $1.3M annualized savings.
+          </p>
+        </header>
+
+        <div class="cs-divider"></div>
+
+        <!-- Metrics grid -->
+        <div class="metrics-grid">
+          {metrics.map(({ value, label }) => (
+            <div class="metric-block">
+              <span class="metric-value">{value}</span>
+              <span class="metric-label">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="cs-divider"></div>
+
+        <!-- Section 1: The Constraint Environment -->
+        <section class="cs-section">
+          <h2 class="cs-section-title">The Constraint Environment</h2>
+          <p class="cs-body">
+            HSBC is the world's largest bank by assets. Every engineering decision operates under compliance and security requirements that most teams never encounter. Timeline pressure was acute — services companies move fast, sometimes unreasonably so.
+          </p>
+          <p class="cs-body">
+            The production environment: Google Cloud Platform, RHEL VMs, a real-time SIP voice stack handling live banking calls. Latency wasn't a preference — it was a contract. Packet loss above 5% was an incident. Downtime had regulatory implications.
+          </p>
+          <p class="cs-body">
+            Timeline pressure was typical of services delivery — fast, often unreasonably so, with scope evolving mid-execution. The compliance environment was HSBC's: one of the world's most scrutinised financial institutions, with data handling, access controls, and operational standards that aren't negotiable. Every architectural decision had to satisfy both the engineering constraint and the compliance constraint simultaneously. There was no sandbox for testing ideas — changes went into a live banking infrastructure.
+          </p>
+        </section>
+
+        <!-- Section 2: What Was Actually Broken -->
+        <section class="cs-section">
+          <h2 class="cs-section-title">What Was Actually Broken</h2>
+          <p class="cs-body">
+            GCP console's VM utilisation board showed we'd never cross about 20% CPU utilisation — but call quality and session capacity kept bottlenecking hard at 20 concurrent calls per VM. The whole team believed the code was incorrect. I knew the code was right. Something else was wrong.
+          </p>
+          <p class="cs-body">
+            Running <code>top</code> and <code>htop</code> under load revealed the answer: no matter how many concurrent calls we pushed through the pipeline, only a single CPU core was ever fully utilised. The GIL. Python's Global Interpreter Lock was serialising every audio processing thread into a single-core bottleneck, while 31 other cores sat idle on a 32-core VM.
+          </p>
+          <p class="cs-body">
+            Before the observability work: diagnosing an incident meant manually entering the agent's extension number, finding the generated conversation ID, browsing across GCE and GKE logs by hand, reconstructing timestamps across services, and building a log trace for that conversation. Manual, error-prone, 1–2 hours minimum.
+          </p>
+        </section>
+
+        <!-- Section 3: The Architecture Decision -->
+        <section class="cs-section">
+          <h2 class="cs-section-title">The Architecture Decision</h2>
+          <p class="cs-body">
+            Escaping the GIL is not straightforward when the audio processing is bound to a SIP session. I evaluated multiprocessing, concurrent.futures, and several threading alternatives. The problem: all audio transformation had to happen inside an active SIP session managed by PJSIP via the PJSUA2 Python API.
+          </p>
+          <p class="cs-body">
+            Offloading media processing outside the SIP session while maintaining session continuity would have required blocking processes, multiple I/O synchronisation points, and significant architectural complexity. The simpler and more reliable solution: run 8 fully independent parallel instances on the 8-core VM using RHEL's <code>taskset</code> command to pin each instance to a dedicated CPU core.
+          </p>
+          <p class="cs-body">
+            A shell runner script brought up all 8 instances. A systemd service managed startup and restarts. Each instance owned its core entirely — no GIL contention, no shared memory, no coordination overhead. The concurrency model switched from threading (serialised by GIL) to process-level parallelism (each instance isolated).
+          </p>
+          <p class="cs-body">
+            The concurrency layer was simultaneously rewritten with <strong>asyncio + uvloop</strong> — replacing the threading model with an event loop. Each SIP session became a coroutine across the SBC, STT, and LLM stages, eliminating GIL contention across the full pipeline.
+          </p>
+        </section>
+
+        <!-- Section 4: Observability — Before and After -->
+        <section class="cs-section">
+          <h2 class="cs-section-title">Observability — Before and After</h2>
+          <p class="cs-body">
+            The pre-observability incident workflow: enter agent extension number → find conversation ID → manually browse GCE logs, GKE logs across all services → manually map timestamps → reconstruct the trace by hand. Time: 1–2 hours. Error rate: high. You could draw the wrong conclusion from a misread timestamp.
+          </p>
+          <p class="cs-body">
+            The replacement: a GCP Logging API pipeline that ingested every log from every service in the stack — GCE VMs, GKE pods, ingresses, egresses, databases, caches, APIs — sorted them by conversation ID, grouped them by agent extension, highlighted failure points, and generated a complete dashboard of every agent and every conversation within the specified time window.
+          </p>
+          <p class="cs-body">
+            Input: time window start, time window end, environment (dev / UAT / pre-prod / prod). Output: full correlated trace of all agents and all conversations, failure points marked, generated automatically. 250,000+ log lines ingested, processed, analysed, and dashboard generated in under 5–6 minutes. MTTR dropped from 1–2 hours to approximately 10 minutes.
+          </p>
+        </section>
+
+        <!-- Section 5: Outcomes -->
+        <section class="cs-section">
+          <h2 class="cs-section-title">Outcomes</h2>
+          <div class="outcomes-list">
+            <div class="outcome-item">
+              <span class="outcome-metric">7× session capacity</span>
+              <span class="outcome-detail">20 → 140–160 concurrent sessions per VM</span>
+            </div>
+            <div class="outcome-item">
+              <span class="outcome-metric">$1.3M annualized savings</span>
+              <span class="outcome-detail">Compute cost: $118K → $8K/month</span>
+            </div>
+            <div class="outcome-item">
+              <span class="outcome-metric">MTTR ~10 minutes</span>
+              <span class="outcome-detail">From 1–2 hours of manual log reconstruction</span>
+            </div>
+            <div class="outcome-item">
+              <span class="outcome-metric">1,600+ concurrent sessions</span>
+              <span class="outcome-detail">Sustained under 300ms latency SLO, &lt;5% packet loss</span>
+            </div>
+            <div class="outcome-item">
+              <span class="outcome-metric">30–40% longer transcripts</span>
+              <span class="outcome-detail">After VM migration to c4-standard-8</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 6: What a Senior Systems Engineer Should Take Away -->
+        <section class="cs-section">
+          <h2 class="cs-section-title">What a Senior Engineer Should Take Away</h2>
+          <p class="cs-body">
+            The GIL problem is well-known in Python. What's less discussed is how session-bound media processing constrains your options for escaping it. Multiprocessing across a SIP session context is non-trivial — you can't naively offload without breaking session continuity. The CPU-pinned parallel instances approach bypasses the coordination problem entirely by accepting the trade-off: more memory overhead per instance, simpler architecture, no shared state.
+          </p>
+          <p class="cs-body">
+            The observability work is the part most teams skip until the third incident. Cross-stack log correlation built before the first production incident is qualitatively different from log correlation bolted on after. When logs are correlated by design, you're never reconstructing — you're reading. The difference in incident response time reflects this directly.
+          </p>
+          <p class="cs-body">
+            The underlying lesson: at 1,600+ concurrent sessions under a strict latency SLO for a bank, every architectural choice has a cost that's immediately measurable. There's no room for "we'll fix this later." The system had to be correct from the first deployment into production.
+          </p>
+        </section>
+
+        <!-- Footer -->
+        <div class="cs-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .case-study-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .case-study-body {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .case-study-body {
+      padding: 7rem 2rem 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .cs-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .cs-context-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+
+  .cs-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #fafaf8;
+    margin: 0 0 1rem;
+  }
+
+  .cs-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
+  }
+
+  .cs-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2rem 0;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.2rem;
+    margin: 2rem 0;
+  }
+
+  .metric-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .metric-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 800;
+    color: #22d3ee;
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+    line-height: 1.4;
+  }
+
+  .cs-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .cs-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.2rem;
+    letter-spacing: -0.01em;
+  }
+
+  .cs-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.62);
+    margin: 0 0 1rem;
+  }
+
+  .cs-body code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  .cs-body strong {
+    color: #e8e0d0;
+    font-weight: 600;
+  }
+
+  .cs-placeholder {
+    color: rgba(255, 255, 255, 0.25);
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+
+  .outcomes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .outcome-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .outcome-metric {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e8e0d0;
+  }
+
+  .outcome-detail {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.07em;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .cs-quote {
+    margin: 3rem 0;
+    padding: 1.5rem 1.5rem 1.5rem 1.8rem;
+    border-left: 2px solid rgba(232, 224, 208, 0.3);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0 6px 6px 0;
+  }
+
+  .cs-quote-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 0.75rem;
+    font-style: normal;
+  }
+
+  .cs-quote-attribution {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.07em;
+    color: rgba(255, 255, 255, 0.32);
+  }
+
+  .cs-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

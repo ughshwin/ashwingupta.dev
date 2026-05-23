@@ -1,125 +1,29 @@
 import { motion } from "motion/react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
-import coforgeLogoImg from "../../assets/coforgeLogo.webp?url";
-import gidaLogoImg from "../../assets/gidaLogo.webp?url";
-import bmsceLogoImg from "../../assets/BMSlogo.webp?url";
-import iiitbLogoImg from "../../assets/IIITlogo.webp?url";
-import iiscLogoImg from "../../assets/iiscLogo.webp?url";
-import outlawedLogoImg from "../../assets/outlawedLogo.webp?url";
-import cellstratLogoImg from "../../assets/cellstratLogo.webp?url";
 
 const FONT_SERIF = '"Playfair Display", Georgia, serif';
 const FONT_MONO = '"DM Mono", monospace';
 const FONT_SANS = '"DM Sans", sans-serif';
 
-const experience = [
-  {
-    from: "Jun 2024",
-    to: "Present",
-    role: "AI Engineer",
-    company: "Coforge",
-    partTime: false,
-    workTitles: ["Integration Engineer", "Infrastructure Engineer"],
-    detail:
-      "Owns the inference and concurrency architecture for HSBC voice AI — replaced GIL'd threading (memory ballooning) with CPU-pinned parallel processes and asyncio + uvloop, eliminating GIL contention across the full SIP/STT/LLM pipeline · 7× session capacity · $1.3M annualized savings · MTTR 1–2hr → ~5min via cross-stack log correlation",
-    logo: coforgeLogoImg,
-    logoH: 55,
-    awards: [
-      "Best Team Award — HSBC Account",
-      "Pat on the Back — Think Customer Award (Individual Excellence)",
-      {
-        text: "Led Java Spring AI training for 130+ colleagues",
-        bullets: [
-          "62% were Senior Engineers, Tech Leads & Architects",
-          "81% voted preferred trainer",
-          "Net Promoter Score +50 · 4.4/5 avg satisfaction",
-        ],
-      },
-    ],
-  },
-  {
-    from: "Jan 2023",
-    to: "May 2024",
-    role: "Data Scientist",
-    company: "Gida Technologies",
-    partTime: false,
-    workTitles: ["Chatbot Developer", "Recommendation Engineer", "Product Engineer"],
-    detail: "163+ language RAG systems, sub-50ms recommenders",
-    logo: gidaLogoImg,
-    logoH: 55,
-  },
-  {
-    from: "Jan 2022",
-    to: "Sep 2022",
-    role: "Head of Machine Learning",
-    company: "IISc",
-    partTime: true,
-    detail:
-      "Founded & led the ML team at NMCAD Lab, Aerospace Engg. — eVTOL design optimisation using ML/DL under Dr Dineshkumar Harursampath. 5 projects delivered in 8 months.",
-    logo: iiscLogoImg,
-    logoH: 36,
-  },
-  {
-    from: "Feb 2021",
-    to: "Dec 2021",
-    role: "AI Product Developer",
-    company: "CellStrat",
-    partTime: true,
-    detail:
-      "Built production-ready AI products based on OpenAI research for cellstrathub.com — 11k+ global AI developers at time of deployment.",
-    logo: cellstratLogoImg,
-    logoH: 36,
-  },
-  {
-    from: "Jan 2020",
-    to: "Oct 2022",
-    role: "Graphic Designer",
-    company: "OutLawed",
-    partTime: true,
-    detail:
-      "Designed social media content and teaching aids to empower underprivileged students through grassroots teaching programs.",
-    logo: outlawedLogoImg,
-    logoH: 55,
-  },
-];
-
-const education = [
-  {
-    from: "Oct 2025",
-    to: "Present",
-    role: "Ex. Diploma in ML & AI",
-    company: "IIIT Bangalore",
-    detail: "Generative AI & Agentic AI · MLOps",
-    logo: iiitbLogoImg,
-    logoH: 55,
-  },
-  {
-    from: "Aug 2019",
-    to: "May 2023",
-    role: "B.E. Mechanical",
-    company: "BMS College of Engineering",
-    awards: [
-      "Best Outgoing Project - Mechanical Engineering '23",
-      "Published @ NCISCT 2022",
-    ],
-    logo: bmsceLogoImg,
-    logoH: 55,
-  },
-];
-
 const pillars = [
   {
     title: "Inference as a System",
-    desc: "Inference is not a function call — it is a workload with scheduling, routing, and resource constraints. I design the layer that decides how requests move through hardware, when to batch, and how to degrade gracefully when capacity is hit.",
+    desc: "Most teams treat inference as a function call. They ship a demo that looks like a product. The real questions — can it handle 10× load, what's the p95 latency, what happens when a backend goes down — are architecture questions, not DevOps questions. I answer them before the first model goes live.",
   },
   {
     title: "Execution Under Constraints",
-    desc: "Real systems run under latency budgets, VRAM ceilings, and cost targets. I design around those constraints before they become failures — not after. Observability is part of the system, not bolted on.",
+    desc: "A system that performs in demos often doesn't survive contact with production. Real constraints — latency budgets, VRAM ceilings, cost per token — aren't discovered at launch, they're known at design time. Most people build first and optimize later. I build the constraint model first.",
   },
   {
     title: "Physics-Informed Scientific ML",
-    desc: "Governing equations exist for many systems. I embed them directly into the learning objective — PDEs as training constraints, not post-hoc validators. PHYSCLIP and the PINNs work both come from this.",
+    desc: "Data-driven models for physical systems aren't data problems — they're structure problems. If the governing equations exist, ignoring them means your model has to discover physics from examples it may never have enough of. Embedding PDEs into the training objective isn't complexity for its own sake. It's the constraint that makes sparse data sufficient.",
   },
+];
+
+const dontDo = [
+  "I don't ship AI wrappers dressed as products. Core API calls with a nice UI aren't systems.",
+  "I don't build for its own sake. The system has to earn what it costs to run.",
+  "I don't take off-the-shelf work. If the implementation is a Google search away, I'm not the right person.",
 ];
 
 export function About() {
@@ -129,17 +33,18 @@ export function About() {
     <section
       id="about"
       style={{
-        padding: isMobile ? "4rem 4vw" : "10rem 6vw",
+        padding: isMobile ? "4rem 4vw" : "6rem 6vw",
         background: "transparent",
         position: "relative",
       }}
     >
+      {/* Section label */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
           gap: "1rem",
-          marginBottom: isMobile ? "3rem" : "5rem",
+          marginBottom: isMobile ? "2rem" : "5rem",
         }}
       >
         <span
@@ -162,6 +67,29 @@ export function About() {
         />
       </div>
 
+      {/* Section heading — full-width above both columns so both start level */}
+      <div style={{ overflow: "hidden", marginBottom: isMobile ? "2.5rem" : "4rem" }}>
+        <motion.h2
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+          style={{
+            fontFamily: FONT_SERIF,
+            fontSize: isMobile
+              ? "clamp(1.8rem, 7vw, 4rem)"
+              : "clamp(2.6rem, 4.5vw, 4rem)",
+            fontWeight: 800,
+            lineHeight: 1.05,
+            letterSpacing: "-0.03em",
+            color: "#fafaf8",
+            margin: 0,
+          }}
+        >
+          Most people find out it's broken at 2am. I find it first.
+        </motion.h2>
+      </div>
+
+      {/* Two-column grid — both columns start at the same level */}
       <div
         style={{
           display: "grid",
@@ -170,578 +98,211 @@ export function About() {
           alignItems: "start",
         }}
       >
-        {/* LEFT — sticky */}
+        {/* LEFT — sticky: thesis + story */}
         <div
           style={{
             position: isMobile ? "relative" : "sticky",
-            top: isMobile ? "0" : "6rem",
+            top: isMobile ? "0" : "5rem",
             alignSelf: "start",
           }}
         >
-          <div style={{ overflow: "hidden", marginBottom: "2.5rem" }}>
-            <motion.h2
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-              style={{
-                fontFamily: FONT_SERIF,
-                fontSize: isMobile
-                  ? "clamp(1.8rem, 7vw, 4rem)"
-                  : "clamp(2.6rem, 4.5vw, 4rem)",
-                fontWeight: 800,
-                lineHeight: 1.05,
-                letterSpacing: "-0.03em",
-                color: "#fafaf8",
-                margin: 0,
-              }}
-            >
-              Systems that decide. Infrastructure that holds.
-            </motion.h2>
-          </div>
-
+          {/* Brand thesis */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            style={{
+              fontFamily: FONT_SANS,
+              fontSize: isMobile ? "1rem" : "1.05rem",
+              lineHeight: 1.65,
+              color: "#e8e0d0",
+              marginBottom: "1.5rem",
+              maxWidth: "500px",
+              borderLeft: "2px solid rgba(232,224,208,0.3)",
+              paddingLeft: "1rem",
+            }}
+          >
+            Honest where it matters. Available when it's hard.
+          </motion.p>
+
+          {/* Para 1 — origin */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
             style={{
               fontFamily: FONT_SANS,
-              fontSize: "1rem",
+              fontSize: "0.95rem",
               lineHeight: 1.8,
-              color: "rgba(255,255,255,0.7)",
-              marginBottom: "1.5rem",
+              color: "rgba(255,255,255,0.62)",
+              marginBottom: "1.2rem",
               maxWidth: "500px",
             }}
           >
-            Most AI work focuses on what a model outputs. I focus on how the
-            system behaves — how requests are routed, how decisions are made
-            under constraint, and how the system holds when inputs are noisy,
-            capacity is saturated, or governing assumptions break.
+            Mechanical engineering by training — which meant learning to ask why
+            a system fails before asking how to build it. AI hit in second year
+            like a realisation, not a subject: software that understood language
+            was a new class of thing, and I knew it would matter before anyone
+            around me thought it would. The IISc ML lead role confirmed the
+            direction — physics-constrained optimisation on eVTOL design under
+            Dr. Harursampath, five projects in eight months, at the edge of what
+            was understood.
           </motion.p>
 
+          {/* Para 2 — production pattern */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.22 }}
+            transition={{ delay: 0.2 }}
             style={{
               fontFamily: FONT_SANS,
-              fontSize: "1rem",
+              fontSize: "0.95rem",
               lineHeight: 1.8,
-              color: "rgba(255,255,255,0.58)",
-              marginBottom: "1.5rem",
+              color: "rgba(255,255,255,0.62)",
+              marginBottom: "1.2rem",
               maxWidth: "500px",
             }}
           >
-            This spans three areas: inference and orchestration systems
-            (scheduling, routing, execution), scientific ML (physics-informed
-            models where governing equations constrain learning), and retrieval
-            pipelines that have to be reliable — not just accurate on
-            benchmarks.
+            Production changed the picture fast. At Gida and then Coforge, the
+            same pattern emerged: the GenAI core — prompts, basic RAG, API calls
+            — is learnable in three months. Everyone builds it. The real gap is
+            what surrounds the model: the routing logic, the concurrency
+            architecture, the observability that tells you what actually broke
+            and when. That's the part nobody wants to own. That's where I went.
           </motion.p>
 
+          {/* Para 3 — HSBC proof */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.28 }}
+            transition={{ delay: 0.25 }}
             style={{
               fontFamily: FONT_SANS,
-              fontSize: "1rem",
+              fontSize: "0.95rem",
               lineHeight: 1.8,
-              color: "rgba(255,255,255,0.58)",
-              marginBottom: "2.5rem",
+              color: "rgba(255,255,255,0.62)",
+              marginBottom: 0,
               maxWidth: "500px",
             }}
           >
-            Controla is inference infrastructure that gets smarter the longer it
-            runs. ScholarOS is structured research execution. PHYSCLIP aligns
-            symbolic physics with observed behavior. The PINNs work embeds PDEs
-            into training. These are not tools — they are systems with decision
-            logic.
+            At Coforge on the HSBC voice AI project, I was the youngest on the
+            team and three months in when I became the de facto integration lead
+            — having solved in one week a problem another technology partner
+            hadn't resolved in eight months at the same client. GIL'd threading
+            replaced with CPU-pinned parallel instances, asyncio + uvloop across
+            the full pipeline, cross-stack observability built before the second
+            incident happened. 7× session capacity. $1.3M annualised savings.
+            MTTR from over an hour to ten minutes.
           </motion.p>
-
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}
-          >
-            {pillars.map(({ title, desc }, i) => (
-              <div key={i}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: "1.2rem",
-                    padding: "1.2rem 1.5rem",
-                    borderRadius: "8px",
-                    border: "1px solid rgba(255,255,255,0.11)",
-                    background: "rgba(255,255,255,0.025)",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "5px",
-                      height: "5px",
-                      borderRadius: "50%",
-                      background: "#e8e0d0",
-                      marginTop: "7px",
-                      flexShrink: 0,
-                      opacity: 0.6,
-                    }}
-                  />
-                  <div>
-                    <p
-                      style={{
-                        fontFamily: FONT_SERIF,
-                        fontWeight: 800,
-                        fontSize: "0.95rem",
-                        color: "#fafaf8",
-                        marginBottom: "3px",
-                      }}
-                    >
-                      {title}
-                    </p>
-                    <p
-                      style={{
-                        fontFamily: FONT_SANS,
-                        fontSize: "0.83rem",
-                        lineHeight: 1.6,
-                        color: "rgba(255,255,255,0.58)",
-                      }}
-                    >
-                      {desc}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
 
-        {/* RIGHT — timeline */}
-        <div>
-          <p
-            style={{
-              fontFamily: FONT_MONO,
-              fontSize: "0.68rem",
-              letterSpacing: "0.2em",
-              color: "rgba(255,255,255,0.4)",
-              textTransform: "uppercase",
-              marginBottom: "1.8rem",
-            }}
-          >
-            Experience
-          </p>
-          <div>
-            {experience.map(
-              (
-                {
-                  from,
-                  to,
-                  role,
-                  company,
-                  partTime = false,
-                  workTitles,
-                  detail,
-                  logo,
-                  awards,
-                },
-                i,
-              ) => (
+        {/* RIGHT — pillars + What I Don't Do */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {pillars.map(({ title, desc }, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08, duration: 0.5 }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "1.2rem",
+                  padding: "1.4rem 1.6rem",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(255,255,255,0.11)",
+                  background: "rgba(255,255,255,0.025)",
+                }}
+              >
                 <div
-                  key={i}
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: isMobile ? "1fr" : "90px 1fr",
-                    gap: isMobile ? "0.5rem" : "1.5rem",
-                    padding: "1.3rem 0",
-                    borderBottom: "1px solid rgba(255,255,255,0.05)",
+                    width: "5px",
+                    height: "5px",
+                    borderRadius: "50%",
+                    background: "#e8e0d0",
+                    marginTop: "7px",
+                    flexShrink: 0,
+                    opacity: 0.6,
                   }}
-                >
-                  <div
+                />
+                <div>
+                  <p
                     style={{
-                      display: "flex",
-                      flexDirection: isMobile ? "row" : "column",
-                      alignItems: "center",
-                      gap: isMobile ? "4px" : "2px",
-                      paddingTop: "3px",
-                      width: "fit-content",
+                      fontFamily: FONT_SERIF,
+                      fontWeight: 800,
+                      fontSize: "0.95rem",
+                      color: "#fafaf8",
+                      marginBottom: "6px",
                     }}
                   >
-                    <span
-                      style={{
-                        fontFamily: FONT_MONO,
-                        fontSize: "0.85rem",
-                        color: "rgba(255,255,255,0.7)",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {from}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: FONT_MONO,
-                        fontSize: "0.72rem",
-                        color: "rgba(255,255,255,0.28)",
-                      }}
-                    >
-                      {isMobile ? "→" : "to"}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: FONT_MONO,
-                        fontSize: "0.85rem",
-                        color:
-                          to === "Present"
-                            ? "#4ade80"
-                            : "rgba(255,255,255,0.7)",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {to}
-                    </span>
-                  </div>
-                  <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        marginBottom: "4px",
-                      }}
-                    >
-                      {logo && (
-                        <img
-                          src={logo}
-                          alt={company}
-                          style={{
-                            height: "48px",
-                            width: "48px",
-                            objectFit: "contain",
-                            display: "block",
-                            flexShrink: 0,
-                            opacity: 0.9,
-                          }}
-                        />
-                      )}
-                      <p
-                        style={{
-                          fontFamily: FONT_SANS,
-                          fontWeight: 600,
-                          fontSize: "0.9rem",
-                          color: "#fafaf8",
-                          margin: 0,
-                        }}
-                      >
-                        {role}{" "}
-                        <span
-                          style={{
-                            color: "rgba(255,255,255,0.48)",
-                            fontWeight: 400,
-                          }}
-                        >
-                          @ {company} •{" "}
-                          {partTime ? "Part-time" : "Full-time"}
-                        </span>
-                        {workTitles && (
-                          <span
-                            style={{
-                              display: "block",
-                              fontWeight: 400,
-                              fontSize: "0.78rem",
-                              color: "rgba(255,255,255,0.65)",
-                              marginTop: "2px",
-                            }}
-                          >
-                            {workTitles.join(" · ")}
-                          </span>
-                        )}
-                      </p>
-                    </div>
-                    {detail && (
-                      <p
-                        style={{
-                          fontFamily: FONT_SANS,
-                          fontSize: "0.82rem",
-                          color: "rgba(255,255,255,0.48)",
-                          lineHeight: 1.5,
-                          paddingLeft: logo ? "62px" : "0",
-                          marginTop: "0.55rem",
-                          marginBottom: awards ? "0.6rem" : 0,
-                        }}
-                      >
-                        {detail}
-                      </p>
-                    )}
-
-                    {/* Awards */}
-                    {awards && (
-                      <div
-                        style={{
-                          paddingLeft: logo ? "62px" : "0",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "4px",
-                        }}
-                      >
-                        {awards.map((award, j) => {
-                          const isObj = typeof award === "object";
-                          const awardText = isObj ? award.text : award;
-                          const isTrainingHighlight =
-                            isObj || awardText.startsWith("Led Java Spring AI");
-                          const isPublicationHighlight =
-                            awardText.includes("Published @ NCISCT");
-                          let awardIcon = "🏆";
-                          if (isPublicationHighlight) {
-                            awardIcon = "📄";
-                          } else if (isTrainingHighlight) {
-                            awardIcon = "🎓";
-                          }
-
-                          return (
-                            <div key={j}>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "6px",
-                                }}
-                              >
-                                <span style={{ fontSize: "0.75rem" }}>
-                                  {awardIcon}
-                                </span>
-                                <span
-                                  style={{
-                                    fontFamily: FONT_SANS,
-                                    fontSize: "0.78rem",
-                                    color: "#c9a84c",
-                                    lineHeight: 1.4,
-                                  }}
-                                >
-                                  {awardText}
-                                </span>
-                              </div>
-                              {isObj && award.bullets && (
-                                <div
-                                  style={{
-                                    paddingLeft: "1.4rem",
-                                    marginTop: "3px",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: "2px",
-                                  }}
-                                >
-                                  {award.bullets.map((bullet, k) => (
-                                    <div
-                                      key={k}
-                                      style={{
-                                        display: "flex",
-                                        alignItems: "flex-start",
-                                        gap: "5px",
-                                      }}
-                                    >
-                                      <span
-                                        style={{
-                                          color: "rgba(201,168,76,0.5)",
-                                          fontSize: "0.65rem",
-                                          marginTop: "2px",
-                                          flexShrink: 0,
-                                        }}
-                                      >
-                                        ↳
-                                      </span>
-                                      <span
-                                        style={{
-                                          fontFamily: FONT_SANS,
-                                          fontSize: "0.73rem",
-                                          color: "rgba(201,168,76,0.7)",
-                                          lineHeight: 1.4,
-                                        }}
-                                      >
-                                        {bullet}
-                                      </span>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ),
-            )}
-          </div>
-
-          <p
-            style={{
-              fontFamily: FONT_MONO,
-              fontSize: "0.68rem",
-              letterSpacing: "0.2em",
-              color: "rgba(255,255,255,0.4)",
-              textTransform: "uppercase",
-              marginTop: "3.5rem",
-              marginBottom: "1.8rem",
-            }}
-          >
-            Education
-          </p>
-          <div>
-            {education.map(
-              ({ from, to, role, company, detail, logo, awards }, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: isMobile ? "1fr" : "90px 1fr",
-                    gap: isMobile ? "0.5rem" : "1.5rem",
-                    padding: "1.3rem 0",
-                    borderBottom: "1px solid rgba(255,255,255,0.05)",
-                  }}
-                >
-                  <div
+                    {title}
+                  </p>
+                  <p
                     style={{
-                      display: "flex",
-                      flexDirection: isMobile ? "row" : "column",
-                      alignItems: "center",
-                      gap: isMobile ? "4px" : "2px",
-                      paddingTop: "3px",
-                      width: "fit-content",
+                      fontFamily: FONT_SANS,
+                      fontSize: "0.83rem",
+                      lineHeight: 1.65,
+                      color: "rgba(255,255,255,0.58)",
                     }}
                   >
-                    <span
-                      style={{
-                        fontFamily: FONT_MONO,
-                        fontSize: "0.85rem",
-                        color: "rgba(255,255,255,0.7)",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {from}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: FONT_MONO,
-                        fontSize: "0.72rem",
-                        color: "rgba(255,255,255,0.28)",
-                      }}
-                    >
-                      {isMobile ? "→" : "to"}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: FONT_MONO,
-                        fontSize: "0.85rem",
-                        color:
-                          to === "Present"
-                            ? "#4ade80"
-                            : "rgba(255,255,255,0.7)",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {to}
-                    </span>
-                  </div>
-                  <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        marginBottom: "4px",
-                      }}
-                    >
-                      {logo && (
-                        <img
-                          src={logo}
-                          alt={company}
-                          style={{
-                            height: "48px",
-                            width: "48px",
-                            objectFit: "contain",
-                            display: "block",
-                            flexShrink: 0,
-                            opacity: 0.9,
-                          }}
-                        />
-                      )}
-                      <p
-                        style={{
-                          fontFamily: FONT_SANS,
-                          fontWeight: 600,
-                          fontSize: "0.9rem",
-                          color: "#fafaf8",
-                          margin: 0,
-                        }}
-                      >
-                        {role}{" "}
-                        <span
-                          style={{
-                            color: "rgba(255,255,255,0.48)",
-                            fontWeight: 400,
-                          }}
-                        >
-                          @ {company}
-                        </span>
-                      </p>
-                    </div>
-                    {detail && (
-                      <p
-                        style={{
-                          fontFamily: FONT_SANS,
-                          fontSize: "0.82rem",
-                          color: "rgba(255,255,255,0.48)",
-                          lineHeight: 1.5,
-                          paddingLeft: logo ? "62px" : "0",
-                          marginBottom: awards ? "0.6rem" : 0,
-                        }}
-                      >
-                        {detail}
-                      </p>
-                    )}
-                    {awards && (
-                      <div
-                        style={{
-                          paddingLeft: logo ? "62px" : "0",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "4px",
-                        }}
-                      >
-                        {awards.map((award, j) => {
-                          const awardIcon = award.includes("Published")
-                            ? "📄"
-                            : "🏆";
-                          return (
-                            <div
-                              key={j}
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "6px",
-                              }}
-                            >
-                              <span style={{ fontSize: "0.75rem" }}>
-                                {awardIcon}
-                              </span>
-                              <span
-                                style={{
-                                  fontFamily: FONT_SANS,
-                                  fontSize: "0.78rem",
-                                  color: "#c9a84c",
-                                  lineHeight: 1.4,
-                                }}
-                              >
-                                {award}
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
+                    {desc}
+                  </p>
                 </div>
-              ),
-            )}
-          </div>
+              </div>
+            </motion.div>
+          ))}
+
+          {/* What I Don't Do */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.24, duration: 0.5 }}
+            style={{
+              padding: "1.2rem 1.5rem",
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: "6px",
+              marginTop: "0.2rem",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.55rem",
+                letterSpacing: "0.18em",
+                color: "rgba(255,255,255,0.3)",
+                textTransform: "uppercase",
+                marginBottom: "0.9rem",
+              }}
+            >
+              What I don't do
+            </p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.55rem",
+              }}
+            >
+              {dontDo.map((line, i) => (
+                <p
+                  key={i}
+                  style={{
+                    fontFamily: FONT_SANS,
+                    fontSize: "0.83rem",
+                    lineHeight: 1.5,
+                    color: "rgba(255,255,255,0.45)",
+                    margin: 0,
+                  }}
+                >
+                  — {line}
+                </p>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

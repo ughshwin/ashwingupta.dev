@@ -1,26 +1,54 @@
 import { useEffect } from "react";
 
-const SECTION_IDS = ["hero", "about", "skills", "research", "projects", "contact"];
+const SECTION_IDS = ["hero", "about", "stack", "experience", "recommendations", "featured", "research", "projects", "contact"];
+
+function getSectionFromPath(path: string): string {
+  const section = path.replace(/^\//, "");
+  return SECTION_IDS.includes(section) ? section : "";
+}
+
+export function scrollToSection(id: string, behavior: ScrollBehavior = "smooth") {
+  const container = document.querySelector(".hologram-interface") as HTMLElement | null;
+  if (!container) return;
+  const target = document.getElementById(id);
+  if (!target) return;
+  // Skip the element's own padding-top so the first visible content (section
+  // label / break line) lands at the container top, not the blank padded space.
+  const paddingTop = parseFloat(getComputedStyle(target).paddingTop) || 0;
+  const offset =
+    container.scrollTop +
+    target.getBoundingClientRect().top -
+    container.getBoundingClientRect().top +
+    paddingTop;
+  container.scrollTo({ top: offset, behavior });
+}
 
 export function useHashScroll() {
   useEffect(() => {
-    const container = document.querySelector(
-      ".hologram-interface",
-    ) as HTMLElement | null;
+    const container = document.querySelector(".hologram-interface") as HTMLElement | null;
     if (!container) return;
 
-    // Scroll to hash on mount — retry until the lazy section renders
-    const initialHash = window.location.hash.slice(1);
-    if (SECTION_IDS.includes(initialHash)) {
+    // On mount: read pathname (e.g. /about) with hash fallback
+    const pathSection = getSectionFromPath(window.location.pathname);
+    const hashSection = window.location.hash.slice(1);
+    const initial = pathSection || (SECTION_IDS.includes(hashSection) ? hashSection : "");
+
+    if (initial && initial !== "hero") {
       let attempts = 0;
       const tryScroll = () => {
-        const target = document.getElementById(initialHash);
+        const target = document.getElementById(initial);
         if (target) {
-          const offset =
-            container.scrollTop +
-            target.getBoundingClientRect().top -
-            container.getBoundingClientRect().top;
-          container.scrollTo({ top: offset, behavior: "instant" });
+          // Gate on fonts so Hero's large serif text is in final metrics before
+          // we measure any offsets. One rAF ensures we're in a stable paint cycle.
+          document.fonts.ready.then(() => {
+            requestAnimationFrame(() => {
+              scrollToSection(initial, "instant");
+              // Correction pass: IntersectionObserver-triggered renders (e.g.
+              // ExperienceTimeline) and late-loading images can shift sections
+              // after the first scroll, so re-snap once layout has settled.
+              setTimeout(() => scrollToSection(initial, "instant"), 300);
+            });
+          });
         } else if (attempts < 20) {
           attempts++;
           setTimeout(tryScroll, 100);
@@ -29,8 +57,8 @@ export function useHashScroll() {
       setTimeout(tryScroll, 50);
     }
 
-    // Update URL hash as sections scroll into the top 40% of the container
-    const updateHash = () => {
+    // Keep URL in sync with the section currently in view
+    const updatePath = () => {
       const containerRect = container.getBoundingClientRect();
       const threshold = containerRect.top + containerRect.height * 0.4;
 
@@ -51,14 +79,14 @@ export function useHashScroll() {
       }
 
       if (activeId) {
-        const next = `#${activeId}`;
-        if (window.location.hash !== next) {
+        const next = activeId === "hero" ? "/" : `/${activeId}`;
+        if (window.location.pathname !== next) {
           history.replaceState(null, "", next);
         }
       }
     };
 
-    container.addEventListener("scroll", updateHash, { passive: true });
-    return () => container.removeEventListener("scroll", updateHash);
+    container.addEventListener("scroll", updatePath, { passive: true });
+    return () => container.removeEventListener("scroll", updatePath);
   }, []);
 }
