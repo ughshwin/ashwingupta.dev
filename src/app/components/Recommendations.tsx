@@ -80,7 +80,6 @@ function RecCard({
         background: "rgba(255,255,255,0.015)",
       }}
     >
-      {/* Header: name + role */}
       <div>
         <p
           style={{
@@ -107,10 +106,8 @@ function RecCard({
         </p>
       </div>
 
-      {/* Divider */}
       <div style={{ height: "1px", background: "rgba(255,255,255,0.05)" }} />
 
-      {/* Quote */}
       <p
         style={{
           fontFamily: FONT_SANS,
@@ -127,7 +124,6 @@ function RecCard({
         "{rec.text}"
       </p>
 
-      {/* Footer metadata */}
       <p
         style={{
           fontFamily: FONT_MONO,
@@ -147,32 +143,68 @@ function RecCard({
 export function Recommendations() {
   const isMobile = useIsMobile();
   const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef(0);
   const headerGapRef = useRef<HTMLDivElement>(null);
+  const maxOffsetRef = useRef(0);
+  const cachedTopRef = useRef<number | null>(null);
+
+  const [vpH, setVpH] = useState(() =>
+    typeof window !== "undefined" ? window.innerHeight : 900,
+  );
+  const [sectionH, setSectionH] = useState(() =>
+    typeof window !== "undefined" ? window.innerHeight : 900,
+  );
 
   useEffect(() => {
     if (isMobile) return;
-    const scroller = document.querySelector(".hologram-interface") as HTMLElement | null;
-    if (!scroller) return;
-    let cachedTop: number | null = null;
+    const measure = () => {
+      const header = headerRef.current;
+      const inner = innerRef.current;
+      if (!header || !inner) return;
+      const vh = window.innerHeight;
+      const headerH = header.offsetHeight;
+      const contentH = inner.scrollHeight;
+      const stripH = Math.max(0, vh - headerH);
+      const maxOffset = Math.max(0, contentH - stripH);
+      maxOffsetRef.current = maxOffset;
+      cachedTopRef.current = null;
+      setVpH(vh);
+      setSectionH(vh + maxOffset);
+    };
+    requestAnimationFrame(measure);
+    window.addEventListener("resize", measure, { passive: true });
+    return () => window.removeEventListener("resize", measure);
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (isMobile) return;
+    const scroller = document.querySelector(
+      ".hologram-interface",
+    ) as HTMLElement | null;
+    const section = sectionRef.current;
+    if (!scroller || !section) return;
+
     const measureTop = () => {
-      const section = ref.current;
-      if (!section) return;
       let acc = 0;
       let el: HTMLElement | null = section;
-      while (el && el !== scroller) { acc += el.offsetTop; el = el.offsetParent as HTMLElement | null; }
-      cachedTop = acc + (parseFloat(getComputedStyle(section).paddingTop) || 0);
+      while (el && el !== scroller) {
+        acc += el.offsetTop;
+        el = el.offsetParent as HTMLElement | null;
+      }
+      cachedTopRef.current = acc;
     };
+
     const onScroll = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
-        if (cachedTop === null) measureTop();
-        const offset = Math.max(0, scroller.scrollTop - (cachedTop ?? 0));
-        if (contentRef.current) {
-          contentRef.current.style.clipPath =
-            offset > 0 ? `inset(${offset}px 0 0 0)` : "none";
+        if (cachedTopRef.current === null) measureTop();
+        const raw = scroller.scrollTop - (cachedTopRef.current ?? 0);
+        const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
+        if (innerRef.current) {
+          innerRef.current.style.transform = `translateY(-${offset}px)`;
         }
         const compressRatio = Math.min(1, offset / 100);
         const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
@@ -181,9 +213,19 @@ export function Recommendations() {
         }
       });
     };
-    requestAnimationFrame(() => { measureTop(); onScroll(); });
+
+    requestAnimationFrame(() => {
+      measureTop();
+      onScroll();
+    });
     scroller.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", () => { cachedTop = null; }, { passive: true });
+    window.addEventListener(
+      "resize",
+      () => {
+        cachedTopRef.current = null;
+      },
+      { passive: true },
+    );
     return () => {
       scroller.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(rafRef.current);
@@ -191,7 +233,7 @@ export function Recommendations() {
   }, [isMobile]);
 
   useEffect(() => {
-    const el = ref.current;
+    const el = sectionRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
@@ -205,91 +247,119 @@ export function Recommendations() {
 
   return (
     <section
-      ref={ref}
+      ref={sectionRef}
       id="recommendations"
       style={{
-        padding: isMobile ? "4rem 4vw" : "6rem 6vw",
-        background: "transparent",
         position: "relative",
+        height: isMobile ? "auto" : sectionH,
+        background: "transparent",
+        ...(isMobile && { padding: "4rem 4vw" }),
       }}
     >
-      {/* Sticky header: section label + heading */}
       <div
-        style={{
-          position: isMobile ? "relative" : "sticky",
-          top: 0,
-          zIndex: 10,
-          paddingTop: "0.85rem",
-          paddingBottom: "2rem",
-          marginLeft: isMobile ? "-4vw" : "-6vw",
-          marginRight: isMobile ? "-4vw" : "-6vw",
-          paddingLeft: isMobile ? "4vw" : "6vw",
-          paddingRight: isMobile ? "4vw" : "6vw",
-        }}
+        style={
+          isMobile
+            ? {}
+            : {
+                position: "sticky",
+                top: 0,
+                height: vpH,
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+              }
+        }
       >
+        {/* Header */}
         <div
-          ref={headerGapRef}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-            marginBottom: isMobile ? "2rem" : "80px",
-          }}
+          ref={headerRef}
+          style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}
         >
-          <span
-            style={{
-              fontFamily: FONT_MONO,
-              fontSize: "0.62rem",
-              letterSpacing: "0.2em",
-              color: "rgba(255,255,255,0.4)",
-              textTransform: "uppercase",
-            }}
-          >
-            Recommendations
-          </span>
           <div
+            ref={headerGapRef}
             style={{
-              flex: 1,
-              height: "1px",
-              background: "rgba(255,255,255,0.07)",
-            }}
-          />
-        </div>
-
-        <div style={{ overflow: "hidden" }}>
-          <motion.h2
-            initial={{ y: "100%" }}
-            animate={isVisible ? { y: 0 } : { y: "100%" }}
-            transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-            style={{
-              fontFamily: FONT_SERIF,
-              fontSize: isMobile
-                ? "clamp(1.8rem, 7vw, 4rem)"
-                : "clamp(2.6rem, 4.5vw, 4rem)",
-              fontWeight: 800,
-              lineHeight: 1.05,
-              letterSpacing: "0.02em",
-              color: "#fafaf8",
-              margin: 0,
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              marginBottom: isMobile ? "2rem" : "80px",
             }}
           >
-            In their words.
-          </motion.h2>
-        </div>
-      </div>
+            <span
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.62rem",
+                letterSpacing: "0.2em",
+                color: "rgba(255,255,255,0.4)",
+                textTransform: "uppercase",
+              }}
+            >
+              Recommendations
+            </span>
+            <div
+              style={{
+                flex: 1,
+                height: "1px",
+                background: "rgba(255,255,255,0.07)",
+              }}
+            />
+          </div>
 
-      <div ref={contentRef} style={{ willChange: "clip-path" }}>
-        {/* Grid */}
+          <div style={{ overflow: "hidden" }}>
+            <motion.h2
+              initial={{ y: "100%" }}
+              animate={isVisible ? { y: 0 } : { y: "100%" }}
+              transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+              style={{
+                fontFamily: FONT_SERIF,
+                fontSize: isMobile
+                  ? "clamp(1.8rem, 7vw, 4rem)"
+                  : "clamp(2.6rem, 4.5vw, 4rem)",
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: "0.02em",
+                color: "#fafaf8",
+                margin: 0,
+              }}
+            >
+              In their words.
+            </motion.h2>
+          </div>
+        </div>
+
+        {/* Content strip */}
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-            gap: isMobile ? "1.2rem" : "1.5rem",
-          }}
+          style={
+            isMobile
+              ? {}
+              : { flex: 1, position: "relative", overflow: "hidden" }
+          }
         >
-          {recs.map((rec, i) => (
-            <RecCard key={rec.name} rec={rec} index={i} isVisible={isVisible} />
-          ))}
+          <div
+            ref={innerRef}
+            style={
+              isMobile
+                ? { paddingTop: "2rem" }
+                : {
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    padding: "1.5rem 6vw 4rem",
+                  }
+            }
+          >
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                gap: isMobile ? "1.2rem" : "1.5rem",
+              }}
+            >
+              {recs.map((rec, i) => (
+                <RecCard key={rec.name} rec={rec} index={i} isVisible={isVisible} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
