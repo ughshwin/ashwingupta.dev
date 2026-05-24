@@ -161,7 +161,7 @@ export function About() {
         </div>
       </div>
 
-      <div ref={contentRef}>
+      <div ref={contentRef} style={{ willChange: "clip-path", transform: "translateZ(0)" }}>
       {/* Brand thesis — full width, above grid so both columns start level */}
       <motion.p
         initial={{ opacity: 0, y: 20 }}
