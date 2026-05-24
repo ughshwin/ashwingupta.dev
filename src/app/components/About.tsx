@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 
 const FONT_SERIF = '"Playfair Display", Georgia, serif';
@@ -30,36 +30,67 @@ const dontDo = [
 export function About() {
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef(0);
   const headerGapRef = useRef<HTMLDivElement>(null);
+  const maxOffsetRef = useRef(0);
+  const cachedTopRef = useRef<number | null>(null);
+
+  const [vpH, setVpH] = useState(() =>
+    typeof window !== "undefined" ? window.innerHeight : 900,
+  );
+  const [sectionH, setSectionH] = useState(() =>
+    typeof window !== "undefined" ? window.innerHeight : 900,
+  );
+
+  useEffect(() => {
+    if (isMobile) return;
+    const measure = () => {
+      const header = headerRef.current;
+      const inner = innerRef.current;
+      if (!header || !inner) return;
+      const vh = window.innerHeight;
+      const headerH = header.offsetHeight;
+      const contentH = inner.scrollHeight;
+      const stripH = Math.max(0, vh - headerH);
+      const maxOffset = Math.max(0, contentH - stripH);
+      maxOffsetRef.current = maxOffset;
+      cachedTopRef.current = null;
+      setVpH(vh);
+      setSectionH(vh + maxOffset);
+    };
+    requestAnimationFrame(measure);
+    window.addEventListener("resize", measure, { passive: true });
+    return () => window.removeEventListener("resize", measure);
+  }, [isMobile]);
 
   useEffect(() => {
     if (isMobile) return;
     const scroller = document.querySelector(
       ".hologram-interface",
     ) as HTMLElement | null;
-    if (!scroller) return;
-    let cachedTop: number | null = null;
+    const section = sectionRef.current;
+    if (!scroller || !section) return;
+
     const measureTop = () => {
-      const section = sectionRef.current;
-      if (!section) return;
       let acc = 0;
       let el: HTMLElement | null = section;
       while (el && el !== scroller) {
         acc += el.offsetTop;
         el = el.offsetParent as HTMLElement | null;
       }
-      cachedTop = acc + (parseFloat(getComputedStyle(section).paddingTop) || 0);
+      cachedTopRef.current = acc;
     };
+
     const onScroll = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
-        if (cachedTop === null) measureTop();
-        const offset = Math.max(0, scroller.scrollTop - (cachedTop ?? 0));
-        if (contentRef.current) {
-          contentRef.current.style.clipPath =
-            offset > 0 ? `inset(${offset}px 0 0 0)` : "none";
+        if (cachedTopRef.current === null) measureTop();
+        const raw = scroller.scrollTop - (cachedTopRef.current ?? 0);
+        const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
+        if (innerRef.current) {
+          innerRef.current.style.transform = `translateY(-${offset}px)`;
         }
         const compressRatio = Math.min(1, offset / 100);
         const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
@@ -68,6 +99,7 @@ export function About() {
         }
       });
     };
+
     requestAnimationFrame(() => {
       measureTop();
       onScroll();
@@ -76,7 +108,7 @@ export function About() {
     window.addEventListener(
       "resize",
       () => {
-        cachedTop = null;
+        cachedTopRef.current = null;
       },
       { passive: true },
     );
@@ -91,302 +123,323 @@ export function About() {
       ref={sectionRef}
       id="about"
       style={{
-        padding: isMobile ? "4rem 4vw" : "6rem 6vw",
-        background: "transparent",
         position: "relative",
+        height: isMobile ? "auto" : sectionH,
+        background: "transparent",
+        ...(isMobile && { padding: "4rem 4vw" }),
       }}
     >
-      {/* Sticky header: section label + heading */}
       <div
-        style={{
-          position: isMobile ? "relative" : "sticky",
-          top: 0,
-          zIndex: 10,
-          paddingTop: "0.85rem",
-          paddingBottom: "2rem",
-          marginLeft: isMobile ? "-4vw" : "-6vw",
-          marginRight: isMobile ? "-4vw" : "-6vw",
-          paddingLeft: isMobile ? "4vw" : "6vw",
-          paddingRight: isMobile ? "4vw" : "6vw",
-        }}
-      >
-        <div
-          ref={headerGapRef}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-            marginBottom: isMobile ? "2rem" : "80px",
-          }}
-        >
-          <span
-            style={{
-              fontFamily: FONT_MONO,
-              fontSize: "0.62rem",
-              letterSpacing: "0.2em",
-              color: "rgba(255,255,255,0.4)",
-              textTransform: "uppercase",
-            }}
-          >
-            About
-          </span>
-          <div
-            style={{
-              flex: 1,
-              height: "1px",
-              background: "rgba(255,255,255,0.07)",
-            }}
-          />
-        </div>
-
-        <div style={{ overflow: "hidden" }}>
-          <motion.h2
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-            style={{
-              fontFamily: FONT_SERIF,
-              fontSize: isMobile
-                ? "clamp(1.8rem, 7vw, 4rem)"
-                : "clamp(2.6rem, 4.5vw, 4rem)",
-              fontWeight: 800,
-              lineHeight: 1.05,
-              letterSpacing: "0.02em",
-              color: "#fafaf8",
-              margin: 0,
-            }}
-          >
-            Inference is easy. Everything around it isn't.
-          </motion.h2>
-        </div>
-      </div>
-
-      <div ref={contentRef} style={{ willChange: "clip-path", transform: "translateZ(0)" }}>
-      {/* Brand thesis — full width, above grid so both columns start level */}
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        style={{
-          fontFamily: FONT_SANS,
-          fontSize: isMobile ? "1rem" : "1.05rem",
-          lineHeight: 1.65,
-          color: "#e8e0d0",
-          marginBottom: isMobile ? "2rem" : "2.5rem",
-          borderLeft: "2px solid rgba(232,224,208,0.3)",
-          paddingLeft: "1rem",
-          maxWidth: "520px",
-        }}
-      >
-        Honest where it matters. Available when it's hard.
-      </motion.p>
-
-      {/* Two-column grid — both columns start at the same level */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-          gap: isMobile ? "3rem" : "6vw",
-          alignItems: "start",
-        }}
-      >
-        {/* LEFT — story paragraphs */}
-        <div
-          style={{
-            alignSelf: "start",
-          }}
-        >
-          {/* Para 1 — origin */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            style={{
-              fontFamily: FONT_SANS,
-              fontSize: "0.95rem",
-              lineHeight: 1.8,
-              color: "rgba(255,255,255,0.62)",
-              marginBottom: "1.2rem",
-              maxWidth: "520px",
-              textAlign: "justify",
-              textJustify: "inter-word",
-            }}
-          >
-            Mechanical engineering by training — which meant learning to ask why
-            a system fails before asking how to build it. AI hit in second year
-            like a realisation, not a subject: software that understood language
-            was a new class of thing, and I knew it would matter before anyone
-            around me thought it would. The IISc ML lead role confirmed the
-            direction — physics-constrained optimisation on eVTOL design under
-            Dr. Harursampath, five projects in eight months, at the edge of what
-            was understood.
-          </motion.p>
-
-          {/* Para 2 — production pattern */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            style={{
-              fontFamily: FONT_SANS,
-              fontSize: "0.95rem",
-              lineHeight: 1.8,
-              color: "rgba(255,255,255,0.62)",
-              marginBottom: "1.2rem",
-              maxWidth: "520px",
-              textAlign: "justify",
-              textJustify: "inter-word",
-            }}
-          >
-            Production changed the picture fast. At Gida and then Coforge, the
-            same pattern emerged: the GenAI core — prompts, basic RAG, API calls
-            — is learnable in three months. Everyone builds it. The real gap is
-            what surrounds the model: the routing logic, the concurrency
-            architecture, the observability that tells you what actually broke
-            and when. That's the part nobody wants to own. That's where I went.
-          </motion.p>
-
-          {/* Para 3 — HSBC proof */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-            style={{
-              fontFamily: FONT_SANS,
-              fontSize: "0.95rem",
-              lineHeight: 1.8,
-              color: "rgba(255,255,255,0.62)",
-              marginBottom: 0,
-              maxWidth: "520px",
-              textAlign: "justify",
-              textJustify: "inter-word",
-            }}
-          >
-            At Coforge on the HSBC Conversational Analytics project, I was the
-            youngest on the team and three months in when I became the de facto
-            integration lead — having solved in one week a problem another
-            technology partner hadn't resolved in eight months at the same
-            client. GIL'd threading replaced with CPU-pinned parallel instances,
-            asyncio + uvloop across the full pipeline, cross-stack observability
-            built before the second incident happened. 7× session capacity.
-            $1.3M annualised savings. MTTR from ~1hr to ~10mins.
-          </motion.p>
-        </div>
-
-        {/* RIGHT — pillars + What I Don't Do */}
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
-        >
-          {pillars.map(({ title, desc }, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "1.2rem",
-                  padding: "1.4rem 1.6rem",
-                  borderRadius: "8px",
-                  border: "1px solid rgba(255,255,255,0.11)",
-                  background: "rgba(255,255,255,0.025)",
-                }}
-              >
-                <div
-                  style={{
-                    width: "5px",
-                    height: "5px",
-                    borderRadius: "50%",
-                    background: "#e8e0d0",
-                    marginTop: "7px",
-                    flexShrink: 0,
-                    opacity: 0.6,
-                  }}
-                />
-                <div>
-                  <p
-                    style={{
-                      fontFamily: FONT_SERIF,
-                      fontWeight: 800,
-                      fontSize: "0.95rem",
-                      color: "#fafaf8",
-                      marginBottom: "6px",
-                    }}
-                  >
-                    {title}
-                  </p>
-                  <p
-                    style={{
-                      fontFamily: FONT_SANS,
-                      fontSize: "0.83rem",
-                      lineHeight: 1.65,
-                      color: "rgba(255,255,255,0.58)",
-                      textAlign: "justify",
-                      textJustify: "inter-word",
-                    }}
-                  >
-                    {desc}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-
-          {/* What I Don't Do */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.24, duration: 0.5 }}
-            style={{
-              padding: "1.2rem 1.5rem",
-              border: "1px solid rgba(255,255,255,0.07)",
-              borderRadius: "6px",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: FONT_MONO,
-                fontSize: "0.55rem",
-                letterSpacing: "0.18em",
-                color: "rgba(255,255,255,0.3)",
-                textTransform: "uppercase",
-                marginBottom: "0.9rem",
-              }}
-            >
-              What I don't do
-            </p>
-            <div
-              style={{
+        style={
+          isMobile
+            ? {}
+            : {
+                position: "sticky",
+                top: 0,
+                height: vpH,
+                overflow: "hidden",
                 display: "flex",
                 flexDirection: "column",
-                gap: "0.55rem",
+              }
+        }
+      >
+        {/* Header */}
+        <div
+          ref={headerRef}
+          style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}
+        >
+          <div
+            ref={headerGapRef}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              marginBottom: isMobile ? "2rem" : "80px",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.62rem",
+                letterSpacing: "0.2em",
+                color: "rgba(255,255,255,0.4)",
+                textTransform: "uppercase",
               }}
             >
-              {dontDo.map((line, i) => (
-                <p
-                  key={i}
+              About
+            </span>
+            <div
+              style={{
+                flex: 1,
+                height: "1px",
+                background: "rgba(255,255,255,0.07)",
+              }}
+            />
+          </div>
+
+          <div style={{ overflow: "hidden" }}>
+            <motion.h2
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+              style={{
+                fontFamily: FONT_SERIF,
+                fontSize: isMobile
+                  ? "clamp(1.8rem, 7vw, 4rem)"
+                  : "clamp(2.6rem, 4.5vw, 4rem)",
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: "0.02em",
+                color: "#fafaf8",
+                margin: 0,
+              }}
+            >
+              Inference is easy. Everything around it isn't.
+            </motion.h2>
+          </div>
+        </div>
+
+        {/* Content strip */}
+        <div
+          style={
+            isMobile
+              ? {}
+              : { flex: 1, position: "relative", overflow: "hidden" }
+          }
+        >
+          <div
+            ref={innerRef}
+            style={
+              isMobile
+                ? { paddingTop: "2rem" }
+                : {
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    padding: "1.5rem 6vw 4rem",
+                  }
+            }
+          >
+            {/* Brand thesis */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              style={{
+                fontFamily: FONT_SANS,
+                fontSize: isMobile ? "1rem" : "1.05rem",
+                lineHeight: 1.65,
+                color: "#e8e0d0",
+                marginBottom: isMobile ? "2rem" : "2.5rem",
+                borderLeft: "2px solid rgba(232,224,208,0.3)",
+                paddingLeft: "1rem",
+                maxWidth: "520px",
+              }}
+            >
+              Honest where it matters. Available when it's hard.
+            </motion.p>
+
+            {/* Two-column grid */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                gap: isMobile ? "3rem" : "6vw",
+                alignItems: "start",
+              }}
+            >
+              {/* LEFT — story paragraphs */}
+              <div style={{ alignSelf: "start" }}>
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
                   style={{
                     fontFamily: FONT_SANS,
-                    fontSize: "0.83rem",
-                    lineHeight: 1.5,
-                    color: "rgba(255,255,255,0.45)",
-                    margin: 0,
+                    fontSize: "0.95rem",
+                    lineHeight: 1.8,
+                    color: "rgba(255,255,255,0.62)",
+                    marginBottom: "1.2rem",
+                    maxWidth: "520px",
                     textAlign: "justify",
                     textJustify: "inter-word",
                   }}
                 >
-                  — {line}
-                </p>
-              ))}
+                  Mechanical engineering by training — which meant learning to ask why
+                  a system fails before asking how to build it. AI hit in second year
+                  like a realisation, not a subject: software that understood language
+                  was a new class of thing, and I knew it would matter before anyone
+                  around me thought it would. The IISc ML lead role confirmed the
+                  direction — physics-constrained optimisation on eVTOL design under
+                  Dr. Harursampath, five projects in eight months, at the edge of what
+                  was understood.
+                </motion.p>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  style={{
+                    fontFamily: FONT_SANS,
+                    fontSize: "0.95rem",
+                    lineHeight: 1.8,
+                    color: "rgba(255,255,255,0.62)",
+                    marginBottom: "1.2rem",
+                    maxWidth: "520px",
+                    textAlign: "justify",
+                    textJustify: "inter-word",
+                  }}
+                >
+                  Production changed the picture fast. At Gida and then Coforge, the
+                  same pattern emerged: the GenAI core — prompts, basic RAG, API calls
+                  — is learnable in three months. Everyone builds it. The real gap is
+                  what surrounds the model: the routing logic, the concurrency
+                  architecture, the observability that tells you what actually broke
+                  and when. That's the part nobody wants to own. That's where I went.
+                </motion.p>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 }}
+                  style={{
+                    fontFamily: FONT_SANS,
+                    fontSize: "0.95rem",
+                    lineHeight: 1.8,
+                    color: "rgba(255,255,255,0.62)",
+                    marginBottom: 0,
+                    maxWidth: "520px",
+                    textAlign: "justify",
+                    textJustify: "inter-word",
+                  }}
+                >
+                  At Coforge on the HSBC Conversational Analytics project, I was the
+                  youngest on the team and three months in when I became the de facto
+                  integration lead — having solved in one week a problem another
+                  technology partner hadn't resolved in eight months at the same
+                  client. GIL'd threading replaced with CPU-pinned parallel instances,
+                  asyncio + uvloop across the full pipeline, cross-stack observability
+                  built before the second incident happened. 7× session capacity.
+                  $1.3M annualised savings. MTTR from ~1hr to ~10mins.
+                </motion.p>
+              </div>
+
+              {/* RIGHT — pillars + What I Don't Do */}
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
+              >
+                {pillars.map(({ title, desc }, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08, duration: 0.5 }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: "1.2rem",
+                        padding: "1.4rem 1.6rem",
+                        borderRadius: "8px",
+                        border: "1px solid rgba(255,255,255,0.11)",
+                        background: "rgba(255,255,255,0.025)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "5px",
+                          height: "5px",
+                          borderRadius: "50%",
+                          background: "#e8e0d0",
+                          marginTop: "7px",
+                          flexShrink: 0,
+                          opacity: 0.6,
+                        }}
+                      />
+                      <div>
+                        <p
+                          style={{
+                            fontFamily: FONT_SERIF,
+                            fontWeight: 800,
+                            fontSize: "0.95rem",
+                            color: "#fafaf8",
+                            marginBottom: "6px",
+                          }}
+                        >
+                          {title}
+                        </p>
+                        <p
+                          style={{
+                            fontFamily: FONT_SANS,
+                            fontSize: "0.83rem",
+                            lineHeight: 1.65,
+                            color: "rgba(255,255,255,0.58)",
+                            textAlign: "justify",
+                            textJustify: "inter-word",
+                          }}
+                        >
+                          {desc}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.24, duration: 0.5 }}
+                  style={{
+                    padding: "1.2rem 1.5rem",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    borderRadius: "6px",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontFamily: FONT_MONO,
+                      fontSize: "0.55rem",
+                      letterSpacing: "0.18em",
+                      color: "rgba(255,255,255,0.3)",
+                      textTransform: "uppercase",
+                      marginBottom: "0.9rem",
+                    }}
+                  >
+                    What I don't do
+                  </p>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.55rem",
+                    }}
+                  >
+                    {dontDo.map((line, i) => (
+                      <p
+                        key={i}
+                        style={{
+                          fontFamily: FONT_SANS,
+                          fontSize: "0.83rem",
+                          lineHeight: 1.5,
+                          color: "rgba(255,255,255,0.45)",
+                          margin: 0,
+                          textAlign: "justify",
+                          textJustify: "inter-word",
+                        }}
+                      >
+                        — {line}
+                      </p>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </div>
       </div>
     </section>
   );
