@@ -472,7 +472,7 @@ export function Research() {
           </motion.h2>
         </div>
       </div>
-      <div ref={contentRef}>
+      <div ref={contentRef} style={{ willChange: "clip-path" }}>
         <EqualGridRenderer
           rows={rows}
           renderCard={(idx) => <ResearchCard item={items[idx]} />}
