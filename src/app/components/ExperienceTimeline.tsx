@@ -521,7 +521,10 @@ export function ExperienceTimeline() {
   const particlesRef = useRef<
     Array<{ x: number; y: number; vx: number; vy: number; life: number; size: number }>
   >([]);
-  const prevScanYRef = useRef<number | null>(null);
+  const scanYTargetRef = useRef<number>(0);
+  const prevTargetRef = useRef<number>(0);
+  const tailVelRef = useRef<number>(0);
+  const dimsRef = useRef<ReturnType<typeof buildDims> | null>(null);
   const particleRafRef = useRef<number>(0);
 
   const [vpW, setVpW] = useState(() =>
@@ -556,6 +559,8 @@ export function ExperienceTimeline() {
   }, []);
 
   const dims = useMemo(() => buildDims(vpW, vpH), [vpW, vpH]);
+
+  useEffect(() => { dimsRef.current = dims; }, [dims]);
 
   useEffect(() => {
     if (isMobile) return;
@@ -611,7 +616,7 @@ export function ExperienceTimeline() {
     canvas.height = dims.STRIP_H;
   }, [vpW, dims]);
 
-  // Particle draw loop — runs forever once mounted
+  // Particle draw loop — inertia simulation + emission + render
   useEffect(() => {
     if (isMobile) return;
     const canvas = canvasRef.current;
@@ -621,6 +626,36 @@ export function ExperienceTimeline() {
     const draw = (now: number) => {
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
+
+      // Drive tail velocity from scroll delta, then let it coast with drag
+      const target = scanYTargetRef.current;
+      const targetDelta = target - prevTargetRef.current;
+      prevTargetRef.current = target;
+      if (Math.abs(targetDelta) > 0.1) {
+        tailVelRef.current = targetDelta / Math.max(dt, 0.001);
+      } else {
+        // Exponential decay — ~50% remaining after 0.1s, gone by ~0.35s
+        tailVelRef.current *= Math.pow(0.001, dt);
+      }
+
+      // Emit at actual head position — tail stays attached
+      if (Math.abs(tailVelRef.current) > 5 && dimsRef.current) {
+        const { SPINE_X } = dimsRef.current;
+        const sign = tailVelRef.current > 0 ? -1 : 1;
+        const speed = Math.min(Math.abs(tailVelRef.current) * 0.85, 200);
+        const count = Math.max(1, Math.min(6, Math.round(Math.abs(tailVelRef.current) / 25)));
+        for (let i = 0; i < count; i++) {
+          particlesRef.current.push({
+            x: SPINE_X + (Math.random() - 0.5) * 6,
+            y: target + (Math.random() - 0.5) * 4,
+            vx: (Math.random() - 0.5) * 30,
+            vy: sign * speed * (0.4 + Math.random() * 0.6),
+            life: 1,
+            size: 0.8 + Math.random() * 1.5,
+          });
+        }
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particlesRef.current = particlesRef.current.filter((p) => p.life > 0);
       for (const p of particlesRef.current) {
@@ -641,29 +676,10 @@ export function ExperienceTimeline() {
     return () => cancelAnimationFrame(particleRafRef.current);
   }, [isMobile]);
 
-  // Emit particles on scroll
+  // Update comet head target on scroll (emission handled by draw loop)
   useEffect(() => {
     if (isMobile || dims.maxOffset === 0) return;
-    const { SPINE_X, STRIP_H, maxOffset } = dims;
-    const scanY = (chartOffset / maxOffset) * STRIP_H;
-    const prev = prevScanYRef.current;
-    prevScanYRef.current = scanY;
-    if (prev === null) return;
-    const delta = scanY - prev;
-    if (Math.abs(delta) < 0.3) return;
-    const sign = delta > 0 ? -1 : 1;
-    const speed = Math.min(Math.abs(delta) * 130, 180);
-    const count = Math.max(1, Math.min(6, Math.round(Math.abs(delta))));
-    for (let i = 0; i < count; i++) {
-      particlesRef.current.push({
-        x: SPINE_X + (Math.random() - 0.5) * 6,
-        y: scanY + (Math.random() - 0.5) * 4,
-        vx: (Math.random() - 0.5) * 30,
-        vy: sign * speed * (0.4 + Math.random() * 0.6),
-        life: 1,
-        size: 0.8 + Math.random() * 1.5,
-      });
-    }
+    scanYTargetRef.current = (chartOffset / dims.maxOffset) * dims.STRIP_H;
   }, [chartOffset, dims, isMobile]);
 
   if (isMobile)
