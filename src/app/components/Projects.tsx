@@ -1050,7 +1050,7 @@ export function Projects() {
         </div>
       </div>
 
-      <div ref={contentRef}>
+      <div ref={contentRef} style={{ willChange: "clip-path" }}>
         {/* Secondary grid */}
         <div style={{ marginBottom: "2rem" }}>
           <p
