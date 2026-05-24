@@ -44,10 +44,12 @@ const BULLET_GAP = 4;
 const FONT_PX = 13.2;
 const FONT_LH = 1.48;
 
+const MOBILE_FONT_PX = 11.2;
+
 const _measureCache = new Map<string, number>();
 
-function measureBarH(e: Entry, barWidth: number): number {
-  const key = `${e.id}-${Math.round(barWidth)}`;
+function measureBarH(e: Entry, barWidth: number, fontPx = FONT_PX): number {
+  const key = `${e.id}-${Math.round(barWidth)}-${fontPx}-${e.bullets.length}`;
   if (_measureCache.has(key)) return _measureCache.get(key)!;
 
   const textW = barWidth - PAD_X * 2 - BULLET_MARK;
@@ -56,8 +58,8 @@ function measureBarH(e: Entry, barWidth: number): number {
   if (typeof window !== "undefined" && textW > 0) {
     try {
       const ctx = document.createElement("canvas").getContext("2d")!;
-      ctx.font = `${FONT_PX}px "DM Sans", sans-serif`;
-      const lineH = FONT_PX * FONT_LH;
+      ctx.font = `${fontPx}px "DM Sans", sans-serif`;
+      const lineH = fontPx * FONT_LH;
       e.bullets.forEach((bullet, bi) => {
         const words = bullet.split(" ");
         let lines = 0,
@@ -74,10 +76,10 @@ function measureBarH(e: Entry, barWidth: number): number {
         if (bi < e.bullets.length - 1) bulletsH += BULLET_GAP;
       });
     } catch {
-      bulletsH = e.bullets.length * 26;
+      bulletsH = e.bullets.length * Math.ceil(fontPx * FONT_LH);
     }
   } else {
-    bulletsH = e.bullets.length * 22;
+    bulletsH = e.bullets.length * Math.ceil(fontPx * FONT_LH);
   }
 
   const h = BAR_HDR_H + bulletsH + PAD_BOTTOM;
@@ -168,7 +170,7 @@ const ENTRIES: Entry[] = [
     track: "professional",
     weight: "recent",
     role: "AI Engineer",
-    company: "Coforge — HSBC",
+    company: "Coforge",
     period: "Jun 2024 – Present",
     start: new Date(2024, 5),
     end: "present",
@@ -249,7 +251,7 @@ const CHART_MULT_V = 2.8;
 const SPINE_RATIO = 0.5;
 const PRO_SPINE_X_GAP = 40; // zone on spine side for year labels
 const EDU_SPINE_X_GAP = 40;
-const PROJ_W = 5; // width of each projection strip
+const PROJ_W = 2; // width of each projection strip
 const PROJ_X_GAP = 16; // gap between parallel strips in the band
 const BAR_X_GAP = 22; // gap from projection band edge to card column
 const MAX_PRO_LANE_W = 320;
@@ -257,6 +259,85 @@ const MAX_EDU_LANE_W = 380;
 
 const N_PRO_PROJ_ROWS = new Set(assignLanes(PRO).values()).size;
 const N_EDU_PROJ_ROWS = new Set(assignLanes(EDU).values()).size;
+
+const ALL_LANE = assignLanes(ENTRIES); // combined — used for mobile EDU card centering
+
+// ── Mobile Gantt constants ─────────────────────────────────────────────────
+const MOBILE_SPINE_X_PX = 28;
+const MOBILE_SPINE_GAP = 6;
+const MOBILE_PROJ_W = 2;
+const MOBILE_PROJ_X_GAP = 6;
+const MOBILE_INTER_BAND_GAP = 4; // gap between pro and edu strip bands
+const MOBILE_BAR_X_GAP = 14;
+const MOBILE_CARD_MARGIN_R = 8;
+const MOBILE_HEADER_H = 140;
+
+function buildMobileDims(vpW: number, vpH: number) {
+  const chartH = Math.max(vpH * CHART_MULT_V, 2400);
+  const monthPx = (chartH - CHART_PAD_T - CHART_PAD_B) / TOTAL_MONTHS;
+  const STRIP_H = vpH - MOBILE_HEADER_H;
+  const SPINE_X = MOBILE_SPINE_X_PX;
+
+  const toPy = (d: Date) =>
+    CHART_PAD_T + (TOTAL_MONTHS - toMonths(d)) * monthPx;
+
+  const bH = (s: Date, e: Date | "present") => {
+    const endM = e === "present" ? toMonths(TODAY) : toMonths(e as Date);
+    return Math.max(monthPx * 2, (endM - toMonths(s)) * monthPx);
+  };
+
+  // Two separate strip bands — mirrors the desktop's dual-track layout,
+  // both placed to the right of the spine instead of left/right of it.
+  const proBandW =
+    N_PRO_PROJ_ROWS * MOBILE_PROJ_W +
+    Math.max(0, N_PRO_PROJ_ROWS - 1) * MOBILE_PROJ_X_GAP;
+  const eduBandW =
+    N_EDU_PROJ_ROWS * MOBILE_PROJ_W +
+    Math.max(0, N_EDU_PROJ_ROWS - 1) * MOBILE_PROJ_X_GAP;
+
+  const proStripStart = SPINE_X + MOBILE_SPINE_GAP;
+  const eduStripStart = proStripStart + proBandW + MOBILE_INTER_BAND_GAP;
+  const cardLeft = eduStripStart + eduBandW + MOBILE_BAR_X_GAP;
+  const laneW = Math.max(160, vpW - MOBILE_CARD_MARGIN_R - cardLeft);
+
+  const barLeft = (_id: EntryId) => cardLeft;
+
+  // Strip X — pro uses PRO_PROJ_LANE, edu uses EDU_PROJ_LANE (track-specific)
+  const projLeft = (e: Entry) => {
+    if (e.track === "professional") {
+      const row = PRO_PROJ_LANE.get(e.id) ?? 0;
+      return proStripStart + row * (MOBILE_PROJ_W + MOBILE_PROJ_X_GAP);
+    }
+    const row = EDU_PROJ_LANE.get(e.id) ?? 0;
+    return eduStripStart + row * (MOBILE_PROJ_W + MOBILE_PROJ_X_GAP);
+  };
+
+  const entryH: Partial<Record<EntryId, number>> = {};
+  const collapsedEntryH: Partial<Record<EntryId, number>> = {};
+  for (const e of ENTRIES) {
+    entryH[e.id] = measureBarH(e, laneW, MOBILE_FONT_PX);
+    collapsedEntryH[e.id] = measureBarH(
+      { ...e, bullets: e.bullets.slice(0, 2) },
+      laneW,
+      MOBILE_FONT_PX,
+    );
+  }
+
+  return {
+    chartH,
+    monthPx,
+    STRIP_H,
+    SPINE_X,
+    toPy,
+    bH,
+    barLeft,
+    laneW,
+    entryH: entryH as Record<EntryId, number>,
+    collapsedEntryH: collapsedEntryH as Record<EntryId, number>,
+    projLeft,
+    maxOffset: Math.max(0, chartH - STRIP_H),
+  };
+}
 
 function buildDims(vpW: number, vpH: number) {
   const chartH = Math.max(vpH * CHART_MULT_V, 2400);
@@ -308,9 +389,14 @@ function buildDims(vpW: number, vpH: number) {
 
   // ── Content heights — cards sized to fit their text ────────────────────
   const entryH: Partial<Record<EntryId, number>> = {};
+  const collapsedEntryH: Partial<Record<EntryId, number>> = {};
   for (const e of ENTRIES) {
     const laneW = e.track === "professional" ? proLaneW : eduLaneW;
     entryH[e.id] = measureBarH(e, laneW);
+    collapsedEntryH[e.id] = measureBarH(
+      { ...e, bullets: e.bullets.slice(0, 1) },
+      laneW,
+    );
   }
 
   return {
@@ -325,6 +411,7 @@ function buildDims(vpW: number, vpH: number) {
     proLaneW,
     eduLaneW,
     entryH: entryH as Record<EntryId, number>,
+    collapsedEntryH: collapsedEntryH as Record<EntryId, number>,
     proProj_left,
     eduProj_left,
     maxOffset: Math.max(0, chartH - STRIP_H),
@@ -342,6 +429,7 @@ function cardCenterY(
   allEntries: Entry[],
   laneMap: Map<EntryId, number>,
   monthPx: number,
+  pickLatest = false,
 ): number {
   const eS = toMonths(e.start);
   const eE = toMonths(e.end === "present" ? TODAY : (e.end as Date));
@@ -373,143 +461,16 @@ function cardCenterY(
   // No free gap → fall back to full-strip centre
   if (gaps.length === 0) return midY(eS, eE);
 
+  if (pickLatest) {
+    // EDU on mobile: pick latest (most-recent) gap so long-span edu entries
+    // anchor near the end of their period, away from the dense pro-era
+    const latest = gaps.reduce((a, b) => (b[0] > a[0] ? b : a));
+    return midY(latest[0], latest[1]);
+  }
+
   // Centre in the largest free sub-range
   const best = gaps.reduce((a, b) => (b[1] - b[0] > a[1] - a[0] ? b : a));
   return midY(best[0], best[1]);
-}
-
-// ── Mobile ────────────────────────────────────────────────────────────────
-function MobileView() {
-  return (
-    <div style={{ padding: "4rem 4vw" }}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "1rem",
-          marginBottom: "2rem",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: FONT_MONO,
-            fontSize: "0.62rem",
-            letterSpacing: "0.2em",
-            color: "rgba(255,255,255,0.4)",
-            textTransform: "uppercase",
-          }}
-        >
-          Experience & Education
-        </span>
-        <div
-          style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.07)" }}
-        />
-      </div>
-      {ENTRIES.map((e) => (
-        <div key={e.id} style={{ marginBottom: "1.8rem" }}>
-          <div
-            style={{
-              display: "flex",
-              gap: "0.75rem",
-              alignItems: "flex-start",
-              marginBottom: "0.5rem",
-            }}
-          >
-            <div
-              style={{
-                width: 3,
-                minHeight: 40,
-                borderRadius: 2,
-                background: CLR[e.id],
-                flexShrink: 0,
-                marginTop: 4,
-              }}
-            />
-            <div>
-              <p
-                style={{
-                  fontFamily: FONT_SANS,
-                  fontWeight: 600,
-                  fontSize: "0.95rem",
-                  color: "#fafaf8",
-                  margin: 0,
-                }}
-              >
-                {e.role}
-              </p>
-              <p
-                style={{
-                  fontFamily: FONT_MONO,
-                  fontSize: "0.58rem",
-                  color: `${CLR[e.id]}cc`,
-                  margin: "2px 0 0",
-                  letterSpacing: "0.04em",
-                }}
-              >
-                {e.company}
-              </p>
-              <p
-                style={{
-                  fontFamily: FONT_MONO,
-                  fontSize: "0.50rem",
-                  color: "rgba(255,255,255,0.28)",
-                  margin: "2px 0 0",
-                  letterSpacing: "0.02em",
-                  textTransform: "uppercase",
-                }}
-              >
-                {e.period}
-              </p>
-            </div>
-          </div>
-          <div
-            style={{
-              marginLeft: "1rem",
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.3rem",
-              maxWidth: "88%",
-            }}
-          >
-            {e.bullets.map((b, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  gap: "0.4rem",
-                  alignItems: "flex-start",
-                }}
-              >
-                <span
-                  style={{
-                    color: CLR[e.id],
-                    fontSize: "0.44rem",
-                    flexShrink: 0,
-                    marginTop: "0.28rem",
-                    opacity: 0.75,
-                  }}
-                >
-                  ▪
-                </span>
-                <span
-                  style={{
-                    fontFamily: FONT_SANS,
-                    fontSize: "0.94rem",
-                    lineHeight: 1.5,
-                    color: "rgba(255,255,255,0.58)",
-                    textAlign: "justify",
-                    textJustify: "inter-word",
-                  }}
-                >
-                  {b}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────
@@ -519,12 +480,19 @@ export function ExperienceTimeline() {
   const rafRef = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<
-    Array<{ x: number; y: number; vx: number; vy: number; life: number; size: number }>
+    Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      life: number;
+      size: number;
+    }>
   >([]);
   const scanYTargetRef = useRef<number>(0);
   const prevTargetRef = useRef<number>(0);
   const tailVelRef = useRef<number>(0);
-  const dimsRef = useRef<ReturnType<typeof buildDims> | null>(null);
+  const dimsRef = useRef<any>(null);
   const particleRafRef = useRef<number>(0);
 
   const [vpW, setVpW] = useState(() =>
@@ -535,6 +503,7 @@ export function ExperienceTimeline() {
   );
   const [chartOffset, setOffset] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [expanded, setExpanded] = useState<EntryId | null>(null);
 
   useEffect(() => {
     const sync = () => {
@@ -559,16 +528,20 @@ export function ExperienceTimeline() {
   }, []);
 
   const dims = useMemo(() => buildDims(vpW, vpH), [vpW, vpH]);
-
-  useEffect(() => { dimsRef.current = dims; }, [dims]);
+  const mDims = useMemo(() => buildMobileDims(vpW, vpH), [vpW, vpH]);
 
   useEffect(() => {
-    if (isMobile) return;
+    dimsRef.current = isMobile ? mDims : dims;
+  }, [dims, mDims, isMobile]);
+
+  useEffect(() => {
     const scroller = document.querySelector(
       ".hologram-interface",
     ) as HTMLElement | null;
     const section = sectionRef.current;
     if (!scroller || !section) return;
+
+    const maxOff = isMobile ? mDims.maxOffset : dims.maxOffset;
 
     let cachedTop: number | null = null;
     const measureTop = () => {
@@ -586,7 +559,7 @@ export function ExperienceTimeline() {
       rafRef.current = requestAnimationFrame(() => {
         if (cachedTop === null) measureTop();
         const raw = scroller.scrollTop - (cachedTop ?? 0);
-        setOffset(Math.max(0, Math.min(dims.maxOffset, raw)));
+        setOffset(Math.max(0, Math.min(maxOff, raw)));
       });
     };
 
@@ -606,19 +579,30 @@ export function ExperienceTimeline() {
       scroller.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [isMobile, dims.maxOffset]);
+  }, [isMobile, dims.maxOffset, mDims.maxOffset]);
+
+  // Auto-close expanded card on scroll
+  useEffect(() => {
+    if (expanded === null) return;
+    const scroller = document.querySelector(
+      ".hologram-interface",
+    ) as HTMLElement | null;
+    if (!scroller) return;
+    const close = () => setExpanded(null);
+    scroller.addEventListener("scroll", close, { passive: true, once: true });
+    return () => scroller.removeEventListener("scroll", close);
+  }, [expanded]);
 
   // Resize canvas to match strip
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     canvas.width = vpW;
-    canvas.height = dims.STRIP_H;
-  }, [vpW, dims]);
+    canvas.height = (isMobile ? mDims : dims).STRIP_H;
+  }, [vpW, dims, mDims, isMobile]);
 
   // Particle draw loop — inertia simulation + emission + render
   useEffect(() => {
-    if (isMobile) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
@@ -643,7 +627,10 @@ export function ExperienceTimeline() {
         const { SPINE_X } = dimsRef.current;
         const sign = tailVelRef.current > 0 ? -1 : 1;
         const speed = Math.min(Math.abs(tailVelRef.current) * 0.85, 200);
-        const count = Math.max(1, Math.min(6, Math.round(Math.abs(tailVelRef.current) / 25)));
+        const count = Math.max(
+          1,
+          Math.min(6, Math.round(Math.abs(tailVelRef.current) / 25)),
+        );
         for (let i = 0; i < count; i++) {
           particlesRef.current.push({
             x: SPINE_X + (Math.random() - 0.5) * 6,
@@ -678,16 +665,11 @@ export function ExperienceTimeline() {
 
   // Update comet head target on scroll (emission handled by draw loop)
   useEffect(() => {
-    if (isMobile || dims.maxOffset === 0) return;
-    scanYTargetRef.current = (chartOffset / dims.maxOffset) * dims.STRIP_H;
-  }, [chartOffset, dims, isMobile]);
-
-  if (isMobile)
-    return (
-      <div ref={sectionRef} id="experience">
-        <MobileView />
-      </div>
-    );
+    const activeDims = isMobile ? mDims : dims;
+    if (activeDims.maxOffset === 0) return;
+    scanYTargetRef.current =
+      (chartOffset / activeDims.maxOffset) * activeDims.STRIP_H;
+  }, [chartOffset, dims, mDims, isMobile]);
 
   const {
     chartH,
@@ -700,6 +682,7 @@ export function ExperienceTimeline() {
     proLaneW,
     eduLaneW,
     entryH,
+    collapsedEntryH,
     proProj_left,
     eduProj_left,
     monthPx,
@@ -712,18 +695,191 @@ export function ExperienceTimeline() {
   const compressRatio = maxOffset > 0 ? Math.min(1, chartOffset / 100) : 0;
   const headerGapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
 
-  const renderBar = (e: Entry, top: number, left: number, width: number) => {
+  const renderBar = (
+    e: Entry,
+    top: number,
+    left: number,
+    width: number,
+    height: number,
+    collapsedHeight: number,
+    fontPx = FONT_PX,
+    interactive = false,
+  ) => {
     const clr = CLR[e.id];
-    const h = entryH[e.id];
+    const roleFontSize = fontPx < FONT_PX ? "0.72rem" : "0.80rem";
+    const isExp = !interactive || expanded === e.id;
+
+    const header = interactive ? (
+      // Mobile: role → company → period stacked
+      <>
+        <span
+          style={{
+            fontFamily: FONT_SANS,
+            fontWeight: 600,
+            fontSize: roleFontSize,
+            color: "#fafaf8",
+            lineHeight: 1.25,
+            display: "block",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            marginBottom: 2,
+          }}
+        >
+          {e.role}
+        </span>
+        <span
+          style={{
+            fontFamily: FONT_MONO,
+            fontSize: "0.50rem",
+            color: `${clr}bb`,
+            letterSpacing: "0.04em",
+            display: "block",
+            lineHeight: 1.4,
+          }}
+        >
+          {e.company}
+        </span>
+        <span
+          style={{
+            fontFamily: FONT_MONO,
+            fontSize: "0.44rem",
+            color: "rgba(255,255,255,0.26)",
+            letterSpacing: "0.06em",
+            display: "block",
+            lineHeight: 1.6,
+            whiteSpace: "nowrap",
+          }}
+        >
+          {e.period}
+        </span>
+      </>
+    ) : (
+      // Desktop: role + period on the same line, company below
+      <>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "space-between",
+            gap: 6,
+            marginBottom: 2,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: FONT_SANS,
+              fontWeight: 600,
+              fontSize: roleFontSize,
+              color: "#fafaf8",
+              lineHeight: 1.25,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              flex: 1,
+            }}
+          >
+            {e.role}
+          </span>
+          <span
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.44rem",
+              color: "rgba(255,255,255,0.26)",
+              letterSpacing: "0.06em",
+              flexShrink: 0,
+              whiteSpace: "nowrap",
+            }}
+          >
+            {e.period}
+          </span>
+        </div>
+        <span
+          style={{
+            fontFamily: FONT_MONO,
+            fontSize: "0.50rem",
+            color: `${clr}bb`,
+            letterSpacing: "0.04em",
+            display: "block",
+            lineHeight: 1.4,
+          }}
+        >
+          {e.company}
+        </span>
+      </>
+    );
+
+    const bulletsEl = (
+      <div
+        style={{
+          padding: `0 ${PAD_X}px ${PAD_BOTTOM}px`,
+          display: "flex",
+          flexDirection: "column",
+          gap: BULLET_GAP,
+        }}
+      >
+        {e.bullets.map((b, i) => (
+          <div
+            key={i}
+            style={{ display: "flex", gap: 5, alignItems: "flex-start" }}
+          >
+            <span
+              style={{
+                color: clr,
+                fontSize: "0.42rem",
+                flexShrink: 0,
+                marginTop: "0.22rem",
+                opacity: 0.7,
+              }}
+            >
+              ▪
+            </span>
+            <span
+              style={{
+                fontFamily: FONT_SANS,
+                fontSize: `${fontPx}px`,
+                lineHeight: FONT_LH,
+                color: "rgba(255,255,255,0.62)",
+                textAlign: "justify",
+                textJustify: "inter-word",
+              }}
+            >
+              {b}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+
+    const headerEl = (
+      <div style={{ padding: `${PAD_TOP}px ${PAD_X}px 0`, flexShrink: 0 }}>
+        {header}
+        <div
+          style={{
+            height: 1,
+            background: `${clr}20`,
+            marginTop: 5,
+            marginBottom: 9,
+          }}
+        />
+      </div>
+    );
+
     return (
       <div
         key={e.id}
+        onClick={
+          interactive
+            ? () => setExpanded((prev) => (prev === e.id ? null : e.id))
+            : undefined
+        }
         style={{
           position: "absolute",
           left,
           top,
           width,
-          height: h,
+          // Desktop: fixed height keeps all content. Mobile: auto height, inner wrapper drives size.
+          ...(interactive ? {} : { height }),
           background: `linear-gradient(180deg, ${clr}0e 0%, ${clr}05 100%)`,
           borderLeft: `2px solid ${clr}`,
           borderTop: `1px solid ${clr}28`,
@@ -734,109 +890,356 @@ export function ExperienceTimeline() {
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
+          cursor: interactive ? "pointer" : "default",
+          userSelect: interactive ? "none" : undefined,
+          // Push animation — cards below slide down when a sibling expands
+          transition: interactive
+            ? "top 0.45s cubic-bezier(0.76, 0, 0.24, 1)"
+            : undefined,
         }}
       >
-        <div style={{ padding: `${PAD_TOP}px ${PAD_X}px 0`, flexShrink: 0 }}>
+        {interactive ? (
+          // Inner wrapper drives height — mask fades only the text, not the card border
           <div
             style={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "space-between",
-              gap: 6,
-              marginBottom: 2,
+              overflow: "hidden",
+              maxHeight: isExp ? height : collapsedHeight,
+              transition: "max-height 0.45s cubic-bezier(0.76, 0, 0.24, 1)",
+              ...(!isExp
+                ? {
+                    WebkitMaskImage:
+                      "linear-gradient(to bottom, black 55%, transparent 100%)",
+                    maskImage:
+                      "linear-gradient(to bottom, black 55%, transparent 100%)",
+                  }
+                : {}),
             }}
           >
-            <span
-              style={{
-                fontFamily: FONT_SANS,
-                fontWeight: 600,
-                fontSize: "0.80rem",
-                color: "#fafaf8",
-                lineHeight: 1.25,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                flex: 1,
-              }}
-            >
-              {e.role}
-            </span>
-            <span
-              style={{
-                fontFamily: FONT_MONO,
-                fontSize: "0.44rem",
-                color: "rgba(255,255,255,0.26)",
-                letterSpacing: "0.06em",
-                flexShrink: 0,
-                whiteSpace: "nowrap",
-              }}
-            >
-              {e.period}
-            </span>
+            {headerEl}
+            {bulletsEl}
           </div>
-          <span
-            style={{
-              fontFamily: FONT_MONO,
-              fontSize: "0.50rem",
-              color: `${clr}bb`,
-              letterSpacing: "0.04em",
-              display: "block",
-              lineHeight: 1.4,
-            }}
-          >
-            {e.company}
-          </span>
-          <div
-            style={{
-              height: 1,
-              background: `${clr}20`,
-              marginTop: 5,
-              marginBottom: 9,
-            }}
-          />
-        </div>
-        <div
-          style={{
-            padding: `0 ${PAD_X}px ${PAD_BOTTOM}px`,
-            display: "flex",
-            flexDirection: "column",
-            gap: BULLET_GAP,
-          }}
-        >
-          {e.bullets.map((b, i) => (
-            <div
-              key={i}
-              style={{ display: "flex", gap: 5, alignItems: "flex-start" }}
-            >
-              <span
-                style={{
-                  color: clr,
-                  fontSize: "0.42rem",
-                  flexShrink: 0,
-                  marginTop: "0.22rem",
-                  opacity: 0.7,
-                }}
-              >
-                ▪
-              </span>
-              <span
-                style={{
-                  fontFamily: FONT_SANS,
-                  fontSize: `${FONT_PX}px`,
-                  lineHeight: FONT_LH,
-                  color: "rgba(255,255,255,0.62)",
-                  textAlign: "justify",
-                  textJustify: "inter-word",
-                }}
-              >
-                {b}
-              </span>
-            </div>
-          ))}
-        </div>
+        ) : (
+          <>
+            {headerEl}
+            {bulletsEl}
+          </>
+        )}
       </div>
     );
   };
+
+  // ── Mobile Gantt render ──────────────────────────────────────────────────
+  if (isMobile) {
+    const {
+      chartH: mChartH,
+      STRIP_H: mStripH,
+      SPINE_X: mSpineX,
+      toPy: mToPy,
+      bH: mBH,
+      barLeft: mBarLeft,
+      laneW: mLaneW,
+      entryH: mEntryH,
+      collapsedEntryH: mCollapsedEntryH,
+      projLeft: mProjLeft,
+      monthPx: mMonthPx,
+      maxOffset: mMaxOffset,
+    } = mDims;
+
+    const mSectionH = vpH + mMaxOffset;
+    const mCompressRatio = mMaxOffset > 0 ? Math.min(1, chartOffset / 100) : 0;
+    const mHeaderGapPx = 60 * (1 - mCompressRatio) + 10 * mCompressRatio;
+    const mScanY = mMaxOffset > 0 ? (chartOffset / mMaxOffset) * mStripH : 0;
+
+    return (
+      <div
+        ref={sectionRef}
+        id="experience"
+        style={{ position: "relative", height: mSectionH }}
+      >
+        <div
+          style={{
+            position: "sticky",
+            top: 0,
+            height: vpH,
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Header */}
+          <div
+            style={{
+              padding: "0.7rem 4vw 0.6rem",
+              opacity: visible ? 1 : 0,
+              transition: "opacity 0.5s",
+              flexShrink: 0,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.75rem",
+                marginBottom: mHeaderGapPx,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: FONT_MONO,
+                  fontSize: "0.55rem",
+                  letterSpacing: "0.18em",
+                  color: "rgba(255,255,255,0.4)",
+                  textTransform: "uppercase",
+                }}
+              >
+                Experience & Education
+              </span>
+              <div
+                style={{
+                  flex: 1,
+                  height: 1,
+                  background: "rgba(255,255,255,0.07)",
+                }}
+              />
+            </div>
+            <h2
+              style={{
+                fontFamily: FONT_SERIF,
+                fontWeight: 800,
+                fontSize: "clamp(1.85rem, 7.5vw, 2.4rem)",
+                lineHeight: 1.1,
+                letterSpacing: "0.02em",
+                color: "#fafaf8",
+                margin: 0,
+              }}
+            >
+              The trajectory.
+            </h2>
+          </div>
+
+          {/* Chart strip */}
+          <div
+            style={
+              {
+                position: "relative",
+                width: "100%",
+                flex: 1,
+                overflow: "hidden",
+                opacity: visible ? 1 : 0,
+                transition: "opacity 0.5s ease 0.1s",
+              } as React.CSSProperties
+            }
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: mChartH,
+                transform: `translateY(-${chartOffset}px)`,
+              }}
+            >
+              {/* Faint year grid */}
+              {YEAR_MARKS.map((y) => (
+                <div
+                  key={y}
+                  style={{
+                    position: "absolute",
+                    top: mToPy(new Date(y, 0, 1)),
+                    left: 0,
+                    right: 0,
+                    height: 1,
+                    background: "rgba(255,255,255,0.04)",
+                  }}
+                />
+              ))}
+
+              {/* Spine — segmented so year labels appear to cut through it */}
+              {(() => {
+                const GAP = 11;
+                const markYs = YEAR_MARKS.map((y) =>
+                  mToPy(new Date(y, 0, 1)),
+                ).sort((a, b) => a - b);
+                const segs: Array<{ top: number; height: number }> = [];
+                let prev = 0;
+                for (const my of markYs) {
+                  const h = my - GAP - prev;
+                  if (h > 0) segs.push({ top: prev, height: h });
+                  prev = my + GAP;
+                }
+                const tail = mChartH - prev;
+                if (tail > 0) segs.push({ top: prev, height: tail });
+                return segs.map((s, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      position: "absolute",
+                      left: mSpineX,
+                      top: s.top,
+                      height: s.height,
+                      width: 1,
+                      background: "rgba(255,255,255,0.15)",
+                    }}
+                  />
+                ));
+              })()}
+
+              {/* Year ticks + labels (right-aligned, left of spine) */}
+              {YEAR_MARKS.map((y) => {
+                const yPos = mToPy(new Date(y, 0, 1));
+                return (
+                  <div key={y}>
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: yPos,
+                        left: mSpineX - 4,
+                        width: 8,
+                        height: 1,
+                        background: "rgba(255,255,255,0.22)",
+                      }}
+                    />
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: yPos - 7,
+                        left: 0,
+                        width: mSpineX - 3,
+                        textAlign: "right",
+                        fontFamily: FONT_MONO,
+                        fontSize: "0.44rem",
+                        letterSpacing: "0.04em",
+                        color: "rgba(255,255,255,0.45)",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {y}
+                    </span>
+                  </div>
+                );
+              })}
+
+              {/* All projection strips (combined — color-coded by entry) */}
+              {ENTRIES.map((e) => {
+                const endDate = e.end === "present" ? TODAY : (e.end as Date);
+                const stripTop = mToPy(endDate);
+                const stripHv = mBH(e.start, e.end);
+                return (
+                  <div
+                    key={`mp-${e.id}`}
+                    style={{
+                      position: "absolute",
+                      top: e.end === "present" ? stripTop - 20 : stripTop,
+                      left: mProjLeft(e),
+                      width: MOBILE_PROJ_W,
+                      height: e.end === "present" ? stripHv + 20 : stripHv,
+                      background: CLR[e.id],
+                      borderRadius: 2,
+                      opacity: 0.82,
+                    }}
+                  />
+                );
+              })}
+
+              {/* Entry cards — asymmetric centering + push-down when a card expands */}
+              {(() => {
+                // Precompute base tops so push delta can be applied to cards below the open one
+                const baseTops = new Map<EntryId, number>();
+                for (const e of ENTRIES) {
+                  let baseTop: number;
+                  if (e.id === "bmsce") {
+                    // Align BMSCE's top edge with the top of its projection strip (end date Y)
+                    baseTop = mToPy(e.end as Date);
+                  } else {
+                    let cy: number;
+                    if (e.track === "professional") {
+                      const lane = PRO_LANE.get(e.id) ?? 0;
+                      cy = cardCenterY(e, lane, PRO, PRO_LANE, mMonthPx);
+                    } else {
+                      const lane = ALL_LANE.get(e.id) ?? 0;
+                      cy = cardCenterY(e, lane, ENTRIES, ALL_LANE, mMonthPx, true);
+                    }
+                    baseTop = cy - mCollapsedEntryH[e.id] / 2;
+                  }
+                  baseTops.set(e.id, baseTop);
+                }
+
+                const expandedTop =
+                  expanded !== null
+                    ? (baseTops.get(expanded) ?? -Infinity)
+                    : -Infinity;
+                const pushDelta =
+                  expanded !== null
+                    ? mEntryH[expanded] - mCollapsedEntryH[expanded]
+                    : 0;
+
+                return ENTRIES.map((e) => {
+                  const base = baseTops.get(e.id)!;
+                  const top =
+                    expanded !== null && e.id !== expanded && base > expandedTop
+                      ? base + pushDelta
+                      : base;
+                  return renderBar(
+                    e,
+                    top,
+                    mBarLeft(e.id),
+                    mLaneW,
+                    mEntryH[e.id],
+                    mCollapsedEntryH[e.id],
+                    MOBILE_FONT_PX,
+                    true,
+                  );
+                });
+              })()}
+            </div>
+
+            {/* Particle canvas */}
+            <canvas
+              ref={canvasRef}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                pointerEvents: "none",
+                zIndex: 2,
+              }}
+            />
+
+            {/* Spine highlight + comet head */}
+            <>
+              <div
+                style={{
+                  position: "absolute",
+                  left: mSpineX,
+                  top: 0,
+                  width: 1,
+                  height: mScanY,
+                  background: "#ffffff",
+                  opacity: 0.9,
+                  pointerEvents: "none",
+                  zIndex: 1,
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  left: mSpineX - 4,
+                  top: mScanY - 4,
+                  width: 9,
+                  height: 9,
+                  borderRadius: "50%",
+                  background: "#ffffff",
+                  pointerEvents: "none",
+                  zIndex: 3,
+                }}
+              />
+            </>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -845,7 +1248,14 @@ export function ExperienceTimeline() {
       style={{ position: "relative", height: sectionH }}
     >
       <div
-        style={{ position: "sticky", top: 0, height: vpH, overflow: "hidden", display: "flex", flexDirection: "column" }}
+        style={{
+          position: "sticky",
+          top: 0,
+          height: vpH,
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         {/* Header */}
         <div
@@ -1051,6 +1461,8 @@ export function ExperienceTimeline() {
                 cy - entryH[e.id] / 2,
                 proBarLeft(e.id),
                 proLaneW,
+                entryH[e.id],
+                entryH[e.id],
               );
             })}
 
@@ -1063,6 +1475,8 @@ export function ExperienceTimeline() {
                 cy - entryH[e.id] / 2,
                 eduBarLeft(e.id),
                 eduLaneW,
+                entryH[e.id],
+                entryH[e.id],
               );
             })}
           </div>
