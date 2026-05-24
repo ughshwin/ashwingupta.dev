@@ -1,0 +1,442 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/articles/the-space-between-stars";
+---
+
+<BaseLayout
+  title="The Space Between Stars — Ashwin Gupta"
+  description="On visual captivity, the cosmos as a metaphor for complex AI systems, and why a portfolio is always an argument — by Ashwin Gupta."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/articles" class="back-link">← Back to articles</a>
+
+        <header class="th-header">
+          <div class="th-badge">Article · May 2026</div>
+          <h1 class="th-title">The Space Between Stars</h1>
+          <p class="th-subtitle">Why My Portfolio Lives in the Cosmos</p>
+          <p class="th-byline">by Ashwin Gupta</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <p class="th-body">
+          There's a moment, right before you open someone's portfolio, where you already have a mental model
+          of what you're about to see. A clean white canvas. A hero section with a name in large type. A grid
+          of projects below it. Maybe a dark mode toggle in the top right corner. You've seen it a hundred times
+          — not because designers lack imagination, but because the genre has converged on a template so
+          thoroughly that the template has become invisible.
+        </p>
+        <p class="th-body">
+          I didn't want that.
+        </p>
+        <p class="th-body">
+          Not out of contrarianism, but out of a genuine belief about how attention works, and what it means
+          to ask a stranger to spend their time understanding who you are.
+        </p>
+
+        <div class="th-section-divider">
+          <span class="th-section-divider-mark">· · ·</span>
+        </div>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Where the Eye Came From</h2>
+          <p class="th-body">
+            Before I was an AI systems engineer, I was a designer.
+          </p>
+          <p class="th-body">
+            Not in the casual sense of someone who picked up Figma and ran with it. I mean the kind of designer
+            that gets shaped by deadlines and editorial standards and the specific humiliation of a layout that
+            almost works but doesn't quite. In school, I was lead designer for both the class magazine and the
+            school magazine for four years — the class magazine won Best Magazine two years running. In Class 11,
+            I was designing and editing for the Times of India student edition. Through college, I ran design for
+            the BMSCE IEEE student branch and did graphic design for Outlawed for over two years each.
+          </p>
+          <p class="th-body">
+            That's nearly a decade of thinking about composition, hierarchy, negative space, typographic rhythm,
+            and the invisible logic that makes a reader want to turn the page before they've consciously decided
+            to. That eye was formed long before I wrote my first neural network or debugged my first RAG pipeline.
+          </p>
+          <p class="th-body">
+            I say this not to credential-stack, but because it's the honest explanation for why this portfolio
+            looks the way it does. The design choices here aren't an engineer reaching awkwardly into unfamiliar
+            territory. They're the result of someone who has spent a long time thinking about what makes visual
+            communication actually work — and who happens to also build AI systems for a living.
+          </p>
+          <p class="th-body">
+            The cosmos-themed, animation-heavy, almost aggressively immersive portfolio is what you get when
+            those two things meet.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The First Second Is Not Optional</h2>
+          <p class="th-body">
+            Here's something I've thought about a lot, both as a designer and as someone who works on AI systems:
+            most decisions are made before the deliberate part of the brain gets involved. A user who lands on a
+            portfolio page makes a subconscious judgment in the first second — <em>is this worth my time?</em> —
+            and the answer to that question isn't determined by the quality of the projects listed or the eloquence
+            of the bio. It's determined entirely by what they <em>feel</em> when they arrive.
+          </p>
+          <p class="th-body">
+            This sounds like a marketing truism, but it has real implications for how I thought about building
+            this site. If I wanted someone — a recruiter, a collaborator, a curious engineer, anyone — to
+            actually <em>read</em> about what I do and what I care about, I first had to give them a reason to
+            stay. Not a clever reason. Not a rational reason. A visceral one.
+          </p>
+          <p class="th-body">
+            Every page I designed for a magazine had to earn its reader before they committed to the article.
+            A feature spread that didn't arrest the eye in the first glance got skipped — regardless of how good
+            the writing was. Portfolios work exactly the same way, and almost none of them seem to know it.
+          </p>
+          <p class="th-body">
+            So I made the choice that most engineers wouldn't: I went design-heavy. Deliberately, unapologetically,
+            almost excessively so. Layered backgrounds. Depth of field. Flowing grain. Smooth scroll behaviors
+            that took more debugging time than some features I've shipped at work. A comet animation threading
+            through the experience timeline that I rebuilt three times because the timing felt wrong.
+          </p>
+          <p class="th-body">
+            Was this over-engineered for a portfolio? By the metrics of conventional wisdom, absolutely. By the
+            metric of <em>did it make someone pause and look closer</em> — I think it works. The design is the
+            first argument I make about myself before a single word of copy is read.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Flat Canvases Don't Breathe</h2>
+          <p class="th-body">
+            The problem with most portfolios — and I say this with genuine respect for the people who built them
+            — is that they don't feel <em>alive</em>. They feel like well-organized documents. And a well-organized
+            document is a thing you consult, not a place you inhabit.
+          </p>
+          <p class="th-body">
+            Years of editorial work taught me the difference. A magazine spread isn't just content on a page —
+            it has atmosphere. There's a reason why the best magazine pages feel like environments: the interplay
+            of type and image and white space creates a kind of pressure, a sense that the page has intention and
+            that the reader is inside something rather than just consuming it.
+          </p>
+          <p class="th-body">
+            Every design choice I made on this site was in service of that same goal.
+          </p>
+          <p class="th-body">
+            The multi-layered parallax background isn't decoration. It's spatial depth — the kind that signals
+            to your peripheral vision that there is more world beyond the edge of the screen. The flowing grain
+            in the background mimics the subtle texture of a real environment, the way a room feels different
+            from a void. The comet animation on the experience timeline — a small glowing trail arcing across
+            milestones — turns what is otherwise a static list of dates and company names into something that
+            feels like a journey being traced across time.
+          </p>
+          <p class="th-body">
+            These aren't tricks. They're the difference between a room with furniture in it and a room that
+            feels like someone actually lives there.
+          </p>
+          <p class="th-body">
+            I chose the cosmos specifically because space does something no other visual metaphor quite achieves:
+            it makes you feel small and curious at the same time. Looking at the night sky, you don't feel anxious
+            about how much you don't know — you feel drawn to it. That orientation, that posture of curious
+            engagement, is exactly what I want a visitor to bring to reading about my work. Come in curious.
+            Stay because something keeps catching your eye.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Night Sky as Systems Thinking</h2>
+          <p class="th-body">
+            But the cosmos isn't just an aesthetic choice. It's the most honest metaphor I've found for the
+            kind of work I actually do.
+          </p>
+          <p class="th-body">
+            When something goes wrong in an AI system — and something always goes wrong in an AI system — the
+            failure is almost never a single clean bug with a stack trace that points directly to the problem.
+            It's a confluence. It's a retrieval component that returns slightly off-context chunks, combined
+            with a prompt that was written for a subtly different input distribution, combined with a temperature
+            setting that made sense for one task and not another, combined with an evaluation harness that wasn't
+            measuring quite the right thing. Four variables, each individually reasonable, together producing an
+            outcome that makes no sense until you've traced all of them simultaneously.
+          </p>
+          <p class="th-body">
+            Junior engineers — and this is not a criticism, it's just a stage — tend to look for the one thing.
+            The bug. The root cause. The fix. And often, for well-scoped problems, that's exactly right. But
+            AI systems at scale don't usually fail that way. They fail the way complex systems fail: through
+            the interaction of components that each look fine in isolation.
+          </p>
+          <p class="th-body">
+            This is exactly what you're looking at when you look at the night sky.
+          </p>
+          <p class="th-body">
+            Individual stars don't tell you much. A single point of light is just a point of light. But the
+            moment you start seeing constellations — the moment your brain overlays a framework of spatial
+            relationships onto what otherwise looks like noise — the sky starts to communicate. Not because
+            the stars changed, but because your relationship to them did. You developed an eye for arrangement.
+            You brought a model to the observation.
+          </p>
+          <p class="th-body">
+            There's a direct line between learning to read a page layout and learning to read a broken AI
+            pipeline. In both cases, the skill isn't knowing what each element does in isolation — any junior
+            designer knows what a pull quote is, any junior engineer knows what a vector database does. The
+            skill is understanding how elements interact, where the tension is, what the composition is actually
+            doing as a whole. <strong>The eye for ordered arrangement is the same eye, whether it's trained on
+            InDesign grids or system architecture diagrams.</strong>
+          </p>
+          <p class="th-body">
+            That's what debugging AI systems actually requires. Not a faster search through logs. Not a better
+            error message. A mental model sophisticated enough that what looks like random floating dots starts
+            to resolve into a pattern that has causal structure. The ability to look at apparent chaos and ask:
+            <em>what would make this make sense?</em>
+          </p>
+          <p class="th-body">
+            I wanted the site itself to embody this idea. The background isn't just stars for aesthetic reasons
+            — it's stars because I genuinely believe that the most interesting problems in AI systems look like
+            that. Distributed, non-obvious, requiring a kind of perceptual patience that most tools don't teach
+            you and most curricula don't reward. The cosmos theme is the most honest thing I could put on my
+            homepage, because it mirrors how I actually think about the problems I work on.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">Why Over-Engineer Smoothness?</h2>
+          <p class="th-body">
+            One more thing I want to be honest about: the smoothness.
+          </p>
+          <p class="th-body">
+            There's a lot of scroll logic on this site. Layout-effect hooks that measure DOM positions before
+            paint. Intersection observers stacked on top of requestAnimationFrame loops. Sticky header behaviors
+            that required three refactors to get right. Easing curves I tweaked by feel rather than formula.
+          </p>
+          <p class="th-body">
+            None of this is visible. That's the point.
+          </p>
+          <p class="th-body">
+            Smoothness is the thing you only notice when it's absent. When a scroll jank interrupts an animation,
+            when a header snaps instead of slides, when a transition breaks the illusion of physical continuity
+            — that's when the user's brain surfaces from the experience and remembers they're looking at a website.
+            The spell breaks. The immersion ends.
+          </p>
+          <p class="th-body">
+            Print designers know this feeling instinctively. A registration error that shifts the cyan plate
+            by half a millimetre ruins an image that might otherwise be invisible. A line that doesn't hang
+            correctly pulls the reader's eye wrong without them knowing why they feel uncomfortable. The flaw
+            doesn't have to be named to be felt.
+          </p>
+          <p class="th-body">
+            I think about this the same way I think about latency in AI systems. A response that takes 3 seconds
+            and a response that takes 8 seconds are both "slow" — but the 3-second one might stay in the zone
+            where a user stays engaged, while the 8-second one is the moment they open a new tab. The difference
+            between a system that feels fast and a system that feels broken isn't always about the underlying
+            capability. It's about whether the perceived behavior matches the user's mental model of what
+            <em>should</em> happen.
+          </p>
+          <p class="th-body">
+            A portfolio that stutters — even slightly — signals something. Not necessarily that the engineer
+            who built it can't write smooth code. But the human brain is pattern-matching constantly, and a
+            site that doesn't feel polished is a site that subtly undermines its own argument.
+          </p>
+          <p class="th-body">
+            If I'm telling you I build careful, considered systems, the first evidence I can offer is this one.
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">A Portfolio Is an Argument</h2>
+          <p class="th-body">
+            Every portfolio is an argument. Most of them argue with words: <em>here are my skills, here are
+            my projects, here is what I'm good at.</em> That's fine. Words are efficient. Words are legible.
+          </p>
+          <p class="th-body">
+            But I wanted to make a different kind of argument — one that a decade of design work taught me is
+            almost always more persuasive than words. I wanted the experience of visiting the site to carry
+            information about how I think, what I value, and what I'm capable of, before a single line of
+            copy is read. I wanted the visual depth to say <em>I care about depth</em>. I wanted the smoothness
+            to say <em>I care about the details that users feel but can't name</em>. I wanted the cosmos to
+            say <em>I live comfortably in complexity, and I know how to find order in it</em>.
+          </p>
+          <p class="th-body">
+            The portfolio isn't over-engineered. It's precisely engineered for a goal that most portfolios
+            don't even attempt: to make you <em>feel</em> something before you decide whether to read anything.
+          </p>
+          <p class="th-body">
+            Whether it works is something only visitors can answer. But the intent was never decoration.
+          </p>
+          <p class="th-body">
+            The intent was always: make them curious enough to look closer.
+          </p>
+          <p class="th-body th-body--closing">
+            And then give them something worth finding.
+          </p>
+        </section>
+
+        <div class="th-section-divider">
+          <span class="th-section-divider-mark">· · ·</span>
+        </div>
+
+        <p class="th-author-note">
+          Ashwin Gupta is an AI systems engineer who builds things that think, and spent a long time before
+          that learning how things should look.
+        </p>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  /* Navigation */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  /* Header */
+  .th-header { margin-bottom: 2rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1.1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5.5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: 0.04em;
+    color: #fafaf8;
+    margin: 0 0 0.5rem;
+  }
+
+  .th-subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0 0 1rem;
+  }
+
+  .th-byline {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.28);
+    margin: 0;
+  }
+
+  /* Dividers */
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2.5rem 0;
+  }
+
+  .th-section-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 3rem 0;
+  }
+
+  .th-section-divider-mark {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: rgba(255, 255, 255, 0.18);
+  }
+
+  /* Sections */
+  .th-section { margin-bottom: 3rem; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 1.4rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* Body prose */
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+    line-height: 1.85;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 1.1rem;
+  }
+
+  .th-body em { color: rgba(255, 255, 255, 0.8); font-style: italic; }
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  .th-body--closing {
+    color: rgba(255, 255, 255, 0.75);
+    font-style: italic;
+  }
+
+  /* Closing author note */
+  .th-author-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.28);
+    font-style: italic;
+    margin: 0 0 6rem;
+  }
+
+  /* Footer */
+  .th-footer {
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

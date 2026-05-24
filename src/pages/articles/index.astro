@@ -1,0 +1,240 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/articles";
+
+const articles = [
+  {
+    slug: "the-space-between-stars",
+    title: "The Space Between Stars",
+    subtitle: "Why My Portfolio Lives in the Cosmos",
+    date: "May 2026",
+    tags: ["Design", "AI Systems", "Portfolio"],
+    excerpt:
+      "On visual captivity, the cosmos as a metaphor for complex systems, and why a portfolio is always an argument — written by someone who was a designer before they were an engineer.",
+  },
+];
+---
+
+<BaseLayout
+  title="Articles | Ashwin Gupta"
+  description="Writing on design, AI systems, and anything with a defensible opinion behind it."
+  canonical={canonical}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body">
+
+        <a href="/" class="back-link">← Back</a>
+
+        <div class="section-label">
+          <span class="label-text">Articles</span>
+          <div class="label-rule"></div>
+        </div>
+
+        <h1 class="page-title">Writing worth reading.</h1>
+
+        <div class="article-list">
+          {articles.map((article) => (
+            <a href={`/articles/${article.slug}`} class="article-card">
+              <div class="article-meta">
+                <span class="article-date">{article.date}</span>
+                <div class="article-tags">
+                  {article.tags.map((tag) => (
+                    <span class="article-tag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+              <h2 class="article-title">{article.title}</h2>
+              <p class="article-subtitle">{article.subtitle}</p>
+              <p class="article-excerpt">{article.excerpt}</p>
+              <span class="article-read">Read →</span>
+            </a>
+          ))}
+        </div>
+
+        <div class="th-footer">
+          <span>© 2026 Ashwin Gupta · AI Engineer · Bangalore, India</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .label-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .label-rule {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  .page-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: 0.04em;
+    color: #fafaf8;
+    margin: 0 0 3rem;
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .article-card {
+    display: block;
+    text-decoration: none;
+    padding: 2.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    transition: border-color 0.2s;
+    position: relative;
+  }
+  .article-card:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  .article-card:hover .article-title {
+    color: #fff;
+  }
+  .article-card:hover .article-read {
+    color: #22d3ee;
+    opacity: 1;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .article-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #22d3ee;
+  }
+
+  .article-tags {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .article-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  .article-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.3rem, 3vw, 1.75rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: 0.03em;
+    color: #e8e0d0;
+    margin: 0 0 0.4rem;
+    transition: color 0.2s;
+  }
+
+  .article-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0 0 1rem;
+    font-style: italic;
+  }
+
+  .article-excerpt {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0 0 1.25rem;
+    max-width: 560px;
+  }
+
+  .article-read {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+    opacity: 0.7;
+    transition: color 0.2s, opacity 0.2s;
+  }
+
+  .th-footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

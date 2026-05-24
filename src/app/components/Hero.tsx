@@ -121,7 +121,7 @@ export function Hero() {
     href: string;
     section: string | null;
   }[] = [
-    { label: "Notes", href: "/notes", section: null },
+    { label: "Articles", href: "/articles", section: null },
     { label: "Contact", href: "/contact", section: "contact" },
   ];
 
