@@ -278,7 +278,7 @@ export function Recommendations() {
         </div>
       </div>
 
-      <div ref={contentRef}>
+      <div ref={contentRef} style={{ willChange: "clip-path" }}>
         {/* Grid */}
         <div
           style={{
