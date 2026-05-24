@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useLayoutEffect } from "react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 
 const FONT_SERIF = '"Playfair Display", Georgia, serif';
@@ -100,10 +100,6 @@ export function About() {
       });
     };
 
-    requestAnimationFrame(() => {
-      measureTop();
-      onScroll();
-    });
     scroller.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener(
       "resize",
@@ -117,6 +113,29 @@ export function About() {
       cancelAnimationFrame(rafRef.current);
     };
   }, [isMobile]);
+
+  useLayoutEffect(() => {
+    if (isMobile) return;
+    const scroller = document.querySelector(
+      ".hologram-interface",
+    ) as HTMLElement | null;
+    const section = sectionRef.current;
+    if (!scroller || !section || !innerRef.current) return;
+    let acc = 0;
+    let el: HTMLElement | null = section;
+    while (el && el !== scroller) {
+      acc += el.offsetTop;
+      el = el.offsetParent as HTMLElement | null;
+    }
+    cachedTopRef.current = acc;
+    const raw = scroller.scrollTop - acc;
+    const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
+    innerRef.current.style.transform = `translateY(-${offset}px)`;
+    if (headerGapRef.current) {
+      const compressRatio = Math.min(1, offset / 100);
+      headerGapRef.current.style.marginBottom = `${80 * (1 - compressRatio) + 20 * compressRatio}px`;
+    }
+  }, [isMobile, sectionH]);
 
   return (
     <section

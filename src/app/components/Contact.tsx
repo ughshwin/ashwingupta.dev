@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { Mail, Github, Linkedin, MapPin, FileDown } from "lucide-react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 // @ts-ignore
@@ -18,37 +18,72 @@ const FONT_SANS = '"DM Sans", sans-serif';
 export function Contact() {
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef(0);
   const headerGapRef = useRef<HTMLDivElement>(null);
+  const maxOffsetRef = useRef(0);
+  const cachedTopRef = useRef<number | null>(null);
+
+  const [vpH, setVpH] = useState(() =>
+    typeof window !== "undefined" ? window.innerHeight : 900,
+  );
+  const [sectionH, setSectionH] = useState(() =>
+    typeof window !== "undefined" ? window.innerHeight : 900,
+  );
+
   const [copyToastMessage, setCopyToastMessage] = useState<string | null>(null);
+  const [downloadToastMessage, setDownloadToastMessage] = useState<
+    string | null
+  >(null);
+
+  useEffect(() => {
+    if (isMobile) return;
+    const measure = () => {
+      const header = headerRef.current;
+      const inner = innerRef.current;
+      if (!header || !inner) return;
+      const vh = window.innerHeight;
+      const headerH = header.offsetHeight;
+      const contentH = inner.scrollHeight;
+      const stripH = Math.max(0, vh - headerH);
+      const maxOffset = Math.max(0, contentH - stripH);
+      maxOffsetRef.current = maxOffset;
+      cachedTopRef.current = null;
+      setVpH(vh);
+      setSectionH(vh + maxOffset);
+    };
+    requestAnimationFrame(measure);
+    window.addEventListener("resize", measure, { passive: true });
+    return () => window.removeEventListener("resize", measure);
+  }, [isMobile]);
 
   useEffect(() => {
     if (isMobile) return;
     const scroller = document.querySelector(
       ".hologram-interface",
     ) as HTMLElement | null;
-    if (!scroller) return;
-    let cachedTop: number | null = null;
+    const section = sectionRef.current;
+    if (!scroller || !section) return;
+
     const measureTop = () => {
-      const section = sectionRef.current;
-      if (!section) return;
       let acc = 0;
       let el: HTMLElement | null = section;
       while (el && el !== scroller) {
         acc += el.offsetTop;
         el = el.offsetParent as HTMLElement | null;
       }
-      cachedTop = acc + (parseFloat(getComputedStyle(section).paddingTop) || 0);
+      cachedTopRef.current = acc;
     };
+
     const onScroll = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
-        if (cachedTop === null) measureTop();
-        const offset = Math.max(0, scroller.scrollTop - (cachedTop ?? 0));
-        if (contentRef.current) {
-          contentRef.current.style.clipPath =
-            offset > 0 ? `inset(${offset}px 0 0 0)` : "none";
+        if (cachedTopRef.current === null) measureTop();
+        const raw = scroller.scrollTop - (cachedTopRef.current ?? 0);
+        const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
+        if (innerRef.current) {
+          innerRef.current.style.transform = `translateY(-${offset}px)`;
         }
         const compressRatio = Math.min(1, offset / 100);
         const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
@@ -57,15 +92,12 @@ export function Contact() {
         }
       });
     };
-    requestAnimationFrame(() => {
-      measureTop();
-      onScroll();
-    });
+
     scroller.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener(
       "resize",
       () => {
-        cachedTop = null;
+        cachedTopRef.current = null;
       },
       { passive: true },
     );
@@ -75,9 +107,28 @@ export function Contact() {
     };
   }, [isMobile]);
 
-  const [downloadToastMessage, setDownloadToastMessage] = useState<
-    string | null
-  >(null);
+  useLayoutEffect(() => {
+    if (isMobile) return;
+    const scroller = document.querySelector(
+      ".hologram-interface",
+    ) as HTMLElement | null;
+    const section = sectionRef.current;
+    if (!scroller || !section || !innerRef.current) return;
+    let acc = 0;
+    let el: HTMLElement | null = section;
+    while (el && el !== scroller) {
+      acc += el.offsetTop;
+      el = el.offsetParent as HTMLElement | null;
+    }
+    cachedTopRef.current = acc;
+    const raw = scroller.scrollTop - acc;
+    const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
+    innerRef.current.style.transform = `translateY(-${offset}px)`;
+    if (headerGapRef.current) {
+      const compressRatio = Math.min(1, offset / 100);
+      headerGapRef.current.style.marginBottom = `${80 * (1 - compressRatio) + 20 * compressRatio}px`;
+    }
+  }, [isMobile, sectionH]);
 
   const copyEmailToClipboard = async () => {
     try {
@@ -142,297 +193,326 @@ export function Contact() {
       ref={sectionRef}
       id="contact"
       style={{
-        padding: isMobile ? "4rem 4vw 3rem" : "10rem 6vw 8rem",
-        background: "transparent",
         position: "relative",
+        height: isMobile ? "auto" : sectionH,
+        background: "transparent",
+        ...(isMobile && { padding: "4rem 4vw 3rem" }),
       }}
     >
-      {/* Sticky header: section label + heading */}
       <div
-        style={{
-          position: isMobile ? "relative" : "sticky",
-          top: 0,
-          zIndex: 10,
-          paddingTop: "0.85rem",
-          paddingBottom: "2rem",
-          marginLeft: isMobile ? "-4vw" : "-6vw",
-          marginRight: isMobile ? "-4vw" : "-6vw",
-          paddingLeft: isMobile ? "4vw" : "6vw",
-          paddingRight: isMobile ? "4vw" : "6vw",
-        }}
+        style={
+          isMobile
+            ? {}
+            : {
+                position: "sticky",
+                top: 0,
+                height: vpH,
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+              }
+        }
       >
+        {/* Header */}
         <div
-          ref={headerGapRef}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-            marginBottom: isMobile ? "2rem" : "80px",
-          }}
+          ref={headerRef}
+          style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}
         >
-          <span
-            style={{
-              fontFamily: FONT_MONO,
-              fontSize: "0.62rem",
-              letterSpacing: "0.2em",
-              color: "rgba(255,255,255,0.4)",
-              textTransform: "uppercase",
-            }}
-          >
-            Contact
-          </span>
           <div
+            ref={headerGapRef}
             style={{
-              flex: 1,
-              height: "1px",
-              background: "rgba(255,255,255,0.07)",
-            }}
-          />
-        </div>
-        <div style={{ overflow: "hidden" }}>
-          <motion.h2
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-            style={{
-              fontFamily: FONT_SERIF,
-              fontSize: isMobile
-                ? "clamp(1.8rem, 7vw, 4rem)"
-                : "clamp(2.6rem, 4.5vw, 4rem)",
-              fontWeight: 800,
-              lineHeight: 1.05,
-              letterSpacing: "0.02em",
-              color: "#fafaf8",
-              margin: 0,
-            }}
-          >
-            Hard problems welcome.
-          </motion.h2>
-        </div>
-      </div>
-
-      <div ref={contentRef}>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-          gap: isMobile ? "3rem" : "8vw",
-          alignItems: "start",
-        }}
-      >
-        {/* LEFT — description */}
-        <div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            style={{
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
-              gap: "10px",
-              padding: "10px 16px",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "4px",
-              marginBottom: "1.5rem",
+              gap: "1rem",
+              marginBottom: isMobile ? "2rem" : "80px",
             }}
           >
-            <div
-              style={{
-                width: "7px",
-                height: "7px",
-                borderRadius: "50%",
-                background: "#ef4444",
-                boxShadow: "0 0 8px #ef4444",
-                animation: "pulse 2s infinite",
-                flexShrink: 0,
-              }}
-            />
             <span
               style={{
-                fontFamily: '"DM Mono", monospace',
-                fontSize: "0.55rem",
+                fontFamily: FONT_MONO,
+                fontSize: "0.62rem",
                 letterSpacing: "0.2em",
-                color: "rgba(255,255,255,0.55)",
+                color: "rgba(255,255,255,0.4)",
                 textTransform: "uppercase",
               }}
             >
-              Optimising: Residuals · Not: Roles
+              Contact
             </span>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            style={{
-              fontFamily: FONT_SANS,
-              fontSize: "1rem",
-              lineHeight: 1.7,
-              color: "rgba(255,255,255,0.6)",
-              maxWidth: "400px",
-              textAlign: "justify",
-              textJustify: "inter-word",
-            }}
-          >
-            Heads-down building right now — not looking for roles. But if you've
-            got a hard problem, a wild idea, or just want to talk shop about
-            LLMs, distributed systems, scientific ML, or why this site is
-            unreasonably over-engineered for a portfolio, I'm always up for
-            that.
-          </motion.p>
-        </div>
-
-        {/* RIGHT — contact links */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-          style={{ display: "flex", flexDirection: "column", gap: "0" }}
-        >
-          {links.map(({ label, value, href, icon, download }, i) => (
-            <motion.a
-              key={i}
-              href={href}
-              download={download ?? undefined}
-              target={
-                !download && href.startsWith("http") ? "_blank" : undefined
-              }
-              rel={
-                !download && href.startsWith("http")
-                  ? "noopener noreferrer"
-                  : undefined
-              }
-              whileHover={{ x: 4 }}
-              onClick={
-                label === "Email"
-                  ? (e) => {
-                      e.preventDefault();
-                      void copyEmailToClipboard();
-                    }
-                  : label === "Resume"
-                    ? () => handleResumeDownload()
-                    : undefined
-              }
+            <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                padding: "1rem 0",
-                borderBottom: "1px solid rgba(255,255,255,0.05)",
-                textDecoration: "none",
-                transition: "all 0.2s",
+                flex: 1,
+                height: "1px",
+                background: "rgba(255,255,255,0.07)",
               }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderBottomColor = "rgba(255,255,255,0.35)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderBottomColor = "rgba(255,255,255,0.05)";
+            />
+          </div>
+          <div style={{ overflow: "hidden" }}>
+            <motion.h2
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+              style={{
+                fontFamily: FONT_SERIF,
+                fontSize: isMobile
+                  ? "clamp(1.8rem, 7vw, 4rem)"
+                  : "clamp(2.6rem, 4.5vw, 4rem)",
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: "0.02em",
+                color: "#fafaf8",
+                margin: 0,
               }}
             >
-              <span style={{ color: "rgba(255,255,255,0.4)", width: "16px" }}>
-                {icon}
-              </span>
-              <div style={{ flex: 1 }}>
-                <p
+              Hard problems welcome.
+            </motion.h2>
+          </div>
+        </div>
+
+        {/* Content strip */}
+        <div
+          style={
+            isMobile
+              ? {}
+              : { flex: 1, position: "relative", overflow: "hidden" }
+          }
+        >
+          <div
+            ref={innerRef}
+            style={
+              isMobile
+                ? { paddingTop: "2rem" }
+                : {
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    padding: "1.5rem 6vw 4rem",
+                  }
+            }
+          >
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                gap: isMobile ? "3rem" : "8vw",
+                alignItems: "start",
+              }}
+            >
+              {/* LEFT — description */}
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
                   style={{
-                    fontFamily: FONT_MONO,
-                    fontSize: "0.58rem",
-                    letterSpacing: "0.15em",
-                    color: "rgba(255,255,255,0.4)",
-                    textTransform: "uppercase",
-                    marginBottom: "2px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "10px 16px",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: "4px",
+                    marginBottom: "1.5rem",
                   }}
                 >
-                  {label}
-                </p>
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "12px" }}
-                >
-                  <p
+                  <div
                     style={{
-                      fontFamily: FONT_SANS,
-                      fontSize: "0.85rem",
-                      color: "rgba(255,255,255,0.5)",
-                      margin: 0,
+                      width: "7px",
+                      height: "7px",
+                      borderRadius: "50%",
+                      background: "#ef4444",
+                      boxShadow: "0 0 8px #ef4444",
+                      animation: "pulse 2s infinite",
+                      flexShrink: 0,
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontFamily: '"DM Mono", monospace',
+                      fontSize: "0.55rem",
+                      letterSpacing: "0.2em",
+                      color: "rgba(255,255,255,0.55)",
+                      textTransform: "uppercase",
                     }}
                   >
-                    {value}
-                  </p>
-                  {(label === "Email" || label === "Resume") && (
-                    <AnimatePresence mode="wait">
-                      {(label === "Email"
-                        ? copyToastMessage
-                        : downloadToastMessage) && (
-                        <motion.p
-                          key={
-                            label === "Email"
-                              ? copyToastMessage!
-                              : downloadToastMessage!
+                    Optimising: Residuals · Not: Roles
+                  </span>
+                </motion.div>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  style={{
+                    fontFamily: FONT_SANS,
+                    fontSize: "1rem",
+                    lineHeight: 1.7,
+                    color: "rgba(255,255,255,0.6)",
+                    maxWidth: "400px",
+                    textAlign: "justify",
+                    textJustify: "inter-word",
+                  }}
+                >
+                  Heads-down building right now — not looking for roles. But if you've
+                  got a hard problem, a wild idea, or just want to talk shop about
+                  LLMs, distributed systems, scientific ML, or why this site is
+                  unreasonably over-engineered for a portfolio, I'm always up for
+                  that.
+                </motion.p>
+              </div>
+
+              {/* RIGHT — contact links */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                style={{ display: "flex", flexDirection: "column", gap: "0" }}
+              >
+                {links.map(({ label, value, href, icon, download }, i) => (
+                  <motion.a
+                    key={i}
+                    href={href}
+                    download={download ?? undefined}
+                    target={
+                      !download && href.startsWith("http") ? "_blank" : undefined
+                    }
+                    rel={
+                      !download && href.startsWith("http")
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                    whileHover={{ x: 4 }}
+                    onClick={
+                      label === "Email"
+                        ? (e) => {
+                            e.preventDefault();
+                            void copyEmailToClipboard();
                           }
-                          initial={{ opacity: 0, x: -6, scale: 0.98 }}
-                          animate={{ opacity: 1, x: 0, scale: 1 }}
-                          exit={{ opacity: 0, x: -4, scale: 0.98 }}
-                          transition={{
-                            duration: 0.75,
-                            ease: [0.22, 1, 0.36, 1],
-                          }}
+                        : label === "Resume"
+                          ? () => handleResumeDownload()
+                          : undefined
+                    }
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                      padding: "1rem 0",
+                      borderBottom: "1px solid rgba(255,255,255,0.05)",
+                      textDecoration: "none",
+                      transition: "all 0.2s",
+                    }}
+                    onMouseEnter={(e) => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.borderBottomColor = "rgba(255,255,255,0.35)";
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.borderBottomColor = "rgba(255,255,255,0.05)";
+                    }}
+                  >
+                    <span style={{ color: "rgba(255,255,255,0.4)", width: "16px" }}>
+                      {icon}
+                    </span>
+                    <div style={{ flex: 1 }}>
+                      <p
+                        style={{
+                          fontFamily: FONT_MONO,
+                          fontSize: "0.58rem",
+                          letterSpacing: "0.15em",
+                          color: "rgba(255,255,255,0.4)",
+                          textTransform: "uppercase",
+                          marginBottom: "2px",
+                        }}
+                      >
+                        {label}
+                      </p>
+                      <div
+                        style={{ display: "flex", alignItems: "center", gap: "12px" }}
+                      >
+                        <p
                           style={{
                             fontFamily: FONT_SANS,
-                            fontSize: "0.78rem",
-                            color: "#4ade80",
-                            border: "1px solid rgba(74,222,128,0.35)",
-                            background: "rgba(74,222,128,0.06)",
-                            borderRadius: "999px",
-                            padding: "4px 10px",
-                            whiteSpace: "nowrap",
+                            fontSize: "0.85rem",
+                            color: "rgba(255,255,255,0.5)",
                             margin: 0,
                           }}
                         >
-                          {label === "Email"
-                            ? copyToastMessage
-                            : downloadToastMessage}
-                        </motion.p>
-                      )}
-                    </AnimatePresence>
-                  )}
-                </div>
-              </div>
+                          {value}
+                        </p>
+                        {(label === "Email" || label === "Resume") && (
+                          <AnimatePresence mode="wait">
+                            {(label === "Email"
+                              ? copyToastMessage
+                              : downloadToastMessage) && (
+                              <motion.p
+                                key={
+                                  label === "Email"
+                                    ? copyToastMessage!
+                                    : downloadToastMessage!
+                                }
+                                initial={{ opacity: 0, x: -6, scale: 0.98 }}
+                                animate={{ opacity: 1, x: 0, scale: 1 }}
+                                exit={{ opacity: 0, x: -4, scale: 0.98 }}
+                                transition={{
+                                  duration: 0.75,
+                                  ease: [0.22, 1, 0.36, 1],
+                                }}
+                                style={{
+                                  fontFamily: FONT_SANS,
+                                  fontSize: "0.78rem",
+                                  color: "#4ade80",
+                                  border: "1px solid rgba(74,222,128,0.35)",
+                                  background: "rgba(74,222,128,0.06)",
+                                  borderRadius: "999px",
+                                  padding: "4px 10px",
+                                  whiteSpace: "nowrap",
+                                  margin: 0,
+                                }}
+                              >
+                                {label === "Email"
+                                  ? copyToastMessage
+                                  : downloadToastMessage}
+                              </motion.p>
+                            )}
+                          </AnimatePresence>
+                        )}
+                      </div>
+                    </div>
+                    <span
+                      style={{
+                        color: "rgba(255,255,255,0.35)",
+                        fontSize: "0.7rem",
+                      }}
+                    >
+                      ↗
+                    </span>
+                  </motion.a>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Footer */}
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: isMobile ? "5rem" : "8rem",
+                paddingTop: "2rem",
+                borderTop: "1px solid rgba(255,255,255,0.07)",
+              }}
+            >
               <span
                 style={{
+                  fontFamily: FONT_MONO,
+                  fontSize: "0.6rem",
+                  letterSpacing: "0.12em",
                   color: "rgba(255,255,255,0.35)",
-                  fontSize: "0.7rem",
+                  textTransform: "uppercase",
                 }}
               >
-                ↗
+                © 2026 Ashwin Gupta · AI Engineer · Bangalore, India
               </span>
-            </motion.a>
-          ))}
-        </motion.div>
-      </div>
-
-      {/* Footer */}
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: isMobile ? "5rem" : "8rem",
-          paddingTop: "2rem",
-          borderTop: "1px solid rgba(255,255,255,0.07)",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: FONT_MONO,
-            fontSize: "0.6rem",
-            letterSpacing: "0.12em",
-            color: "rgba(255,255,255,0.35)",
-            textTransform: "uppercase",
-          }}
-        >
-          © 2026 Ashwin Gupta · AI Engineer · Bangalore, India
-        </span>
-      </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

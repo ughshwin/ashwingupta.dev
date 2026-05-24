@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import type React from "react";
 import { useIsMobile, useIsDesktop } from "../../hooks/useMediaQuery";
 import { useEqualRows } from "../../hooks/useCollageGrid";
@@ -453,10 +453,6 @@ export function Featured() {
       });
     };
 
-    requestAnimationFrame(() => {
-      measureTop();
-      onScroll();
-    });
     scroller.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener(
       "resize",
@@ -470,6 +466,29 @@ export function Featured() {
       cancelAnimationFrame(rafRef.current);
     };
   }, [isMobile]);
+
+  useLayoutEffect(() => {
+    if (isMobile) return;
+    const scroller = document.querySelector(
+      ".hologram-interface",
+    ) as HTMLElement | null;
+    const section = sectionRef.current;
+    if (!scroller || !section || !innerRef.current) return;
+    let acc = 0;
+    let el: HTMLElement | null = section;
+    while (el && el !== scroller) {
+      acc += el.offsetTop;
+      el = el.offsetParent as HTMLElement | null;
+    }
+    cachedTopRef.current = acc;
+    const raw = scroller.scrollTop - acc;
+    const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
+    innerRef.current.style.transform = `translateY(-${offset}px)`;
+    if (headerGapRef.current) {
+      const compressRatio = Math.min(1, offset / 100);
+      headerGapRef.current.style.marginBottom = `${80 * (1 - compressRatio) + 20 * compressRatio}px`;
+    }
+  }, [isMobile, sectionH]);
 
   const maxPerRow = isMobile ? 1 : 3;
   const rows = useEqualRows(ITEMS.length, maxPerRow);
