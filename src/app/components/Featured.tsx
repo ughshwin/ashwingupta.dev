@@ -523,7 +523,7 @@ export function Featured() {
         </div>
       </div>
 
-      <div ref={contentRef}>
+      <div ref={contentRef} style={{ willChange: "clip-path" }}>
         <EqualGridRenderer
           rows={rows}
           renderCard={(idx) => <FeaturedCard item={ITEMS[idx]} />}
