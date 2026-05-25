@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { motion } from "motion/react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 
@@ -26,6 +27,17 @@ const dontDo = [
   "I don't take off-the-shelf work. If the implementation is a Google search away, I'm not the right person.",
 ];
 
+const highlights = [
+  "Guinness World Record — Most Participants in an Agentic AI Hackathon · Google Cloud · July 2025",
+  "$1.3M Annualised Compute Savings — HSBC · Coforge",
+  "Best Team Award — HSBC Account · Coforge",
+  "Pat on Back — Think Customer · Individual Delivery Excellence · Coforge",
+  "Java Spring AI Trainer · 130+ Participants · 81% Preferred · NPS +50",
+  "Best Outgoing Project — Mechanical Engineering · BMSCE 2023",
+  "Founded Augment.AI — BMSCE's AI Club",
+  "Human Faces Kaggle Dataset — 42.8K Downloads · 202K Views",
+];
+
 export function About() {
   const isMobile = useIsMobile();
 
@@ -38,6 +50,12 @@ export function About() {
         padding: isMobile ? "4rem 4vw" : "4rem 0",
       }}
     >
+      <style>{`
+        @keyframes highlights-marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+      `}</style>
       <div style={{ display: "flex", flexDirection: "column" }}>
         {/* Header */}
         <div style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}>
@@ -93,7 +111,7 @@ export function About() {
 
         {/* Content strip */}
         <div>
-          <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 4rem" }}>
+          <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 7rem" }}>
             {/* Brand thesis */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -134,7 +152,7 @@ export function About() {
                     lineHeight: 1.8,
                     color: "rgba(255,255,255,0.62)",
                     marginBottom: "1.2rem",
-                    maxWidth: "520px",
+                    maxWidth: "580px",
                     textAlign: "justify",
                     textJustify: "inter-word",
                   }}
@@ -160,7 +178,7 @@ export function About() {
                     lineHeight: 1.8,
                     color: "rgba(255,255,255,0.62)",
                     marginBottom: "1.2rem",
-                    maxWidth: "520px",
+                    maxWidth: "580px",
                     textAlign: "justify",
                     textJustify: "inter-word",
                   }}
@@ -184,7 +202,7 @@ export function About() {
                     lineHeight: 1.8,
                     color: "rgba(255,255,255,0.62)",
                     marginBottom: 0,
-                    maxWidth: "520px",
+                    maxWidth: "580px",
                     textAlign: "justify",
                     textJustify: "inter-word",
                   }}
@@ -316,6 +334,67 @@ export function About() {
                     ))}
                   </div>
                 </motion.div>
+              </div>
+            </div>
+
+            {/* Highlights */}
+            <div style={{ marginTop: isMobile ? "4rem" : "7rem" }}>
+              <div style={{ marginBottom: "1.5rem" }}>
+                <span
+                  style={{
+                    fontFamily: FONT_MONO,
+                    fontSize: "0.62rem",
+                    letterSpacing: "0.2em",
+                    color: "rgba(255,255,255,0.4)",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Highlights
+                </span>
+              </div>
+              <div style={{ overflow: "hidden" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "max-content",
+                    animation: "highlights-marquee 45s linear infinite",
+                    willChange: "transform",
+                  }}
+                >
+                  {[...highlights, ...highlights].map((h, i) => (
+                    <Fragment key={i}>
+                      <div
+                        style={{
+                          fontFamily: FONT_SERIF,
+                          fontSize: "1.1rem",
+                          fontWeight: 700,
+                          fontStyle: "italic",
+                          lineHeight: 1.3,
+                          color: "#f5ca40",
+                          width: "220px",
+                          flexShrink: 0,
+                          letterSpacing: "0.01em",
+                          userSelect: "none",
+                          textShadow:
+                            "0 0 12px rgba(245,202,64,0.25)",
+                        }}
+                      >
+                        {h}
+                      </div>
+                      <div
+                        style={{
+                          width: "1px",
+                          background: "rgba(245,202,64,0.35)",
+                          boxShadow: "0 0 6px rgba(245,202,64,0.2)",
+                          flexShrink: 0,
+                          margin: "0 2.5rem",
+                          alignSelf: "stretch",
+                        }}
+                      />
+                    </Fragment>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
