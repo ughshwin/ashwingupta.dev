@@ -173,7 +173,7 @@ export function AIBackground() {
       scanlinesRef.current = sc;
     };
 
-    // ── resize (viewport height only — canvas is position:fixed) ──────────
+    // ── resize (viewport height only - canvas is position:fixed) ──────────
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -350,7 +350,7 @@ export function AIBackground() {
         const pos = breezePosition(mote, pathProgress, W, H);
         const opacity = shimmerOpacity(shimmerProgress);
 
-        // Mouse repulsion — spring offset decays back to zero
+        // Mouse repulsion - spring offset decays back to zero
         if (!isTouchDevice) {
           const mdx = pos.x - mouseRef.current.x;
           const mdy = pos.y - mouseRef.current.y;
@@ -542,7 +542,7 @@ export function AIBackground() {
       resizeTimer = setTimeout(resize, 150);
     };
 
-    // ── visibility guard — pause RAF when tab hidden ──────────────────────
+    // ── visibility guard - pause RAF when tab hidden ──────────────────────
     const handleVisibility = () => {
       if (document.hidden) {
         cancelAnimationFrame(animRef.current);

@@ -12,7 +12,7 @@ const metrics = [
 ---
 
 <BaseLayout
-  title="Airline Contract Intelligence — Amex GBT | Ashwin Gupta"
+  title="Airline Contract Intelligence - Amex GBT | Ashwin Gupta"
   description="~96% extraction accuracy across airline PDF contracts. Camelot + Ghostscript table extraction, GPT-4o one-shot normalization across varied carrier schemas."
   canonical={canonical}
 >
@@ -44,7 +44,7 @@ const metrics = [
         <section class="th-section">
           <h2 class="th-section-title">The Problem</h2>
           <p class="th-body">
-            Airline contract tables were reviewed manually — slow, error-prone, and unable to scale to the volume of carrier agreements that AMEX GBT handles. Template drift across carriers meant each format required separate handling logic. Sales and support queries on contract terms had no real-time resolution path — every spec question required a human to locate and parse the relevant section.
+            Airline contract tables were reviewed manually - slow, error-prone, and unable to scale to the volume of carrier agreements that AMEX GBT handles. Template drift across carriers meant each format required separate handling logic. Sales and support queries on contract terms had no real-time resolution path - every spec question required a human to locate and parse the relevant section.
           </p>
           <p class="th-body">
             The source documents compounded the difficulty: airline PDFs mixed image-embedded and programmatic table formats, sometimes within the same document. A single extraction strategy couldn't handle both.
@@ -54,17 +54,17 @@ const metrics = [
         <section class="th-section">
           <h2 class="th-section-title">The System</h2>
           <p class="th-body">
-            Document intelligence pipeline: <strong>Camelot and Ghostscript</strong> extract tables from both image-embedded and readable PDF sources. <strong>GPT-4o with one-shot prompting</strong> normalizes across diverse contract formats — clause normalization, table structuring, schema-consistent output for every carrier. One-shot prompting maintains contextual coherence across carrier templates without per-carrier fine-tuning. New carriers are handled automatically, not by writing carrier-specific logic.
+            Document intelligence pipeline: <strong>Camelot and Ghostscript</strong> extract tables from both image-embedded and readable PDF sources. <strong>GPT-4o with one-shot prompting</strong> normalizes across diverse contract formats - clause normalization, table structuring, schema-consistent output for every carrier. One-shot prompting maintains contextual coherence across carrier templates without per-carrier fine-tuning. New carriers are handled automatically, not by writing carrier-specific logic.
           </p>
           <p class="th-body">
-            Camelot handles programmatic PDFs with high precision. Ghostscript renders image-embedded pages to a format Camelot can then process. Together they eliminate the format gap that blocked previous single-strategy approaches — covering the full range from scan-quality images to nested programmatic tables in a single pass.
+            Camelot handles programmatic PDFs with high precision. Ghostscript renders image-embedded pages to a format Camelot can then process. Together they eliminate the format gap that blocked previous single-strategy approaches - covering the full range from scan-quality images to nested programmatic tables in a single pass.
           </p>
         </section>
 
         <section class="th-section">
           <h2 class="th-section-title">Outcomes</h2>
           <p class="th-body">
-            <strong>~96% extraction accuracy</strong> across airline contract Q&A — image and programmatic PDF formats. Automated normalization replaced manual review across varied airline PDF schemas. Real-time query resolution for sales and customer support. Zero per-carrier tuning required.
+            <strong>~96% extraction accuracy</strong> across airline contract Q&A - image and programmatic PDF formats. Automated normalization replaced manual review across varied airline PDF schemas. Real-time query resolution for sales and customer support. Zero per-carrier tuning required.
           </p>
         </section>
 

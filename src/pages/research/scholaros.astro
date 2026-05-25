@@ -14,8 +14,8 @@ const metrics = [
 ---
 
 <BaseLayout
-  title="ScholarOS — Structured Research Execution Platform | Ashwin Gupta"
-  description="Research as structured execution — five deterministic MCP services over a DAG orchestrator. Evidence-bound outputs, bounded hypothesis critique, fully local."
+  title="ScholarOS - Structured Research Execution Platform | Ashwin Gupta"
+  description="Research as structured execution - five deterministic MCP services over a DAG orchestrator. Evidence-bound outputs, bounded hypothesis critique, fully local."
   canonical={canonical}
 >
   <div class="spatial-scene">
@@ -26,7 +26,7 @@ const metrics = [
 
         <header class="th-header">
           <div class="th-badge">In Development · Personal</div>
-          <h1 class="th-title">ScholarOS — Research as Structured Execution</h1>
+          <h1 class="th-title">ScholarOS - Research as Structured Execution</h1>
           <p class="th-subtitle">Five deterministic MCP services over a DAG orchestrator. Every claim bound to source evidence. No hallucinated synthesis in governance outputs.</p>
         </header>
 
@@ -46,7 +46,7 @@ const metrics = [
         <section class="th-section">
           <h2 class="th-section-title">The Problem With Research Copilots</h2>
           <p class="th-body">
-            Generic AI tools applied to academic research produce fluent text with no evidence traceability. Hallucinated synthesis is structurally indistinguishable from grounded synthesis — you cannot tell from the output alone whether a claim was derived from the literature or confabulated. Every research workflow — literature review, contradiction detection, hypothesis validation, evidence extraction, proposal drafting — requires a separate manual process with no shared execution model.
+            Generic AI tools applied to academic research produce fluent text with no evidence traceability. Hallucinated synthesis is structurally indistinguishable from grounded synthesis - you cannot tell from the output alone whether a claim was derived from the literature or confabulated. Every research workflow - literature review, contradiction detection, hypothesis validation, evidence extraction, proposal drafting - requires a separate manual process with no shared execution model.
           </p>
           <p class="th-body">
             Hypothesis stress-testing is the worst case: the same model that generated the hypothesis is asked to critique it. No adversarial challenge, no convergence gate, no provenance on the resulting claim. The output looks like analysis but carries none of the guarantees.
@@ -56,7 +56,7 @@ const metrics = [
         <section class="th-section">
           <h2 class="th-section-title">The Architecture</h2>
           <p class="th-body">
-            ScholarOS is a structured research execution platform — five capabilities delivered as a DAG-executed MCP workflow, not a chatbox. Every output is bound to source evidence. Nine services process research artifacts with rule-based, schema-defined, reproducible logic. No service imports another service — all data flows through the orchestrator via MCP tool invocations, eliminating hidden state.
+            ScholarOS is a structured research execution platform - five capabilities delivered as a DAG-executed MCP workflow, not a chatbox. Every output is bound to source evidence. Nine services process research artifacts with rule-based, schema-defined, reproducible logic. No service imports another service - all data flows through the orchestrator via MCP tool invocations, eliminating hidden state.
           </p>
           <p class="th-body">
             The five capabilities: <strong>Literature Mapping</strong> (HDBSCAN clustering, LLM cluster labeling, paper ranking); <strong>Contradiction & Consensus</strong> (claim extraction, metric normalization, polarity/value divergence detection, Belief Engine confidence assignment); <strong>Hypothesis & Critique</strong> (bounded Hypothesis/Critic loop, max 5 iterations, grounded to source claim identifiers); <strong>Multimodal Evidence Extraction</strong> (tables, figures, metrics from PDFs to structured output); <strong>Proposal Assistant</strong> (validated hypotheses to Markdown/LaTeX with citation assembly).
@@ -69,7 +69,7 @@ const metrics = [
         <section class="th-section">
           <h2 class="th-section-title">The Pipeline</h2>
           <p class="th-body">
-            The MCP Orchestrator executes workflows as DAGs with pause/resume, session management, and full trace logging. Only hypothesis critique is agentic — bounded to five iterations with required grounding to source claim identifiers. All other stages are deterministic with provenance tracked through typed artifacts.
+            The MCP Orchestrator executes workflows as DAGs with pause/resume, session management, and full trace logging. Only hypothesis critique is agentic - bounded to five iterations with required grounding to source claim identifiers. All other stages are deterministic with provenance tracked through typed artifacts.
           </p>
           <p class="th-body">
             100% determinism rate means identical inputs produce identical outputs. No stochastic processes in the deterministic pipeline. Nine independently testable services with no global state. Agent reasoning is explicitly bounded: convergence detection terminates the hypothesis loop before it runs unconstrained.
@@ -79,10 +79,10 @@ const metrics = [
         <section class="th-section">
           <h2 class="th-section-title">Outputs & Current State</h2>
           <p class="th-body">
-            Five output artifact types: ClusterMap (JSON), Contradiction Report (JSON), Validated Hypotheses (JSON), Research Proposals (Markdown · LaTeX), Extracted Evidence (CSV · JSON). Fully local and self-hostable — no external API dependency for any deterministic pipeline stage.
+            Five output artifact types: ClusterMap (JSON), Contradiction Report (JSON), Validated Hypotheses (JSON), Research Proposals (Markdown · LaTeX), Extracted Evidence (CSV · JSON). Fully local and self-hostable - no external API dependency for any deterministic pipeline stage.
           </p>
           <p class="th-body">
-            March 2026 validation run: 5,479 chunks processed, 180 claims extracted, 76 contradictions detected. Each claim is bound to source evidence. Contradiction detection marks where consensus breaks — keeping outputs falsifiable and useful beyond individual sessions.
+            March 2026 validation run: 5,479 chunks processed, 180 claims extracted, 76 contradictions detected. Each claim is bound to source evidence. Contradiction detection marks where consensus breaks - keeping outputs falsifiable and useful beyond individual sessions.
           </p>
         </section>
 

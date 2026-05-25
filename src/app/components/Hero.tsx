@@ -138,7 +138,7 @@ export function Hero() {
 
   const navLinkStyle = {
     fontFamily: '"DM Mono", monospace',
-    fontSize: "0.58rem",
+    fontSize: "0.65rem",
     letterSpacing: "0.13em",
     textTransform: "uppercase" as const,
     color: "rgba(255,255,255,0.35)",
@@ -187,7 +187,7 @@ export function Hero() {
         }}
       />
 
-      {/* Navigation — hamburger on mobile, grid on desktop */}
+      {/* Navigation - hamburger on mobile, grid on desktop */}
       {isMobile ? (
         <>
           {/* Hamburger button */}
@@ -336,7 +336,7 @@ export function Hero() {
                         animate={{ rotate: mobileWorkOpen ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
                         style={{
-                          fontSize: "0.7em",
+                          fontSize: "1.5em",
                           opacity: 0.55,
                           display: "inline-block",
                         }}
@@ -511,7 +511,7 @@ export function Hero() {
               <span>Work</span>
               <span
                 style={{
-                  fontSize: "0.75em",
+                  fontSize: "1.5em",
                   opacity: 0.65,
                   marginTop: "0.05em",
                 }}
@@ -627,9 +627,9 @@ export function Hero() {
           zIndex: 1,
         }}
       >
-        {/* LEFT — typography */}
+        {/* LEFT - typography */}
         <div ref={layerText} style={{ willChange: "transform" }}>
-          {/* Eyebrow — tagline */}
+          {/* Eyebrow - tagline */}
           <div style={{ overflow: "hidden", marginBottom: "2rem" }}>
             <motion.div
               initial={{ y: 30, opacity: 0 }}
@@ -651,12 +651,12 @@ export function Hero() {
               <span
                 style={{
                   fontFamily: '"DM Mono", monospace',
-                  fontSize: isMobile ? "0.58rem" : "0.65rem",
+                  fontSize: isMobile ? "0.75rem" : "0.8rem",
                   letterSpacing: "0.12em",
                   color: "#e8e0d0",
                 }}
               >
-                Not what a model outputs — how the system decides, executes, and
+                Not what a model outputs - how the system decides, executes, and
                 holds under load.
               </span>
             </motion.div>
@@ -797,7 +797,7 @@ export function Hero() {
               position: "relative",
             }}
           >
-            {/* Toast — absolutely positioned so it never affects row width */}
+            {/* Toast - absolutely positioned so it never affects row width */}
             <AnimatePresence mode="wait">
               {toastMessage && (
                 <motion.div
@@ -827,7 +827,7 @@ export function Hero() {
               )}
             </AnimatePresence>
 
-            {/* Row 1 — icon buttons (+ Download Resume on desktop) */}
+            {/* Row 1 - icon buttons (+ Download Resume on desktop) */}
             <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
               {[
                 {
@@ -890,7 +890,7 @@ export function Hero() {
                   {icon}
                 </motion.a>
               ))}
-              {/* Download Resume — desktop only in this row */}
+              {/* Download Resume - desktop only in this row */}
               {!isMobile && (
                 <motion.a
                   href={resumeUrl}
@@ -938,7 +938,7 @@ export function Hero() {
               )}
             </div>
 
-            {/* Row 2 — Download Resume, mobile only */}
+            {/* Row 2 - Download Resume, mobile only */}
             {isMobile && (
               <motion.a
                 href={resumeUrl}
@@ -1022,7 +1022,7 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* RIGHT — photo */}
+        {/* RIGHT - photo */}
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1093,7 +1093,7 @@ export function Hero() {
                   textTransform: "uppercase",
                 }}
               >
-                MLOps & GenAI — IIIT Bangalore
+                MLOps & GenAI - IIIT Bangalore
               </span>
               <span
                 style={{

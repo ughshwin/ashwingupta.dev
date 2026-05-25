@@ -15,7 +15,7 @@ const metrics = [
 ---
 
 <BaseLayout
-  title="Conversational Analytics — HSBC | Ashwin Gupta"
+  title="Conversational Analytics - HSBC | Ashwin Gupta"
   description="Conversational analytics platform for banking at scale. 1,600+ concurrent sessions. $1.3M annualized savings. Case study."
   canonical={canonical}
 >
@@ -29,7 +29,7 @@ const metrics = [
         <!-- Hero -->
         <header class="cs-header">
           <div class="cs-context-badge">Client Delivery · Coforge</div>
-          <h1 class="cs-title">Conversational Analytics — HSBC</h1>
+          <h1 class="cs-title">Conversational Analytics - HSBC</h1>
           <p class="cs-subtitle">
             Conversational analytics platform for banking at scale. 1,600+ concurrent sessions. $1.3M annualized savings.
           </p>
@@ -53,13 +53,13 @@ const metrics = [
         <section class="cs-section">
           <h2 class="cs-section-title">The Constraint Environment</h2>
           <p class="cs-body">
-            HSBC is the world's largest bank by assets. Every engineering decision operates under compliance and security requirements that most teams never encounter. Timeline pressure was acute — services companies move fast, sometimes unreasonably so.
+            HSBC is the world's largest bank by assets. Every engineering decision operates under compliance and security requirements that most teams never encounter. Timeline pressure was acute - services companies move fast, sometimes unreasonably so.
           </p>
           <p class="cs-body">
-            The production environment: Google Cloud Platform, RHEL VMs, a real-time SIP voice stack handling live banking calls. Latency wasn't a preference — it was a contract. Packet loss above 5% was an incident. Downtime had regulatory implications.
+            The production environment: Google Cloud Platform, RHEL VMs, a real-time SIP voice stack handling live banking calls. Latency wasn't a preference - it was a contract. Packet loss above 5% was an incident. Downtime had regulatory implications.
           </p>
           <p class="cs-body">
-            Timeline pressure was typical of services delivery — fast, often unreasonably so, with scope evolving mid-execution. The compliance environment was HSBC's: one of the world's most scrutinised financial institutions, with data handling, access controls, and operational standards that aren't negotiable. Every architectural decision had to satisfy both the engineering constraint and the compliance constraint simultaneously. There was no sandbox for testing ideas — changes went into a live banking infrastructure.
+            Timeline pressure was typical of services delivery - fast, often unreasonably so, with scope evolving mid-execution. The compliance environment was HSBC's: one of the world's most scrutinised financial institutions, with data handling, access controls, and operational standards that aren't negotiable. Every architectural decision had to satisfy both the engineering constraint and the compliance constraint simultaneously. There was no sandbox for testing ideas - changes went into a live banking infrastructure.
           </p>
         </section>
 
@@ -67,7 +67,7 @@ const metrics = [
         <section class="cs-section">
           <h2 class="cs-section-title">What Was Actually Broken</h2>
           <p class="cs-body">
-            GCP console's VM utilisation board showed we'd never cross about 20% CPU utilisation — but call quality and session capacity kept bottlenecking hard at 20 concurrent calls per VM. The whole team believed the code was incorrect. I knew the code was right. Something else was wrong.
+            GCP console's VM utilisation board showed we'd never cross about 20% CPU utilisation - but call quality and session capacity kept bottlenecking hard at 20 concurrent calls per VM. The whole team believed the code was incorrect. I knew the code was right. Something else was wrong.
           </p>
           <p class="cs-body">
             Running <code>top</code> and <code>htop</code> under load revealed the answer: no matter how many concurrent calls we pushed through the pipeline, only a single CPU core was ever fully utilised. The GIL. Python's Global Interpreter Lock was serialising every audio processing thread into a single-core bottleneck, while 31 other cores sat idle on a 32-core VM.
@@ -87,21 +87,21 @@ const metrics = [
             Offloading media processing outside the SIP session while maintaining session continuity would have required blocking processes, multiple I/O synchronisation points, and significant architectural complexity. The simpler and more reliable solution: run 8 fully independent parallel instances on the 8-core VM using RHEL's <code>taskset</code> command to pin each instance to a dedicated CPU core.
           </p>
           <p class="cs-body">
-            A shell runner script brought up all 8 instances. A systemd service managed startup and restarts. Each instance owned its core entirely — no GIL contention, no shared memory, no coordination overhead. The concurrency model switched from threading (serialised by GIL) to process-level parallelism (each instance isolated).
+            A shell runner script brought up all 8 instances. A systemd service managed startup and restarts. Each instance owned its core entirely - no GIL contention, no shared memory, no coordination overhead. The concurrency model switched from threading (serialised by GIL) to process-level parallelism (each instance isolated).
           </p>
           <p class="cs-body">
-            The concurrency layer was simultaneously rewritten with <strong>asyncio + uvloop</strong> — replacing the threading model with an event loop. Each SIP session became a coroutine across the SBC, STT, and LLM stages, eliminating GIL contention across the full pipeline.
+            The concurrency layer was simultaneously rewritten with <strong>asyncio + uvloop</strong> - replacing the threading model with an event loop. Each SIP session became a coroutine across the SBC, STT, and LLM stages, eliminating GIL contention across the full pipeline.
           </p>
         </section>
 
-        <!-- Section 4: Observability — Before and After -->
+        <!-- Section 4: Observability - Before and After -->
         <section class="cs-section">
-          <h2 class="cs-section-title">Observability — Before and After</h2>
+          <h2 class="cs-section-title">Observability - Before and After</h2>
           <p class="cs-body">
             The pre-observability incident workflow: enter agent extension number → find conversation ID → manually browse GCE logs, GKE logs across all services → manually map timestamps → reconstruct the trace by hand. Time: 1–2 hours. Error rate: high. You could draw the wrong conclusion from a misread timestamp.
           </p>
           <p class="cs-body">
-            The replacement: a GCP Logging API pipeline that ingested every log from every service in the stack — GCE VMs, GKE pods, ingresses, egresses, databases, caches, APIs — sorted them by conversation ID, grouped them by agent extension, highlighted failure points, and generated a complete dashboard of every agent and every conversation within the specified time window.
+            The replacement: a GCP Logging API pipeline that ingested every log from every service in the stack - GCE VMs, GKE pods, ingresses, egresses, databases, caches, APIs - sorted them by conversation ID, grouped them by agent extension, highlighted failure points, and generated a complete dashboard of every agent and every conversation within the specified time window.
           </p>
           <p class="cs-body">
             Input: time window start, time window end, environment (dev / UAT / pre-prod / prod). Output: full correlated trace of all agents and all conversations, failure points marked, generated automatically. 250,000+ log lines ingested, processed, analysed, and dashboard generated in under 5–6 minutes. MTTR dropped from 1–2 hours to approximately 10 minutes.
@@ -139,10 +139,10 @@ const metrics = [
         <section class="cs-section">
           <h2 class="cs-section-title">What a Senior Engineer Should Take Away</h2>
           <p class="cs-body">
-            The GIL problem is well-known in Python. What's less discussed is how session-bound media processing constrains your options for escaping it. Multiprocessing across a SIP session context is non-trivial — you can't naively offload without breaking session continuity. The CPU-pinned parallel instances approach bypasses the coordination problem entirely by accepting the trade-off: more memory overhead per instance, simpler architecture, no shared state.
+            The GIL problem is well-known in Python. What's less discussed is how session-bound media processing constrains your options for escaping it. Multiprocessing across a SIP session context is non-trivial - you can't naively offload without breaking session continuity. The CPU-pinned parallel instances approach bypasses the coordination problem entirely by accepting the trade-off: more memory overhead per instance, simpler architecture, no shared state.
           </p>
           <p class="cs-body">
-            The observability work is the part most teams skip until the third incident. Cross-stack log correlation built before the first production incident is qualitatively different from log correlation bolted on after. When logs are correlated by design, you're never reconstructing — you're reading. The difference in incident response time reflects this directly.
+            The observability work is the part most teams skip until the third incident. Cross-stack log correlation built before the first production incident is qualitatively different from log correlation bolted on after. When logs are correlated by design, you're never reconstructing - you're reading. The difference in incident response time reflects this directly.
           </p>
           <p class="cs-body">
             The underlying lesson: at 1,600+ concurrent sessions under a strict latency SLO for a bank, every architectural choice has a cost that's immediately measurable. There's no room for "we'll fix this later." The system had to be correct from the first deployment into production.

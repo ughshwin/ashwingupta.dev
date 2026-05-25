@@ -21,20 +21,20 @@ const { section } = Astro.params;
 const canonical = `https://www.ashwingupta.dev/${section}`;
 
 const titles: Record<string, string> = {
-  about:           "About — Ashwin Gupta | AI Systems Engineer",
-  stack:           "Stack — Ashwin Gupta | AI Systems Engineer",
-  experience:      "Experience — Ashwin Gupta | AI Systems Engineer",
-  recommendations: "Recommendations — Ashwin Gupta | AI Systems Engineer",
-  featured:        "Featured Work — Ashwin Gupta | AI Systems Engineer",
-  research:        "Research — Ashwin Gupta | AI Systems Engineer",
-  projects:        "Projects — Ashwin Gupta | AI Systems Engineer",
-  contact:         "Contact — Ashwin Gupta | AI Systems Engineer",
+  about:           "About - Ashwin Gupta | AI Systems Engineer",
+  stack:           "Stack - Ashwin Gupta | AI Systems Engineer",
+  experience:      "Experience - Ashwin Gupta | AI Systems Engineer",
+  recommendations: "Recommendations - Ashwin Gupta | AI Systems Engineer",
+  featured:        "Featured Work - Ashwin Gupta | AI Systems Engineer",
+  research:        "Research - Ashwin Gupta | AI Systems Engineer",
+  projects:        "Projects - Ashwin Gupta | AI Systems Engineer",
+  contact:         "Contact - Ashwin Gupta | AI Systems Engineer",
 };
 ---
 
 <BaseLayout
   title={titles[section] ?? "Ashwin Gupta — AI Systems Engineer"}
-  description="Not what a model outputs — how the system decides, executes, and holds under load. AI Systems Engineer at Coforge."
+  description="Inference routing. Concurrency architecture. Physics-informed ML. An AI Systems Engineer who thinks in systems and in design — building what surrounds the model, not just the model itself. Bangalore."
   canonical={canonical}
 >
   <link slot="head" rel="preload" as="image" href={profilePictureUrl} fetchpriority="high" type="image/webp" />

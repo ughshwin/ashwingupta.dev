@@ -298,7 +298,7 @@ export function Contact() {
                 alignItems: "start",
               }}
             >
-              {/* LEFT — description */}
+              {/* LEFT - description */}
               <div>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -352,15 +352,15 @@ export function Contact() {
                     textJustify: "inter-word",
                   }}
                 >
-                  Heads-down building right now — not looking for roles. But if you've
-                  got a hard problem, a wild idea, or just want to talk shop about
-                  LLMs, distributed systems, scientific ML, or why this site is
-                  unreasonably over-engineered for a portfolio, I'm always up for
-                  that.
+                  Heads-down building right now - not looking for roles. But if
+                  you've got a hard problem, a wild idea, or just want to talk
+                  shop about LLMs, distributed systems, scientific ML, or why
+                  this site is unreasonably over-engineered for a portfolio, I'm
+                  always up for that.
                 </motion.p>
               </div>
 
-              {/* RIGHT — contact links */}
+              {/* RIGHT - contact links */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -373,7 +373,9 @@ export function Contact() {
                     href={href}
                     download={download ?? undefined}
                     target={
-                      !download && href.startsWith("http") ? "_blank" : undefined
+                      !download && href.startsWith("http")
+                        ? "_blank"
+                        : undefined
                     }
                     rel={
                       !download && href.startsWith("http")
@@ -409,7 +411,9 @@ export function Contact() {
                       el.style.borderBottomColor = "rgba(255,255,255,0.05)";
                     }}
                   >
-                    <span style={{ color: "rgba(255,255,255,0.4)", width: "16px" }}>
+                    <span
+                      style={{ color: "rgba(255,255,255,0.4)", width: "16px" }}
+                    >
                       {icon}
                     </span>
                     <div style={{ flex: 1 }}>
@@ -426,7 +430,11 @@ export function Contact() {
                         {label}
                       </p>
                       <div
-                        style={{ display: "flex", alignItems: "center", gap: "12px" }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "12px",
+                        }}
                       >
                         <p
                           style={{

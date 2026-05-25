@@ -8,7 +8,7 @@ const FONT_SANS = '"DM Sans", sans-serif';
 const capabilities = [
   {
     title: "Concurrency Architecture & GIL Escape",
-    desc: "Replaced GIL'd threading on a 32-core VM with 8 CPU-pinned parallel instances via taskset — one per core — and rewrote the threading layer as asyncio + uvloop coroutines. Memory ballooning eliminated. 20 concurrent SIP sessions → 140–160 per VM under sustained load. Latency profiled at 99th percentile, not average.",
+    desc: "Replaced GIL'd threading on a 32-core VM with 8 CPU-pinned parallel instances via taskset - one per core - and rewrote the threading layer as asyncio + uvloop coroutines. Memory ballooning eliminated. 20 concurrent SIP sessions → 140–160 per VM under sustained load. Latency profiled at 99th percentile, not average.",
     tags: [
       "asyncio · uvloop",
       "CPU-pinned processes",
@@ -31,7 +31,7 @@ const capabilities = [
   },
   {
     title: "RAG & Retrieval Infrastructure",
-    desc: "HNSW/LEANN indexes with dense embeddings (facebook/contriever), Top-K (3–4) and context windows (1024–1536 tokens) tuned for recall vs. coherence. Tree-RAG provider abstraction with finish-reason normalization stabilizes recursive traversal across Ollama, llama.cpp, and vLLM — provider switching is transparent. QA-gated retrieval validates lookup quality before generation; reproducible index artifacts enable air-gapped operation.",
+    desc: "HNSW/LEANN indexes with dense embeddings (facebook/contriever), Top-K (3–4) and context windows (1024–1536 tokens) tuned for recall vs. coherence. Tree-RAG provider abstraction with finish-reason normalization stabilizes recursive traversal across Ollama, llama.cpp, and vLLM - provider switching is transparent. QA-gated retrieval validates lookup quality before generation; reproducible index artifacts enable air-gapped operation.",
     tags: [
       "HNSW · LEANN indexing",
       "tree-RAG",
@@ -43,7 +43,7 @@ const capabilities = [
   },
   {
     title: "Production AI Infrastructure",
-    desc: "Led a 4-engineer team. Owned Packer automation for all GCE image builds across the full SIP stack — SBC → STT → LLM inference. Sustained 1,600+ concurrent sessions at <2s E2E transcription latency and <5% packet loss. Monthly compute: $118K → $8K/month (~$1.3M annualized savings). HPA for capacity; libsrtp + DTLS/SRTP for in-transit security.",
+    desc: "Led a 4-engineer team. Owned Packer automation for all GCE image builds across the full SIP stack - SBC → STT → LLM inference. Sustained 1,600+ concurrent sessions at <2s E2E transcription latency and <5% packet loss. Monthly compute: $118K → $8K/month (~$1.3M annualized savings). HPA for capacity; libsrtp + DTLS/SRTP for in-transit security.",
     tags: [
       "GCP (Packer · GCE · HPA)",
       "SIP/PJSIP stack",
@@ -54,7 +54,7 @@ const capabilities = [
   },
   {
     title: "Observability & Incident Recovery",
-    desc: "Architected cross-stack log correlation over GCP Logging APIs — 250K+ log lines reconstructed in under 5 seconds. MTTR: 1–2 hours → ~10 minutes. SIPp load test suite at 2,000 concurrent users. Prometheus/Grafana monitoring with MACD-triggered alerts. Trace correlation built into the stack, not bolted on after the incident.",
+    desc: "Architected cross-stack log correlation over GCP Logging APIs - 250K+ log lines reconstructed in under 5 seconds. MTTR: 1–2 hours → ~10 minutes. SIPp load test suite at 2,000 concurrent users. Prometheus/Grafana monitoring with MACD-triggered alerts. Trace correlation built into the stack, not bolted on after the incident.",
     tags: [
       "GCP Logging APIs",
       "cross-stack trace correlation",
@@ -65,7 +65,7 @@ const capabilities = [
   },
   {
     title: "Physics-Informed Neural Networks",
-    desc: "Dual-loss PINN framework embedding PDE/ODE constraints directly into the optimization objective alongside data loss — physics acts as a regularizer preventing physically implausible solutions when data is sparse. Validated across 6 benchmarks: Burgers' equation, 1D heat conduction, fixed-fixed column deflection, cantilever tip deflection, 1D transient cooling under Neumann and Dirichlet boundary conditions. Applied to HVAC thermal feedback and server cooling use cases.",
+    desc: "Dual-loss PINN framework embedding PDE/ODE constraints directly into the optimization objective alongside data loss - physics acts as a regularizer preventing physically implausible solutions when data is sparse. Validated across 6 benchmarks: Burgers' equation, 1D heat conduction, fixed-fixed column deflection, cantilever tip deflection, 1D transient cooling under Neumann and Dirichlet boundary conditions. Applied to HVAC thermal feedback and server cooling use cases.",
     tags: [
       "dual-loss optimization",
       "PDE · ODE constraints",
@@ -76,7 +76,7 @@ const capabilities = [
   },
   {
     title: "Graph Systems & Heuristic Scoring",
-    desc: "Weighted directed graph encoding multi-level skill hierarchies as typed edges with dynamic weight updates. Dynamic node insertion without full graph recomputation. Deterministic traversal produces consistent outputs under concurrent updates — latency profiled on NVIDIA T4 before deployment. +30% recommendation relevance and sub-50ms inference under production load.",
+    desc: "Weighted directed graph encoding multi-level skill hierarchies as typed edges with dynamic weight updates. Dynamic node insertion without full graph recomputation. Deterministic traversal produces consistent outputs under concurrent updates - latency profiled on NVIDIA T4 before deployment. +30% recommendation relevance and sub-50ms inference under production load.",
     tags: [
       "weighted directed graph",
       "typed edge hierarchies",
@@ -87,7 +87,7 @@ const capabilities = [
   },
   {
     title: "Local LLM Deployment & Provider Abstraction",
-    desc: "Fully offline RAG and inference across Ollama, llama.cpp, and vLLM — no external API keys at any pipeline stage. Provider-routing abstraction resolved via env vars with finish-reason normalization across runtime outputs. Sub-1GB quantized model support for CPU-only and low-VRAM hardware. VRAM accounting at runtime accounts for concurrent load, not just startup state.",
+    desc: "Fully offline RAG and inference across Ollama, llama.cpp, and vLLM - no external API keys at any pipeline stage. Provider-routing abstraction resolved via env vars with finish-reason normalization across runtime outputs. Sub-1GB quantized model support for CPU-only and low-VRAM hardware. VRAM accounting at runtime accounts for concurrent load, not just startup state.",
     tags: [
       "Ollama · llama.cpp · vLLM",
       "provider-routing abstraction",
@@ -98,7 +98,7 @@ const capabilities = [
   },
   {
     title: "Deterministic Pipeline Architecture (MCP)",
-    desc: "ScholarOS executes research workflows as DAGs over 9 deterministic MCP services — no service imports another; all data flows through the orchestrator via typed tool invocations. Hypothesis critique is agentic and bounded to 5 iterations with required grounding to source claim identifiers. 100% determinism rate: identical inputs produce identical outputs. March 2026 validation: 5,479 chunks, 180 claims extracted, 76 contradictions detected.",
+    desc: "ScholarOS executes research workflows as DAGs over 9 deterministic MCP services - no service imports another; all data flows through the orchestrator via typed tool invocations. Hypothesis critique is agentic and bounded to 5 iterations with required grounding to source claim identifiers. 100% determinism rate: identical inputs produce identical outputs. March 2026 validation: 5,479 chunks, 180 claims extracted, 76 contradictions detected.",
     tags: [
       "MCP orchestrator",
       "DAG execution",
@@ -110,7 +110,7 @@ const capabilities = [
   },
   {
     title: "Document Intelligence & Live-State Extraction",
-    desc: "Camelot + Ghostscript extract tables from both scan-quality and programmatic PDFs; GPT-4o one-shot normalization maps diverse carrier templates to schema-consistent output — ~96% extraction accuracy. Azure Resource Graph API subscription scans auto-generate SDDs and PlantUML diagrams; fabrication guardrails cross-check every generated component against extracted inventory, eliminating hallucinated topology from governance docs. Turnaround: 2–3 days → ~2–3 hours.",
+    desc: "Camelot + Ghostscript extract tables from both scan-quality and programmatic PDFs; GPT-4o one-shot normalization maps diverse carrier templates to schema-consistent output - ~96% extraction accuracy. Azure Resource Graph API subscription scans auto-generate SDDs and PlantUML diagrams; fabrication guardrails cross-check every generated component against extracted inventory, eliminating hallucinated topology from governance docs. Turnaround: 2–3 days → ~2–3 hours.",
     tags: [
       "Camelot · Ghostscript",
       "one-shot · few-shot prompting",
@@ -189,7 +189,7 @@ export function Skills() {
           alignItems: "start",
         }}
       >
-        {/* LEFT — sticky heading + tech stack */}
+        {/* LEFT - sticky heading + tech stack */}
         <div
           style={{
             position: isMobile ? "relative" : "sticky",
@@ -273,7 +273,7 @@ export function Skills() {
           </motion.div>
         </div>
 
-        {/* RIGHT — capability cards */}
+        {/* RIGHT - capability cards */}
         <div
           style={{
             display: "flex",

@@ -7,7 +7,7 @@ const githubUrl = "https://github.com/ughshwin/research-it";
 ---
 
 <BaseLayout
-  title="Research-It — Fully Local RAG System | Ashwin Gupta"
+  title="Research-It - Fully Local RAG System | Ashwin Gupta"
   description="API-free academic document QA. LEANN/HNSW indexing, dense embeddings, Ollama inference. Reproducible indexes for air-gapped institutions."
   canonical={canonical}
 >
@@ -19,8 +19,8 @@ const githubUrl = "https://github.com/ughshwin/research-it";
 
         <header class="th-header">
           <div class="th-badge">Shipped · Open Source</div>
-          <h1 class="th-title">Research-It — Fully Local RAG System</h1>
-          <p class="th-subtitle">Academic RAG without cloud inference. LEANN/HNSW indexing, dense embeddings, and Ollama-backed generation — designed for air-gapped institutions and privacy-constrained research.</p>
+          <h1 class="th-title">Research-It - Fully Local RAG System</h1>
+          <p class="th-subtitle">Academic RAG without cloud inference. LEANN/HNSW indexing, dense embeddings, and Ollama-backed generation - designed for air-gapped institutions and privacy-constrained research.</p>
         </header>
 
         <div class="th-divider"></div>
@@ -28,7 +28,7 @@ const githubUrl = "https://github.com/ughshwin/research-it";
         <section class="th-section">
           <h2 class="th-section-title">The Problem</h2>
           <p class="th-body">
-            Academic RAG assumed cloud inference by default. Sensitive papers had no private processing path — all retrieval and generation required external API credentials. Researchers on CPU-only or low-VRAM hardware had no viable local inference option. Institutions with air-gap requirements were blocked by every existing tool.
+            Academic RAG assumed cloud inference by default. Sensitive papers had no private processing path - all retrieval and generation required external API credentials. Researchers on CPU-only or low-VRAM hardware had no viable local inference option. Institutions with air-gap requirements were blocked by every existing tool.
           </p>
           <p class="th-body">
             Mixed source formats compounded the difficulty: PDFs, arXiv HTML pages, and paper directories each required separate handling logic that no single tool unified. The only path from ingestion to QA either exposed data externally or required manual preprocessing per source type.
@@ -41,14 +41,14 @@ const githubUrl = "https://github.com/ughshwin/research-it";
             Fully local retrieval stack: <strong>LEANN/HNSW vector indexing</strong> with dense embeddings (facebook/contriever), Ollama-backed inference, and multi-source ingestion across PDFs, academic HTML, and paper directories. Quantized model support for CPU-only hardware. Smart chunking with configurable overlap, Top-K (3–4), and context windows (1,024–1,536 tokens).
           </p>
           <p class="th-body">
-            PyMuPDF and BeautifulSoup handle varied PDF quality and HTML structure before indexing — not at query time. Retrieval quality problems are caught during ingestion, where they're fixable, rather than surfacing as silent errors in generated answers.
+            PyMuPDF and BeautifulSoup handle varied PDF quality and HTML structure before indexing - not at query time. Retrieval quality problems are caught during ingestion, where they're fixable, rather than surfacing as silent errors in generated answers.
           </p>
         </section>
 
         <section class="th-section">
           <h2 class="th-section-title">Air-Gap Design</h2>
           <p class="th-body">
-            Reproducible HNSW index artifacts are the key to air-gapped operation. Given the same corpus, the same index is produced — enabling institutions to build indexes in a connected environment and transfer them to isolated infrastructure without re-running ingestion. No external service is required at query time. API-free document QA across academic sources, running on sub-1GB quantized models.
+            Reproducible HNSW index artifacts are the key to air-gapped operation. Given the same corpus, the same index is produced - enabling institutions to build indexes in a connected environment and transfer them to isolated infrastructure without re-running ingestion. No external service is required at query time. API-free document QA across academic sources, running on sub-1GB quantized models.
           </p>
         </section>
 

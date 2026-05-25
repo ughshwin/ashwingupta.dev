@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 /**
  * Shortest-column-first (greedy bin-packing) masonry layout hook.
@@ -42,7 +36,10 @@ export function useMasonry(
   count: number,
   cols: number,
   gap: number,
-): { columns: number[][]; getRef: (i: number) => (el: HTMLElement | null) => void } {
+): {
+  columns: number[][];
+  getRef: (i: number) => (el: HTMLElement | null) => void;
+} {
   // Measured heights for each item (in px). Updated by measure() before pack().
   const heights = useRef<number[]>(Array.from({ length: count }, () => 0));
 
@@ -138,7 +135,7 @@ export function useMasonry(
       }
       return refCbs.current[i];
     },
-    [], // no deps — the closure only captures the stable refs
+    [], // no deps - the closure only captures the stable refs
   );
 
   // ── Column arrays ──────────────────────────────────────────────────────────

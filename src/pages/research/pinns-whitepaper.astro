@@ -7,7 +7,7 @@ const pdfUrl = "/PINNs_whitepaper.pdf";
 ---
 
 <BaseLayout
-  title="Physics-Informed Inference for Partial Observability — White Paper | Ashwin Gupta"
+  title="Physics-Informed Inference for Partial Observability - White Paper | Ashwin Gupta"
   description="Enterprise deployment proposition for physics-informed neural networks. Where PINNs fit in industrial and operational settings constrained by sparse telemetry."
   canonical={canonical}
 >
@@ -20,7 +20,7 @@ const pdfUrl = "/PINNs_whitepaper.pdf";
         <header class="th-header">
           <div class="th-badge">White Paper · Enterprise</div>
           <h1 class="th-title">Physics-Informed Inference for Partial Observability</h1>
-          <p class="th-subtitle">A deployment proposition for physics-informed neural networks in enterprise settings — where governing equations are known but sensor coverage is not, and conventional data-driven inference breaks down.</p>
+          <p class="th-subtitle">A deployment proposition for physics-informed neural networks in enterprise settings - where governing equations are known but sensor coverage is not, and conventional data-driven inference breaks down.</p>
         </header>
 
         <div class="th-divider"></div>
@@ -28,20 +28,20 @@ const pdfUrl = "/PINNs_whitepaper.pdf";
         <section class="th-section">
           <h2 class="th-section-title">The Partial Observability Problem in Enterprise</h2>
           <p class="th-body">
-            Enterprise systems are governed by well-understood physics — heat transfer in data centres, structural dynamics in industrial machinery, fluid flow in process pipelines. The governing equations are not in question. What's in question is coverage: sensors are placed where they can be placed, not where they're needed, and telemetry is sparse by operational constraint rather than theoretical limit.
+            Enterprise systems are governed by well-understood physics - heat transfer in data centres, structural dynamics in industrial machinery, fluid flow in process pipelines. The governing equations are not in question. What's in question is coverage: sensors are placed where they can be placed, not where they're needed, and telemetry is sparse by operational constraint rather than theoretical limit.
           </p>
           <p class="th-body">
-            Conventional data-driven inference fails here because it requires dense coverage to reconstruct system state. Sparse telemetry leaves blind regions that the model cannot interpolate across — not because the physics is unknown, but because the model has no mechanism to exploit it. The result is a blind-control problem: the system operator makes decisions on partial state with no principled way to bound what's being missed.
+            Conventional data-driven inference fails here because it requires dense coverage to reconstruct system state. Sparse telemetry leaves blind regions that the model cannot interpolate across - not because the physics is unknown, but because the model has no mechanism to exploit it. The result is a blind-control problem: the system operator makes decisions on partial state with no principled way to bound what's being missed.
           </p>
         </section>
 
         <section class="th-section">
           <h2 class="th-section-title">The PINN Approach</h2>
           <p class="th-body">
-            Physics-informed neural networks embed governing PDE constraints directly into the training objective. The network fits sparse telemetry while simultaneously satisfying the governing dynamics — physics acts as a regularizer, not a post-processing step. This means the model cannot produce a solution that satisfies the data loss while violating conservation laws or boundary conditions. The entire class of physically implausible solutions is eliminated structurally.
+            Physics-informed neural networks embed governing PDE constraints directly into the training objective. The network fits sparse telemetry while simultaneously satisfying the governing dynamics - physics acts as a regularizer, not a post-processing step. This means the model cannot produce a solution that satisfies the data loss while violating conservation laws or boundary conditions. The entire class of physically implausible solutions is eliminated structurally.
           </p>
           <p class="th-body">
-            Staged training rebalances telemetry fidelity against PDE adherence across epochs. Convergence is validated via residual consistency, boundary behavior, and physical plausibility — not just loss curves. Extrapolation stays bounded by governing structure rather than training coverage, which is precisely what matters in operational settings where the test distribution is always partially outside the training domain.
+            Staged training rebalances telemetry fidelity against PDE adherence across epochs. Convergence is validated via residual consistency, boundary behavior, and physical plausibility - not just loss curves. Extrapolation stays bounded by governing structure rather than training coverage, which is precisely what matters in operational settings where the test distribution is always partially outside the training domain.
           </p>
         </section>
 
@@ -54,20 +54,20 @@ const pdfUrl = "/PINNs_whitepaper.pdf";
             <strong>Server and hardware thermal feedback loops.</strong> Component-level temperature reconstruction from board-level sensors. Governing heat equations for specific hardware architectures are known from manufacturer specifications. A physics-informed model can provide spatially resolved thermal state at inference time without requiring per-component instrumentation.
           </p>
           <p class="th-body">
-            <strong>Industrial process control and structural monitoring.</strong> Fluid dynamics in process pipelines, structural stress distributions in load-bearing systems, pressure fields in confined geometries — all governed by PDEs with known boundary conditions. Sparse sensor networks provide boundary measurements; PINNs reconstruct interior fields without additional instrumentation.
+            <strong>Industrial process control and structural monitoring.</strong> Fluid dynamics in process pipelines, structural stress distributions in load-bearing systems, pressure fields in confined geometries - all governed by PDEs with known boundary conditions. Sparse sensor networks provide boundary measurements; PINNs reconstruct interior fields without additional instrumentation.
           </p>
           <p class="th-body">
-            <strong>Predictive maintenance under partial observability.</strong> Structural mechanics equations govern degradation dynamics. Vibration, load, and displacement sensors sample coarsely. Physics-constrained inference propagates what's measured into what's physically implied — enabling degradation estimates at unmeasured points and extending the actionable horizon for maintenance scheduling.
+            <strong>Predictive maintenance under partial observability.</strong> Structural mechanics equations govern degradation dynamics. Vibration, load, and displacement sensors sample coarsely. Physics-constrained inference propagates what's measured into what's physically implied - enabling degradation estimates at unmeasured points and extending the actionable horizon for maintenance scheduling.
           </p>
         </section>
 
         <section class="th-section">
           <h2 class="th-section-title">The Deployment Proposition</h2>
           <p class="th-body">
-            The right question for enterprise physics-informed deployment is not "do we have enough data?" but "do we know the governing equations?" For the operational settings above, the answer to the second question is yes — and always has been. The data is sparse because dense instrumentation is expensive, not because the physics is uncertain.
+            The right question for enterprise physics-informed deployment is not "do we have enough data?" but "do we know the governing equations?" For the operational settings above, the answer to the second question is yes - and always has been. The data is sparse because dense instrumentation is expensive, not because the physics is uncertain.
           </p>
           <p class="th-body">
-            PINNs make sparse data sufficient in a way that purely data-driven approaches cannot. The governing equations carry structural information about the solution that would otherwise require orders of magnitude more labeled examples to approximate. Enterprise is not a harder setting for physics-informed methods — it is a better-suited one, because the physics is better-known and the data is more reliably sparse.
+            PINNs make sparse data sufficient in a way that purely data-driven approaches cannot. The governing equations carry structural information about the solution that would otherwise require orders of magnitude more labeled examples to approximate. Enterprise is not a harder setting for physics-informed methods - it is a better-suited one, because the physics is better-known and the data is more reliably sparse.
           </p>
         </section>
 

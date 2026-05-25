@@ -99,11 +99,11 @@ const ENTRIES: Entry[] = [
     start: new Date(2019, 7),
     end: new Date(2023, 4),
     bullets: [
-      "Founder & mentor — Augment.AI, BMSCE's AI club",
-      "Sponsorship Head, UTSAV '22 — signed MoUs · raised >50% of total budget in 14 days",
+      "Founder & mentor - Augment.AI, BMSCE's AI club",
+      "Sponsorship Head, UTSAV '22 - signed MoUs · raised >50% of total budget in 14 days",
       "IEEE Joint Secretary · 75+ events · chapter ranked #2 globally · co-founded CS chapter",
-      "Best Outgoing Project '23 — PINNs across fluid, structural & thermal simulation",
-      "Published: MCQ generation via graph + LLMs — NCISCT 2022",
+      "Best Outgoing Project '23 - PINNs across fluid, structural & thermal simulation",
+      "Published: MCQ generation via graph + LLMs - NCISCT 2022",
     ],
   },
   {
@@ -117,7 +117,7 @@ const ENTRIES: Entry[] = [
     end: new Date(2022, 9),
     bullets: [
       "Visual identity, event collateral & social content for a teaching NGO",
-      "First audience feedback loop — iteration under zero-budget constraints",
+      "First audience feedback loop - iteration under zero-budget constraints",
     ],
   },
   {
@@ -130,7 +130,7 @@ const ENTRIES: Entry[] = [
     start: new Date(2021, 1),
     end: new Date(2021, 11),
     bullets: [
-      "Early GPT-era enterprise ML — among first Indian teams shipping",
+      "Early GPT-era enterprise ML - among first Indian teams shipping",
       "NLP pipelines: document classification & processing for enterprise clients",
       "Full lifecycle: curation → training → eval → deploy → client handoff",
     ],
@@ -140,7 +140,7 @@ const ENTRIES: Entry[] = [
     track: "professional",
     weight: "early",
     role: "Head of Machine Learning",
-    company: "IISc — NMCAD Lab",
+    company: "IISc - NMCAD Lab",
     period: "Jan 2022 – Sep 2022",
     start: new Date(2022, 0),
     end: new Date(2022, 8),
@@ -160,9 +160,9 @@ const ENTRIES: Entry[] = [
     start: new Date(2023, 0),
     end: new Date(2024, 4),
     bullets: [
-      "Here.app (HDFC ERGO) — 163-lang multilingual RAG · 97% factual accuracy",
-      "Prismforce Skill Graph — +30% relevance · sub-50ms on NVIDIA T4",
-      "Laminar / Metamorph / Polymorph — AI CMS · no-code chatbots · cURL→20+ lang API",
+      "Here.app (HDFC ERGO) - 163-lang multilingual RAG · 97% factual accuracy",
+      "Prismforce Skill Graph - +30% relevance · sub-50ms on NVIDIA T4",
+      "Laminar / Metamorph / Polymorph - AI CMS · no-code chatbots · cURL→20+ lang API",
     ],
   },
   {
@@ -175,12 +175,12 @@ const ENTRIES: Entry[] = [
     start: new Date(2024, 5),
     end: "present",
     bullets: [
-      "Conversational Analytics (HSBC) — SBC→STT→LLM on GCP/RHEL · authored LLD + orchestration architecture",
+      "Conversational Analytics (HSBC) - SBC→STT→LLM on GCP/RHEL · authored LLD + orchestration architecture",
       "GIL fix: CPU-pinned procs + asyncio/uvloop · 20→140–160 sessions/VM · 1,600+ concurrent",
       "Packer GCE automation · GCP log correlator: 250K lines <5s · MTTR 1–2hr→~10min",
       "Compute: $118K→$8K/month (~$1.3M/yr) · Azure infra intelligence · Amex GBT RAG",
       "Best Team Award - HSBC Account",
-      "Pat on Back — Think Customer · individual delivery innovation & excellence",
+      "Pat on Back - Think Customer · individual delivery innovation & excellence",
       "Java Spring AI trainer · 130+ participants · 81% voted-preferred · NPS +50",
     ],
   },
@@ -194,8 +194,8 @@ const ENTRIES: Entry[] = [
     start: new Date(2025, 9),
     end: new Date(2027, 2),
     bullets: [
-      "Dual specialisation — MLOps, GenAI & Agentic AI",
-      "Concurrent with Coforge — formalising the theory behind production systems",
+      "Dual specialisation - MLOps, GenAI & Agentic AI",
+      "Concurrent with Coforge - formalising the theory behind production systems",
       "Structural ML · probabilistic reasoning · optimisation · MLOps at scale",
     ],
   },
@@ -260,7 +260,7 @@ const MAX_EDU_LANE_W = 380;
 const N_PRO_PROJ_ROWS = new Set(assignLanes(PRO).values()).size;
 const N_EDU_PROJ_ROWS = new Set(assignLanes(EDU).values()).size;
 
-const ALL_LANE = assignLanes(ENTRIES); // combined — used for mobile EDU card centering
+const ALL_LANE = assignLanes(ENTRIES); // combined - used for mobile EDU card centering
 
 // ── Mobile Gantt constants ─────────────────────────────────────────────────
 const MOBILE_SPINE_X_PX = 28;
@@ -286,7 +286,7 @@ function buildMobileDims(vpW: number, vpH: number) {
     return Math.max(monthPx * 2, (endM - toMonths(s)) * monthPx);
   };
 
-  // Two separate strip bands — mirrors the desktop's dual-track layout,
+  // Two separate strip bands - mirrors the desktop's dual-track layout,
   // both placed to the right of the spine instead of left/right of it.
   const proBandW =
     N_PRO_PROJ_ROWS * MOBILE_PROJ_W +
@@ -302,7 +302,7 @@ function buildMobileDims(vpW: number, vpH: number) {
 
   const barLeft = (_id: EntryId) => cardLeft;
 
-  // Strip X — pro uses PRO_PROJ_LANE, edu uses EDU_PROJ_LANE (track-specific)
+  // Strip X - pro uses PRO_PROJ_LANE, edu uses EDU_PROJ_LANE (track-specific)
   const projLeft = (e: Entry) => {
     if (e.track === "professional") {
       const row = PRO_PROJ_LANE.get(e.id) ?? 0;
@@ -349,7 +349,7 @@ function buildDims(vpW: number, vpH: number) {
   const toPy = (d: Date) =>
     CHART_PAD_T + (TOTAL_MONTHS - toMonths(d)) * monthPx;
 
-  // Duration height for projection strips — time-proportional
+  // Duration height for projection strips - time-proportional
   const bH = (s: Date, e: Date | "present") => {
     const endM = e === "present" ? toMonths(TODAY) : toMonths(e as Date);
     return Math.max(monthPx * 2, (endM - toMonths(s)) * monthPx);
@@ -387,7 +387,7 @@ function buildDims(vpW: number, vpH: number) {
     return SPINE_X - EDU_SPINE_X_GAP - PROJ_W - row * (PROJ_W + PROJ_X_GAP);
   };
 
-  // ── Content heights — cards sized to fit their text ────────────────────
+  // ── Content heights - cards sized to fit their text ────────────────────
   const entryH: Partial<Record<EntryId, number>> = {};
   const collapsedEntryH: Partial<Record<EntryId, number>> = {};
   for (const e of ENTRIES) {
@@ -601,7 +601,7 @@ export function ExperienceTimeline() {
     canvas.height = (isMobile ? mDims : dims).STRIP_H;
   }, [vpW, dims, mDims, isMobile]);
 
-  // Particle draw loop — inertia simulation + emission + render
+  // Particle draw loop - inertia simulation + emission + render
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -618,11 +618,11 @@ export function ExperienceTimeline() {
       if (Math.abs(targetDelta) > 0.1) {
         tailVelRef.current = targetDelta / Math.max(dt, 0.001);
       } else {
-        // Exponential decay — ~50% remaining after 0.1s, gone by ~0.35s
+        // Exponential decay - ~50% remaining after 0.1s, gone by ~0.35s
         tailVelRef.current *= Math.pow(0.001, dt);
       }
 
-      // Emit at actual head position — tail stays attached
+      // Emit at actual head position - tail stays attached
       if (Math.abs(tailVelRef.current) > 5 && dimsRef.current) {
         const { SPINE_X } = dimsRef.current;
         const sign = tailVelRef.current > 0 ? -1 : 1;
@@ -691,7 +691,7 @@ export function ExperienceTimeline() {
 
   const sectionH = vpH + maxOffset;
 
-  // Header compresses over the first 100px of scroll — heading slides up to sit tight against the section line
+  // Header compresses over the first 100px of scroll - heading slides up to sit tight against the section line
   const compressRatio = maxOffset > 0 ? Math.min(1, chartOffset / 100) : 0;
   const headerGapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
 
@@ -892,14 +892,14 @@ export function ExperienceTimeline() {
           flexDirection: "column",
           cursor: interactive ? "pointer" : "default",
           userSelect: interactive ? "none" : undefined,
-          // Push animation — cards below slide down when a sibling expands
+          // Push animation - cards below slide down when a sibling expands
           transition: interactive
             ? "top 0.45s cubic-bezier(0.76, 0, 0.24, 1)"
             : undefined,
         }}
       >
         {interactive ? (
-          // Inner wrapper drives height — mask fades only the text, not the card border
+          // Inner wrapper drives height - mask fades only the text, not the card border
           <div
             style={{
               overflow: "hidden",
@@ -1055,7 +1055,7 @@ export function ExperienceTimeline() {
                 />
               ))}
 
-              {/* Spine — segmented so year labels appear to cut through it */}
+              {/* Spine - segmented so year labels appear to cut through it */}
               {(() => {
                 const GAP = 11;
                 const markYs = YEAR_MARKS.map((y) =>
@@ -1120,7 +1120,7 @@ export function ExperienceTimeline() {
                 );
               })}
 
-              {/* All projection strips (combined — color-coded by entry) */}
+              {/* All projection strips (combined - color-coded by entry) */}
               {ENTRIES.map((e) => {
                 const endDate = e.end === "present" ? TODAY : (e.end as Date);
                 const stripTop = mToPy(endDate);
@@ -1142,7 +1142,7 @@ export function ExperienceTimeline() {
                 );
               })}
 
-              {/* Entry cards — asymmetric centering + push-down when a card expands */}
+              {/* Entry cards - asymmetric centering + push-down when a card expands */}
               {(() => {
                 // Precompute base tops so push delta can be applied to cards below the open one
                 const baseTops = new Map<EntryId, number>();
@@ -1158,7 +1158,14 @@ export function ExperienceTimeline() {
                       cy = cardCenterY(e, lane, PRO, PRO_LANE, mMonthPx);
                     } else {
                       const lane = ALL_LANE.get(e.id) ?? 0;
-                      cy = cardCenterY(e, lane, ENTRIES, ALL_LANE, mMonthPx, true);
+                      cy = cardCenterY(
+                        e,
+                        lane,
+                        ENTRIES,
+                        ALL_LANE,
+                        mMonthPx,
+                        true,
+                      );
                     }
                     baseTop = cy - mCollapsedEntryH[e.id] / 2;
                   }
@@ -1345,7 +1352,7 @@ export function ExperienceTimeline() {
               />
             ))}
 
-            {/* Spine — segmented so year labels appear to cut through it */}
+            {/* Spine - segmented so year labels appear to cut through it */}
             {(() => {
               const GAP = 11;
               const markYs = YEAR_MARKS.map((y) =>
@@ -1409,7 +1416,7 @@ export function ExperienceTimeline() {
               );
             })}
 
-            {/* Pro projection strips — time-proportional duration indicator */}
+            {/* Pro projection strips - time-proportional duration indicator */}
             {PRO_PROJ.map((e) => {
               const endDate = e.end === "present" ? TODAY : (e.end as Date);
               const stripTop = toPy(endDate);
@@ -1452,7 +1459,7 @@ export function ExperienceTimeline() {
               );
             })}
 
-            {/* Professional cards — each centred in its strip's largest free sub-range */}
+            {/* Professional cards - each centred in its strip's largest free sub-range */}
             {PRO.map((e) => {
               const lane = PRO_LANE.get(e.id) ?? 0;
               const cy = cardCenterY(e, lane, PRO, PRO_LANE, monthPx);
@@ -1481,7 +1488,7 @@ export function ExperienceTimeline() {
             })}
           </div>
 
-          {/* Particle canvas — fixed in strip viewport coords */}
+          {/* Particle canvas - fixed in strip viewport coords */}
           <canvas
             ref={canvasRef}
             style={{
@@ -1497,7 +1504,7 @@ export function ExperienceTimeline() {
               maxOffset > 0 ? (chartOffset / maxOffset) * STRIP_H : 0;
             return (
               <>
-                {/* Painted spine highlight — grows down on scroll, shrinks on reverse */}
+                {/* Painted spine highlight - grows down on scroll, shrinks on reverse */}
                 <div
                   style={{
                     position: "absolute",

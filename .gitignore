@@ -164,3 +164,6 @@ guidelines
 scripts
 .cursorrules
 verify_shots*
+AGENTS.md
+CLAUDE.md
+GEMINI.md

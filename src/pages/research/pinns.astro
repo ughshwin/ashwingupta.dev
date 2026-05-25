@@ -7,8 +7,8 @@ const pdfUrl = "/PINNs_whitepaper.pdf";
 ---
 
 <BaseLayout
-  title="Physics-Informed Neural Networks — Dual-Loss Framework | Ashwin Gupta"
-  description="Dual-loss PINN framework for multi-domain physics simulation. Best Outgoing Project — BMSCE 2022–23. 6 validated benchmarks across fluid, structural, and thermal domains."
+  title="Physics-Informed Neural Networks - Dual-Loss Framework | Ashwin Gupta"
+  description="Dual-loss PINN framework for multi-domain physics simulation. Best Outgoing Project - BMSCE 2022–23. 6 validated benchmarks across fluid, structural, and thermal domains."
   canonical={canonical}
 >
   <div class="spatial-scene">
@@ -19,7 +19,7 @@ const pdfUrl = "/PINNs_whitepaper.pdf";
 
         <header class="th-header">
           <div class="th-badge">Best Outgoing Project '23 · BMS College of Engineering</div>
-          <h1 class="th-title">Physics-Informed Neural Networks — Dual-Loss Framework for Multi-Domain Simulation</h1>
+          <h1 class="th-title">Physics-Informed Neural Networks - Dual-Loss Framework for Multi-Domain Simulation</h1>
           <p class="th-subtitle">Physics constraints as regularizers. Sparse data made sufficient through governing equations.</p>
         </header>
 
@@ -28,17 +28,17 @@ const pdfUrl = "/PINNs_whitepaper.pdf";
         <section class="th-section">
           <h2 class="th-section-title">The Problem With Data-Driven Physics</h2>
           <p class="th-body">
-            Purely data-driven physics simulation is fragile under sparse data. A model trained only on observations can satisfy the data loss while violating the governing equations — producing solutions that are mathematically consistent with the loss function but physically implausible. You need labeled datasets that are expensive or impossible to generate experimentally, and even with enough data, there is no guarantee the model learned the right structure.
+            Purely data-driven physics simulation is fragile under sparse data. A model trained only on observations can satisfy the data loss while violating the governing equations - producing solutions that are mathematically consistent with the loss function but physically implausible. You need labeled datasets that are expensive or impossible to generate experimentally, and even with enough data, there is no guarantee the model learned the right structure.
           </p>
           <p class="th-body">
-            The standard response — more data, more compute — does not address the structural problem. The model has no reason to respect conservation laws, boundary conditions, or governing PDEs. It fits the examples it was given, and nothing more.
+            The standard response - more data, more compute - does not address the structural problem. The model has no reason to respect conservation laws, boundary conditions, or governing PDEs. It fits the examples it was given, and nothing more.
           </p>
         </section>
 
         <section class="th-section">
           <h2 class="th-section-title">The Framework</h2>
           <p class="th-body">
-            The dual-loss PINN framework embeds governing PDE and ODE constraints directly into the optimization objective alongside data loss. The network minimises both simultaneously — fitting observations while satisfying the physics. The constraints act as a regularizer, preventing physically implausible solutions from emerging even when training data is sparse.
+            The dual-loss PINN framework embeds governing PDE and ODE constraints directly into the optimization objective alongside data loss. The network minimises both simultaneously - fitting observations while satisfying the physics. The constraints act as a regularizer, preventing physically implausible solutions from emerging even when training data is sparse.
           </p>
           <p class="th-body">
             This makes sparse data sufficient in a way that purely data-driven approaches cannot achieve. The governing equations carry structural information about the solution that would otherwise require thousands of labeled examples to approximate. Embedding PDEs into the objective is what makes the sparse-data regime tractable.
@@ -51,10 +51,10 @@ const pdfUrl = "/PINNs_whitepaper.pdf";
             The framework was validated across six benchmarks spanning three physics domains: fluid dynamics (Burgers' equation), structural mechanics (fixed-fixed column deflection, cantilever tip deflection), and heat transfer (1D heat conduction via pin fin, 1D transient cooling under Neumann flux and Dirichlet boundary conditions).
           </p>
           <p class="th-body">
-            Neumann and Dirichlet boundary condition variants were tested explicitly to validate generalizability across constraint types and problem geometries — not just across domains. Stable convergence was achieved across all six with limited labeled data.
+            Neumann and Dirichlet boundary condition variants were tested explicitly to validate generalizability across constraint types and problem geometries - not just across domains. Stable convergence was achieved across all six with limited labeled data.
           </p>
           <p class="th-body">
-            Applied use cases explored: HVAC thermal feedback and server cooling — both domains where labeled simulation data is expensive and sparse data is the realistic operating constraint.
+            Applied use cases explored: HVAC thermal feedback and server cooling - both domains where labeled simulation data is expensive and sparse data is the realistic operating constraint.
           </p>
         </section>
 
@@ -64,7 +64,7 @@ const pdfUrl = "/PINNs_whitepaper.pdf";
             Physics-informed training shifts the question from "do I have enough data?" to "do I know the governing equations?" For most engineering problems, the governing equations are known. The data is sparse because experiments are expensive. PINNs make that the right trade-off to exploit.
           </p>
           <p class="th-body">
-            The key consequence: extrapolation under a physics-constrained model stays bounded by governing structure, not just by training coverage. Generalization depends on dynamics, not data density alone. The model cannot satisfy data loss by producing solutions that violate physics — the constraint eliminates that entire solution class.
+            The key consequence: extrapolation under a physics-constrained model stays bounded by governing structure, not just by training coverage. Generalization depends on dynamics, not data density alone. The model cannot satisfy data loss by producing solutions that violate physics - the constraint eliminates that entire solution class.
           </p>
         </section>
 

@@ -5,7 +5,7 @@ import { useIsMobile } from "../../hooks/useMediaQuery";
 const FONT_MONO = '"DM Mono", monospace';
 const FONT_SANS = '"DM Sans", sans-serif';
 
-// Update this block monthly — it should reflect what's actively being built right now.
+// Update this block monthly - it should reflect what's actively being built right now.
 // Last updated: 2026-05
 const currentStatus = [
   {
@@ -16,7 +16,7 @@ const currentStatus = [
   {
     label: "ScholarOS",
     detail:
-      "Structured research execution — five deterministic MCP services, DAG-executed, fully local. In active development.",
+      "Structured research execution - five deterministic MCP services, DAG-executed, fully local. In active development.",
   },
 ];
 
@@ -78,7 +78,9 @@ export function Currently() {
         </span>
 
         {/* Status lines */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}
+        >
           {currentStatus.map(({ label, detail }) => (
             <p
               key={label}
@@ -100,7 +102,7 @@ export function Currently() {
               >
                 {label}
               </span>
-              {" — "}
+              {" - "}
               {detail}
             </p>
           ))}

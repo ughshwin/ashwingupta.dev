@@ -7,7 +7,7 @@ const githubUrl = "https://github.com/ughshwin/PHYSCLIP";
 ---
 
 <BaseLayout
-  title="PHYSCLIP — Contrastive Regime Classification | Ashwin Gupta"
+  title="PHYSCLIP - Contrastive Regime Classification | Ashwin Gupta"
   description="Contrastive learning for physics regime classification. Dual encoders aligning symbolic PDE descriptions and field observations upstream of PINN enforcement."
   canonical={canonical}
 >
@@ -19,8 +19,8 @@ const githubUrl = "https://github.com/ughshwin/PHYSCLIP";
 
         <header class="th-header">
           <div class="th-badge">Open Source · Personal</div>
-          <h1 class="th-title">PHYSCLIP — Contrastive Regime Classification for Physics-Informed Models</h1>
-          <p class="th-subtitle">Regime recognition from cross-modal alignment between symbolic physics and observed fields — the perception layer upstream of physics-constrained solving.</p>
+          <h1 class="th-title">PHYSCLIP - Contrastive Regime Classification for Physics-Informed Models</h1>
+          <p class="th-subtitle">Regime recognition from cross-modal alignment between symbolic physics and observed fields - the perception layer upstream of physics-constrained solving.</p>
         </header>
 
         <div class="th-divider"></div>
@@ -28,20 +28,20 @@ const githubUrl = "https://github.com/ughshwin/PHYSCLIP";
         <section class="th-section">
           <h2 class="th-section-title">The Upstream Problem</h2>
           <p class="th-body">
-            Physics-informed models — PINNs and their variants — assume the governing equation is already known. That assumption is often the weakest link in the pipeline. The harder, upstream problem is regime classification: given an observed field, which governing equation applies? This question has to be answered before physics-constrained training can begin, and it is rarely discussed.
+            Physics-informed models - PINNs and their variants - assume the governing equation is already known. That assumption is often the weakest link in the pipeline. The harder, upstream problem is regime classification: given an observed field, which governing equation applies? This question has to be answered before physics-constrained training can begin, and it is rarely discussed.
           </p>
           <p class="th-body">
-            Traditional approaches hand-code regime boundaries or rely on domain expert annotation. Neither scales. The regime identification step becomes a bottleneck for any physics-informed pipeline operating on real-world, partially observed data — the exact setting where PINNs are most useful.
+            Traditional approaches hand-code regime boundaries or rely on domain expert annotation. Neither scales. The regime identification step becomes a bottleneck for any physics-informed pipeline operating on real-world, partially observed data - the exact setting where PINNs are most useful.
           </p>
         </section>
 
         <section class="th-section">
           <h2 class="th-section-title">The Approach</h2>
           <p class="th-body">
-            PHYSCLIP uses dual encoders to map two modalities into a shared latent space: symbolic physics descriptions (PDEs, governing equations expressed in text form) and field observations (numerical data, measurements). Regime recognition emerges from cross-modal alignment — not from hand-coded classification rules or expert-labeled boundaries.
+            PHYSCLIP uses dual encoders to map two modalities into a shared latent space: symbolic physics descriptions (PDEs, governing equations expressed in text form) and field observations (numerical data, measurements). Regime recognition emerges from cross-modal alignment - not from hand-coded classification rules or expert-labeled boundaries.
           </p>
           <p class="th-body">
-            The contrastive objective pulls matched (description, observation) pairs together in the latent space and pushes mismatched pairs apart. The same mechanism that makes CLIP work for vision-language alignment — applied to the physics-symbolic and physics-observational modalities instead.
+            The contrastive objective pulls matched (description, observation) pairs together in the latent space and pushes mismatched pairs apart. The same mechanism that makes CLIP work for vision-language alignment - applied to the physics-symbolic and physics-observational modalities instead.
           </p>
         </section>
 
@@ -51,7 +51,7 @@ const githubUrl = "https://github.com/ughshwin/PHYSCLIP";
             PHYSCLIP is designed as a perception layer upstream of PINN-style enforcement, not as a standalone model. The intended flow: observation → regime identification via PHYSCLIP → physics-constrained solving with the identified governing equation. This makes the full pipeline end-to-end without requiring domain expert intervention at the classification step.
           </p>
           <p class="th-body">
-            Latent proximity carries physical meaning. Nearby embeddings in the shared space indicate similar physics regimes — enabling interpretable regime identification under partial observability, where the full field is never observed and hard analytic boundaries cannot be computed. Partial observations produce embeddings that cluster near the correct regime even when the complete solution is unknown.
+            Latent proximity carries physical meaning. Nearby embeddings in the shared space indicate similar physics regimes - enabling interpretable regime identification under partial observability, where the full field is never observed and hard analytic boundaries cannot be computed. Partial observations produce embeddings that cluster near the correct regime even when the complete solution is unknown.
           </p>
         </section>
 

@@ -13,14 +13,17 @@ const GAP = "1.25rem";
  * The wrapper uses display:grid so the card fills 100% of the cell's width
  * AND height. The row uses default align-items:stretch so every wrapper in
  * a row reaches the same height (the tallest sibling). This guarantees the
- * gap below every card is exactly GAP — never more, never less.
+ * gap below every card is exactly GAP - never more, never less.
  */
 interface EqualGridProps {
   rows: number[];
   renderCard: (idx: number) => ReactNode;
 }
 
-export function EqualGridRenderer({ rows, renderCard }: Readonly<EqualGridProps>) {
+export function EqualGridRenderer({
+  rows,
+  renderCard,
+}: Readonly<EqualGridProps>) {
   let cardIdx = 0;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: GAP }}>
@@ -28,7 +31,10 @@ export function EqualGridRenderer({ rows, renderCard }: Readonly<EqualGridProps>
         const start = cardIdx;
         cardIdx += n;
         return (
-          <div key={start} style={{ display: "flex", gap: GAP, alignItems: "flex-start" }}>
+          <div
+            key={start}
+            style={{ display: "flex", gap: GAP, alignItems: "flex-start" }}
+          >
             {Array.from({ length: n }, (_, i) => (
               <div key={start + i} style={{ flex: 1, minWidth: 0 }}>
                 {renderCard(start + i)}
@@ -66,12 +72,9 @@ export function CollageRenderer({ blocks, renderCard }: Props) {
     <div style={{ display: "flex", flexDirection: "column", gap: GAP }}>
       {blocks.map((block, blockIdx) => {
         if (block.kind === "tall") {
-          const mainIdx =
-            block.side === "left" ? cardIdx : cardIdx + 2;
-          const s1Idx =
-            block.side === "left" ? cardIdx + 1 : cardIdx;
-          const s2Idx =
-            block.side === "left" ? cardIdx + 2 : cardIdx + 1;
+          const mainIdx = block.side === "left" ? cardIdx : cardIdx + 2;
+          const s1Idx = block.side === "left" ? cardIdx + 1 : cardIdx;
+          const s2Idx = block.side === "left" ? cardIdx + 2 : cardIdx + 1;
           cardIdx += 3;
 
           const mainFlex = Math.round(block.mainWeight * 100);
@@ -95,7 +98,7 @@ export function CollageRenderer({ blocks, renderCard }: Props) {
                 gap: GAP,
               }}
             >
-              {/* Stacked cards keep natural height — no forced stretch */}
+              {/* Stacked cards keep natural height - no forced stretch */}
               <div style={{ minWidth: 0 }}>{renderCard(s1Idx)}</div>
               <div style={{ minWidth: 0 }}>{renderCard(s2Idx)}</div>
             </div>

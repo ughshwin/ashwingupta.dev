@@ -12,7 +12,9 @@ const About = lazy(() =>
   import("./components/About").then((m) => ({ default: m.About })),
 );
 const Recommendations = lazy(() =>
-  import("./components/Recommendations").then((m) => ({ default: m.Recommendations })),
+  import("./components/Recommendations").then((m) => ({
+    default: m.Recommendations,
+  })),
 );
 const Currently = lazy(() =>
   import("./components/Currently").then((m) => ({ default: m.Currently })),
@@ -21,7 +23,9 @@ const Skills = lazy(() =>
   import("./components/Skills").then((m) => ({ default: m.Skills })),
 );
 const ExperienceTimeline = lazy(() =>
-  import("./components/ExperienceTimeline").then((m) => ({ default: m.ExperienceTimeline })),
+  import("./components/ExperienceTimeline").then((m) => ({
+    default: m.ExperienceTimeline,
+  })),
 );
 const Featured = lazy(() =>
   import("./components/Featured").then((m) => ({ default: m.Featured })),
@@ -67,7 +71,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!showThankYou) { setCountdown(10); return; }
+    if (!showThankYou) {
+      setCountdown(10);
+      return;
+    }
     const id = setInterval(() => {
       setCountdown((n) => (n <= 1 ? (clearInterval(id), 0) : n - 1));
     }, 1000);
@@ -80,7 +87,7 @@ export default function App() {
 
   return (
     <>
-      {/* Page content — blurred when thank-you is showing */}
+      {/* Page content - blurred when thank-you is showing */}
       <div
         className="spatial-scene"
         style={{
@@ -105,7 +112,7 @@ export default function App() {
         <SpeedInsights />
       </div>
 
-      {/* Back to top — outside blurred container so it stays sharp */}
+      {/* Back to top - outside blurred container so it stays sharp */}
       <AnimatePresence>
         {showTop && (
           <motion.button
@@ -139,32 +146,54 @@ export default function App() {
               padding: 0,
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.95)";
+              (e.currentTarget as HTMLElement).style.color =
+                "rgba(255,255,255,0.95)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.55)";
+              (e.currentTarget as HTMLElement).style.color =
+                "rgba(255,255,255,0.55)";
             }}
           >
             <svg
               width={btnSize}
               height={btnSize}
-              style={{ position: "absolute", inset: 0, transform: "rotate(-90deg)" }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                transform: "rotate(-90deg)",
+              }}
             >
-              <circle cx={btnSize / 2} cy={btnSize / 2} r={btnR} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" />
               <circle
-                cx={btnSize / 2} cy={btnSize / 2} r={btnR} fill="none"
-                stroke="#4ade80" strokeWidth="1.5" strokeLinecap="round"
+                cx={btnSize / 2}
+                cy={btnSize / 2}
+                r={btnR}
+                fill="none"
+                stroke="rgba(255,255,255,0.08)"
+                strokeWidth="1.5"
+              />
+              <circle
+                cx={btnSize / 2}
+                cy={btnSize / 2}
+                r={btnR}
+                fill="none"
+                stroke="#4ade80"
+                strokeWidth="1.5"
+                strokeLinecap="round"
                 strokeDasharray={btnCirc}
                 strokeDashoffset={btnCirc * (1 - scrollProgress)}
                 style={{ transition: "stroke-dashoffset 0.15s ease" }}
               />
             </svg>
-            <ChevronUp size={isMobile ? 16 : 19} strokeWidth={1.5} style={{ position: "relative" }} />
+            <ChevronUp
+              size={isMobile ? 16 : 19}
+              strokeWidth={1.5}
+              style={{ position: "relative" }}
+            />
           </motion.button>
         )}
       </AnimatePresence>
 
-      {/* Thank you banner — outside blurred container, transparent bg clips via combined blur */}
+      {/* Thank you banner - outside blurred container, transparent bg clips via combined blur */}
       <AnimatePresence>
         {showThankYou && (
           <motion.div
@@ -199,7 +228,8 @@ export default function App() {
             >
               <span
                 style={{
-                  fontFamily: '"Editorial New", "Playfair Display", Georgia, serif',
+                  fontFamily:
+                    '"Editorial New", "Playfair Display", Georgia, serif',
                   fontSize: isMobile ? "1.3rem" : "1.75rem",
                   fontWeight: 700,
                   color: "rgba(255,255,255,0.9)",
@@ -209,8 +239,10 @@ export default function App() {
                 }}
               >
                 Somewhere between the hero and here, you decided to keep going.
-                <br /><br />
-                Thank you for taking the time to know me a little more than you already did.
+                <br />
+                <br />
+                Thank you for taking the time to know me a little more than you
+                already did.
               </span>
               <span
                 style={{
@@ -236,12 +268,46 @@ export default function App() {
               </span>
 
               {/* Countdown ring */}
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", marginTop: "0.4rem" }}>
-                <div style={{ position: "relative", width: "52px", height: "52px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <svg width="52" height="52" style={{ position: "absolute", inset: 0, transform: "rotate(-90deg)" }}>
-                    <circle cx="26" cy="26" r="22" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="2" />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  marginTop: "0.4rem",
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    width: "52px",
+                    height: "52px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <svg
+                    width="52"
+                    height="52"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      transform: "rotate(-90deg)",
+                    }}
+                  >
+                    <circle
+                      cx="26"
+                      cy="26"
+                      r="22"
+                      fill="none"
+                      stroke="rgba(255,255,255,0.07)"
+                      strokeWidth="2"
+                    />
                     <motion.circle
-                      cx="26" cy="26" r="22"
+                      cx="26"
+                      cy="26"
+                      r="22"
                       fill="none"
                       stroke="#4ade80"
                       strokeWidth="2"
@@ -252,11 +318,27 @@ export default function App() {
                       transition={{ duration: 10, ease: "linear" }}
                     />
                   </svg>
-                  <span style={{ fontFamily: '"DM Mono", monospace', fontSize: "1rem", color: "rgba(255,255,255,0.7)", position: "relative", zIndex: 1 }}>
+                  <span
+                    style={{
+                      fontFamily: '"DM Mono", monospace',
+                      fontSize: "1rem",
+                      color: "rgba(255,255,255,0.7)",
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                  >
                     {countdown}
                   </span>
                 </div>
-                <span style={{ fontFamily: '"DM Mono", monospace', fontSize: "0.52rem", letterSpacing: "0.18em", color: "rgba(255,255,255,0.25)", textTransform: "uppercase" }}>
+                <span
+                  style={{
+                    fontFamily: '"DM Mono", monospace',
+                    fontSize: "0.52rem",
+                    letterSpacing: "0.18em",
+                    color: "rgba(255,255,255,0.25)",
+                    textTransform: "uppercase",
+                  }}
+                >
                   glad you stayed
                 </span>
               </div>

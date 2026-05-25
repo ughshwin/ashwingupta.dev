@@ -21,7 +21,7 @@ const recs = [
     company: "Coforge",
     relationship: "Direct colleague · HSBC project",
     date: "Nov 2025",
-    text: "Ashwin's work on the telephony ingestion layer — PJSIP-based, highly stable, low-latency SIP call-handling at scale — was technically precise. Technically strong, dependable, and proactive. He consistently delivered production-ready code with strong technical ownership, and enhanced the development workflow through automation. Highly recommended for roles in VoIP engineering, real-time media systems, or conversational-AI infrastructure.",
+    text: "Ashwin's work on the telephony ingestion layer - PJSIP-based, highly stable, low-latency SIP call-handling at scale - was technically precise. Technically strong, dependable, and proactive. He consistently delivered production-ready code with strong technical ownership, and enhanced the development workflow through automation. Highly recommended for roles in VoIP engineering, real-time media systems, or conversational-AI infrastructure.",
   },
   {
     name: "Snehasish Chakraborty",
@@ -37,7 +37,7 @@ const recs = [
     company: "HSBC (client)",
     relationship: "Client · HSBC",
     date: "Feb 2025",
-    text: "He would keep an open mind, welcome challenges, and think to deliver an end-to-end solution. I rate Ashwin highly — not just for his knowledge and skills, but his attitude to continue trying under pressure and deliver. I'm sure he will be adding great value wherever he works.",
+    text: "He would keep an open mind, welcome challenges, and think to deliver an end-to-end solution. I rate Ashwin highly - not just for his knowledge and skills, but his attitude to continue trying under pressure and deliver. I'm sure he will be adding great value wherever he works.",
   },
   {
     name: "Tulsi Patro",
@@ -45,7 +45,7 @@ const recs = [
     company: "Gida Technologies",
     relationship: "Direct colleague",
     date: "Nov 2023",
-    text: "Ashwin is a risk-taker, never shying away from trying innovative approaches — and what sets him apart is his ability to convert those risks into successful implementations. His commitment to meeting deadlines while upholding the quality of work is a testament to his professionalism. Fearlessness in taking on challenges inspires the entire team to push boundaries and strive for excellence.",
+    text: "Ashwin is a risk-taker, never shying away from trying innovative approaches - and what sets him apart is his ability to convert those risks into successful implementations. His commitment to meeting deadlines while upholding the quality of work is a testament to his professionalism. Fearlessness in taking on challenges inspires the entire team to push boundaries and strive for excellence.",
   },
 ];
 
@@ -375,7 +375,12 @@ export function Recommendations() {
               }}
             >
               {recs.map((rec, i) => (
-                <RecCard key={rec.name} rec={rec} index={i} isVisible={isVisible} />
+                <RecCard
+                  key={rec.name}
+                  rec={rec}
+                  index={i}
+                  isVisible={isVisible}
+                />
               ))}
             </div>
           </div>
