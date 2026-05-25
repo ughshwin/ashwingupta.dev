@@ -38,7 +38,7 @@ const SPRING_ICON = "https://cdn.simpleicons.org/spring";
 const highlights: { title: string; sub: string; icon: string }[] = [
   {
     title: "Guinness World Record",
-    sub: "Most Participants in an Agentic AI Hackathon · Google Cloud · July 2025",
+    sub: "Command Centre · Most Participants - Agentic AI Hackathon · Google Cloud · July 2025",
     icon: guinnessLogoUrl,
   },
   {
