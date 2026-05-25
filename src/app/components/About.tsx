@@ -1,6 +1,12 @@
 import { Fragment } from "react";
 import { motion } from "motion/react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
+import bmsLogoUrl from "../../assets/BMSlogo.webp?url";
+import coforgeLogoUrl from "../../assets/coforgeLogo.webp?url";
+import augmentLogoUrl from "../../assets/augmentAILogo.webp?url";
+import guinnessLogoUrl from "../../assets/GuinnessLogo.webp?url";
+import hsbcLogoUrl from "../../assets/HSBCLogo.webp?url";
+import kaggleLogoUrl from "../../assets/KaggleLogo.webp?url";
 
 const FONT_SERIF = '"Playfair Display", Georgia, serif';
 const FONT_MONO = '"DM Mono", monospace';
@@ -27,15 +33,49 @@ const dontDo = [
   "I don't take off-the-shelf work. If the implementation is a Google search away, I'm not the right person.",
 ];
 
-const highlights = [
-  "Guinness World Record — Most Participants in an Agentic AI Hackathon · Google Cloud · July 2025",
-  "$1.3M Annualised Compute Savings — HSBC · Coforge",
-  "Best Team Award — HSBC Account · Coforge",
-  "Pat on Back — Think Customer · Individual Delivery Excellence · Coforge",
-  "Java Spring AI Trainer · 130+ Participants · 81% Preferred · NPS +50",
-  "Best Outgoing Project — Mechanical Engineering · BMSCE 2023",
-  "Founded Augment.AI — BMSCE's AI Club",
-  "Human Faces Kaggle Dataset — 42.8K Downloads · 202K Views",
+const SPRING_ICON = "https://cdn.simpleicons.org/spring";
+
+const highlights: { title: string; sub: string; icon: string }[] = [
+  {
+    title: "Guinness World Record",
+    sub: "Most Participants in an Agentic AI Hackathon · Google Cloud · July 2025",
+    icon: guinnessLogoUrl,
+  },
+  {
+    title: "$1.3M+ Annualised Savings",
+    sub: "HSBC · Coforge",
+    icon: hsbcLogoUrl,
+  },
+  {
+    title: "Best Team Award",
+    sub: "HSBC Account · Coforge",
+    icon: hsbcLogoUrl,
+  },
+  {
+    title: "Pat on Back - Think Customer",
+    sub: "Individual Delivery Excellence · Coforge",
+    icon: coforgeLogoUrl,
+  },
+  {
+    title: "Java Spring AI Trainer",
+    sub: "130+ Participants · 81% voted preferred trainer · NPS +50",
+    icon: SPRING_ICON,
+  },
+  {
+    title: "Best Outgoing Project",
+    sub: "Mechanical Engineering · BMSCE 2023",
+    icon: bmsLogoUrl,
+  },
+  {
+    title: "Founded Augment.AI",
+    sub: "BMSCE's AI Club",
+    icon: augmentLogoUrl,
+  },
+  {
+    title: "42.8K Downloads · 202K Views",
+    sub: "Human Faces Kaggle Dataset",
+    icon: kaggleLogoUrl,
+  },
 ];
 
 export function About() {
@@ -47,7 +87,7 @@ export function About() {
       style={{
         position: "relative",
         background: "transparent",
-        padding: isMobile ? "4rem 4vw" : "4rem 0",
+        padding: isMobile ? "4rem 4vw" : "4rem 0 0",
       }}
     >
       <style>{`
@@ -111,7 +151,7 @@ export function About() {
 
         {/* Content strip */}
         <div>
-          <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 7rem" }}>
+          <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 2rem" }}>
             {/* Brand thesis */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -338,7 +378,7 @@ export function About() {
             </div>
 
             {/* Highlights */}
-            <div style={{ marginTop: isMobile ? "4rem" : "7rem" }}>
+            <div style={{ marginTop: isMobile ? "4rem" : "6rem" }}>
               <div style={{ marginBottom: "1.5rem" }}>
                 <span
                   style={{
@@ -356,7 +396,7 @@ export function About() {
                 <div
                   style={{
                     display: "flex",
-                    alignItems: "center",
+                    alignItems: "flex-start",
                     width: "max-content",
                     animation: "highlights-marquee 45s linear infinite",
                     willChange: "transform",
@@ -364,34 +404,80 @@ export function About() {
                 >
                   {[...highlights, ...highlights].map((h, i) => (
                     <Fragment key={i}>
+                      {/* card */}
                       <div
                         style={{
-                          fontFamily: FONT_SERIF,
-                          fontSize: "1.1rem",
-                          fontWeight: 700,
-                          fontStyle: "italic",
-                          lineHeight: 1.3,
-                          color: "#f5ca40",
-                          width: "220px",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "0.3rem",
+                          width: "max-content",
                           flexShrink: 0,
-                          letterSpacing: "0.01em",
                           userSelect: "none",
-                          textShadow:
-                            "0 0 12px rgba(245,202,64,0.25)",
                         }}
                       >
-                        {h}
+                        {/* row: icon + title */}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.65rem",
+                          }}
+                        >
+                          <img
+                            src={h.icon}
+                            alt=""
+                            aria-hidden="true"
+                            style={{
+                              width: "28px",
+                              height: "28px",
+                              objectFit: "contain",
+                              flexShrink: 0,
+                              opacity: 0.9,
+                            }}
+                          />
+                          <div
+                            style={{
+                              fontFamily: FONT_SERIF,
+                              fontSize: "1rem",
+                              fontWeight: 700,
+                              lineHeight: 1.2,
+                              color: "#f5ca40",
+                              letterSpacing: "0.03em",
+                              textShadow: "0 0 12px rgba(245,202,64,0.25)",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {h.title}
+                          </div>
+                        </div>
+                        {/* sub */}
+                        <div
+                          style={{
+                            fontFamily: FONT_SANS,
+                            fontSize: "0.7rem",
+                            lineHeight: 1.45,
+                            color: "rgba(255,255,255,0.38)",
+                            letterSpacing: "0.02em",
+                            paddingLeft: "42px",
+                          }}
+                        >
+                          {h.sub}
+                        </div>
                       </div>
-                      <div
+                      {/* bullet separator */}
+                      <span
                         style={{
-                          width: "1px",
-                          background: "rgba(245,202,64,0.35)",
-                          boxShadow: "0 0 6px rgba(245,202,64,0.2)",
+                          fontSize: "1.6rem",
+                          color: "rgba(245,202,64,0.3)",
+                          margin: "0 2.2rem",
+                          alignSelf: "flex-start",
                           flexShrink: 0,
-                          margin: "0 2.5rem",
-                          alignSelf: "stretch",
+                          lineHeight: 1,
+                          userSelect: "none",
                         }}
-                      />
+                      >
+                        •
+                      </span>
                     </Fragment>
                   ))}
                 </div>

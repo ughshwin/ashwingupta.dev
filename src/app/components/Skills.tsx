@@ -148,7 +148,7 @@ export function Skills() {
     <section
       id="stack"
       style={{
-        padding: isMobile ? "4rem 4vw" : "10rem 6vw",
+        padding: isMobile ? "4rem 4vw" : "4rem 6vw 10rem",
         background: "transparent",
         position: "relative",
       }}
