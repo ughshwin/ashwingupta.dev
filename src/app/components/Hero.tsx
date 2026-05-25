@@ -651,7 +651,7 @@ export function Hero() {
               <span
                 style={{
                   fontFamily: '"DM Mono", monospace',
-                  fontSize: isMobile ? "0.75rem" : "0.8rem",
+                  fontSize: isMobile ? "0.6rem" : "0.7rem",
                   letterSpacing: "0.12em",
                   color: "#e8e0d0",
                 }}
