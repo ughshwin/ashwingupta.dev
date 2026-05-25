@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail, FileDown } from "lucide-react";
+import { Github, Linkedin, Mail, FileDown, Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useRef, useCallback, useState, useEffect } from "react";
 import { useIsMobile, useIsTouchDevice } from "../../hooks/useMediaQuery";
@@ -21,6 +21,8 @@ export function Hero() {
   const [workOpen, setWorkOpen] = useState(false);
   const workRef = useRef<HTMLDivElement>(null);
   const workTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileWorkOpen, setMobileWorkOpen] = useState(false);
 
   const openWork = useCallback(() => {
     if (workTimerRef.current) clearTimeout(workTimerRef.current);
@@ -41,6 +43,15 @@ export function Hero() {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [workOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [menuOpen]);
 
   const showToast = useCallback((msg: string, duration = 1600) => {
     setToastMessage(msg);
@@ -127,8 +138,8 @@ export function Hero() {
 
   const navLinkStyle = {
     fontFamily: '"DM Mono", monospace',
-    fontSize: isMobile ? "0.42rem" : "0.58rem",
-    letterSpacing: isMobile ? "0" : "0.13em",
+    fontSize: "0.58rem",
+    letterSpacing: "0.13em",
     textTransform: "uppercase" as const,
     color: "rgba(255,255,255,0.35)",
     textDecoration: "none",
@@ -136,8 +147,8 @@ export function Hero() {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: isMobile ? "0.5rem 0.3rem" : "0.65rem 0.4rem",
-    cursor: isMobile ? "auto" : "none",
+    padding: "0.65rem 0.4rem",
+    cursor: "none",
     transition: "color 0.2s, background 0.2s",
     borderRadius: "3px",
   } as const;
@@ -176,213 +187,433 @@ export function Hero() {
         }}
       />
 
-      {/* Navigation bar */}
-      <motion.nav
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.1, duration: 0.6 }}
-        style={{
-          position: "absolute",
-          top: isMobile ? 18 : 36,
-          left: isMobile ? "5.5vw" : "5%",
-          right: isMobile ? "5.5vw" : "5%",
-          display: "grid",
-          gridTemplateColumns: `repeat(${navBeforeWork.length + 1 + navAfterWork.length}, 1fr)`,
-          zIndex: 5,
-        }}
-      >
-        {/* Flat links — before Work dropdown */}
-        {navBeforeWork.map(({ label, href, section }) => (
-          <a
-            key={href}
-            href={href}
-            onClick={(e) => {
-              if (section) {
-                e.preventDefault();
-                scrollToSection(section);
-                history.pushState(null, "", href);
-              }
-            }}
-            style={navLinkStyle}
-            onMouseEnter={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.9)";
-                    el.style.background =
-                      "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
-                  }
-            }
-            onMouseLeave={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.35)";
-                    el.style.background = "transparent";
-                  }
-            }
-          >
-            {label}
-          </a>
-        ))}
-
-        {/* Work ▾ dropdown */}
-        <div
-          ref={workRef}
-          onMouseEnter={openWork}
-          onMouseLeave={scheduleCloseWork}
-          style={{ position: "relative", display: "flex" }}
-        >
-          <div
+      {/* Navigation — hamburger on mobile, grid on desktop */}
+      {isMobile ? (
+        <>
+          {/* Hamburger button */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
             style={{
-              flex: 1,
-              fontFamily: '"DM Mono", monospace',
-              fontSize: isMobile ? "0.42rem" : "0.58rem",
-              letterSpacing: isMobile ? "0" : "0.13em",
-              textTransform: "uppercase" as const,
-              color: "rgba(255,255,255,0.35)",
+              position: "absolute",
+              top: 18,
+              right: "5.5vw",
+              zIndex: 50,
               background: "transparent",
+              border: "1px solid rgba(255,255,255,0.12)",
+              borderRadius: "4px",
+              width: "36px",
+              height: "36px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "3px",
-              padding: isMobile ? "0.5rem 0.3rem" : "0.65rem 0.4rem",
-              cursor: isMobile ? "auto" : "none",
-              transition: "color 0.2s, background 0.2s",
-              borderRadius: "3px",
+              color: "rgba(255,255,255,0.65)",
+              cursor: "auto",
+              padding: 0,
             }}
-            onMouseEnter={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.9)";
-                    el.style.background =
-                      "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
-                  }
-            }
-            onMouseLeave={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.35)";
-                    el.style.background = "transparent";
-                  }
-            }
           >
-            <span>Work</span>
-            <span
-              style={{ fontSize: "0.75em", opacity: 0.65, marginTop: "0.05em" }}
-            >
-              ▾
-            </span>
-          </div>
+            <AnimatePresence mode="wait" initial={false}>
+              {menuOpen ? (
+                <motion.span
+                  key="close"
+                  initial={{ opacity: 0, rotate: -45 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 45 }}
+                  transition={{ duration: 0.18 }}
+                  style={{ display: "flex" }}
+                >
+                  <X size={16} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="menu"
+                  initial={{ opacity: 0, rotate: 45 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: -45 }}
+                  transition={{ duration: 0.18 }}
+                  style={{ display: "flex" }}
+                >
+                  <Menu size={16} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
 
+          {/* Mobile full-screen overlay menu */}
           <AnimatePresence>
-            {workOpen && (
+            {menuOpen && (
               <motion.div
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.15 }}
-                onMouseEnter={openWork}
-                onMouseLeave={scheduleCloseWork}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.22 }}
                 style={{
-                  position: "absolute",
-                  top: "calc(100% + 2px)",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  background: "rgba(8,8,8,0.95)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  borderRadius: "4px",
-                  padding: "0.3rem 0",
-                  minWidth: "130px",
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
-                  zIndex: 20,
+                  position: "fixed",
+                  inset: 0,
+                  background: "rgba(6,6,6,0.55)",
+                  backdropFilter: "blur(10px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                  zIndex: 40,
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "80px 8vw 48px",
+                  overflowY: "auto",
                 }}
               >
-                {workItems.map(({ label, href, section }) => (
-                  <a
-                    key={href}
-                    href={href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setWorkOpen(false);
-                      scrollToSection(section);
-                      history.pushState(null, "", href);
-                    }}
-                    style={{
-                      display: "block",
-                      fontFamily: '"DM Mono", monospace',
-                      fontSize: isMobile ? "0.42rem" : "0.55rem",
-                      letterSpacing: "0.13em",
-                      textTransform: "uppercase" as const,
-                      color: "rgba(255,255,255,0.4)",
-                      textDecoration: "none",
-                      padding: "0.5rem 1rem",
-                      cursor: isMobile ? "auto" : "none",
-                      transition: "color 0.15s, background 0.15s",
-                    }}
-                    onMouseEnter={(e) => {
-                      const el = e.currentTarget as HTMLElement;
-                      el.style.color = "rgba(255,255,255,0.9)";
-                      el.style.background = "rgba(255,255,255,0.05)";
-                    }}
-                    onMouseLeave={(e) => {
-                      const el = e.currentTarget as HTMLElement;
-                      el.style.color = "rgba(255,255,255,0.4)";
-                      el.style.background = "transparent";
+                {/* All nav items */}
+                <nav
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 0,
+                    flex: 1,
+                  }}
+                >
+                  {navBeforeWork.map(({ label, href, section }, i) => (
+                    <motion.a
+                      key={href}
+                      href={href}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.05 + i * 0.04, duration: 0.22 }}
+                      onClick={(e) => {
+                        if (section) {
+                          e.preventDefault();
+                          setMenuOpen(false);
+                          scrollToSection(section);
+                          history.pushState(null, "", href);
+                        }
+                      }}
+                      style={{
+                        fontFamily: '"DM Mono", monospace',
+                        fontSize: "0.75rem",
+                        letterSpacing: "0.15em",
+                        textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.8)",
+                        textDecoration: "none",
+                        padding: "1rem 0",
+                        borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        display: "block",
+                      }}
+                    >
+                      {label}
+                    </motion.a>
+                  ))}
+
+                  {/* Work expandable row */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: 0.05 + navBeforeWork.length * 0.04,
+                      duration: 0.22,
                     }}
                   >
-                    {label}
-                  </a>
-                ))}
+                    <button
+                      onClick={() => setMobileWorkOpen((v) => !v)}
+                      style={{
+                        width: "100%",
+                        background: "transparent",
+                        border: "none",
+                        borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        padding: "1rem 0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        fontFamily: '"DM Mono", monospace',
+                        fontSize: "0.75rem",
+                        letterSpacing: "0.15em",
+                        textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.8)",
+                        cursor: "auto",
+                      }}
+                    >
+                      <span>Work</span>
+                      <motion.span
+                        animate={{ rotate: mobileWorkOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                          fontSize: "0.7em",
+                          opacity: 0.55,
+                          display: "inline-block",
+                        }}
+                      >
+                        ▾
+                      </motion.span>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {mobileWorkOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{
+                            duration: 0.22,
+                            ease: [0.4, 0, 0.2, 1],
+                          }}
+                          style={{ overflow: "hidden" }}
+                        >
+                          {workItems.map(({ label, href, section }) => (
+                            <a
+                              key={href}
+                              href={href}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setMenuOpen(false);
+                                setMobileWorkOpen(false);
+                                scrollToSection(section);
+                                history.pushState(null, "", href);
+                              }}
+                              style={{
+                                display: "block",
+                                fontFamily: '"DM Mono", monospace',
+                                fontSize: "0.68rem",
+                                letterSpacing: "0.13em",
+                                textTransform: "uppercase",
+                                color: "rgba(255,255,255,0.6)",
+                                textDecoration: "none",
+                                padding: "0.75rem 0 0.75rem 1.25rem",
+                                borderBottom:
+                                  "1px solid rgba(255,255,255,0.04)",
+                              }}
+                            >
+                              {label}
+                            </a>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+
+                  {navAfterWork.map(({ label, href, section }, i) => (
+                    <motion.a
+                      key={href}
+                      href={href}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        delay: 0.05 + (navBeforeWork.length + 1 + i) * 0.04,
+                        duration: 0.22,
+                      }}
+                      onClick={(e) => {
+                        if (section) {
+                          e.preventDefault();
+                          setMenuOpen(false);
+                          scrollToSection(section);
+                          history.pushState(null, "", href);
+                        }
+                      }}
+                      style={{
+                        fontFamily: '"DM Mono", monospace',
+                        fontSize: "0.75rem",
+                        letterSpacing: "0.15em",
+                        textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.8)",
+                        textDecoration: "none",
+                        padding: "1rem 0",
+                        borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        display: "block",
+                      }}
+                    >
+                      {label}
+                    </motion.a>
+                  ))}
+                </nav>
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </>
+      ) : (
+        /* Desktop horizontal nav */
+        <motion.nav
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1, duration: 0.6 }}
+          style={{
+            position: "absolute",
+            top: 36,
+            left: "5%",
+            right: "5%",
+            display: "grid",
+            gridTemplateColumns: `repeat(${navBeforeWork.length + 1 + navAfterWork.length}, 1fr)`,
+            zIndex: 5,
+          }}
+        >
+          {navBeforeWork.map(({ label, href, section }) => (
+            <a
+              key={href}
+              href={href}
+              onClick={(e) => {
+                if (section) {
+                  e.preventDefault();
+                  scrollToSection(section);
+                  history.pushState(null, "", href);
+                }
+              }}
+              style={navLinkStyle}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.9)";
+                el.style.background =
+                  "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.35)";
+                el.style.background = "transparent";
+              }}
+            >
+              {label}
+            </a>
+          ))}
 
-        {/* Flat links — after Work dropdown */}
-        {navAfterWork.map(({ label, href, section }) => (
-          <a
-            key={href}
-            href={href}
-            onClick={(e) => {
-              if (section) {
-                e.preventDefault();
-                scrollToSection(section);
-                history.pushState(null, "", href);
-              }
-            }}
-            style={navLinkStyle}
-            onMouseEnter={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.9)";
-                    el.style.background =
-                      "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
-                  }
-            }
-            onMouseLeave={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.35)";
-                    el.style.background = "transparent";
-                  }
-            }
+          {/* Work ▾ dropdown */}
+          <div
+            ref={workRef}
+            onMouseEnter={openWork}
+            onMouseLeave={scheduleCloseWork}
+            style={{ position: "relative", display: "flex" }}
           >
-            {label}
-          </a>
-        ))}
-      </motion.nav>
+            <div
+              style={{
+                flex: 1,
+                fontFamily: '"DM Mono", monospace',
+                fontSize: "0.58rem",
+                letterSpacing: "0.13em",
+                textTransform: "uppercase" as const,
+                color: "rgba(255,255,255,0.35)",
+                background: "transparent",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "3px",
+                padding: "0.65rem 0.4rem",
+                cursor: "none",
+                transition: "color 0.2s, background 0.2s",
+                borderRadius: "3px",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.9)";
+                el.style.background =
+                  "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.35)";
+                el.style.background = "transparent";
+              }}
+            >
+              <span>Work</span>
+              <span
+                style={{
+                  fontSize: "0.75em",
+                  opacity: 0.65,
+                  marginTop: "0.05em",
+                }}
+              >
+                ▾
+              </span>
+            </div>
+
+            <AnimatePresence>
+              {workOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.15 }}
+                  onMouseEnter={openWork}
+                  onMouseLeave={scheduleCloseWork}
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 2px)",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: "rgba(8,8,8,0.95)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    borderRadius: "4px",
+                    padding: "0.3rem 0",
+                    minWidth: "130px",
+                    backdropFilter: "blur(12px)",
+                    WebkitBackdropFilter: "blur(12px)",
+                    zIndex: 20,
+                  }}
+                >
+                  {workItems.map(({ label, href, section }) => (
+                    <a
+                      key={href}
+                      href={href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setWorkOpen(false);
+                        scrollToSection(section);
+                        history.pushState(null, "", href);
+                      }}
+                      style={{
+                        display: "block",
+                        fontFamily: '"DM Mono", monospace',
+                        fontSize: "0.55rem",
+                        letterSpacing: "0.13em",
+                        textTransform: "uppercase" as const,
+                        color: "rgba(255,255,255,0.4)",
+                        textDecoration: "none",
+                        padding: "0.5rem 1rem",
+                        cursor: "none",
+                        transition: "color 0.15s, background 0.15s",
+                      }}
+                      onMouseEnter={(e) => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.color = "rgba(255,255,255,0.9)";
+                        el.style.background = "rgba(255,255,255,0.05)";
+                      }}
+                      onMouseLeave={(e) => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.color = "rgba(255,255,255,0.4)";
+                        el.style.background = "transparent";
+                      }}
+                    >
+                      {label}
+                    </a>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {navAfterWork.map(({ label, href, section }) => (
+            <a
+              key={href}
+              href={href}
+              onClick={(e) => {
+                if (section) {
+                  e.preventDefault();
+                  scrollToSection(section);
+                  history.pushState(null, "", href);
+                }
+              }}
+              style={navLinkStyle}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.9)";
+                el.style.background =
+                  "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.35)";
+                el.style.background = "transparent";
+              }}
+            >
+              {label}
+            </a>
+          ))}
+        </motion.nav>
+      )}
 
       {/* Main content */}
       <div

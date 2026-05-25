@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
-import { useIsTouchDevice } from "../../hooks/useMediaQuery";
+import { useIsMobile, useIsTouchDevice } from "../../hooks/useMediaQuery";
 
 export function Cursor() {
   const isTouchDevice = useIsTouchDevice();
+  const isMobile = useIsMobile();
   const dot = useRef<HTMLDivElement>(null);
   const ring = useRef<HTMLDivElement>(null);
   const pos = useRef({ x: 0, y: 0 });
@@ -11,8 +12,7 @@ export function Cursor() {
   const rafActive = useRef(false);
 
   useEffect(() => {
-    // Don't set up cursor on touch devices
-    if (isTouchDevice) return;
+    if (isTouchDevice || isMobile) return;
 
     const lerp = () => {
       const dx = pos.current.x - ringPos.current.x;
@@ -32,8 +32,10 @@ export function Cursor() {
     const move = (e: MouseEvent) => {
       pos.current = { x: e.clientX, y: e.clientY };
       if (dot.current) {
+        dot.current.style.opacity = "1";
         dot.current.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`;
       }
+      if (ring.current) ring.current.style.opacity = "1";
       if (!rafActive.current) {
         rafActive.current = true;
         raf.current = requestAnimationFrame(lerp);
@@ -71,10 +73,7 @@ export function Cursor() {
     };
   }, [isTouchDevice]);
 
-  // Hide cursor elements on touch devices
-  if (isTouchDevice) {
-    return null;
-  }
+  if (isTouchDevice || isMobile) return null;
 
   return (
     <>
@@ -91,6 +90,7 @@ export function Cursor() {
           pointerEvents: "none",
           zIndex: 9999,
           mixBlendMode: "difference",
+          opacity: 0,
         }}
       />
       <div
@@ -105,6 +105,7 @@ export function Cursor() {
           border: "1px solid rgba(255,255,255,0.3)",
           pointerEvents: "none",
           zIndex: 9998,
+          opacity: 0,
           transition: "width 0.3s, height 0.3s, border-color 0.3s",
         }}
       />
