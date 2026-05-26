@@ -38,7 +38,7 @@ const SPRING_ICON = "https://cdn.simpleicons.org/spring";
 const highlights: { title: string; sub: string; icon: string }[] = [
   {
     title: "Guinness World Record",
-    sub: "Command Centre · Most Participants - Agentic AI Hackathon · Google Cloud · July 2025",
+    sub: "Command Centre Ops · Most Participants - Agentic AI Day 2025\nGoogle Cloud | Hack2Skill · July 2025",
     icon: guinnessLogoUrl,
   },
   {
@@ -67,7 +67,7 @@ const highlights: { title: string; sub: string; icon: string }[] = [
     icon: bmsLogoUrl,
   },
   {
-    title: "Founded Augment.AI",
+    title: "Augment.AI, Mentor and Founder",
     sub: "BMSCE's AI Club",
     icon: augmentLogoUrl,
   },
@@ -377,7 +377,7 @@ export function About() {
               </div>
             </div>
 
-            {/* Highlights */}
+            {/* The Gold and the Glory */}
             <div style={{ marginTop: isMobile ? "4rem" : "6rem" }}>
               <div style={{ marginBottom: "1.5rem" }}>
                 <span
@@ -385,11 +385,11 @@ export function About() {
                     fontFamily: FONT_MONO,
                     fontSize: "0.62rem",
                     letterSpacing: "0.2em",
-                    color: "rgba(255,255,255,0.4)",
+                    color: "rgba(245,202,64,1)",
                     textTransform: "uppercase",
                   }}
                 >
-                  Highlights
+                  <center>• The Gold and the Glory •</center>
                 </span>
               </div>
               <div style={{ overflow: "hidden" }}>
@@ -459,6 +459,7 @@ export function About() {
                             color: "rgba(255,255,255,0.38)",
                             letterSpacing: "0.02em",
                             paddingLeft: "42px",
+                            whiteSpace: "pre-line",
                           }}
                         >
                           {h.sub}

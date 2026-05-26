@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ISS Cursor — Animation Variants</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #060608; font-family: 'DM Mono', monospace; padding: 3rem; }
+  h1 { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 0.8rem; }
+  h2 { font-size: 0.48rem; letter-spacing: 0.12em; color: rgba(255,255,255,0.12); margin-bottom: 3rem; font-weight: normal; }
+
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+  .box {
+    width: 160px; height: 160px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.015);
+    transition: border-color 0.3s, background 0.3s;
+    cursor: pointer;
+    overflow: visible;
+    position: relative;
+  }
+  .box:hover { border-color: rgba(245,202,64,0.4); background: rgba(245,202,64,0.03); }
+
+  .box svg {
+    color: rgba(255,255,255,0.55);
+    transition: color 0.3s, filter 0.3s;
+    overflow: visible;
+  }
+  .box:hover svg {
+    color: #f5ca40;
+    filter: drop-shadow(0 0 7px rgba(245,202,64,0.45));
+  }
+
+  .label { font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; line-height: 1.7; color: rgba(255,255,255,0.3); }
+  .num { font-size: 0.42rem; color: rgba(255,255,255,0.15); margin-bottom: 0.15rem; }
+  .anim-desc { font-size: 0.42rem; color: rgba(245,202,64,0.5); font-style: italic; letter-spacing: 0.05em; text-transform: none; margin-top: 0.2rem; line-height: 1.6; }
+
+  /* ═══════════════════════════════════════════════════
+     SHARED — elements hidden by default, shown on hover
+  ═══════════════════════════════════════════════════ */
+  .wave, .dish-arc, .panel-glow { opacity: 0; }
+
+  /* ═══════════════════════════════════════════════════
+     A1 — Slow orbit spin (baseline)
+  ═══════════════════════════════════════════════════ */
+  @keyframes iss-spin { to { transform: rotate(360deg); } }
+  .a1 .box:hover svg { animation: iss-spin 8s linear infinite; }
+
+  /* ═══════════════════════════════════════════════════
+     A2 — Omni signal: concentric rings pulse from center
+  ═══════════════════════════════════════════════════ */
+  @keyframes wave-out {
+    0%   { transform: scale(0.3); opacity: 0.7; }
+    100% { transform: scale(2.8); opacity: 0; }
+  }
+  .a2 .box:hover .wave {
+    transform-box: view-box;
+    transform-origin: center;
+    animation: wave-out 2s ease-out infinite;
+    opacity: 1;
+  }
+  .a2 .box:hover .wave-2 { animation-delay: 0.65s; }
+  .a2 .box:hover .wave-3 { animation-delay: 1.3s; }
+
+  /* ═══════════════════════════════════════════════════
+     A3 — Dish beam: directional arcs from dish upward
+  ═══════════════════════════════════════════════════ */
+  @keyframes dish-arc-out {
+    0%   { transform: translateY(0) scale(0.5); opacity: 0.8; }
+    100% { transform: translateY(-14px) scale(1.4); opacity: 0; }
+  }
+  .a3 .box:hover .dish-arc {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: dish-arc-out 1.6s ease-out infinite;
+    opacity: 1;
+  }
+  .a3 .box:hover .dish-arc-2 { animation-delay: 0.55s; }
+  .a3 .box:hover .dish-arc-3 { animation-delay: 1.1s; }
+
+  /* ═══════════════════════════════════════════════════
+     A4 — Panel charge: solar panels flash in sequence
+  ═══════════════════════════════════════════════════ */
+  @keyframes panel-seq {
+    0%,15%,100% { opacity: 0.2; }
+    5%           { opacity: 1; }
+  }
+  .a4 .box:hover .p-outer-l { animation: panel-seq 1.6s ease-in-out infinite; }
+  .a4 .box:hover .p-inner-l { animation: panel-seq 1.6s ease-in-out infinite; animation-delay: 0.2s; }
+  .a4 .box:hover .p-inner-r { animation: panel-seq 1.6s ease-in-out infinite; animation-delay: 0.4s; }
+  .a4 .box:hover .p-outer-r { animation: panel-seq 1.6s ease-in-out infinite; animation-delay: 0.6s; }
+
+  /* ═══════════════════════════════════════════════════
+     A5 — Lock-on snap: quick rotate + scale + hold
+  ═══════════════════════════════════════════════════ */
+  @keyframes lock-snap {
+    0%   { transform: rotate(0deg) scale(1); }
+    30%  { transform: rotate(12deg) scale(1.15); }
+    55%  { transform: rotate(-6deg) scale(1.25); }
+    75%  { transform: rotate(3deg) scale(1.22); }
+    100% { transform: rotate(0deg) scale(1.2); }
+  }
+  .a5 .box:hover svg { animation: lock-snap 0.6s cubic-bezier(0.23,1,0.32,1) forwards; }
+</style>
+</head>
+<body>
+<h1>ISS cursor — 5 hover animation variants</h1>
+<h2>Hover each card to preview</h2>
+<div class="grid">
+
+  <!-- A1: Slow orbit spin -->
+  <div class="item a1">
+    <div class="box">
+      <svg width="90" height="90" viewBox="0 0 40 40">
+        <rect x="16.5" y="18" width="7" height="4" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="2" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <rect x="2" y="15.5" width="7" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect x="11" y="15.5" width="5" height="9" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.6"/>
+        <rect x="31" y="15.5" width="7" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect x="24" y="15.5" width="5" height="9" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.6"/>
+        <line x1="20" y1="12" x2="20" y2="18" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="20" y1="22" x2="20" y2="28" stroke="currentColor" stroke-width="0.75"/>
+        <circle cx="20" cy="20" r="0.7" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label">
+      <div class="num">A1</div>Orbit drift
+      <div class="anim-desc">slow continuous spin —<br/>in orbit, always moving</div>
+    </div>
+  </div>
+
+  <!-- A2: Omni signal waves -->
+  <div class="item a2">
+    <div class="box">
+      <svg width="90" height="90" viewBox="0 0 40 40" style="overflow:visible">
+        <!-- signal waves (hidden until hover) -->
+        <circle class="wave"      cx="20" cy="20" r="8"  fill="none" stroke="currentColor" stroke-width="0.6"/>
+        <circle class="wave wave-2" cx="20" cy="20" r="8"  fill="none" stroke="currentColor" stroke-width="0.5"/>
+        <circle class="wave wave-3" cx="20" cy="20" r="8"  fill="none" stroke="currentColor" stroke-width="0.4"/>
+        <!-- ISS body -->
+        <rect x="16.5" y="18" width="7" height="4" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="2" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <rect x="2" y="15.5" width="7" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect x="11" y="15.5" width="5" height="9" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.6"/>
+        <rect x="31" y="15.5" width="7" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect x="24" y="15.5" width="5" height="9" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.6"/>
+        <line x1="20" y1="12" x2="20" y2="18" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="20" y1="22" x2="20" y2="28" stroke="currentColor" stroke-width="0.75"/>
+        <circle cx="20" cy="20" r="0.7" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label">
+      <div class="num">A2</div>Omni signal
+      <div class="anim-desc">concentric rings<br/>pulse from center</div>
+    </div>
+  </div>
+
+  <!-- A3: Dish beam transmission -->
+  <div class="item a3">
+    <div class="box">
+      <svg width="90" height="90" viewBox="0 0 40 40" style="overflow:visible">
+        <!-- ISS body -->
+        <rect x="16.5" y="18" width="7" height="4" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="2" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <rect x="2" y="15.5" width="7" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect x="11" y="15.5" width="5" height="9" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.6"/>
+        <rect x="31" y="15.5" width="7" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect x="24" y="15.5" width="5" height="9" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.6"/>
+        <line x1="20" y1="22" x2="20" y2="28" stroke="currentColor" stroke-width="0.75"/>
+        <circle cx="20" cy="20" r="0.7" fill="currentColor"/>
+        <!-- dish stub + dish arcs transmitting upward -->
+        <line x1="20" y1="12" x2="20" y2="18" stroke="currentColor" stroke-width="0.75"/>
+        <path d="M16,13 Q20,10 24,13" fill="none" stroke="currentColor" stroke-width="0.8"/>
+        <!-- transmission arcs -->
+        <path class="dish-arc"        d="M15,11 Q20,6  25,11" fill="none" stroke="currentColor" stroke-width="0.6"/>
+        <path class="dish-arc dish-arc-2" d="M13,10 Q20,3  27,10" fill="none" stroke="currentColor" stroke-width="0.45"/>
+        <path class="dish-arc dish-arc-3" d="M11,9  Q20,1  29,9"  fill="none" stroke="currentColor" stroke-width="0.3"/>
+      </svg>
+    </div>
+    <div class="label">
+      <div class="num">A3</div>Dish beam
+      <div class="anim-desc">directional arcs<br/>emit from dish</div>
+    </div>
+  </div>
+
+  <!-- A4: Panel charge sequence -->
+  <div class="item a4">
+    <div class="box">
+      <svg width="90" height="90" viewBox="0 0 40 40">
+        <rect x="16.5" y="18" width="7" height="4" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="2" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <!-- panels with individual classes for sequenced flash -->
+        <rect class="p-outer-l" x="2"  y="15.5" width="7" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect class="p-inner-l" x="11" y="15.5" width="5" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect class="p-inner-r" x="24" y="15.5" width="5" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect class="p-outer-r" x="31" y="15.5" width="7" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="20" y1="12" x2="20" y2="18" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="20" y1="22" x2="20" y2="28" stroke="currentColor" stroke-width="0.75"/>
+        <circle cx="20" cy="20" r="0.7" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label">
+      <div class="num">A4</div>Panel charge
+      <div class="anim-desc">solar panels flash<br/>left → right in sequence</div>
+    </div>
+  </div>
+
+  <!-- A5: Lock-on snap -->
+  <div class="item a5">
+    <div class="box">
+      <svg width="90" height="90" viewBox="0 0 40 40">
+        <rect x="16.5" y="18" width="7" height="4" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="2" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <rect x="2" y="15.5" width="7" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect x="11" y="15.5" width="5" height="9" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.6"/>
+        <rect x="31" y="15.5" width="7" height="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <rect x="24" y="15.5" width="5" height="9" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.6"/>
+        <line x1="20" y1="12" x2="20" y2="18" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="20" y1="22" x2="20" y2="28" stroke="currentColor" stroke-width="0.75"/>
+        <circle cx="20" cy="20" r="0.7" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label">
+      <div class="num">A5</div>Lock-on snap
+      <div class="anim-desc">wobbles then holds —<br/>acquired target</div>
+    </div>
+  </div>
+
+</div>
+
+<p style="margin-top:2.5rem; font-size:0.45rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.12);">
+  Tell me which animation (A1–A5) or a combination to wire into the site
+</p>
+</body>
+</html>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cursor Options</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #060608; font-family: 'DM Mono', monospace; padding: 2.5rem; }
+  h1 { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 2.5rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.2rem; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; }
+
+  .box {
+    width: 108px; height: 108px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.015);
+    transition: border-color 0.3s, background 0.3s;
+    cursor: pointer;
+    overflow: visible;
+  }
+  .box:hover { border-color: rgba(245,202,64,0.35); background: rgba(245,202,64,0.03); }
+
+  .box svg {
+    color: rgba(255,255,255,0.5);
+    transition: color 0.3s, filter 0.3s;
+    overflow: visible;
+  }
+  .box:hover svg { color: #f5ca40; filter: drop-shadow(0 0 5px rgba(245,202,64,0.4)); }
+
+  .label { font-size: 0.46rem; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; line-height: 1.6; color: rgba(255,255,255,0.3); }
+  .num { font-size: 0.4rem; color: rgba(255,255,255,0.15); margin-bottom: 0.1rem; }
+  .anim-desc { font-size: 0.4rem; color: rgba(245,202,64,0.4); font-style: italic; letter-spacing: 0.06em; text-transform: none; margin-top: 0.15rem; }
+
+  .tag-current .box { border-color: rgba(255,255,255,0.13); }
+  .tag-current .label { color: rgba(255,255,255,0.5); }
+
+  /* ── SVG child elements that animate on hover ─────────────────────────── */
+  /* For all spinning-around-center child groups */
+  .spin-center {
+    transform-box: view-box;
+    transform-origin: center;
+  }
+
+  /* ── Whole-SVG hover animations ─────────────────────────────────────────── */
+
+  /* rotate 45° */
+  .current .box:hover svg,
+  .a-r45 .box:hover svg { transform: rotate(45deg) scale(1.3); transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), color 0.3s, filter 0.3s; }
+
+  /* rotate 90° */
+  .a-r90 .box:hover svg { transform: rotate(90deg) scale(1.25); transition: transform 0.45s cubic-bezier(0.23,1,0.32,1), color 0.3s, filter 0.3s; }
+
+  /* rotate 22.5° */
+  .a-r22 .box:hover svg { transform: rotate(22.5deg) scale(1.3); transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), color 0.3s, filter 0.3s; }
+
+  /* rotate 30° */
+  .a-r30 .box:hover svg { transform: rotate(30deg) scale(1.25); transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), color 0.3s, filter 0.3s; }
+
+  /* rotate 180° */
+  .a-r180 .box:hover svg { transform: rotate(180deg) scale(1.2); transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), color 0.3s, filter 0.3s; }
+
+  /* scale up */
+  .a-scale .box:hover svg { transform: scale(1.5); transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), color 0.3s, filter 0.3s; }
+  .a-scale-xl .box:hover svg { transform: scale(1.7); transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), color 0.3s, filter 0.3s; }
+
+  /* continuous spin (whole svg) */
+  @keyframes svg-spin { to { transform: rotate(360deg); } }
+  .a-spin .box:hover svg { animation: svg-spin 3s linear infinite; }
+  .a-spin-slow .box:hover svg { animation: svg-spin 7s linear infinite; }
+
+  /* pulse */
+  @keyframes svg-pulse { 0%,100% { transform: scale(1.08); } 50% { transform: scale(1.45); } }
+  .a-pulse .box:hover svg { animation: svg-pulse 1s ease-in-out infinite; }
+
+  /* ── Child element animations ─────────────────────────────────────────────── */
+
+  /* ORBITAL (03) — ellipse + dot spin around center */
+  @keyframes spin360 { to { transform: rotate(360deg); } }
+
+  .item-03 .box:hover .orbital-group {
+    transform-box: view-box; transform-origin: center;
+    animation: spin360 2s linear infinite;
+  }
+
+  /* ATOM (15) — 3 ellipse orbits spin at different speeds */
+  .item-15 .box:hover .atom-o1 {
+    transform-box: view-box; transform-origin: center;
+    animation: spin360 2s linear infinite;
+  }
+  .item-15 .box:hover .atom-o2 {
+    transform-box: view-box; transform-origin: center;
+    animation: spin360 3s linear infinite reverse;
+  }
+  .item-15 .box:hover .atom-o3 {
+    transform-box: view-box; transform-origin: center;
+    animation: spin360 2.5s linear infinite;
+    animation-delay: -1s;
+  }
+
+  /* RADAR (17) — sweep arm spins */
+  .item-17 .box:hover .radar-arm {
+    transform-box: view-box; transform-origin: center;
+    animation: spin360 2s linear infinite;
+  }
+
+  /* BINARY STAR (18) — whole orbit group spins */
+  .item-18 .box:hover .binary-group {
+    transform-box: view-box; transform-origin: center;
+    animation: spin360 2.5s linear infinite;
+  }
+
+  /* CORNER BRACKETS (02) — spread outward */
+  @keyframes br-tl { to { transform: translate(-4px, -4px); } }
+  @keyframes br-tr { to { transform: translate(4px, -4px); } }
+  @keyframes br-bl { to { transform: translate(-4px, 4px); } }
+  @keyframes br-brr { to { transform: translate(4px, 4px); } }
+
+  .item-02 .box:hover .br-tl { animation: br-tl 0.4s cubic-bezier(0.23,1,0.32,1) forwards; }
+  .item-02 .box:hover .br-tr { animation: br-tr 0.4s cubic-bezier(0.23,1,0.32,1) forwards; }
+  .item-02 .box:hover .br-bl { animation: br-bl 0.4s cubic-bezier(0.23,1,0.32,1) forwards; }
+  .item-02 .box:hover .br-brr { animation: br-brr 0.4s cubic-bezier(0.23,1,0.32,1) forwards; }
+
+  /* SCANNER (21) — brackets compress inward */
+  @keyframes sc-tl { to { transform: translate(3px, 3px); } }
+  @keyframes sc-tr { to { transform: translate(-3px, 3px); } }
+  @keyframes sc-bl { to { transform: translate(3px, -3px); } }
+  @keyframes sc-br { to { transform: translate(-3px, -3px); } }
+
+  .item-21 .box:hover .sc-tl { animation: sc-tl 0.4s cubic-bezier(0.23,1,0.32,1) forwards; }
+  .item-21 .box:hover .sc-tr { animation: sc-tr 0.4s cubic-bezier(0.23,1,0.32,1) forwards; }
+  .item-21 .box:hover .sc-bl { animation: sc-bl 0.4s cubic-bezier(0.23,1,0.32,1) forwards; }
+  .item-21 .box:hover .sc-br { animation: sc-br 0.4s cubic-bezier(0.23,1,0.32,1) forwards; }
+
+  /* CLOCK (13) — whole svg spins slowly */
+  .item-13 .box:hover svg { animation: svg-spin 6s linear infinite; }
+
+  /* WORMHOLE (10) — inner ellipse spins */
+  .item-10 .box:hover .worm-ellipse {
+    transform-box: view-box; transform-origin: center;
+    animation: spin360 2.5s linear infinite;
+  }
+
+  /* COMET (16) — slight swing */
+  @keyframes comet-swing { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(-18deg) scale(1.2); } }
+  .item-16 .box:hover svg { animation: comet-swing 1.8s ease-in-out infinite; }
+
+  /* NEBULA EYE (30) — breathe scale */
+  @keyframes eye-breathe { 0%,100% { transform: scaleX(1) scaleY(1); } 50% { transform: scaleX(1.3) scaleY(0.85); } }
+  .item-30 .box:hover svg { animation: eye-breathe 1.4s ease-in-out infinite; }
+
+  /* NORTH STAR (11) — slow spin */
+  .item-11 .box:hover svg { transform: rotate(45deg) scale(1.2); transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), color 0.3s, filter 0.3s; }
+
+  /* SPIRAL (23) — unwind */
+  .item-23 .box:hover svg { transform: rotate(270deg) scale(1.2); transition: transform 0.7s cubic-bezier(0.23,1,0.32,1), color 0.3s, filter 0.3s; }
+
+  /* PIN DROP (25) — squish on land */
+  @keyframes pin-land { 0% { transform: scale(1); } 40% { transform: scaleX(1.3) scaleY(0.8) translateY(4px); } 100% { transform: scale(1.2); } }
+  .item-25 .box:hover svg { animation: pin-land 0.5s cubic-bezier(0.23,1,0.32,1) forwards; }
+
+  /* GALAXY (29) — slow continuous spin */
+  .item-29 .box:hover svg { animation: svg-spin 5s linear infinite; }
+</style>
+</head>
+<body>
+<h1>Cursor options — hover each to see the active animation</h1>
+<div class="grid">
+
+  <!-- CURRENT -->
+  <div class="item current tag-current">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <line x1="20" y1="2" x2="20" y2="8" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="20" y1="32" x2="20" y2="38" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="2" y1="20" x2="8" y2="20" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="32" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.75"/>
+        <line x1="27.5" y1="5.5" x2="29.5" y2="7.5" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="12.5" y1="5.5" x2="10.5" y2="7.5" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="27.5" y1="34.5" x2="29.5" y2="32.5" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="12.5" y1="34.5" x2="10.5" y2="32.5" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.45"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">current</div>Reticle + corners<div class="anim-desc">rotates 45° · locks on</div></div>
+  </div>
+
+  <!-- 01 Gapped reticle -->
+  <div class="item item-01 a-r90">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <path d="M20,11 A9,9 0 0,1 29,20" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <path d="M29,20 A9,9 0 0,1 20,29" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <path d="M20,29 A9,9 0 0,1 11,20" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <path d="M11,20 A9,9 0 0,1 20,11" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <line x1="20" y1="2" x2="20" y2="9.5" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="20" y1="30.5" x2="20" y2="38" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="2" y1="20" x2="9.5" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="30.5" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.85"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">01</div>Gapped reticle<div class="anim-desc">rotates 90°</div></div>
+  </div>
+
+  <!-- 02 Corner brackets -->
+  <div class="item item-02">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <g class="br-tl"><polyline points="5,12 5,5 12,5" fill="none" stroke="currentColor" stroke-width="1"/></g>
+        <g class="br-tr"><polyline points="28,5 35,5 35,12" fill="none" stroke="currentColor" stroke-width="1"/></g>
+        <g class="br-bl"><polyline points="5,28 5,35 12,35" fill="none" stroke="currentColor" stroke-width="1"/></g>
+        <g class="br-brr"><polyline points="28,35 35,35 35,28" fill="none" stroke="currentColor" stroke-width="1"/></g>
+      </svg>
+    </div>
+    <div class="label"><div class="num">02</div>Corner brackets<div class="anim-desc">spreads open</div></div>
+  </div>
+
+  <!-- 03 Orbital -->
+  <div class="item item-03">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="1.8" fill="currentColor"/>
+        <g class="orbital-group">
+          <ellipse cx="20" cy="20" rx="13" ry="5" fill="none" stroke="currentColor" stroke-width="0.8" transform="rotate(-35 20 20)"/>
+          <circle cx="32.3" cy="15.6" r="1.1" fill="currentColor" opacity="0.7" transform="rotate(-35 20 20)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="label"><div class="num">03</div>Orbital<div class="anim-desc">orbit spins</div></div>
+  </div>
+
+  <!-- 04 Starburst -->
+  <div class="item item-04 a-r22">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <line x1="20" y1="4" x2="20" y2="13" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="20" y1="27" x2="20" y2="36" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="4" y1="20" x2="13" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="27" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="7.6" y1="7.6" x2="14.3" y2="14.3" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="25.7" y1="25.7" x2="32.4" y2="32.4" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="32.4" y1="7.6" x2="25.7" y2="14.3" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="14.3" y1="25.7" x2="7.6" y2="32.4" stroke="currentColor" stroke-width="0.85"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">04</div>Starburst<div class="anim-desc">half-step spin</div></div>
+  </div>
+
+  <!-- 05 Diamond reticle -->
+  <div class="item item-05 a-r45">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <polygon points="20,10 30,20 20,30 10,20" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="20" y1="2" x2="20" y2="8" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="20" y1="32" x2="20" y2="38" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="2" y1="20" x2="8" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="32" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.85"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">05</div>Diamond reticle<div class="anim-desc">squares up 45°</div></div>
+  </div>
+
+  <!-- 06 Compass rose -->
+  <div class="item item-06 a-r45">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <line x1="20" y1="2" x2="20" y2="9" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="20" y1="31" x2="20" y2="38" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="2" y1="20" x2="9" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="31" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="5.8" y1="5.8" x2="11.4" y2="11.4" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.55"/>
+        <line x1="34.2" y1="5.8" x2="28.6" y2="11.4" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.55"/>
+        <line x1="5.8" y1="34.2" x2="11.4" y2="28.6" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.55"/>
+        <line x1="34.2" y1="34.2" x2="28.6" y2="28.6" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.55"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">06</div>Compass rose<div class="anim-desc">locks direction</div></div>
+  </div>
+
+  <!-- 07 Satellite -->
+  <div class="item item-07 a-r180">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="2.2" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="4" y1="20" x2="16" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="24" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="20" y1="4" x2="20" y2="16" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="20" y1="24" x2="20" y2="36" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="4" y1="17" x2="4" y2="23" stroke="currentColor" stroke-width="1"/>
+        <line x1="36" y1="17" x2="36" y2="23" stroke="currentColor" stroke-width="1"/>
+        <line x1="17" y1="4" x2="23" y2="4" stroke="currentColor" stroke-width="1"/>
+        <line x1="17" y1="36" x2="23" y2="36" stroke="currentColor" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">07</div>Satellite<div class="anim-desc">flips 180°</div></div>
+  </div>
+
+  <!-- 08 HUD arc brackets -->
+  <div class="item item-08 a-scale">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <path d="M8,14 A13,13 0 0,1 14,8" fill="none" stroke="currentColor" stroke-width="1.1"/>
+        <path d="M26,8 A13,13 0 0,1 32,14" fill="none" stroke="currentColor" stroke-width="1.1"/>
+        <path d="M8,26 A13,13 0 0,0 14,32" fill="none" stroke="currentColor" stroke-width="1.1"/>
+        <path d="M26,32 A13,13 0 0,0 32,26" fill="none" stroke="currentColor" stroke-width="1.1"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">08</div>HUD arc brackets<div class="anim-desc">widens field</div></div>
+  </div>
+
+  <!-- 09 Pulsar -->
+  <div class="item item-09 a-pulse">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="1.4" fill="currentColor"/>
+        <line x1="20" y1="1" x2="20" y2="38" stroke="currentColor" stroke-width="0.65" stroke-opacity="0.55"/>
+        <line x1="1" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.65" stroke-opacity="0.55"/>
+        <line x1="17" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="17" y1="30" x2="23" y2="30" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="10" y1="17" x2="10" y2="23" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="30" y1="17" x2="30" y2="23" stroke="currentColor" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">09</div>Pulsar<div class="anim-desc">heartbeat pulse</div></div>
+  </div>
+
+  <!-- 10 Wormhole -->
+  <div class="item item-10">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <circle cx="20" cy="20" r="10" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <ellipse class="worm-ellipse" cx="20" cy="20" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.6" transform="rotate(50 20 20)"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">10</div>Wormhole<div class="anim-desc">inner ring warps</div></div>
+  </div>
+
+  <!-- 11 North star -->
+  <div class="item item-11">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <path d="M20,3 L22,18 L37,20 L22,22 L20,37 L18,22 L3,20 L18,18 Z" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">11</div>North star<div class="anim-desc">rotates 45°</div></div>
+  </div>
+
+  <!-- 12 Target rings -->
+  <div class="item item-12 a-pulse">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="15" fill="none" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
+        <circle cx="20" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="0.7" stroke-opacity="0.6"/>
+        <circle cx="20" cy="20" r="4" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <line x1="20" y1="2" x2="20" y2="8" stroke="currentColor" stroke-width="0.7"/>
+        <line x1="20" y1="32" x2="20" y2="38" stroke="currentColor" stroke-width="0.7"/>
+        <line x1="2" y1="20" x2="8" y2="20" stroke="currentColor" stroke-width="0.7"/>
+        <line x1="32" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.7"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">12</div>Target rings<div class="anim-desc">pulses · locks on</div></div>
+  </div>
+
+  <!-- 13 Clock marks -->
+  <div class="item item-13">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="0.7"/>
+        <circle cx="20" cy="20" r="1.3" fill="currentColor"/>
+        <line x1="20" y1="4" x2="20" y2="7.5" stroke="currentColor" stroke-width="1.1"/>
+        <line x1="20" y1="32.5" x2="20" y2="36" stroke="currentColor" stroke-width="1.1"/>
+        <line x1="4" y1="20" x2="7.5" y2="20" stroke="currentColor" stroke-width="1.1"/>
+        <line x1="32.5" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="1.1"/>
+        <line x1="11.5" y1="6.5" x2="13.2" y2="9.5" stroke="currentColor" stroke-width="0.6"/>
+        <line x1="6.5" y1="11.5" x2="9.5" y2="13.2" stroke="currentColor" stroke-width="0.6"/>
+        <line x1="6.5" y1="28.5" x2="9.5" y2="26.8" stroke="currentColor" stroke-width="0.6"/>
+        <line x1="11.5" y1="33.5" x2="13.2" y2="30.5" stroke="currentColor" stroke-width="0.6"/>
+        <line x1="28.5" y1="6.5" x2="26.8" y2="9.5" stroke="currentColor" stroke-width="0.6"/>
+        <line x1="33.5" y1="11.5" x2="30.5" y2="13.2" stroke="currentColor" stroke-width="0.6"/>
+        <line x1="33.5" y1="28.5" x2="30.5" y2="26.8" stroke="currentColor" stroke-width="0.6"/>
+        <line x1="28.5" y1="33.5" x2="26.8" y2="30.5" stroke="currentColor" stroke-width="0.6"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">13</div>Clock marks<div class="anim-desc">continuous spin</div></div>
+  </div>
+
+  <!-- 14 Minimal crosshair -->
+  <div class="item item-14 a-scale-xl">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <line x1="20" y1="2" x2="20" y2="15" stroke="currentColor" stroke-width="0.9"/>
+        <line x1="20" y1="25" x2="20" y2="38" stroke="currentColor" stroke-width="0.9"/>
+        <line x1="2" y1="20" x2="15" y2="20" stroke="currentColor" stroke-width="0.9"/>
+        <line x1="25" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.9"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">14</div>Minimal crosshair<div class="anim-desc">extends reach</div></div>
+  </div>
+
+  <!-- 15 Atom -->
+  <div class="item item-15">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="2" fill="currentColor"/>
+        <ellipse class="atom-o1" cx="20" cy="20" rx="13" ry="5" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <ellipse class="atom-o2" cx="20" cy="20" rx="13" ry="5" fill="none" stroke="currentColor" stroke-width="0.75" transform="rotate(60 20 20)"/>
+        <ellipse class="atom-o3" cx="20" cy="20" rx="13" ry="5" fill="none" stroke="currentColor" stroke-width="0.75" transform="rotate(120 20 20)"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">15</div>Atom<div class="anim-desc">electrons spin</div></div>
+  </div>
+
+  <!-- 16 Comet -->
+  <div class="item item-16">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="25" cy="15" r="3.5" fill="none" stroke="currentColor" stroke-width="0.9"/>
+        <circle cx="25" cy="15" r="1" fill="currentColor"/>
+        <path d="M22.5,18 Q15,24 7,33" fill="none" stroke="currentColor" stroke-width="0.85" stroke-opacity="0.65"/>
+        <path d="M22,19 Q14,25 6,35" fill="none" stroke="currentColor" stroke-width="0.45" stroke-opacity="0.3"/>
+        <path d="M23,17 Q16,22 9,30" fill="none" stroke="currentColor" stroke-width="0.35" stroke-opacity="0.2"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">16</div>Comet<div class="anim-desc">swings arc</div></div>
+  </div>
+
+  <!-- 17 Radar sweep -->
+  <div class="item item-17">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.35"/>
+        <circle cx="20" cy="20" r="8" fill="none" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.4"/>
+        <circle cx="20" cy="20" r="1.4" fill="currentColor"/>
+        <g class="radar-arm">
+          <line x1="20" y1="20" x2="32" y2="9" stroke="currentColor" stroke-width="0.9"/>
+          <line x1="20" y1="20" x2="29" y2="7" stroke="currentColor" stroke-width="0.4" stroke-opacity="0.3"/>
+        </g>
+      </svg>
+    </div>
+    <div class="label"><div class="num">17</div>Radar sweep<div class="anim-desc">arm scans</div></div>
+  </div>
+
+  <!-- 18 Binary star -->
+  <div class="item item-18">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <g class="binary-group">
+          <ellipse cx="20" cy="20" rx="11" ry="4.5" fill="none" stroke="currentColor" stroke-width="0.65" stroke-opacity="0.45"/>
+          <circle cx="29" cy="20" r="2" fill="none" stroke="currentColor" stroke-width="0.9"/>
+          <circle cx="11" cy="20" r="3" fill="none" stroke="currentColor" stroke-width="0.9"/>
+          <circle cx="29" cy="20" r="0.7" fill="currentColor"/>
+          <circle cx="11" cy="20" r="1" fill="currentColor"/>
+        </g>
+      </svg>
+    </div>
+    <div class="label"><div class="num">18</div>Binary star<div class="anim-desc">binary dance</div></div>
+  </div>
+
+  <!-- 19 Hex reticle -->
+  <div class="item item-19 a-r30">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <polygon points="20,8 29.6,13.5 29.6,26.5 20,32 10.4,26.5 10.4,13.5" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <line x1="20" y1="2" x2="20" y2="6.5" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="20" y1="33.5" x2="20" y2="38" stroke="currentColor" stroke-width="0.85"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">19</div>Hex reticle<div class="anim-desc">aligns to grid</div></div>
+  </div>
+
+  <!-- 20 Arrow tips -->
+  <div class="item item-20 a-scale">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <polyline points="17,5 20,2 23,5" fill="none" stroke="currentColor" stroke-width="0.9"/>
+        <polyline points="17,35 20,38 23,35" fill="none" stroke="currentColor" stroke-width="0.9"/>
+        <polyline points="5,17 2,20 5,23" fill="none" stroke="currentColor" stroke-width="0.9"/>
+        <polyline points="35,17 38,20 35,23" fill="none" stroke="currentColor" stroke-width="0.9"/>
+        <line x1="20" y1="2" x2="20" y2="14" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.4"/>
+        <line x1="20" y1="26" x2="20" y2="38" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.4"/>
+        <line x1="2" y1="20" x2="14" y2="20" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.4"/>
+        <line x1="26" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">20</div>Arrow tips<div class="anim-desc">expands outward</div></div>
+  </div>
+
+  <!-- 21 Scanner -->
+  <div class="item item-21">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <g class="sc-tl"><polyline points="7,14 7,7 14,7" fill="none" stroke="currentColor" stroke-width="1"/></g>
+        <g class="sc-tr"><polyline points="26,7 33,7 33,14" fill="none" stroke="currentColor" stroke-width="1"/></g>
+        <g class="sc-bl"><polyline points="7,26 7,33 14,33" fill="none" stroke="currentColor" stroke-width="1"/></g>
+        <g class="sc-br"><polyline points="26,33 33,33 33,26" fill="none" stroke="currentColor" stroke-width="1"/></g>
+        <line x1="7" y1="20" x2="11" y2="20" stroke="currentColor" stroke-width="0.7" stroke-opacity="0.4"/>
+        <line x1="29" y1="20" x2="33" y2="20" stroke="currentColor" stroke-width="0.7" stroke-opacity="0.4"/>
+        <line x1="20" y1="7" x2="20" y2="11" stroke="currentColor" stroke-width="0.7" stroke-opacity="0.4"/>
+        <line x1="20" y1="29" x2="20" y2="33" stroke="currentColor" stroke-width="0.7" stroke-opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">21</div>Scanner<div class="anim-desc">brackets compress</div></div>
+  </div>
+
+  <!-- 22 Star polygon -->
+  <div class="item item-22 a-spin">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <polygon points="20,4 22.6,15.4 34,13.1 25.6,21.6 30.5,33 20,26.8 9.5,33 14.4,21.6 6,13.1 17.4,15.4" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">22</div>Star polygon<div class="anim-desc">continuous spin</div></div>
+  </div>
+
+  <!-- 23 Spiral -->
+  <div class="item item-23">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <path d="M20,20 C20,18 22,16 24,18 C26,20 24,24 20,24 C16,24 13,20 13,16 C13,12 17,8 22,8 C27,8 32,13 32,20" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">23</div>Spiral<div class="anim-desc">unwinds 270°</div></div>
+  </div>
+
+  <!-- 24 Double ring -->
+  <div class="item item-24 a-scale">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="13" fill="none" stroke="currentColor" stroke-width="0.55" stroke-opacity="0.4"/>
+        <circle cx="20" cy="20" r="7.5" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="20" cy="20" r="1.3" fill="currentColor"/>
+        <line x1="20" y1="2" x2="20" y2="11" stroke="currentColor" stroke-width="0.8"/>
+        <line x1="20" y1="29" x2="20" y2="38" stroke="currentColor" stroke-width="0.8"/>
+        <line x1="2" y1="20" x2="11" y2="20" stroke="currentColor" stroke-width="0.8"/>
+        <line x1="29" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.8"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">24</div>Double ring<div class="anim-desc">expands orbit</div></div>
+  </div>
+
+  <!-- 25 Pin drop -->
+  <div class="item item-25">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="16" r="7" fill="none" stroke="currentColor" stroke-width="0.9"/>
+        <circle cx="20" cy="16" r="1.6" fill="currentColor"/>
+        <path d="M14,21 Q13,28 20,37 Q27,28 26,21" fill="none" stroke="currentColor" stroke-width="0.85"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">25</div>Pin drop<div class="anim-desc">squish lands</div></div>
+  </div>
+
+  <!-- 26 Chevron cross -->
+  <div class="item item-26 a-r45">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <polyline points="14,4 20,10 26,4" fill="none" stroke="currentColor" stroke-width="0.9"/>
+        <polyline points="14,36 20,30 26,36" fill="none" stroke="currentColor" stroke-width="0.9"/>
+        <polyline points="4,14 10,20 4,26" fill="none" stroke="currentColor" stroke-width="0.9"/>
+        <polyline points="36,14 30,20 36,26" fill="none" stroke="currentColor" stroke-width="0.9"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">26</div>Chevron cross<div class="anim-desc">rotates 45°</div></div>
+  </div>
+
+  <!-- 27 Asterism -->
+  <div class="item item-27 a-r30">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="11" r="1.8" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="12" cy="26" r="1.8" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="28" cy="26" r="1.8" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <line x1="20" y1="12.8" x2="13.5" y2="24.4" stroke="currentColor" stroke-width="0.65" stroke-opacity="0.55"/>
+        <line x1="20" y1="12.8" x2="26.5" y2="24.4" stroke="currentColor" stroke-width="0.65" stroke-opacity="0.55"/>
+        <line x1="13.8" y1="26" x2="26.2" y2="26" stroke="currentColor" stroke-width="0.65" stroke-opacity="0.55"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">27</div>Asterism<div class="anim-desc">constellation shifts</div></div>
+  </div>
+
+  <!-- 28 Telescope sight -->
+  <div class="item item-28 a-pulse">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="20" cy="20" r="4" fill="none" stroke="currentColor" stroke-width="0.6" stroke-opacity="0.45"/>
+        <circle cx="20" cy="20" r="1.2" fill="currentColor"/>
+        <line x1="20" y1="2" x2="20" y2="9" stroke="currentColor" stroke-width="0.9"/>
+        <line x1="20" y1="31" x2="20" y2="38" stroke="currentColor" stroke-width="0.9"/>
+        <line x1="2" y1="20" x2="9" y2="20" stroke="currentColor" stroke-width="0.9"/>
+        <line x1="31" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="0.9"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">28</div>Telescope sight<div class="anim-desc">pulses · focuses</div></div>
+  </div>
+
+  <!-- 29 Galaxy -->
+  <div class="item item-29">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="2" fill="currentColor"/>
+        <circle cx="20" cy="20" r="7" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <circle cx="22" cy="19" r="11.5" fill="none" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.45"/>
+        <line x1="20" y1="3" x2="20" y2="8" stroke="currentColor" stroke-width="0.75" stroke-opacity="0.55"/>
+        <line x1="20" y1="32" x2="20" y2="37" stroke="currentColor" stroke-width="0.75" stroke-opacity="0.55"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">29</div>Galaxy<div class="anim-desc">spiral arms turn</div></div>
+  </div>
+
+  <!-- 30 Nebula eye -->
+  <div class="item item-30">
+    <div class="box">
+      <svg width="64" height="64" viewBox="0 0 40 40">
+        <path d="M4,20 Q12,10 20,10 Q28,10 36,20 Q28,30 20,30 Q12,30 4,20 Z" fill="none" stroke="currentColor" stroke-width="0.85"/>
+        <circle cx="20" cy="20" r="5.5" fill="none" stroke="currentColor" stroke-width="0.75"/>
+        <circle cx="20" cy="20" r="1.5" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="label"><div class="num">30</div>Nebula eye<div class="anim-desc">dilates · stares</div></div>
+  </div>
+
+</div>
+
+<p style="margin-top:2rem; font-size:0.45rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.12);">
+  Hover any cursor to preview colour + animation · tell me a number to use it
+</p>
+</body>
+</html>

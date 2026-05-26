@@ -512,11 +512,11 @@ export function Contact() {
                   fontFamily: FONT_MONO,
                   fontSize: "0.6rem",
                   letterSpacing: "0.12em",
-                  color: "rgba(255,255,255,0.35)",
+                  color: "rgba(255,255,255,0.5)",
                   textTransform: "uppercase",
                 }}
               >
-                © 2026 Ashwin Gupta · AI Engineer · Bangalore, India
+                Built with Claude Code · Shipped on Vercel 🚀
               </span>
             </div>
           </div>

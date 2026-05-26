@@ -57,10 +57,10 @@ const NODE_BRIGHT = "rgba(255,255,255,";
 const EDGE_COLOR = "255,255,255";
 const PARTICLE_COLOR = "255,255,255";
 
-const getNodeCount = (isMobile: boolean) => (isMobile ? 40 : 100);
-const getParticleCount = (isMobile: boolean) => (isMobile ? 40 : 70);
-const getConnectionDist = (isMobile: boolean) => (isMobile ? 80 : 400);
-const getDustMoteCount = (isMobile: boolean) => (isMobile ? 80 : 500);
+const getNodeCount = (isMobile: boolean) => (isMobile ? 40 : 110);
+const getParticleCount = (isMobile: boolean) => (isMobile ? 40 : 75);
+const getConnectionDist = (isMobile: boolean) => (isMobile ? 80 : 500);
+const getDustMoteCount = (isMobile: boolean) => (isMobile ? 80 : 600);
 
 const PACKET_INTERVAL = 20;
 const PACKET_SPEED_MIN = 0.001;
@@ -355,18 +355,18 @@ export function AIBackground() {
           const mdx = pos.x - mouseRef.current.x;
           const mdy = pos.y - mouseRef.current.y;
           const mDistSq = mdx * mdx + mdy * mdy;
-          const MOUSE_R = 120;
+          const MOUSE_R = 150;
           if (mDistSq < MOUSE_R * MOUSE_R && mDistSq > 0) {
             const mDist = Math.sqrt(mDistSq);
-            const force = ((MOUSE_R - mDist) / MOUSE_R) * 18;
+            const force = ((MOUSE_R - mDist) / MOUSE_R) * 26;
             mote.mouseOffX += (mdx / mDist) * force;
             mote.mouseOffY += (mdy / mDist) * force;
           }
         }
-        mote.mouseOffX *= 0.91;
-        mote.mouseOffY *= 0.91;
+        mote.mouseOffX *= 0.9;
+        mote.mouseOffY *= 0.9;
         // cap displacement so motes don't fly off screen
-        const CAP = 180;
+        const CAP = 200;
         if (mote.mouseOffX > CAP) mote.mouseOffX = CAP;
         if (mote.mouseOffX < -CAP) mote.mouseOffX = -CAP;
         if (mote.mouseOffY > CAP) mote.mouseOffY = CAP;
@@ -419,11 +419,11 @@ export function AIBackground() {
           const dx = n.x - mouse.x;
           const dy = n.y - mouse.y;
           const distSq = dx * dx + dy * dy;
-          if (distSq < 22500 && distSq > 0) {
+          if (distSq < 32400 && distSq > 0) {
             const dist = Math.sqrt(distSq);
-            const force = (150 - dist) / 150;
-            n.x += (dx / dist) * force * 2;
-            n.y += (dy / dist) * force * 2;
+            const force = (180 - dist) / 180;
+            n.x += (dx / dist) * force * 3;
+            n.y += (dy / dist) * force * 3;
           }
         }
 
