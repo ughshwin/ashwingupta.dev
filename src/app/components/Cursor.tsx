@@ -28,8 +28,7 @@ export function Cursor() {
 
       if (wrapRef.current) {
         // translate3d forces GPU compositing — no layout thrash, no paint
-        wrapRef.current.style.transform =
-          `translate3d(${curX.current - 26}px,${curY.current - 26}px,0)`;
+        wrapRef.current.style.transform = `translate3d(${curX.current - 26}px,${curY.current - 26}px,0)`;
       }
 
       const dx = posX.current - curX.current;
@@ -55,7 +54,7 @@ export function Cursor() {
     // overrides cursor:pointer on every element, making computed cursor always "none".
     // Instead walk the DOM with closest() against known interactive selectors.
     const SEMANTIC =
-      'a, button, input, select, textarea, label, summary, ' +
+      "a, button, input, select, textarea, label, summary, " +
       '[role="button"], [role="link"], [role="menuitem"], [role="tab"], ' +
       '[role="checkbox"], [role="radio"], [role="switch"], ' +
       '[tabindex]:not([tabindex="-1"]), [data-hover]';
@@ -94,16 +93,16 @@ export function Cursor() {
       }
     };
 
-    document.addEventListener("mousemove",  onMove,     { passive: true });
-    document.addEventListener("mouseover",  onOver,     { passive: true });
-    document.addEventListener("mouseout",   onOut,      { passive: true });
+    document.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("mouseover", onOver, { passive: true });
+    document.addEventListener("mouseout", onOut, { passive: true });
     document.addEventListener("mouseleave", onDocLeave, { passive: true });
 
     return () => {
       styleEl.remove();
-      document.removeEventListener("mousemove",  onMove);
-      document.removeEventListener("mouseover",  onOver);
-      document.removeEventListener("mouseout",   onOut);
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseover", onOver);
+      document.removeEventListener("mouseout", onOut);
       document.removeEventListener("mouseleave", onDocLeave);
       cancelAnimationFrame(rafId.current);
     };
@@ -121,30 +120,38 @@ export function Cursor() {
           transform-origin: center bottom;
         }
 
-        /* Hover state — gold + glow */
+        /* Hover state — cyan + glow */
         .iss-cursor.iss-hovering {
-          color: #f5ca40 !important;
-          filter: drop-shadow(0 0 7px rgba(245,202,64,0.5));
+          color: #22d3ee !important;
+          filter: drop-shadow(0 0 7px rgba(34,211,238,0.55));
         }
 
         /* Dish beam keyframe — arcs expand upward and fade */
         @keyframes iss-arc-emit {
           0%   { opacity: 0;    transform: translateY(1px)   scaleX(0.45) scaleY(0.3);  }
-          14%  { opacity: 0.88; }
-          100% { opacity: 0;    transform: translateY(-12px) scaleX(1.7)  scaleY(1.6);  }
+          14%  { opacity: 0.95; }
+          100% { opacity: 0;    transform: translateY(-18px) scaleX(2.0)  scaleY(1.8);  }
         }
 
-        /* Three staggered arcs — 0.6s apart so one is always mid-travel */
+        /* Five staggered arcs — 0.36s apart so two are always mid-travel */
         .iss-cursor.iss-hovering .iss-arc-1 {
           animation: iss-arc-emit 1.8s ease-out infinite;
         }
         .iss-cursor.iss-hovering .iss-arc-2 {
           animation: iss-arc-emit 1.8s ease-out infinite;
-          animation-delay: 0.6s;
+          animation-delay: 0.36s;
         }
         .iss-cursor.iss-hovering .iss-arc-3 {
           animation: iss-arc-emit 1.8s ease-out infinite;
-          animation-delay: 1.2s;
+          animation-delay: 0.72s;
+        }
+        .iss-cursor.iss-hovering .iss-arc-4 {
+          animation: iss-arc-emit 1.8s ease-out infinite;
+          animation-delay: 1.08s;
+        }
+        .iss-cursor.iss-hovering .iss-arc-5 {
+          animation: iss-arc-emit 1.8s ease-out infinite;
+          animation-delay: 1.44s;
         }
       `}</style>
 
@@ -181,48 +188,133 @@ export function Cursor() {
           {/* ── ISS body ──────────────────────────────── */}
 
           {/* center module */}
-          <rect x="16.5" y="18" width="7" height="4"
-            fill="none" stroke="currentColor" strokeWidth="0.75"/>
+          <rect
+            x="16.5"
+            y="18"
+            width="7"
+            height="4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.75"
+          />
 
           {/* main horizontal truss */}
-          <line x1="2" y1="20" x2="38" y2="20"
-            stroke="currentColor" strokeWidth="0.85"/>
+          <line
+            x1="2"
+            y1="20"
+            x2="38"
+            y2="20"
+            stroke="currentColor"
+            strokeWidth="0.85"
+          />
 
           {/* outer solar panel pair */}
-          <rect x="2"  y="15.5" width="7" height="9"
-            fill="none" stroke="currentColor" strokeWidth="0.75"/>
-          <rect x="31" y="15.5" width="7" height="9"
-            fill="none" stroke="currentColor" strokeWidth="0.75"/>
+          <rect
+            x="2"
+            y="15.5"
+            width="7"
+            height="9"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.75"
+          />
+          <rect
+            x="31"
+            y="15.5"
+            width="7"
+            height="9"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.75"
+          />
 
           {/* inner solar panel pair (slightly dimmer) */}
-          <rect x="11" y="15.5" width="5" height="9"
-            fill="none" stroke="currentColor" strokeWidth="0.6" strokeOpacity="0.6"/>
-          <rect x="24" y="15.5" width="5" height="9"
-            fill="none" stroke="currentColor" strokeWidth="0.6" strokeOpacity="0.6"/>
+          <rect
+            x="11"
+            y="15.5"
+            width="5"
+            height="9"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.6"
+            strokeOpacity="0.6"
+          />
+          <rect
+            x="24"
+            y="15.5"
+            width="5"
+            height="9"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.6"
+            strokeOpacity="0.6"
+          />
 
           {/* vertical module stubs */}
-          <line x1="20" y1="12" x2="20" y2="18"
-            stroke="currentColor" strokeWidth="0.75"/>
-          <line x1="20" y1="22" x2="20" y2="28"
-            stroke="currentColor" strokeWidth="0.75"/>
+          <line
+            x1="20"
+            y1="12"
+            x2="20"
+            y2="18"
+            stroke="currentColor"
+            strokeWidth="0.75"
+          />
+          <line
+            x1="20"
+            y1="22"
+            x2="20"
+            y2="28"
+            stroke="currentColor"
+            strokeWidth="0.75"
+          />
 
           {/* dish parabola */}
-          <path d="M16,13 Q20,10 24,13"
-            fill="none" stroke="currentColor" strokeWidth="0.85"/>
+          <path
+            d="M16,13 Q20,10 24,13"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.85"
+          />
 
           {/* center hotspot dot */}
-          <circle cx="20" cy="20" r="0.7" fill="currentColor"/>
+          <circle cx="20" cy="20" r="0.7" fill="currentColor" />
 
           {/* ── Dish beam arcs (A3) — shown only on hover ── */}
-          <path className="iss-arc iss-arc-1"
+          <path
+            className="iss-arc iss-arc-1"
             d="M15,11 Q20,7 25,11"
-            fill="none" stroke="currentColor" strokeWidth="0.65"/>
-          <path className="iss-arc iss-arc-2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.65"
+          />
+          <path
+            className="iss-arc iss-arc-2"
             d="M13,10 Q20,4 27,10"
-            fill="none" stroke="currentColor" strokeWidth="0.5"/>
-          <path className="iss-arc iss-arc-3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.5"
+          />
+          <path
+            className="iss-arc iss-arc-3"
             d="M11,9  Q20,2 29,9"
-            fill="none" stroke="currentColor" strokeWidth="0.35"/>
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.35"
+          />
+          <path
+            className="iss-arc iss-arc-4"
+            d="M9,8   Q20,0 31,8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.25"
+          />
+          <path
+            className="iss-arc iss-arc-5"
+            d="M7,7   Q20,-3 33,7"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.18"
+          />
         </svg>
       </div>
     </>
