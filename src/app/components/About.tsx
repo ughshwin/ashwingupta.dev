@@ -52,7 +52,7 @@ const highlights: { title: string; sub: string; icon: string }[] = [
     icon: hsbcLogoUrl,
   },
   {
-    title: "Pat on Back - Think Customer",
+    title: "Pat on Back - Think Customer Award",
     sub: "Individual Delivery Excellence · Coforge",
     icon: coforgeLogoUrl,
   },
