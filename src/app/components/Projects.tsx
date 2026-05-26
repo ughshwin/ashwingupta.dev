@@ -1033,7 +1033,7 @@ export function Projects() {
         position: "relative",
         height: isMobile ? "auto" : sectionH,
         background: "transparent",
-        ...(isMobile && { padding: "2.75rem 4vw 4rem" }),
+        ...(isMobile && { padding: "2.75rem 4vw 8rem" }),
       }}
     >
       <div
@@ -1124,7 +1124,7 @@ export function Projects() {
                     top: 0,
                     left: 0,
                     right: 0,
-                    padding: "1.5rem 6vw 4rem",
+                    padding: "1.5rem 6vw 8rem",
                   }
             }
           >
