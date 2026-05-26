@@ -334,7 +334,7 @@ export function Contact() {
                       textTransform: "uppercase",
                     }}
                   >
-                    Optimising: Residuals · Not: Roles
+                    Optimising: Residuals • Not: Roles
                   </span>
                 </motion.div>
 
@@ -516,7 +516,8 @@ export function Contact() {
                   textTransform: "uppercase",
                 }}
               >
-                Built with Claude Code · Shipped on Vercel 🚀
+                🎨 Vision & design by Ashwin Gupta • ⚡ Engineered with Claude
+                Code • 🚀 Deployed on Vercel{" "}
               </span>
             </div>
           </div>

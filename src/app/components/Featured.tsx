@@ -45,7 +45,7 @@ const TYPE_META: Record<
     glow: "0 0 4px rgba(74,222,128,0.28)",
   },
   patent: {
-    label: "Patent Pending · In Development",
+    label: "Patent Pending • In Development",
     color: "#ffffff",
     border: "rgba(139,92,246,0.55)",
     bg: "rgba(93,33,182,0.22)",
@@ -75,7 +75,7 @@ const ITEMS: FeaturedItem[] = [
     name: "Conversational Analytics",
     title:
       "Real-Time Conversational AI - SIP Voice Infrastructure at Production Scale",
-    subtitle: "Coforge - HSBC · Jun 2024 – Present",
+    subtitle: "Coforge - HSBC • Jun 2024 – Present",
     link: "/work/hsbc",
     bullets: [
       "GIL-bound threading serialised all audio onto one core on a **32-core VM** - **20 concurrent calls**, 31 cores idle, CPU utilisation capped below **20%**.",
@@ -89,7 +89,7 @@ const ITEMS: FeaturedItem[] = [
     name: "controla",
     title:
       "Local-First Self-Improving Inference OS - Routing That Compounds With Every Deployment",
-    subtitle: "Personal · Patent Pending · In Active Development",
+    subtitle: "Personal • Patent Pending • In Active Development",
     link: "/research/controla",
     bullets: [
       "Local inference routing is **stateless** - prior outcomes ignored, blind dispatch repeated indefinitely; no unified API surface across modalities.",
@@ -103,7 +103,7 @@ const ITEMS: FeaturedItem[] = [
     name: "Here.app",
     title:
       "163-Language Vehicle Intelligence - Multilingual RAG at Enterprise Scale",
-    subtitle: "Gida Technologies / HDFC ERGO · 2023–2024",
+    subtitle: "Gida Technologies / HDFC ERGO • 2023–2024",
     link: "/work/here-app",
     bullets: [
       "Standard chatbots failed on structured vehicle spec data - inconsistent answers drove manual escalation at **HDFC ERGO**, one of India's largest general insurers.",
@@ -117,7 +117,7 @@ const ITEMS: FeaturedItem[] = [
     name: "PINNs",
     title:
       "Physics-Informed Neural Networks - Dual-Loss Framework for Multi-Domain Simulation",
-    subtitle: "BMS College of Engineering · Final Year Thesis · 2022–23",
+    subtitle: "BMS College of Engineering • Final Year Thesis • 2022–23",
     link: "/research/pinns",
     bullets: [
       "Purely data-driven physics simulation demanded large labeled datasets - sparse data let models ignore governing equations, producing physically implausible solutions.",
@@ -131,7 +131,7 @@ const ITEMS: FeaturedItem[] = [
     name: "PHYSCLIP",
     title:
       "Contrastive Regime Classification - Symbolic and Observed Space Alignment",
-    subtitle: "Personal · Open Source",
+    subtitle: "Personal • Open Source",
     link: "/research/physclip",
     bullets: [
       "Physics-informed models assume the governing equation is known - the harder upstream problem is **regime classification**: which regime applies to the observed field.",

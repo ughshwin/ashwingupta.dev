@@ -65,17 +65,17 @@ export const projects: Project[] = [
       "Spatial UI Architecture",
       "TypeScript / React",
       "Canvas 2D",
-      "Astro · Vercel",
+      "Astro • Vercel",
       "Performance Engineering",
       "Domain & DNS",
     ],
     impact:
-      "Live at ashwingupta.dev · 90% image reduction · 72% JS bundle cut · 400 CSS DOM nodes eliminated",
+      "Live at ashwingupta.dev • 90% image reduction • 72% JS bundle cut • 400 CSS DOM nodes eliminated",
     summary: [
       "The original portfolio claimed performance engineering while shipping **400 animated DOM nodes** and a **2 MB JPEG hero** - self-defeating on load.",
       "Rebuilt as a **three-layer spatial interface** - environment shell, Canvas particle field, hologram surface - collapsing all visual effects into one system.",
       "**Offscreen pre-rendering**, visibility-gated RAF, lazy loading, and WebP + fetchpriority preloads cut work at the source, making optimization structural not cosmetic.",
-      "**90% image reduction** · **72% JS cut** · frame time **18–25ms → 4–6ms** · stable **60fps** under throttle · **400 animated DOM nodes** removed.",
+      "**90% image reduction** • **72% JS cut** • frame time **18–25ms → 4–6ms** • stable **60fps** under throttle • **400 animated DOM nodes** removed.",
     ],
     bullets: [
       "A portfolio site is its own proof unit. The designer baseline was self-defeating - the first thing a hiring manager measured was a **performance failure on the site claiming performance engineering**.",
@@ -104,7 +104,7 @@ export const projects: Project[] = [
       "Python / Open Source",
     ],
     impact:
-      "Fully offline tree-RAG execution · vendor lock-in eliminated · provider-agnostic runtime",
+      "Fully offline tree-RAG execution • vendor lock-in eliminated • provider-agnostic runtime",
     summary: [
       "Tree-RAG was **hardwired to one provider contract** - completion differences silently corrupted recursive traversal; failures surface only at collapse.",
       "Added a **provider-routing layer** with **finish-reason normalization**, so traversal depends on stable internal contracts, not whichever runtime answered.",
@@ -134,16 +134,16 @@ export const projects: Project[] = [
       "Dense Embeddings",
       "Ollama / Local LLMs",
       "Multi-Source Ingestion",
-      "PyMuPDF · BeautifulSoup",
+      "PyMuPDF • BeautifulSoup",
       "Privacy-First",
     ],
     impact:
-      "Fully offline academic document QA · reproducible HNSW indexes · zero API dependency",
+      "Fully offline academic document QA • reproducible HNSW indexes • zero API dependency",
     summary: [
       "Academic RAG assumed **cloud inference by default** - air-gapped institutions and low-VRAM machines had no private path from ingestion to QA.",
       "Built a **local-first retrieval stack**: LEANN/HNSW indexes, dense embeddings, Ollama inference, and normalized ingestion across PDFs, HTML, and paper dirs.",
       "Chunk overlap, tuned **Top-K** and context windows; PyMuPDF and BeautifulSoup cleanup fix retrieval quality, before errors reach query time.",
-      "**API-free academic QA** on **sub-1GB quantized models** · reproducible HNSW artifacts for air-gapped use · ingestion and retrieval run without cloud credentials.",
+      "**API-free academic QA** on **sub-1GB quantized models** • reproducible HNSW artifacts for air-gapped use • ingestion and retrieval run without cloud credentials.",
     ],
     bullets: [
       "Sensitive academic papers had **no private processing path** - all RAG required external inference APIs; researchers on **CPU-only or low-VRAM hardware** had no viable local inference option; institutions with air-gap requirements were blocked by all existing tooling.",
@@ -163,20 +163,20 @@ export const projects: Project[] = [
     logoHeight: 22,
     status: "Client Delivery",
     tags: [
-      "SIP/Voice Orchestration (PJSIP · RFC 3261)",
-      "CPU-Pinned Processes · asyncio + uvloop",
-      "GCP Infrastructure (Packer · GCE · HPA)",
+      "SIP/Voice Orchestration (PJSIP • RFC 3261)",
+      "CPU-Pinned Processes • asyncio + uvloop",
+      "GCP Infrastructure (Packer • GCE • HPA)",
       "Cross-Stack Observability",
       "LLM Inference Pipeline",
       "Cost Engineering",
     ],
     impact:
-      "1,600+ concurrent sessions · 7× VM capacity · ~$1.3M annualized savings · MTTR ~1–2 hrs → ~10 min",
+      "1,600+ concurrent sessions • 7× VM capacity • ~$1.3M annualized savings • MTTR ~1–2 hrs → ~10 min",
     summary: [
       "GIL'd threading on a **32-core VM** left 31 cores idle - memory ballooning capped sessions at **20 per VM**; documentation **10–15 min**; incident recovery **1–2 hours**.",
       "Migrated to **8-core VM**; **8 CPU-pinned parallel instances** via taskset escaped GIL; **asyncio + uvloop** replaced threading - each SIP session a coroutine across SBC, STT, and LLM.",
       "Built **cross-stack log correlation**, SIPp load testing, and secure media transport - capacity, observability, and cost treated as one system.",
-      "**7× per-VM capacity** · **1,600+ sessions** sustained · **$118K → $8K/month** · MTTR **1–2 hr → ~10 min** · docs **10–15 min → 2–3 min**.",
+      "**7× per-VM capacity** • **1,600+ sessions** sustained • **$118K → $8K/month** • MTTR **1–2 hr → ~10 min** • docs **10–15 min → 2–3 min**.",
     ],
     bullets: [
       "**GIL'd threading caused memory ballooning** - concurrent sessions saturated at 20 per VM before packet loss rose above 10%; available hardware capacity was highly under-utilised; post-call documentation required **10–15 minutes of manual effort** per interaction with no automated path; fragmented cross-service logs with no correlation layer meant incidents required **1–2 hours of manual reconstruction** to identify root cause.",
@@ -204,12 +204,12 @@ export const projects: Project[] = [
       "Fabrication Guardrails",
     ],
     impact:
-      "~2–3 days → ~2–3 hours documentation turnaround · 104 resource groups/project · zero fabricated components",
+      "~2–3 days → ~2–3 hours documentation turnaround • 104 resource groups/project • zero fabricated components",
     summary: [
       "Azure docs relied on **manual exports and hand-drawn diagrams** - every project took **2–3 days** and drifted from live state.",
       "Built a **live-state extraction pipeline** - subscription scan, topology mapping, and security config analysis auto-generate SDDs and PlantUML from live resource evidence.",
       "**Few-shot prompting** grounds generation in extracted inventory; guardrails reject any component without a matching live resource - fabrication blocked from governance docs.",
-      "**2–3 days → ~2–3 hours** · **104 resource groups** per engagement · **zero fabricated components** · manual PlantUML authoring removed.",
+      "**2–3 days → ~2–3 hours** • **104 resource groups** per engagement • **zero fabricated components** • manual PlantUML authoring removed.",
     ],
     bullets: [
       "Infrastructure documentation required **manual extraction from Azure** - 2–3 days per project; **PlantUML diagrams were authored by hand** from memory or stale exports; documented architecture drifted from live infrastructure state with **no mechanism to detect or correct divergence**.",
@@ -229,19 +229,19 @@ export const projects: Project[] = [
     logoHeight: 18,
     status: "Client Delivery",
     tags: [
-      "PDF Table Extraction (Camelot · Ghostscript)",
+      "PDF Table Extraction (Camelot • Ghostscript)",
       "GPT-4o Normalization",
       "One-Shot Prompting",
       "Mixed-Format Document Handling",
       "Contract Intelligence Pipeline",
     ],
     impact:
-      "~96% extraction accuracy · automated normalization across varied airline PDF schemas",
+      "~96% extraction accuracy • automated normalization across varied airline PDF schemas",
     summary: [
       "Airline contracts mixed **scan-quality and readable PDF tables**; carrier template drift made manual review the only reliable extraction path.",
       "**Camelot + Ghostscript** extracted tables from both formats; **GPT-4o one-shot normalization** mapped carrier layouts into a schema-consistent output.",
       "One-shot prompting preserves coherence across carrier templates - no per-carrier tuning; covers full format range from scan images to nested tables.",
-      "**~96% extraction accuracy** across airline contract Q&A · automated normalization replaced manual review · real-time query resolution, sales and support.",
+      "**~96% extraction accuracy** across airline contract Q&A • automated normalization replaced manual review • real-time query resolution, sales and support.",
     ],
     bullets: [
       "Airline contract tables were **reviewed manually** - slow, error-prone, and couldn't scale to the volume of carrier agreements; **template drift across carriers** meant each format required separate handling logic; sales and support queries on contract terms had **no real-time resolution path**.",
@@ -269,12 +269,12 @@ export const projects: Project[] = [
       "Vehicle Intelligence",
     ],
     impact:
-      "~97% factual accuracy · 163 languages · reduced manual escalation on specification queries",
+      "~97% factual accuracy • 163 languages • reduced manual escalation on specification queries",
     summary: [
       "Vehicle assistants answered **specification queries inconsistently across languages** - the same request could contradict itself, making manual escalation the safe fallback.",
       "Built a **RAG system** over a structured vehicle database with image-linked attributes - every answer grounded in one canonical source.",
       "**QA-gated retrieval** validates lookup quality before generation, while **163-language delivery** stays anchored to one data model instead of post-hoc translation.",
-      "**~97% factual accuracy** across **163 languages** · grounded responses reduced manual escalation on configuration, pricing, and feature-specification queries at scale.",
+      "**~97% factual accuracy** across **163 languages** • grounded responses reduced manual escalation on configuration, pricing, and feature-specification queries at scale.",
     ],
     bullets: [
       "Vehicle spec chatbots produced **inconsistent and factually unreliable answers** - the same query in different languages could return contradictory results; **manual support escalation** was the only fallback for spec-heavy queries, creating volume bottlenecks at scale.",
@@ -288,7 +288,7 @@ export const projects: Project[] = [
   {
     index: "08",
     slug: "laminar-metamorph-polymorph",
-    title: "Laminar · Metamorph · Polymorph - AI Delivery Toolchain",
+    title: "Laminar • Metamorph • Polymorph - AI Delivery Toolchain",
     company: "Gida Technologies",
     logo: GIDA_LOGO,
     logoHeight: 28,
@@ -302,12 +302,12 @@ export const projects: Project[] = [
       "AI-Generated Visuals",
     ],
     impact:
-      "Three interlinked AI tools · 163-language content generation · cURL-to-20+ language API conversion",
+      "Three interlinked AI tools • 163-language content generation • cURL-to-20+ language API conversion",
     summary: [
       "Content generation, chatbot delivery, and API conversion required **separate tools with manual handoffs** - output drifted across every project.",
       "Built **three-part AI toolchain**: Laminar for multilingual content, Metamorph for no-code chatbots, Polymorph for API conversion scaffolds.",
       "Each tool ships **standardized deployable artifacts** - brand-consistent visuals, multilingual content at scale, cURL-derived code across 20+ languages.",
-      "**Three fragmented workflows unified** · **163-language content generation** at scale · no-code bot delivery removed engineering dependency · API work accelerated.",
+      "**Three fragmented workflows unified** • **163-language content generation** at scale • no-code bot delivery removed engineering dependency • API work accelerated.",
     ],
     bullets: [
       "Content generation, bot deployment, and API conversion each required **separate tools and manual handoff steps** - inconsistent output quality across every client engagement; **multilingual content at scale** had no standardized generation path; chatbot delivery required **engineering involvement** for every new deployment or update.",
@@ -335,12 +335,12 @@ export const projects: Project[] = [
       "NVIDIA T4",
     ],
     impact:
-      "+30% recommendation relevance · sub-50ms latency · single NVIDIA T4 under production load",
+      "+30% recommendation relevance • sub-50ms latency • single NVIDIA T4 under production load",
     summary: [
       "Skill recommendations ignored **hierarchical relationships**, taxonomy changes forced **full batch retraining**, and live inference missed the **sub-50ms** SLA.",
       "Built a **weighted directed graph** over multilevel skill hierarchies with typed edges, lightweight scoring - structure, not retraining, drives relevance.",
       "Dynamic node insertion and deterministic traversal keep the graph current; latency was profiled at the **99th percentile** under production load.",
-      "**+30% relevance** · **sub-50ms inference** on one **NVIDIA T4** · taxonomy expansion no longer required batch retraining · live updates stayed current.",
+      "**+30% relevance** • **sub-50ms inference** on one **NVIDIA T4** • taxonomy expansion no longer required batch retraining • live updates stayed current.",
     ],
     bullets: [
       "The recommendation system **ignored hierarchical skill relationships** - related skills treated as independent nodes with no structural modeling; **every taxonomy expansion triggered full batch retraining**, blocking updates until recompute completed; inference latency under production concurrency **exceeded the sub-50ms SLA** required for live platform use.",
@@ -358,7 +358,7 @@ export const projects: Project[] = [
     company: "BMS College of Engineering",
     logo: BMSCE_LOGO,
     logoHeight: 28,
-    status: "Best Outgoing Project · 2022–23",
+    status: "Best Outgoing Project • 2022–23",
     tags: [
       "PINNs",
       "Dual-Loss Optimization",
@@ -368,12 +368,12 @@ export const projects: Project[] = [
       "Heat Transfer",
     ],
     impact:
-      "Best Outgoing Project · BMSCE 2022–23 · 6 validated benchmarks across fluid, structural, and thermal domains",
+      "Best Outgoing Project • BMSCE 2022–23 • 6 validated benchmarks across fluid, structural, and thermal domains",
     summary: [
       "Purely data-driven simulation needed **large labeled datasets** and produced **physically invalid solutions** when sparse data let models ignore governing laws.",
       "Developed a **dual-loss PINN framework** that embeds **PDE/ODE constraints** directly into optimization - data fit and physical law are solved together.",
       "Validated across **six benchmarks** spanning fluid, structural, and thermal domains, including Burgers' equation plus Neumann and Dirichlet variants.",
-      "**Stable convergence** across three physics domains with limited data · HVAC and server-cooling use cases explored · **Best Outgoing Project - BMSCE 2022–23**.",
+      "**Stable convergence** across three physics domains with limited data • HVAC and server-cooling use cases explored • **Best Outgoing Project - BMSCE 2022–23**.",
     ],
     bullets: [
       "Purely data-driven physics simulation required **large labeled datasets** expensive or impossible to generate experimentally; sparse training data produced **physically implausible solutions** - the model could satisfy the data loss while violating governing equations; no unified framework existed that validated across multiple physics domains simultaneously.",
@@ -393,15 +393,15 @@ export const projects: Project[] = [
     logoHeight: 18,
     status: "In Development",
     tags: [
-      "MCP Orchestrator · DAG Execution",
+      "MCP Orchestrator • DAG Execution",
       "9 Deterministic Services",
-      "Hypothesis · Critic Agent Loop",
+      "Hypothesis • Critic Agent Loop",
       "Evidence-Bound Outputs",
-      "Chroma · SQLite · Redis",
-      "Local-First · Self-Hostable",
+      "Chroma • SQLite • Redis",
+      "Local-First • Self-Hostable",
     ],
     impact:
-      "5,479 chunks · 180 claims · 76 contradictions detected · 100% determinism rate · fully local execution",
+      "5,479 chunks • 180 claims • 76 contradictions detected • 100% determinism rate • fully local execution",
     summary: [
       "Research copilots generate **fluent text without evidence traceability** - grounded synthesis and hallucination look identical, so no claim can be audited.",
       "**Five locked MCP services** cover literature mapping, contradiction detection, hypothesis critique, evidence extraction, and assembly through **schema-defined interfaces**.",
@@ -413,7 +413,7 @@ export const projects: Project[] = [
       "ScholarOS is a **structured research execution platform** - five capabilities delivered as a DAG-executed MCP workflow, not a chatbox. Every output is **bound to source evidence**. Contradiction detection runs across the full corpus, not per-query. Hypothesis critique uses a **bounded Hypothesis / Critic agent loop** with convergence detection - not unconstrained generation. Nine services process research artifacts with rule-based, schema-defined, reproducible logic. **No service imports another service** - all data flows through the orchestrator via MCP tool invocations.",
       "**MCP Orchestrator** executes workflows as DAGs with pause/resume, session management, and full trace logging. Five capabilities: **Literature Mapping** (HDBSCAN clustering + LLM cluster labeling + paper ranking), **Contradiction & Consensus** (claim extraction → metric normalization → polarity/value divergence detection → Belief Engine confidence assignment), **Hypothesis & Critique** (bounded Hypothesis/Critic loop, max 5 iterations, grounded to source claim identifiers), **Multimodal Evidence Extraction** (tables, figures, metrics from PDFs → structured output), **Proposal Assistant** (validated hypotheses → Markdown/LaTeX with citation assembly). Data layer: **Chroma** (vector), **SQLite** (metadata), **Redis** (session). Local inference: **Ollama qwen2.5:32b**, **sentence-transformers all-MiniLM-L6-v2**.",
       "**100% determinism rate** - identical inputs produce identical outputs; no stochastic processes in the deterministic pipeline. Nine independently testable services with no global state and no inter-service imports - all data flows through the orchestrator, **eliminating hidden state**. Agent reasoning is **explicitly bounded**: max 5 iterations per hypothesis loop with required grounding to source claim identifiers. March 2026 validation: **5,479 chunks processed**, **180 claims extracted**, **76 contradictions detected**.",
-      "**Five research output artifacts** - ClusterMap (JSON), Contradiction Report (JSON), Validated Hypotheses (JSON), Research Proposals (Markdown · LaTeX), Extracted Evidence (CSV · JSON). **Fully local and self-hostable** - no external API dependency for any deterministic pipeline stage.",
+      "**Five research output artifacts** - ClusterMap (JSON), Contradiction Report (JSON), Validated Hypotheses (JSON), Research Proposals (Markdown • LaTeX), Extracted Evidence (CSV • JSON). **Fully local and self-hostable** - no external API dependency for any deterministic pipeline stage.",
     ],
     github: "https://github.com/ughshwin/ScholarOS",
   },
@@ -687,7 +687,7 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
   const isDesktop = useIsDesktop();
   const showOutcome = hovered || revealed;
 
-  const isAward = p.status === "Best Outgoing Project · 2022–23";
+  const isAward = p.status === "Best Outgoing Project • 2022–23";
   const statusColor = isAward
     ? "#facc15"
     : p.status === "Client Delivery"
@@ -1016,8 +1016,8 @@ export function Projects() {
   );
 
   const orderedSecondary = [...secondaryProjects].sort((a, b) => {
-    const aIsAward = a.status === "Best Outgoing Project · 2022–23";
-    const bIsAward = b.status === "Best Outgoing Project · 2022–23";
+    const aIsAward = a.status === "Best Outgoing Project • 2022–23";
+    const bIsAward = b.status === "Best Outgoing Project • 2022–23";
     if (aIsAward === bIsAward) return 0;
     return aIsAward ? 1 : -1;
   });

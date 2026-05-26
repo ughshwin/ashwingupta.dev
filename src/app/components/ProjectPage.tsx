@@ -38,7 +38,7 @@ export function ProjectPage({
     );
   }
 
-  const isAward = p.status === "Best Outgoing Project · 2022–23";
+  const isAward = p.status === "Best Outgoing Project • 2022–23";
   const statusColor = isAward
     ? "#facc15"
     : p.status === "Client Delivery"

@@ -100,8 +100,8 @@ const ENTRIES: Entry[] = [
     end: new Date(2023, 4),
     bullets: [
       "Founder & mentor - Augment.AI, BMSCE's AI club",
-      "Sponsorship Head, UTSAV '22 - signed MoUs · raised >50% of total budget in 14 days",
-      "IEEE Joint Secretary · 75+ events · chapter ranked #2 globally · co-founded CS chapter",
+      "Sponsorship Head, UTSAV '22 - signed MoUs • raised >50% of total budget in 14 days",
+      "IEEE Joint Secretary • 75+ events • chapter ranked #2 globally • co-founded CS chapter",
       "Best Outgoing Project '23 - PINNs across fluid, structural & thermal simulation",
       "Published: MCQ generation via graph + LLMs - NCISCT 2022",
     ],
@@ -146,7 +146,7 @@ const ENTRIES: Entry[] = [
     end: new Date(2022, 8),
     bullets: [
       "eVTOL aerodynamic & structural optimisation under Prof. Harursampath",
-      "Physics-constrained surrogate ML to reduce FEM simulation cost · 5 projects across fluid, structural & thermal domains",
+      "Physics-constrained surrogate ML to reduce FEM simulation cost • 5 projects across fluid, structural & thermal domains",
       "Stable convergence with a fraction of the labelled data required by classical simulation",
     ],
   },
@@ -160,9 +160,9 @@ const ENTRIES: Entry[] = [
     start: new Date(2023, 0),
     end: new Date(2024, 4),
     bullets: [
-      "Here.app (HDFC ERGO) - 163-lang multilingual RAG · 97% factual accuracy",
-      "Prismforce Skill Graph - +30% relevance · sub-50ms on NVIDIA T4",
-      "Laminar / Metamorph / Polymorph - AI CMS · no-code chatbots · cURL→20+ lang API",
+      "Here.app (HDFC ERGO) - 163-lang multilingual RAG • 97% factual accuracy",
+      "Prismforce Skill Graph - +30% relevance • sub-50ms on NVIDIA T4",
+      "Laminar / Metamorph / Polymorph - AI CMS • no-code chatbots • cURL→20+ lang API",
     ],
   },
   {
@@ -175,13 +175,13 @@ const ENTRIES: Entry[] = [
     start: new Date(2024, 5),
     end: "present",
     bullets: [
-      "Conversational Analytics (HSBC) - SBC→STT→LLM on GCP/RHEL · authored LLD + orchestration architecture",
-      "GIL fix: CPU-pinned procs + asyncio/uvloop · 20→140–160 sessions/VM · 1,600+ concurrent",
-      "Packer GCE automation · GCP log correlator: 250K lines <5s · MTTR 1–2hr→~10min",
-      "Compute: $118K→$8K/month (~$1.3M/yr) · Azure infra intelligence · Amex GBT RAG",
+      "Conversational Analytics (HSBC) - SBC→STT→LLM on GCP/RHEL • authored LLD + orchestration architecture",
+      "GIL fix: CPU-pinned procs + asyncio/uvloop • 20→140–160 sessions/VM • 1,600+ concurrent",
+      "Packer GCE automation • GCP log correlator: 250K lines <5s • MTTR 1–2hr→~10min",
+      "Compute: $118K→$8K/month (~$1.3M/yr) • Azure infra intelligence • Amex GBT RAG",
       "Best Team Award - HSBC Account",
-      "Pat on Back - Think Customer · individual delivery innovation & excellence",
-      "Java Spring AI trainer · 130+ participants · 81% voted-preferred · NPS +50",
+      "Pat on Back - Think Customer • individual delivery innovation & excellence",
+      "Java Spring AI trainer • 130+ participants • 81% voted-preferred • NPS +50",
     ],
   },
   {
@@ -196,7 +196,7 @@ const ENTRIES: Entry[] = [
     bullets: [
       "Dual specialisation - MLOps, GenAI & Agentic AI",
       "Concurrent with Coforge - formalising the theory behind production systems",
-      "Structural ML · probabilistic reasoning · optimisation · MLOps at scale",
+      "Structural ML • probabilistic reasoning • optimisation • MLOps at scale",
     ],
   },
 ];

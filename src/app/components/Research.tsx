@@ -64,7 +64,7 @@ const TYPE_META: Record<
     glow: "0 0 2px rgba(96,165,250,0.35)",
   },
   commercial: {
-    label: "Patent Pending · In Development",
+    label: "Patent Pending • In Development",
     color: "#ffffff",
     border: "rgba(139,92,246,0.55)",
     bg: "rgba(93,33,182,0.22)",
@@ -79,7 +79,7 @@ const items: ResearchItem[] = [
     type: "paper",
     name: "NCISCT 2022",
     title: "Automated Assessment Generation - Graphs & Language Models",
-    subtitle: "Published Research · IJISET · Vol. 9 Special Issue",
+    subtitle: "Published Research • IJISET • Vol. 9 Special Issue",
     link: "https://ijiset.com/conference/NCISCT-2022/IJISET-NCISCT-220520.pdf",
     bullets: [
       "MCQ distractors must be **semantically plausible** - factually wrong alone fails to separate understanding from guessing",

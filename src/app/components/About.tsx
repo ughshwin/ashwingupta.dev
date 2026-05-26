@@ -38,32 +38,32 @@ const SPRING_ICON = "https://cdn.simpleicons.org/spring";
 const highlights: { title: string; sub: string; icon: string }[] = [
   {
     title: "Guinness World Record",
-    sub: "Command Centre Ops · Most Participants - Agentic AI Day 2025\nGoogle Cloud | Hack2Skill · July 2025",
+    sub: "Command Centre Ops • Most Participants - Agentic AI Day 2025\nGoogle Cloud | Hack2Skill • July 2025",
     icon: guinnessLogoUrl,
   },
   {
     title: "$1.3M+ Annualised Savings",
-    sub: "HSBC · Coforge",
+    sub: "HSBC • Coforge",
     icon: hsbcLogoUrl,
   },
   {
     title: "Best Team Award",
-    sub: "HSBC Account · Coforge",
+    sub: "HSBC Account • Coforge",
     icon: hsbcLogoUrl,
   },
   {
     title: "Pat on Back - Think Customer Award",
-    sub: "Individual Delivery Excellence · Coforge",
+    sub: "Individual Delivery Excellence • Coforge",
     icon: coforgeLogoUrl,
   },
   {
     title: "Java Spring AI Trainer",
-    sub: "130+ Participants · 81% voted preferred trainer · NPS +50",
+    sub: "130+ Participants • 81% voted preferred trainer • NPS +50",
     icon: SPRING_ICON,
   },
   {
     title: "Best Outgoing Project",
-    sub: "Mechanical Engineering · BMSCE 2023",
+    sub: "Mechanical Engineering • BMSCE 2023",
     icon: bmsLogoUrl,
   },
   {
@@ -72,7 +72,7 @@ const highlights: { title: string; sub: string; icon: string }[] = [
     icon: augmentLogoUrl,
   },
   {
-    title: "42.8K Downloads · 202K Views",
+    title: "42.8K Downloads • 202K Views",
     sub: "Human Faces Kaggle Dataset",
     icon: kaggleLogoUrl,
   },

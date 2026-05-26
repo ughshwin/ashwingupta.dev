@@ -11,7 +11,7 @@ const recs = [
     name: "Arun Kumar Vastrakar",
     title: "Senior Delivery Director",
     company: "Coforge",
-    relationship: "Delivery Head · HSBC AI · Pat on Back award",
+    relationship: "Delivery Head • HSBC AI • Pat on Back award",
     date: "Nov 2024",
     text: "Ashwin showed a great flexibility and stretched to complete a challenging task which resulted in client's delight. He was able to code a logic which client's other partner could not do it. Well done Ashwin.",
   },
@@ -19,7 +19,7 @@ const recs = [
     name: "Raja Sekhar Amirapu",
     title: "Senior Technical Architect",
     company: "Coforge",
-    relationship: "Direct colleague · HSBC project",
+    relationship: "Direct colleague • HSBC project",
     date: "Nov 2025",
     text: "Ashwin's work on the telephony ingestion layer - PJSIP-based, highly stable, low-latency SIP call-handling at scale - was technically precise. Technically strong, dependable, and proactive. He consistently delivered production-ready code with strong technical ownership, and enhanced the development workflow through automation. Highly recommended for roles in VoIP engineering, real-time media systems, or conversational-AI infrastructure.",
   },
@@ -27,7 +27,7 @@ const recs = [
     name: "Snehasish Chakraborty",
     title: "GCP Infrastructure Engineer",
     company: "HSBC (client)",
-    relationship: "Client · HSBC",
+    relationship: "Client • HSBC",
     date: "Feb 2025",
     text: "I had the pleasure of working with Ashwin on a highly complex GCP infrastructure setup, where his expertise in scalability, testing, and debugging proved invaluable. He played a crucial role in designing and implementing the scalability logic, ensuring our infrastructure could handle increasing workloads efficiently. His structured approach to testing helped identify potential bottlenecks early, saving us from critical failures down the line.",
   },
@@ -35,7 +35,7 @@ const recs = [
     name: "Kartik Mehta",
     title: "Fraud VS Technology Lead",
     company: "HSBC (client)",
-    relationship: "Client · HSBC",
+    relationship: "Client • HSBC",
     date: "Feb 2025",
     text: "He would keep an open mind, welcome challenges, and think to deliver an end-to-end solution. I rate Ashwin highly - not just for his knowledge and skills, but his attitude to continue trying under pressure and deliver. I'm sure he will be adding great value wherever he works.",
   },
@@ -102,7 +102,7 @@ function RecCard({
             margin: 0,
           }}
         >
-          {rec.title} · {rec.company}
+          {rec.title} • {rec.company}
         </p>
       </div>
 
@@ -134,7 +134,7 @@ function RecCard({
           textTransform: "uppercase",
         }}
       >
-        {rec.relationship} · {rec.date}
+        {rec.relationship} • {rec.date}
       </p>
     </motion.div>
   );

@@ -1016,7 +1016,7 @@ export function Hero() {
                   textTransform: "uppercase",
                 }}
               >
-                Optimising: Residuals · Not: Roles
+                Optimising: Residuals • Not: Roles
               </span>
             </div>
           </motion.div>
@@ -1104,7 +1104,7 @@ export function Hero() {
                   textTransform: "uppercase",
                 }}
               >
-                PyTorch · LLMs · RAG · GCP
+                PyTorch • LLMs • RAG • GCP
               </span>
             </div>
           </div>
