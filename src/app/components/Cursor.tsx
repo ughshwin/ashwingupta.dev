@@ -23,8 +23,8 @@ export function Cursor() {
     document.head.appendChild(styleEl);
 
     const lerp = () => {
-      curX.current += (posX.current - curX.current) * 0.18;
-      curY.current += (posY.current - curY.current) * 0.18;
+      curX.current += (posX.current - curX.current) * 0.4;
+      curY.current += (posY.current - curY.current) * 0.4;
 
       if (wrapRef.current) {
         // translate3d forces GPU compositing — no layout thrash, no paint

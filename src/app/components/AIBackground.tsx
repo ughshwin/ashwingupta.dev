@@ -358,13 +358,13 @@ export function AIBackground() {
           const MOUSE_R = 150;
           if (mDistSq < MOUSE_R * MOUSE_R && mDistSq > 0) {
             const mDist = Math.sqrt(mDistSq);
-            const force = ((MOUSE_R - mDist) / MOUSE_R) * 26;
+            const force = ((MOUSE_R - mDist) / MOUSE_R) * 42;
             mote.mouseOffX += (mdx / mDist) * force;
             mote.mouseOffY += (mdy / mDist) * force;
           }
         }
-        mote.mouseOffX *= 0.9;
-        mote.mouseOffY *= 0.9;
+        mote.mouseOffX *= 0.85;
+        mote.mouseOffY *= 0.85;
         // cap displacement so motes don't fly off screen
         const CAP = 200;
         if (mote.mouseOffX > CAP) mote.mouseOffX = CAP;
@@ -422,8 +422,8 @@ export function AIBackground() {
           if (distSq < 32400 && distSq > 0) {
             const dist = Math.sqrt(distSq);
             const force = (180 - dist) / 180;
-            n.x += (dx / dist) * force * 3;
-            n.y += (dy / dist) * force * 3;
+            n.x += (dx / dist) * force * 5.5;
+            n.y += (dy / dist) * force * 5.5;
           }
         }
 

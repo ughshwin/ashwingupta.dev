@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState } from "react";
 import {
   useIsMobile,
   useIsTablet,
@@ -899,113 +899,6 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
 export function Projects() {
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
-  const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef(0);
-  const headerGapRef = useRef<HTMLDivElement>(null);
-  const maxOffsetRef = useRef(0);
-  const cachedTopRef = useRef<number | null>(null);
-
-  const [vpH, setVpH] = useState(() =>
-    typeof window !== "undefined" ? window.innerHeight : 900,
-  );
-  const [sectionH, setSectionH] = useState(() =>
-    typeof window !== "undefined" ? window.innerHeight : 900,
-  );
-
-  useEffect(() => {
-    if (isMobile) return;
-    const measure = () => {
-      const header = headerRef.current;
-      const inner = innerRef.current;
-      if (!header || !inner) return;
-      const vh = window.innerHeight;
-      const headerH = header.offsetHeight;
-      const contentH = inner.scrollHeight;
-      const stripH = Math.max(0, vh - headerH);
-      const maxOffset = Math.max(0, contentH - stripH);
-      maxOffsetRef.current = maxOffset;
-      cachedTopRef.current = null;
-      setVpH(vh);
-      setSectionH(vh + maxOffset);
-    };
-    requestAnimationFrame(measure);
-    window.addEventListener("resize", measure, { passive: true });
-    return () => window.removeEventListener("resize", measure);
-  }, [isMobile]);
-
-  useEffect(() => {
-    if (isMobile) return;
-    const scroller = document.querySelector(
-      ".hologram-interface",
-    ) as HTMLElement | null;
-    const section = sectionRef.current;
-    if (!scroller || !section) return;
-
-    const measureTop = () => {
-      let acc = 0;
-      let el: HTMLElement | null = section;
-      while (el && el !== scroller) {
-        acc += el.offsetTop;
-        el = el.offsetParent as HTMLElement | null;
-      }
-      cachedTopRef.current = acc;
-    };
-
-    const onScroll = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        if (cachedTopRef.current === null) measureTop();
-        const raw = scroller.scrollTop - (cachedTopRef.current ?? 0);
-        const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
-        if (innerRef.current) {
-          innerRef.current.style.transform = `translateY(-${offset}px)`;
-        }
-        const compressRatio = Math.min(1, offset / 100);
-        const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
-        if (headerGapRef.current) {
-          headerGapRef.current.style.marginBottom = `${gapPx}px`;
-        }
-      });
-    };
-
-    scroller.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener(
-      "resize",
-      () => {
-        cachedTopRef.current = null;
-      },
-      { passive: true },
-    );
-    return () => {
-      scroller.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [isMobile]);
-
-  useLayoutEffect(() => {
-    if (isMobile) return;
-    const scroller = document.querySelector(
-      ".hologram-interface",
-    ) as HTMLElement | null;
-    const section = sectionRef.current;
-    if (!scroller || !section || !innerRef.current) return;
-    let acc = 0;
-    let el: HTMLElement | null = section;
-    while (el && el !== scroller) {
-      acc += el.offsetTop;
-      el = el.offsetParent as HTMLElement | null;
-    }
-    cachedTopRef.current = acc;
-    const raw = scroller.scrollTop - acc;
-    const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
-    innerRef.current.style.transform = `translateY(-${offset}px)`;
-    if (headerGapRef.current) {
-      const compressRatio = Math.min(1, offset / 100);
-      headerGapRef.current.style.marginBottom = `${80 * (1 - compressRatio) + 20 * compressRatio}px`;
-    }
-  }, [isMobile, sectionH]);
 
   const secondaryProjects = projects.filter(
     (p) =>
@@ -1027,41 +920,27 @@ export function Projects() {
 
   return (
     <section
-      ref={sectionRef}
       id="projects"
       style={{
         position: "relative",
-        height: isMobile ? "auto" : sectionH,
         background: "transparent",
-        ...(isMobile && { padding: "2.75rem 4vw 8rem" }),
+        padding: isMobile ? "5rem 4vw" : "4rem 0",
       }}
     >
       <div
-        style={
-          isMobile
-            ? {}
-            : {
-                position: "sticky",
-                top: 0,
-                height: vpH,
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-              }
-        }
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         {/* Header */}
-        <div
-          ref={headerRef}
-          style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}
-        >
+        <div style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}>
           <div
-            ref={headerGapRef}
             style={{
               display: "flex",
               alignItems: "center",
               gap: "1rem",
-              marginBottom: isMobile ? "2rem" : "80px",
+              marginBottom: "2rem",
             }}
           >
             <span
@@ -1107,48 +986,27 @@ export function Projects() {
         </div>
 
         {/* Content strip */}
-        <div
-          style={
-            isMobile
-              ? {}
-              : { flex: 1, position: "relative", overflow: "hidden" }
-          }
-        >
-          <div
-            ref={innerRef}
-            style={
-              isMobile
-                ? { paddingTop: "2rem" }
-                : {
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    padding: "1.5rem 6vw 8rem",
-                  }
-            }
-          >
-            <div style={{ marginBottom: "2rem" }}>
-              <p
-                style={{
-                  fontFamily: FONT_MONO,
-                  fontSize: "0.55rem",
-                  letterSpacing: "0.2em",
-                  color: "rgba(255,255,255,0.28)",
-                  textTransform: "uppercase",
-                  marginBottom: "1.5rem",
-                }}
-              >
-                All projects
-              </p>
-            </div>
-            <EqualGridRenderer
-              rows={rows}
-              renderCard={(idx) => (
-                <ProjectCard p={orderedSecondary[idx]} index={idx} />
-              )}
-            />
+        <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 4rem" }}>
+          <div style={{ marginBottom: "2rem" }}>
+            <p
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.55rem",
+                letterSpacing: "0.2em",
+                color: "rgba(255,255,255,0.28)",
+                textTransform: "uppercase",
+                marginBottom: "1.5rem",
+              }}
+            >
+              All projects
+            </p>
           </div>
+          <EqualGridRenderer
+            rows={rows}
+            renderCard={(idx) => (
+              <ProjectCard p={orderedSecondary[idx]} index={idx} />
+            )}
+          />
         </div>
       </div>
     </section>
