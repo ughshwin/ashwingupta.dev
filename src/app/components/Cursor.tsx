@@ -16,7 +16,7 @@ export function Cursor() {
   useEffect(() => {
     if (isTouchDevice || isMobile) return;
 
-    // Inject cursor:none on every element — no native cursor can ever show through
+    // Inject cursor:none on every element - no native cursor can ever show through
     const styleEl = document.createElement("style");
     styleEl.dataset.cursorOverride = "1";
     styleEl.textContent = `*, *::before, *::after { cursor: none !important; }`;
@@ -27,7 +27,7 @@ export function Cursor() {
       curY.current += (posY.current - curY.current) * 0.4;
 
       if (wrapRef.current) {
-        // translate3d forces GPU compositing — no layout thrash, no paint
+        // translate3d forces GPU compositing - no layout thrash, no paint
         wrapRef.current.style.transform = `translate3d(${curX.current - 26}px,${curY.current - 26}px,0)`;
       }
 
@@ -50,7 +50,7 @@ export function Cursor() {
       }
     };
 
-    // getComputedStyle won't work here — our own cursor:none !important injection
+    // getComputedStyle won't work here - our own cursor:none !important injection
     // overrides cursor:pointer on every element, making computed cursor always "none".
     // Instead walk the DOM with closest() against known interactive selectors.
     const SEMANTIC =
@@ -60,7 +60,7 @@ export function Cursor() {
       '[tabindex]:not([tabindex="-1"]), [data-hover]';
 
     // Walk up the tree checking both semantic selectors AND inline style.cursor.
-    // getComputedStyle can't be used — our own cursor:none !important poisons it.
+    // getComputedStyle can't be used - our own cursor:none !important poisons it.
     // element.style.cursor reads only the element's own inline style attribute,
     // which is exactly what React's style prop sets, so it's immune to injection.
     const isClickable = (el: Element | null): boolean => {
@@ -120,20 +120,20 @@ export function Cursor() {
           transform-origin: center bottom;
         }
 
-        /* Hover state — cyan + glow */
+        /* Hover state - cyan + glow */
         .iss-cursor.iss-hovering {
           color: #22d3ee !important;
           filter: drop-shadow(0 0 7px rgba(34,211,238,0.55));
         }
 
-        /* Dish beam keyframe — arcs expand upward and fade */
+        /* Dish beam keyframe - arcs expand upward and fade */
         @keyframes iss-arc-emit {
           0%   { opacity: 0;    transform: translateY(1px)   scaleX(0.45) scaleY(0.3);  }
           14%  { opacity: 0.95; }
           100% { opacity: 0;    transform: translateY(-18px) scaleX(2.0)  scaleY(1.8);  }
         }
 
-        /* Five staggered arcs — 0.36s apart so two are always mid-travel */
+        /* Five staggered arcs - 0.36s apart so two are always mid-travel */
         .iss-cursor.iss-hovering .iss-arc-1 {
           animation: iss-arc-emit 1.8s ease-out infinite;
         }
@@ -164,7 +164,7 @@ export function Cursor() {
           width: "52px",
           height: "52px",
           pointerEvents: "none",
-          // Max possible z-index — sits above every overlay, modal, and sheet
+          // Max possible z-index - sits above every overlay, modal, and sheet
           zIndex: 2147483647,
           opacity: 0,
           // Promotes to own compositor layer so movement never triggers paint
@@ -279,7 +279,7 @@ export function Cursor() {
           {/* center hotspot dot */}
           <circle cx="20" cy="20" r="0.7" fill="currentColor" />
 
-          {/* ── Dish beam arcs (A3) — shown only on hover ── */}
+          {/* ── Dish beam arcs (A3) - shown only on hover ── */}
           <path
             className="iss-arc iss-arc-1"
             d="M15,11 Q20,7 25,11"
