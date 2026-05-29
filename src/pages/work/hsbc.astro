@@ -538,11 +538,15 @@ sequenceDiagram
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
+  function tryInit() {
+    if (typeof mermaid === 'undefined') { setTimeout(tryInit, 30); return; }
+    if (tryInit._done) return;
+    tryInit._done = true;
     init();
   }
+
+  document.addEventListener('astro:page-load', function() { tryInit._done = false; tryInit(); });
+  tryInit();
 </script>
 
 <style is:global>
