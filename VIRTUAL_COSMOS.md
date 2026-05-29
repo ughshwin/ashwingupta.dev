@@ -2,7 +2,7 @@
 
 > **Status**: Pre-implementation  
 > **Target**: Production-grade global deployment  
-> **Stack**: Astro + React + TypeScript + Vercel + Supabase + Three.js  
+> **Stack**: Astro + React + TypeScript + Vercel + Supabase + Three.js
 
 ---
 
@@ -54,6 +54,7 @@
 ## 2. Business Requirements
 
 ### BR-01: Galaxy Visualization
+
 - Render 32,768 stars arranged in a Milky Way spiral galaxy structure.
 - Must run at 60fps on modern desktop and mobile hardware.
 - Must not block initial page load or degrade Core Web Vitals.
@@ -61,31 +62,36 @@
 - Star twinkling and slow galaxy rotation are continuous animations, zero CPU cost per frame.
 
 ### BR-02: Eligibility Criteria
+
 A visitor earns star-naming rights when **all three** conditions are satisfied:
 
-| Condition | Requirement |
-|---|---|
-| Time on site | ≥ 3 minutes (180,000ms) of active tab time |
-| Meaningful interaction | ≥ 1 click on a content item: article, project, research entry, featured item |
-| Full homepage scroll | Must scroll through entire homepage (not jump via nav — must physically scroll past all sections) |
+| Condition              | Requirement                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------------- |
+| Time on site           | ≥ 3 minutes (180,000ms) of active tab time                                                        |
+| Meaningful interaction | ≥ 1 click on a content item: article, project, research entry, featured item                      |
+| Full homepage scroll   | Must scroll through entire homepage (not jump via nav — must physically scroll past all sections) |
 
 ### BR-03: Star Naming
+
 - Visitor selects a name for their star (free text, validated).
 - Name must be globally unique among all currently active (non-expired) stars (case-insensitive).
 - On successful claim: visitor receives star ID (binary), star name, expiry date, and postcard.
 - Star is assigned randomly from the available pool.
 
 ### BR-04: Star Expiry
+
 - Stars expire 90 days after claim.
 - Expired stars return to the available pool.
 - Expired star names become available again (a new person can claim the same name after the previous holder's star expires).
 
 ### BR-05: Gift Flow
+
 - Visitor can name a star as a gift: provide gift_from (their name), star_name (recipient/occasion name), occasion (free text).
 - Postcard wording changes to: "[gift_from] gifts you star [binary_id] to celebrate [occasion]".
 - Gift stars count against the same 32,768 pool and same name-uniqueness constraint.
 
 ### BR-06: Postcard
+
 - Every successful claim generates a downloadable/shareable postcard image.
 - Format: PNG, 1200×630px (Open Graph dimensions).
 - Contains: binary star ID, star name, claim date, expiry date, gift wording if applicable.
@@ -93,6 +99,7 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 - Shareable via Web Share API on mobile; download link on desktop.
 
 ### BR-07: VMWR
+
 - Public page showing all currently active named stars.
 - Fields visible: binary star ID, name, occasion (if gift), days remaining, date named.
 - gift_from is **not** shown publicly to protect gifter privacy.
@@ -102,6 +109,7 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 - Galaxy view option: same WebGL render with named stars highlighted in gold.
 
 ### BR-08: Bot & Abuse Prevention
+
 - Behavioral bot detection layered with third-party challenge (Turnstile).
 - Rate limiting: 1 star claim per IP per 24 hours.
 - Eligibility tokens are single-use, signed, time-limited.
@@ -109,6 +117,7 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 - SQL injection prevented at client (input validation), transport (parameterized queries only), and DB (RLS).
 
 ### BR-09: Global Scale
+
 - Must handle traffic spikes from social sharing (postcard going viral).
 - VMWR read traffic served from cache — DB read load near zero at scale.
 - All claim logic runs at Vercel Edge (global PoP network) — low latency worldwide.
@@ -119,21 +128,25 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 ## 3. User Stories & Acceptance Criteria
 
 ### US-01: New Visitor
+
 **As** a first-time visitor,  
 **I want** to discover the galaxy visualization while exploring the portfolio,  
 **So that** I have a reason to engage deeply with the content.
 
 **AC:**
+
 - Galaxy renders within 2s of section entering viewport.
 - Galaxy does not cause layout shift or block scroll.
 - A subtle CTA appears: "Earn your star — explore the portfolio."
 
 ### US-02: Eligible Visitor Naming a Star
+
 **As** a visitor who has met all three eligibility criteria,  
 **I want** to name a star for myself,  
 **So that** I have a personal, lasting (90-day) connection to this portfolio.
 
 **AC:**
+
 - Galaxy section shows "You've earned a star" badge after criteria met.
 - Clicking the badge opens a claim modal.
 - Modal shows: name input, uniqueness feedback (live check), confirm button.
@@ -142,22 +155,26 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 - Postcard download/share is available on success screen.
 
 ### US-03: Visitor Gifting a Star
+
 **As** a visitor who wants to celebrate an occasion,  
 **I want** to name a star as a gift for someone else,  
 **So that** I can share a unique, memorable keepsake.
 
 **AC:**
+
 - Claim modal has toggle: "For me" / "Gift to someone".
 - Gift mode adds fields: "Your name", "Star name (recipient/occasion)", "Occasion".
 - Postcard wording reflects gift context.
 - Gift_from is stored but never shown in VMWR.
 
 ### US-04: Visitor Browsing VMWR
+
 **As** any visitor (with or without a star),  
 **I want** to explore the registry of all named stars,  
 **So that** I can see the community of visitors and find my own star.
 
 **AC:**
+
 - VMWR loads within 1s (cached response).
 - Shows count badge: "X / 32,768 stars named".
 - Search by name returns results within 200ms.
@@ -165,11 +182,13 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 - Galaxy view highlights named stars on hover with tooltip.
 
 ### US-05: Returning Visitor
+
 **As** a returning visitor who previously named a star,  
 **I want** to see my star still exists,  
 **So that** I feel a lasting connection to the portfolio.
 
 **AC:**
+
 - Star ID stored in localStorage on successful claim.
 - On return visit, "Your star" widget in the galaxy section shows the stored star.
 - If star has expired: "Your star [ID] has expired — scroll through to earn a new one."
@@ -258,11 +277,11 @@ VMWR Read:
 
 **Three.js `BufferGeometry` + `Points` — single draw call for all 32,768 stars.**
 
-| Approach | 32k stars @ 60fps | Choice |
-|---|---|---|
-| DOM/CSS nodes | Impossible (<1fps) | No |
-| SVG elements | ~15fps | No |
-| Canvas 2D | ~40fps low-end | No |
+| Approach         | 32k stars @ 60fps                    | Choice  |
+| ---------------- | ------------------------------------ | ------- |
+| DOM/CSS nodes    | Impossible (<1fps)                   | No      |
+| SVG elements     | ~15fps                               | No      |
+| Canvas 2D        | ~40fps low-end                       | No      |
 | **WebGL Points** | **60fps on any GPU made after 2015** | **Yes** |
 
 ### New Dependency
@@ -283,28 +302,31 @@ All star positions computed once in a **Web Worker** on first load, stored in `F
 // Runs off main thread — keeps scroll and interaction fully responsive during init
 
 function generateMilkyWay(count: number): GalaxyBuffers {
-  const positions   = new Float32Array(count * 3);
-  const colors      = new Float32Array(count * 3);
-  const sizes       = new Float32Array(count);
-  const seeds       = new Float32Array(count); // for per-star twinkling
-  const starTypes   = new Uint8Array(count);   // 0=main-seq 1=giant 2=young-blue 3=old-red
+  const positions = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
+  const sizes = new Float32Array(count);
+  const seeds = new Float32Array(count); // for per-star twinkling
+  const starTypes = new Uint8Array(count); // 0=main-seq 1=giant 2=young-blue 3=old-red
 
   const ARMS = 4;
-  const TWIST = 3.5;         // spiral tightness
+  const TWIST = 3.5; // spiral tightness
   const DISK_THICKNESS = 0.025;
   const BULGE_FRACTION = 0.12; // 12% of stars in central bulge
 
   // Star color palette (physically motivated)
   const COLORS = [
     [1.0, 1.0, 0.85], // main sequence (yellow-white, like Sun)
-    [1.0, 0.7, 0.4],  // red giants
-    [0.6, 0.8, 1.0],  // young blue stars (spiral arm tips)
+    [1.0, 0.7, 0.4], // red giants
+    [0.6, 0.8, 1.0], // young blue stars (spiral arm tips)
     [1.0, 0.95, 0.8], // old white stars (bulge)
   ];
 
   function gaussian(): number {
     // Box-Muller transform
-    return Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
+    return (
+      Math.sqrt(-2 * Math.log(Math.random())) *
+      Math.cos(2 * Math.PI * Math.random())
+    );
   }
 
   for (let i = 0; i < count; i++) {
@@ -332,25 +354,29 @@ function generateMilkyWay(count: number): GalaxyBuffers {
       z = gaussian() * DISK_THICKNESS * (1 - r * 0.7);
     }
 
-    positions[i * 3]     = x;
+    positions[i * 3] = x;
     positions[i * 3 + 1] = y;
     positions[i * 3 + 2] = z;
 
     // Color: blue tips on arms, yellow core, random variation
-    const distFromCenter = Math.sqrt(x*x + y*y);
-    const colorIdx = isBulge ? 3
-      : distFromCenter > 0.7 ? 2   // outer arms: blue young stars
-      : distFromCenter < 0.15 ? 3  // core: old white
-      : Math.random() < 0.15 ? 1   // 15% red giants scattered
-      : 0;                          // majority: main sequence
+    const distFromCenter = Math.sqrt(x * x + y * y);
+    const colorIdx = isBulge
+      ? 3
+      : distFromCenter > 0.7
+        ? 2 // outer arms: blue young stars
+        : distFromCenter < 0.15
+          ? 3 // core: old white
+          : Math.random() < 0.15
+            ? 1 // 15% red giants scattered
+            : 0; // majority: main sequence
 
     const [r, g, b] = COLORS[colorIdx];
-    colors[i * 3]     = r + (Math.random() - 0.5) * 0.1;
+    colors[i * 3] = r + (Math.random() - 0.5) * 0.1;
     colors[i * 3 + 1] = g + (Math.random() - 0.5) * 0.1;
     colors[i * 3 + 2] = b + (Math.random() - 0.5) * 0.1;
 
-    sizes[i]     = 0.3 + Math.random() * 0.7; // base size variation
-    seeds[i]     = Math.random() * 100;
+    sizes[i] = 0.3 + Math.random() * 0.7; // base size variation
+    seeds[i] = Math.random() * 100;
     starTypes[i] = colorIdx;
   }
 
@@ -374,11 +400,11 @@ void main() {
 
   // Twinkling: each star has unique phase via seed
   float twinkle = sin(uTime * 1.8 + seed * 6.283) * 0.25 + 0.75;
-  
+
   // Named stars pulse with stronger glow
   float namePulse = isNamed * (sin(uTime * 2.5 + seed) * 0.4 + 1.6);
   float finalSize = size * twinkle * (1.0 + namePulse) * uPixelRatio;
-  
+
   gl_PointSize = finalSize * (300.0 / -mvPosition.z);
   gl_Position  = projectionMatrix * mvPosition;
 }
@@ -398,10 +424,10 @@ void main() {
 
   // Glow falloff
   float alpha = smoothstep(0.5, 0.0, dist) * 0.8;
-  
+
   // Named stars: gold tint
-  vec3 finalColor = vIsNamed > 0.5 
-    ? mix(vColor, vec3(1.0, 0.85, 0.2), 0.7) 
+  vec3 finalColor = vIsNamed > 0.5
+    ? mix(vColor, vec3(1.0, 0.85, 0.2), 0.7)
     : vColor;
 
   gl_FragColor = vec4(finalColor, alpha);
@@ -412,23 +438,23 @@ void main() {
 
 ```tsx
 // components/VirtualCosmos.tsx
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 export function VirtualCosmos() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const rendererRef  = useRef<GalaxyRenderer | null>(null);
+  const rendererRef = useRef<GalaxyRenderer | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       async ([entry]) => {
         if (!entry.isIntersecting || rendererRef.current) return;
-        
+
         // Dynamic import — Three.js only loads when section is visible
-        const { GalaxyRenderer } = await import('../lib/galaxy/GalaxyRenderer');
+        const { GalaxyRenderer } = await import("../lib/galaxy/GalaxyRenderer");
         rendererRef.current = new GalaxyRenderer(containerRef.current!);
         observer.disconnect();
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     observer.observe(containerRef.current!);
@@ -448,7 +474,10 @@ class StarPicker {
   private mouse = new THREE.Vector2();
   private pending = false;
 
-  constructor(private camera: THREE.Camera, private points: THREE.Points) {
+  constructor(
+    private camera: THREE.Camera,
+    private points: THREE.Points,
+  ) {
     this.raycaster.params.Points!.threshold = 0.008;
   }
 
@@ -459,8 +488,8 @@ class StarPicker {
     requestAnimationFrame(() => {
       const rect = canvas.getBoundingClientRect();
       this.mouse.set(
-        ((e.clientX - rect.left) / rect.width)  *  2 - 1,
-        ((e.clientY - rect.top)  / rect.height) * -2 + 1
+        ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        ((e.clientY - rect.top) / rect.height) * -2 + 1,
       );
       this.raycaster.setFromCamera(this.mouse, this.camera);
       const hits = this.raycaster.intersectObject(this.points);
@@ -517,7 +546,7 @@ export class EligibilityTracker {
     let accumulatedTime = 0;
     let lastVisible = performance.now();
 
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         accumulatedTime += performance.now() - lastVisible;
       } else {
@@ -563,68 +592,101 @@ export class EligibilityTracker {
       }
     };
 
-    CONTENT_SELECTORS.forEach(sel => {
-      document.querySelectorAll(sel).forEach(el =>
-        el.addEventListener('click', handler, { passive: true })
-      );
+    CONTENT_SELECTORS.forEach((sel) => {
+      document
+        .querySelectorAll(sel)
+        .forEach((el) =>
+          el.addEventListener("click", handler, { passive: true }),
+        );
     });
   }
 
   private trackScroll() {
     // Use IntersectionObserver on the footer — harder to fake than scrollY check
-    const footer = document.querySelector('footer');
+    const footer = document.querySelector("footer");
     if (!footer) return;
 
-    window.addEventListener('scroll', () => {
-      this.state.scrollLog.push({ pos: window.scrollY, t: performance.now() });
-    }, { passive: true });
+    window.addEventListener(
+      "scroll",
+      () => {
+        this.state.scrollLog.push({
+          pos: window.scrollY,
+          t: performance.now(),
+        });
+      },
+      { passive: true },
+    );
 
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !this.state.fullyScrolled) {
-        // Must have accumulated real scroll distance (not teleport)
-        const totalScrollDistance = this.state.scrollLog.reduce((acc, e, i) => {
-          if (i === 0) return acc;
-          return acc + Math.abs(e.pos - this.state.scrollLog[i - 1].pos);
-        }, 0);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !this.state.fullyScrolled) {
+          // Must have accumulated real scroll distance (not teleport)
+          const totalScrollDistance = this.state.scrollLog.reduce(
+            (acc, e, i) => {
+              if (i === 0) return acc;
+              return acc + Math.abs(e.pos - this.state.scrollLog[i - 1].pos);
+            },
+            0,
+          );
 
-        // Must have scrolled more than 80% of page height cumulatively
-        if (totalScrollDistance > document.body.scrollHeight * 0.8) {
-          this.state.fullyScrolled = true;
-          this.notify();
+          // Must have scrolled more than 80% of page height cumulatively
+          if (totalScrollDistance > document.body.scrollHeight * 0.8) {
+            this.state.fullyScrolled = true;
+            this.notify();
+          }
         }
-      }
-    }, { threshold: 0.3 });
+      },
+      { threshold: 0.3 },
+    );
 
     observer.observe(footer);
   }
 
   private trackMouse() {
-    document.addEventListener('mousemove', (e) => {
-      // Sample at most 20 events/sec to keep array manageable
-      const last = this.state.mouseEvents[this.state.mouseEvents.length - 1];
-      if (last && performance.now() - last.t < 50) return;
-      this.state.mouseEvents.push({ x: e.clientX, y: e.clientY, t: performance.now() });
-    }, { passive: true });
+    document.addEventListener(
+      "mousemove",
+      (e) => {
+        // Sample at most 20 events/sec to keep array manageable
+        const last = this.state.mouseEvents[this.state.mouseEvents.length - 1];
+        if (last && performance.now() - last.t < 50) return;
+        this.state.mouseEvents.push({
+          x: e.clientX,
+          y: e.clientY,
+          t: performance.now(),
+        });
+      },
+      { passive: true },
+    );
   }
 
   private notify() {
-    if (this.isEligible()) this.listeners.forEach(fn => fn());
+    if (this.isEligible()) this.listeners.forEach((fn) => fn());
   }
 
   isEligible(): boolean {
-    return this.state.threeMinutes && this.state.interacted && this.state.fullyScrolled;
+    return (
+      this.state.threeMinutes &&
+      this.state.interacted &&
+      this.state.fullyScrolled
+    );
   }
 
   getBehavioralPayload(): BehavioralPayload {
     return {
       elapsed_ms: performance.now() - this.state.sessionStart,
       scroll_log_count: this.state.scrollLog.length,
-      scroll_total_distance: this.state.scrollLog.reduce((acc, e, i) =>
-        i === 0 ? acc : acc + Math.abs(e.pos - this.state.scrollLog[i - 1].pos), 0),
+      scroll_total_distance: this.state.scrollLog.reduce(
+        (acc, e, i) =>
+          i === 0
+            ? acc
+            : acc + Math.abs(e.pos - this.state.scrollLog[i - 1].pos),
+        0,
+      ),
       scroll_stddev_ratio: this.computeScrollVariance(),
       interaction_count: this.state.interactionTimestamps.length,
       first_interaction_delay_ms: this.state.interactionTimestamps[0]
-        ? this.state.interactionTimestamps[0] - this.state.sessionStart : 0,
+        ? this.state.interactionTimestamps[0] - this.state.sessionStart
+        : 0,
       mouse_entropy: this.computeMouseEntropy(),
       webgl_renderer: this.getWebGLRenderer(),
     };
@@ -633,11 +695,14 @@ export class EligibilityTracker {
   private computeScrollVariance(): number {
     const log = this.state.scrollLog;
     if (log.length < 10) return 0;
-    const velocities = log.slice(1).map((e, i) =>
-      Math.abs(e.pos - log[i].pos) / (e.t - log[i].t + 0.001)
-    ).filter(v => v > 0);
+    const velocities = log
+      .slice(1)
+      .map((e, i) => Math.abs(e.pos - log[i].pos) / (e.t - log[i].t + 0.001))
+      .filter((v) => v > 0);
     const mean = velocities.reduce((s, v) => s + v, 0) / velocities.length;
-    const stddev = Math.sqrt(velocities.reduce((s, v) => s + (v - mean) ** 2, 0) / velocities.length);
+    const stddev = Math.sqrt(
+      velocities.reduce((s, v) => s + (v - mean) ** 2, 0) / velocities.length,
+    );
     return mean > 0 ? stddev / mean : 0; // coefficient of variation
   }
 
@@ -646,27 +711,30 @@ export class EligibilityTracker {
     if (events.length < 30) return 0;
     const angles: number[] = [];
     for (let i = 2; i < events.length; i++) {
-      const dx1 = events[i-1].x - events[i-2].x;
-      const dy1 = events[i-1].y - events[i-2].y;
-      const dx2 = events[i].x   - events[i-1].x;
-      const dy2 = events[i].y   - events[i-1].y;
+      const dx1 = events[i - 1].x - events[i - 2].x;
+      const dy1 = events[i - 1].y - events[i - 2].y;
+      const dx2 = events[i].x - events[i - 1].x;
+      const dy2 = events[i].y - events[i - 1].y;
       if (dx1 === 0 && dy1 === 0) continue;
       angles.push(Math.atan2(dy2 * dx1 - dx2 * dy1, dx2 * dx1 + dy2 * dy1));
     }
     const mean = angles.reduce((s, a) => s + a, 0) / angles.length;
-    const variance = angles.reduce((s, a) => s + (a - mean) ** 2, 0) / angles.length;
+    const variance =
+      angles.reduce((s, a) => s + (a - mean) ** 2, 0) / angles.length;
     return Math.min(Math.sqrt(variance), 1);
   }
 
   private getWebGLRenderer(): string {
-    const canvas = document.createElement('canvas');
-    const gl = canvas.getContext('webgl') as WebGLRenderingContext | null;
-    if (!gl) return 'none';
-    const ext = gl.getExtension('WEBGL_debug_renderer_info');
-    return ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : 'unknown';
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl") as WebGLRenderingContext | null;
+    if (!gl) return "none";
+    const ext = gl.getExtension("WEBGL_debug_renderer_info");
+    return ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : "unknown";
   }
 
-  onEligible(fn: () => void) { this.listeners.push(fn); }
+  onEligible(fn: () => void) {
+    this.listeners.push(fn);
+  }
 }
 ```
 
@@ -674,11 +742,11 @@ export class EligibilityTracker {
 
 Every clickable content item in the portfolio must carry a `data-track` attribute. Add to:
 
-| Component | Attribute |
-|---|---|
-| `Projects.tsx` — project cards | `data-track="project"` |
-| `Research.tsx` — research entries | `data-track="research"` |
-| `Featured.tsx` — featured items | `data-track="featured"` |
+| Component                                      | Attribute                 |
+| ---------------------------------------------- | ------------------------- |
+| `Projects.tsx` — project cards                 | `data-track="project"`    |
+| `Research.tsx` — research entries              | `data-track="research"`   |
+| `Featured.tsx` — featured items                | `data-track="featured"`   |
 | `ExperienceTimeline.tsx` — company/role expand | `data-track="experience"` |
 
 ---
@@ -693,17 +761,18 @@ const NAME_MAX = 50;
 const SAFE_NAME = /^[\p{L}\p{N}\s'\-\.]+$/u;
 
 export function validateStarName(raw: string): string {
-  const name = raw.trim().replace(/\s+/g, ' ');
-  if (!name || name.length > NAME_MAX) throw new ValidationError('invalid_length');
-  if (!SAFE_NAME.test(name))           throw new ValidationError('invalid_chars');
-  if (/[\x00-\x1F\x7F]/.test(name))   throw new ValidationError('control_chars');
+  const name = raw.trim().replace(/\s+/g, " ");
+  if (!name || name.length > NAME_MAX)
+    throw new ValidationError("invalid_length");
+  if (!SAFE_NAME.test(name)) throw new ValidationError("invalid_chars");
+  if (/[\x00-\x1F\x7F]/.test(name)) throw new ValidationError("control_chars");
   return name;
 }
 
 export function validateOccasion(raw: string): string {
-  const occ = raw.trim().replace(/\s+/g, ' ');
-  if (occ.length > 100) throw new ValidationError('occasion_too_long');
-  if (/[\x00-\x1F\x7F]/.test(occ)) throw new ValidationError('control_chars');
+  const occ = raw.trim().replace(/\s+/g, " ");
+  if (occ.length > 100) throw new ValidationError("occasion_too_long");
+  if (/[\x00-\x1F\x7F]/.test(occ)) throw new ValidationError("control_chars");
   return occ;
 }
 ```
@@ -731,27 +800,31 @@ The `SUPABASE_SERVICE_ROLE_KEY` is **only** used in Vercel Edge Functions (serve
 
 ```ts
 // lib/jwt.ts — runs in Vercel Edge Function
-import { SignJWT, jwtVerify } from 'jose';
+import { SignJWT, jwtVerify } from "jose";
 
 const SECRET = new TextEncoder().encode(process.env.CLAIM_JWT_SECRET);
 
-export async function signEligibilityToken(payload: EligibilityTokenPayload): Promise<string> {
+export async function signEligibilityToken(
+  payload: EligibilityTokenPayload,
+): Promise<string> {
   return new SignJWT(payload)
-    .setProtectedHeader({ alg: 'HS256' })
+    .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime('10m') // 10 minute window to complete claim
+    .setExpirationTime("10m") // 10 minute window to complete claim
     .sign(SECRET);
 }
 
-export async function verifyEligibilityToken(token: string): Promise<EligibilityTokenPayload> {
+export async function verifyEligibilityToken(
+  token: string,
+): Promise<EligibilityTokenPayload> {
   const { payload } = await jwtVerify(token, SECRET);
   return payload as EligibilityTokenPayload;
 }
 
 interface EligibilityTokenPayload {
   ip: string;
-  nonce: string;        // UUID, consumed on use
-  risk_score: number;   // 0-100, logged for audit
+  nonce: string; // UUID, consumed on use
+  risk_score: number; // 0-100, logged for audit
   iat: number;
   exp: number;
 }
@@ -769,15 +842,19 @@ function scoreBotRisk(payload: BehavioralPayload): number {
   let risk = 0;
 
   // WebGL: software renderer = very strong bot signal
-  if (/swiftshader|llvmpipe|softpipe|virtualbox|vmware/i.test(payload.webgl_renderer))
+  if (
+    /swiftshader|llvmpipe|softpipe|virtualbox|vmware/i.test(
+      payload.webgl_renderer,
+    )
+  )
     risk += 45;
 
   // Mouse: no movement or perfectly linear = bot
-  if (payload.mouse_entropy < 0.05)       risk += 30;
-  else if (payload.mouse_entropy < 0.15)  risk += 15;
+  if (payload.mouse_entropy < 0.05) risk += 30;
+  else if (payload.mouse_entropy < 0.15) risk += 15;
 
   // Scroll: perfectly uniform velocity = scripted
-  if (payload.scroll_stddev_ratio < 0.1)  risk += 25;
+  if (payload.scroll_stddev_ratio < 0.1) risk += 25;
   else if (payload.scroll_stddev_ratio < 0.2) risk += 10;
 
   // Interaction: too fast (< 30s) = bot
@@ -797,35 +874,36 @@ const RISK_THRESHOLD = 60;
 
 All rate limits stored in Vercel KV.
 
-| Limit | Key | TTL |
-|---|---|---|
-| 1 eligibility token per IP per 24h | `elig:{ip}` | 86400s |
-| 3 claim attempts per IP per hour | `claim:{ip}:{hour}` | 3600s |
-| 1 name-check per IP per second | `namecheck:{ip}` | 1s |
-| 5 VMWR requests per IP per second | `vmwr:{ip}` | 1s |
+| Limit                              | Key                 | TTL    |
+| ---------------------------------- | ------------------- | ------ |
+| 1 eligibility token per IP per 24h | `elig:{ip}`         | 86400s |
+| 3 claim attempts per IP per hour   | `claim:{ip}:{hour}` | 3600s  |
+| 1 name-check per IP per second     | `namecheck:{ip}`    | 1s     |
+| 5 VMWR requests per IP per second  | `vmwr:{ip}`         | 1s     |
 
 ### 7.7 Arcjet Middleware
 
 Runs at the Vercel Edge before any function. Handles:
+
 - Playwright/Puppeteer/headless Chrome detection (ML-based, not just `navigator.webdriver`)
 - Shield WAF (OWASP top 10 protection)
 - DDoS protection at application layer
 
 ```ts
 // middleware.ts
-import arcjet, { shield, detectBot, tokenBucket } from '@arcjet/next';
-import type { NextRequest } from 'next/server';
+import arcjet, { shield, detectBot, tokenBucket } from "@arcjet/next";
+import type { NextRequest } from "next/server";
 
 const aj = arcjet({
   key: process.env.ARCJET_KEY!,
   rules: [
-    shield({ mode: 'LIVE' }),
+    shield({ mode: "LIVE" }),
     detectBot({
-      mode: 'LIVE',
-      allow: ['CATEGORY:SEARCH_ENGINE', 'CATEGORY:MONITOR'],
+      mode: "LIVE",
+      allow: ["CATEGORY:SEARCH_ENGINE", "CATEGORY:MONITOR"],
     }),
     tokenBucket({
-      mode: 'LIVE',
+      mode: "LIVE",
       refillRate: 10,
       interval: 10,
       capacity: 20,
@@ -834,10 +912,10 @@ const aj = arcjet({
 });
 
 export default async function middleware(req: NextRequest) {
-  if (!req.nextUrl.pathname.startsWith('/api/')) return;
+  if (!req.nextUrl.pathname.startsWith("/api/")) return;
   const decision = await aj.protect(req);
   if (decision.isDenied())
-    return new Response('Access denied', { status: 403 });
+    return new Response("Access denied", { status: 403 });
 }
 ```
 
@@ -847,16 +925,22 @@ Invisible CAPTCHA. Renders in the claim modal. Token validated server-side befor
 
 ```ts
 // lib/turnstile.ts
-export async function validateTurnstile(token: string, ip: string): Promise<boolean> {
-  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      secret: process.env.TURNSTILE_SECRET_KEY,
-      response: token,
-      remoteip: ip,
-    }),
-  });
+export async function validateTurnstile(
+  token: string,
+  ip: string,
+): Promise<boolean> {
+  const res = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        secret: process.env.TURNSTILE_SECRET_KEY,
+        response: token,
+        remoteip: ip,
+      }),
+    },
+  );
   const data = await res.json();
   return data.success === true;
 }
@@ -924,20 +1008,26 @@ CREATE TRIGGER star_archive_trigger
 
 ```ts
 // scripts/seed-stars.ts — run once at project setup
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
 
 const BATCH_SIZE = 500;
 const TOTAL = 32768;
 
 for (let start = 0; start < TOTAL; start += BATCH_SIZE) {
-  const rows = Array.from({ length: Math.min(BATCH_SIZE, TOTAL - start) }, (_, i) => ({
-    star_id: start + i,
-    name: null,
-    expires_at: new Date(0).toISOString(), // epoch = immediately available
-  }));
-  await supabase.from('stars').insert(rows);
+  const rows = Array.from(
+    { length: Math.min(BATCH_SIZE, TOTAL - start) },
+    (_, i) => ({
+      star_id: start + i,
+      name: null,
+      expires_at: new Date(0).toISOString(), // epoch = immediately available
+    }),
+  );
+  await supabase.from("stars").insert(rows);
   console.log(`Seeded ${start + rows.length} / ${TOTAL}`);
 }
 ```
@@ -1028,6 +1118,7 @@ All endpoints are **Vercel Edge Functions** (not Node.js serverless — Edge run
 Validates behavioral payload, issues signed JWT.
 
 **Request:**
+
 ```json
 {
   "elapsed_ms": 185000,
@@ -1042,16 +1133,19 @@ Validates behavioral payload, issues signed JWT.
 ```
 
 **Response (success):**
+
 ```json
 { "token": "<signed-JWT>" }
 ```
 
 **Response (bot detected):**
+
 ```json
 { "error": "bot_detected", "code": 403 }
 ```
 
 **Response (rate limited):**
+
 ```json
 { "error": "rate_limited", "retry_after": 86400 }
 ```
@@ -1063,6 +1157,7 @@ Validates behavioral payload, issues signed JWT.
 Claims a star. Requires eligibility JWT + Turnstile token.
 
 **Request:**
+
 ```json
 {
   "name": "Nova",
@@ -1074,6 +1169,7 @@ Claims a star. Requires eligibility JWT + Turnstile token.
 ```
 
 **Response (success):**
+
 ```json
 {
   "star_id": 14892,
@@ -1085,11 +1181,13 @@ Claims a star. Requires eligibility JWT + Turnstile token.
 ```
 
 **Response (name taken):**
+
 ```json
 { "error": "name_taken", "code": 409 }
 ```
 
 **Response (no stars available):**
+
 ```json
 { "error": "pool_exhausted", "next_expiry": "2026-06-02T08:15:00Z" }
 ```
@@ -1101,6 +1199,7 @@ Claims a star. Requires eligibility JWT + Turnstile token.
 Real-time uniqueness check as user types in modal (debounced, 500ms).
 
 **Response:**
+
 ```json
 { "available": true }
 // or
@@ -1118,6 +1217,7 @@ Returns all active named stars. Edge-cached in Vercel KV (TTL 30s).
 **Query params:** `?page=1&per_page=100&sort=recent&search=nova`
 
 **Response:**
+
 ```json
 {
   "total": 847,
@@ -1183,7 +1283,7 @@ After VMWR fetch, merge named star IDs into the WebGL buffer:
 
 ```ts
 // After fetching VMWR data
-const namedIds = new Set(vmwrStars.map(s => s.star_id));
+const namedIds = new Set(vmwrStars.map((s) => s.star_id));
 const isNamedAttr = points.geometry.attributes.isNamed;
 
 for (let i = 0; i < 32768; i++) {
@@ -1217,29 +1317,35 @@ interface PostcardData {
 }
 
 export async function generatePostcard(data: PostcardData): Promise<Blob> {
-  const canvas = document.createElement('canvas');
-  canvas.width  = 1200;
+  const canvas = document.createElement("canvas");
+  canvas.width = 1200;
   canvas.height = 630;
-  const ctx = canvas.getContext('2d')!;
+  const ctx = canvas.getContext("2d")!;
 
   // Background: deep space
   const bg = ctx.createLinearGradient(0, 0, 1200, 630);
-  bg.addColorStop(0,   '#02050f');
-  bg.addColorStop(0.5, '#060d1a');
-  bg.addColorStop(1,   '#020408');
+  bg.addColorStop(0, "#02050f");
+  bg.addColorStop(0.5, "#060d1a");
+  bg.addColorStop(1, "#020408");
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, 1200, 630);
 
   // Subtle star field
   for (let i = 0; i < 200; i++) {
     ctx.beginPath();
-    ctx.arc(Math.random() * 1200, Math.random() * 630, Math.random() * 1.2, 0, Math.PI * 2);
+    ctx.arc(
+      Math.random() * 1200,
+      Math.random() * 630,
+      Math.random() * 1.2,
+      0,
+      Math.PI * 2,
+    );
     ctx.fillStyle = `rgba(255,255,255,${0.1 + Math.random() * 0.4})`;
     ctx.fill();
   }
 
   // Gold accent line
-  ctx.strokeStyle = '#c8a84b';
+  ctx.strokeStyle = "#c8a84b";
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(80, 150);
@@ -1248,49 +1354,60 @@ export async function generatePostcard(data: PostcardData): Promise<Blob> {
 
   // Binary Star ID (hero element)
   ctx.font = 'bold 52px "DM Mono", monospace';
-  ctx.fillStyle = '#c8a84b';
+  ctx.fillStyle = "#c8a84b";
   ctx.fillText(data.starIdBinary, 80, 130);
 
   // Main label
   ctx.font = '18px "DM Mono", monospace';
-  ctx.fillStyle = 'rgba(255,255,255,0.5)';
-  ctx.fillText('VIRTUAL MILKY WAY REGISTRY', 80, 80);
+  ctx.fillStyle = "rgba(255,255,255,0.5)";
+  ctx.fillText("VIRTUAL MILKY WAY REGISTRY", 80, 80);
 
   // Star name or gift text
   if (data.isGift && data.giftFrom && data.occasion) {
     ctx.font = 'bold 42px "DM Sans", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = "#ffffff";
     ctx.fillText(data.name, 80, 240);
 
     ctx.font = '22px "DM Sans", sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.fillStyle = "rgba(255,255,255,0.7)";
     ctx.fillText(`gifted by ${data.giftFrom}`, 80, 290);
     ctx.fillText(`to celebrate ${data.occasion}`, 80, 325);
   } else {
     ctx.font = 'bold 42px "DM Sans", sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = "#ffffff";
     ctx.fillText(data.name, 80, 240);
 
     ctx.font = '22px "DM Sans", sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.7)';
-    ctx.fillText('has claimed this star', 80, 290);
+    ctx.fillStyle = "rgba(255,255,255,0.7)";
+    ctx.fillText("has claimed this star", 80, 290);
   }
 
   // Expiry
   ctx.font = '16px "DM Mono", monospace';
-  ctx.fillStyle = 'rgba(255,255,255,0.35)';
-  ctx.fillText(`Active until ${new Date(data.expiresAt).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}`, 80, 390);
+  ctx.fillStyle = "rgba(255,255,255,0.35)";
+  ctx.fillText(
+    `Active until ${new Date(data.expiresAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`,
+    80,
+    390,
+  );
 
   // Portfolio URL watermark
   ctx.font = '14px "DM Mono", monospace';
-  ctx.fillStyle = 'rgba(200,168,75,0.5)';
-  ctx.fillText('ashwingupta.dev/cosmos', 80, 580);
+  ctx.fillStyle = "rgba(200,168,75,0.5)";
+  ctx.fillText("ashwingupta.dev/cosmos", 80, 580);
 
-  return new Promise(resolve => canvas.toBlob(blob => resolve(blob!), 'image/png'));
+  return new Promise((resolve) =>
+    canvas.toBlob((blob) => resolve(blob!), "image/png"),
+  );
 }
 
-export async function shareOrDownloadPostcard(blob: Blob, starIdBinary: string) {
-  const file = new File([blob], `star-${starIdBinary}.png`, { type: 'image/png' });
+export async function shareOrDownloadPostcard(
+  blob: Blob,
+  starIdBinary: string,
+) {
+  const file = new File([blob], `star-${starIdBinary}.png`, {
+    type: "image/png",
+  });
 
   // Mobile: Web Share API with file
   if (navigator.share && navigator.canShare?.({ files: [file] })) {
@@ -1304,7 +1421,7 @@ export async function shareOrDownloadPostcard(blob: Blob, starIdBinary: string) 
 
   // Desktop: download
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
   a.download = `star-${starIdBinary}.png`;
   a.click();
@@ -1321,6 +1438,7 @@ Gift is a mode toggle in the claim modal.
 ### UI States
 
 **Self mode (default):**
+
 ```
 Star Name: [____________]
            ✓ "Nova" is available
@@ -1329,6 +1447,7 @@ Star Name: [____________]
 ```
 
 **Gift mode:**
+
 ```
 Star Name (for whom / occasion):  [____________]
 Your Name (gift_from, private):   [____________]
@@ -1360,7 +1479,7 @@ interface ClaimedStar {
 }
 
 // Store on successful claim
-localStorage.setItem('virtual_cosmos_star', JSON.stringify(claimedStar));
+localStorage.setItem("virtual_cosmos_star", JSON.stringify(claimedStar));
 
 // On revisit: restore state, show "Your star" widget in galaxy section
 ```
@@ -1373,14 +1492,14 @@ localStorage.setItem('virtual_cosmos_star', JSON.stringify(claimedStar));
 
 Assume a viral postcard sharing event drives 50,000 unique visitors in 24 hours.
 
-| Endpoint | Traffic | Strategy |
-|---|---|---|
-| Homepage (static) | 50k req/24h | CDN edge cache, no origin hits |
-| Galaxy JS bundle | 50k req/24h | Immutable cache header, CDN |
-| `/api/vmwr` | 200k req/24h | Vercel KV cache, TTL 30s → max 2,880 Supabase hits/24h |
-| `/api/check-name` | 500k req/24h | KV rate limit (1/sec/IP), indexed DB query |
-| `/api/request-eligibility-token` | 5k req/24h | KV rate limit (1/IP/24h) |
-| `/api/claim-star` | 1k req/24h | Fully validated, atomic DB write |
+| Endpoint                         | Traffic      | Strategy                                               |
+| -------------------------------- | ------------ | ------------------------------------------------------ |
+| Homepage (static)                | 50k req/24h  | CDN edge cache, no origin hits                         |
+| Galaxy JS bundle                 | 50k req/24h  | Immutable cache header, CDN                            |
+| `/api/vmwr`                      | 200k req/24h | Vercel KV cache, TTL 30s → max 2,880 Supabase hits/24h |
+| `/api/check-name`                | 500k req/24h | KV rate limit (1/sec/IP), indexed DB query             |
+| `/api/request-eligibility-token` | 5k req/24h   | KV rate limit (1/IP/24h)                               |
+| `/api/claim-star`                | 1k req/24h   | Fully validated, atomic DB write                       |
 
 **Supabase hit rate at peak: ~3,000 queries/24h** — trivial even on free tier.
 
@@ -1388,7 +1507,7 @@ Assume a viral postcard sharing event drives 50,000 unique visitors in 24 hours.
 
 ```ts
 // api/vmwr.ts
-const KV_KEY = 'vmwr:active:p{page}';
+const KV_KEY = "vmwr:active:p{page}";
 const KV_TTL = 30; // seconds
 
 export async function getVMWR(page: number, perPage: number) {
@@ -1396,22 +1515,24 @@ export async function getVMWR(page: number, perPage: number) {
   const cacheKey = `vmwr:active:p${page}:pp${perPage}`;
 
   // Serve from cache
-  const cached = await kv.get(cacheKey, 'json');
+  const cached = await kv.get(cacheKey, "json");
   if (cached) return cached;
 
   // Cache miss: query Supabase
   const { data } = await supabase
-    .from('stars')
-    .select('star_id, name, occasion, claimed_at, expires_at')
-    .gt('expires_at', new Date().toISOString())
-    .order('claimed_at', { ascending: false })
+    .from("stars")
+    .select("star_id, name, occasion, claimed_at, expires_at")
+    .gt("expires_at", new Date().toISOString())
+    .order("claimed_at", { ascending: false })
     .range((page - 1) * perPage, page * perPage - 1);
 
   const result = {
-    stars: data?.map(s => ({
+    stars: data?.map((s) => ({
       ...s,
-      star_id_binary: s.star_id.toString(2).padStart(15, '0'),
-      days_remaining: Math.ceil((new Date(s.expires_at).getTime() - Date.now()) / 86_400_000),
+      star_id_binary: s.star_id.toString(2).padStart(15, "0"),
+      days_remaining: Math.ceil(
+        (new Date(s.expires_at).getTime() - Date.now()) / 86_400_000,
+      ),
     })),
   };
 
@@ -1424,8 +1545,8 @@ export async function getVMWR(page: number, perPage: number) {
 export async function invalidateVMWRCache() {
   const kv = getKV();
   // Pattern delete all VMWR keys (Vercel KV supports scan)
-  const keys = await kv.keys('vmwr:active:*');
-  await Promise.all(keys.map(k => kv.del(k)));
+  const keys = await kv.keys("vmwr:active:*");
+  await Promise.all(keys.map((k) => kv.del(k)));
 }
 ```
 
@@ -1436,18 +1557,21 @@ If all 32,768 stars are simultaneously active (extremely unlikely but theoretica
 ```ts
 // api/claim-star.ts — after 'pool_exhausted' error from DB
 const { data: nextExpiry } = await supabase
-  .from('stars')
-  .select('expires_at')
-  .gt('expires_at', new Date().toISOString())
-  .order('expires_at', { ascending: true })
+  .from("stars")
+  .select("expires_at")
+  .gt("expires_at", new Date().toISOString())
+  .order("expires_at", { ascending: true })
   .limit(1)
   .single();
 
-return Response.json({
-  error: 'pool_exhausted',
-  message: 'All stars are currently named. Check back soon.',
-  next_available: nextExpiry?.expires_at,
-}, { status: 503 });
+return Response.json(
+  {
+    error: "pool_exhausted",
+    message: "All stars are currently named. Check back soon.",
+    next_available: nextExpiry?.expires_at,
+  },
+  { status: 503 },
+);
 ```
 
 UI shows: "All 32,768 stars are named — a star becomes available on [date]."
@@ -1455,6 +1579,7 @@ UI shows: "All 32,768 stars are named — a star becomes available on [date]."
 ### Graceful Degradation
 
 If Supabase is unavailable:
+
 - VMWR shows last cached version from Vercel KV.
 - Claim flow shows: "Star naming is temporarily unavailable. Your eligibility is saved — try again shortly."
 - Galaxy renderer continues to function (pure client-side).
@@ -1468,27 +1593,31 @@ If Supabase is unavailable:
     {
       "source": "/cosmos",
       "headers": [
-        { "key": "Cache-Control", "value": "public, s-maxage=30, stale-while-revalidate=60" }
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=30, stale-while-revalidate=60"
+        }
       ]
     },
     {
       "source": "/api/vmwr",
       "headers": [
-        { "key": "Cache-Control", "value": "public, s-maxage=30, stale-while-revalidate=60" }
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=30, stale-while-revalidate=60"
+        }
       ]
     },
     {
       "source": "/api/claim-star",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
     }
   ],
   "functions": {
-    "src/api/claim-star.ts":             { "runtime": "edge" },
+    "src/api/claim-star.ts": { "runtime": "edge" },
     "src/api/request-eligibility-token.ts": { "runtime": "edge" },
-    "src/api/vmwr.ts":                   { "runtime": "edge" },
-    "src/api/check-name.ts":             { "runtime": "edge" }
+    "src/api/vmwr.ts": { "runtime": "edge" },
+    "src/api/check-name.ts": { "runtime": "edge" }
   }
 }
 ```
@@ -1513,16 +1642,16 @@ $$);
 
 ## 14. Performance Budget
 
-| Metric | Budget | Strategy |
-|---|---|---|
-| LCP (Largest Contentful Paint) | < 2.5s | Galaxy lazy-loads, not in LCP path |
-| FID / INP | < 100ms | Galaxy init in Web Worker |
-| CLS | 0 | Galaxy section has fixed height |
-| Three.js bundle | < 180KB gzipped | Code-split, loaded only for `/cosmos` section |
-| Galaxy init time | < 300ms after section visible | Web Worker + GPU upload |
-| Star positions memory | < 2MB GPU | Float32Arrays, no per-frame allocation |
-| VMWR first load | < 1s | Edge cache, 30s TTL |
-| Claim flow end-to-end | < 2s | Edge Functions + pooled DB |
+| Metric                         | Budget                        | Strategy                                      |
+| ------------------------------ | ----------------------------- | --------------------------------------------- |
+| LCP (Largest Contentful Paint) | < 2.5s                        | Galaxy lazy-loads, not in LCP path            |
+| FID / INP                      | < 100ms                       | Galaxy init in Web Worker                     |
+| CLS                            | 0                             | Galaxy section has fixed height               |
+| Three.js bundle                | < 180KB gzipped               | Code-split, loaded only for `/cosmos` section |
+| Galaxy init time               | < 300ms after section visible | Web Worker + GPU upload                       |
+| Star positions memory          | < 2MB GPU                     | Float32Arrays, no per-frame allocation        |
+| VMWR first load                | < 1s                          | Edge cache, 30s TTL                           |
+| Claim flow end-to-end          | < 2s                          | Edge Functions + pooled DB                    |
 
 ### Bundle Splitting Strategy
 
@@ -1535,7 +1664,7 @@ const initGalaxy = async (container: HTMLDivElement) => {
   // This entire import tree (Three.js + galaxy code) is a separate chunk
   const { GalaxyRenderer } = await import(
     /* webpackChunkName: "galaxy" */
-    '../lib/galaxy/GalaxyRenderer'
+    "../lib/galaxy/GalaxyRenderer"
   );
   return new GalaxyRenderer(container);
 };
@@ -1546,9 +1675,11 @@ const initGalaxy = async (container: HTMLDivElement) => {
 ## 15. Implementation Phases
 
 ### Phase 1: Galaxy Renderer (Standalone, No Backend)
+
 **Deliverable**: WebGL galaxy renders in portfolio, 60fps, lazy loaded.
 
 Steps:
+
 1. `pnpm add three @types/three`
 2. Create `src/lib/galaxy/` directory.
 3. Implement `galaxy-gen.worker.ts` — star position generation.
@@ -1561,9 +1692,11 @@ Steps:
 ---
 
 ### Phase 2: Eligibility Tracker
+
 **Deliverable**: All three criteria tracked; `onEligible` fires correctly.
 
 Steps:
+
 1. Implement `src/lib/eligibility/tracker.ts` (full code above).
 2. Add `data-track` attributes to `Projects.tsx`, `Research.tsx`, `Featured.tsx`, `ExperienceTimeline.tsx`.
 3. Wire `EligibilityTracker` into `App.tsx` — start on mount.
@@ -1573,9 +1706,11 @@ Steps:
 ---
 
 ### Phase 3: Supabase Setup
+
 **Deliverable**: Database live, seeded, RLS locked down.
 
 Steps:
+
 1. Create Supabase project (see [Section 16](#16-required-credentials--integrations)).
 2. Run schema SQL (Section 8.1).
 3. Run seed script (Section 8.2) — creates all 32,768 rows.
@@ -1588,9 +1723,11 @@ Steps:
 ---
 
 ### Phase 4: Vercel Edge Functions + KV
+
 **Deliverable**: All four API endpoints live, rate-limited, validated.
 
 Steps:
+
 1. Enable Vercel KV in project (see Section 16).
 2. Install deps: `pnpm add jose @arcjet/next @vercel/kv`.
 3. Create `src/api/` directory.
@@ -1604,9 +1741,11 @@ Steps:
 ---
 
 ### Phase 5: Claim Modal + Star Flow
+
 **Deliverable**: End-to-end claim flow works in browser.
 
 Steps:
+
 1. Implement `ClaimModal.tsx` — name input, live uniqueness check (debounced 500ms), self/gift toggle, gift fields.
 2. Implement Turnstile widget integration (client-side JS snippet + server validation).
 3. Implement `useClaim` hook — orchestrates: get eligibility token → show Turnstile → submit claim → store in localStorage.
@@ -1618,23 +1757,27 @@ Steps:
 ---
 
 ### Phase 6: VMWR Page
+
 **Deliverable**: `/cosmos` page fully functional.
 
 Steps:
+
 1. Create Astro page `src/pages/cosmos.astro`.
 2. Create `VMWR.tsx` React component — table + search + sort + pagination.
 3. Integrate galaxy view on VMWR page — same `GalaxyRenderer`, load named star IDs from VMWR API, update `isNamed` buffer attribute.
 4. Add `/cosmos` to `vercel.json` rewrites.
 5. Add nav link to cosmos page.
 6. Implement Hall of Fame tab (query `star_history`).
-7. **Verify**: VMWR loads within 1s. Search works. Named stars glow in galaxy view. Hover tooltip shows name. 
+7. **Verify**: VMWR loads within 1s. Search works. Named stars glow in galaxy view. Hover tooltip shows name.
 
 ---
 
 ### Phase 7: Postcard Generation + Gift Flow
+
 **Deliverable**: Postcard generates correctly for self + gift. Share works on mobile.
 
 Steps:
+
 1. Implement `src/lib/postcard/generate.ts` (full code in Section 11).
 2. Load portfolio fonts (DM Mono, DM Sans) into Canvas using `FontFace` API.
 3. Implement gift mode in `ClaimModal.tsx` — toggle and additional fields.
@@ -1646,9 +1789,11 @@ Steps:
 ---
 
 ### Phase 8: Robustness + Load Testing
+
 **Deliverable**: System handles 50k concurrent users without degradation.
 
 Steps:
+
 1. Enable Vercel Pro (or ensure project is on correct plan for Edge Functions).
 2. Upgrade Supabase to Pro — enable read replica.
 3. Configure Arcjet production key.
@@ -1671,18 +1816,20 @@ Steps:
 ### 16.1 Supabase Project
 
 **What to do:**
+
 1. Go to [supabase.com](https://supabase.com) → New Project.
 2. Region: choose closest to Vercel deployment region (likely `us-east-1`).
 3. Note the following (needed in Vercel env vars):
 
-| Env Var | Where to find | Notes |
-|---|---|---|
-| `SUPABASE_URL` | Project Settings → API → Project URL | `https://xxx.supabase.co` |
-| `SUPABASE_ANON_KEY` | Project Settings → API → anon/public | Used in browser for VMWR reads only |
-| `SUPABASE_SERVICE_ROLE_KEY` | Project Settings → API → service_role | **Server-side only. Never expose to browser.** |
-| `SUPABASE_POOLER_URL` | Project Settings → Database → Connection Pooling → Transaction mode URI | Use this for all Edge Function DB connections |
+| Env Var                     | Where to find                                                           | Notes                                          |
+| --------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------- |
+| `SUPABASE_URL`              | Project Settings → API → Project URL                                    | `https://xxx.supabase.co`                      |
+| `SUPABASE_ANON_KEY`         | Project Settings → API → anon/public                                    | Used in browser for VMWR reads only            |
+| `SUPABASE_SERVICE_ROLE_KEY` | Project Settings → API → service_role                                   | **Server-side only. Never expose to browser.** |
+| `SUPABASE_POOLER_URL`       | Project Settings → Database → Connection Pooling → Transaction mode URI | Use this for all Edge Function DB connections  |
 
 **Recommended plan**: Start on Free tier for development. Upgrade to **Pro ($25/mo)** before launch for:
+
 - Read replica (VMWR performance)
 - 7-day PITR (disaster recovery)
 - No connection limits on pooler
@@ -1693,16 +1840,17 @@ Steps:
 ### 16.2 Vercel KV (Redis)
 
 **What to do:**
+
 1. In Vercel dashboard → Storage → Create KV Database.
 2. Name: `virtual-cosmos-kv`.
 3. Region: `iad1` (US East) or closest to Supabase region.
 4. Connect to project → Vercel auto-injects these env vars:
 
-| Env Var | Auto-injected by Vercel | Notes |
-|---|---|---|
-| `KV_REST_API_URL` | Yes | Used by `@vercel/kv` client |
-| `KV_REST_API_TOKEN` | Yes | Used by `@vercel/kv` client |
-| `KV_REST_API_READ_ONLY_TOKEN` | Yes | Not needed for this use case |
+| Env Var                       | Auto-injected by Vercel | Notes                        |
+| ----------------------------- | ----------------------- | ---------------------------- |
+| `KV_REST_API_URL`             | Yes                     | Used by `@vercel/kv` client  |
+| `KV_REST_API_TOKEN`           | Yes                     | Used by `@vercel/kv` client  |
+| `KV_REST_API_READ_ONLY_TOKEN` | Yes                     | Not needed for this use case |
 
 **Plan**: Free tier (30k commands/day) sufficient for development. Monitor in production — upgrade to Pro KV ($20/mo) if command count exceeds limit during traffic spikes.
 
@@ -1711,12 +1859,13 @@ Steps:
 ### 16.3 Arcjet
 
 **What to do:**
+
 1. Go to [arcjet.com](https://arcjet.com) → Sign up → New Site.
 2. Add site domain: `ashwingupta.dev` (or your portfolio domain).
 3. Note:
 
-| Env Var | Where to find |
-|---|---|
+| Env Var      | Where to find                     |
+| ------------ | --------------------------------- |
 | `ARCJET_KEY` | Arcjet dashboard → Site → API Key |
 
 **Plan**: Free tier (10k requests/month). Upgrade to Pro if traffic exceeds this.
@@ -1728,15 +1877,16 @@ Steps:
 ### 16.4 Cloudflare Turnstile
 
 **What to do:**
+
 1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com) → Turnstile → Add widget.
 2. Widget type: **Invisible** (no user friction).
 3. Allowed hostnames: add `ashwingupta.dev` and `localhost`.
 4. Note:
 
-| Env Var | Where to find | Used in |
-|---|---|---|
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Turnstile widget settings | Browser (client-side) |
-| `TURNSTILE_SECRET_KEY` | Turnstile widget settings | Vercel Edge Function only |
+| Env Var                          | Where to find             | Used in                   |
+| -------------------------------- | ------------------------- | ------------------------- |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Turnstile widget settings | Browser (client-side)     |
+| `TURNSTILE_SECRET_KEY`           | Turnstile widget settings | Vercel Edge Function only |
 
 **Cost**: Free, unlimited.
 
@@ -1752,8 +1902,8 @@ Generate a cryptographically random 32-byte secret and add to Vercel env vars:
 node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
 ```
 
-| Env Var | Value |
-|---|---|
+| Env Var            | Value                   |
+| ------------------ | ----------------------- |
 | `CLAIM_JWT_SECRET` | Output of above command |
 
 ---
@@ -1761,12 +1911,14 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
 ### 16.6 Vercel Project Settings
 
 **What to configure:**
+
 1. Vercel Dashboard → Project → Settings → Functions → Edge Runtime: ensure enabled.
 2. Environment Variables: add all vars from 16.1–16.5 to Production + Preview environments.
 3. Framework Preset: **Astro** (should be auto-detected).
 4. Build Command: `astro build` (already in `package.json`).
 
 **Vercel Plan requirement:**
+
 - **Free (Hobby)**: Edge Functions limited, no SLA. Acceptable for early launch.
 - **Pro ($20/mo)**: Required for: custom domains with advanced certs, 100GB bandwidth, higher Edge Function limits. **Recommended for production launch.**
 
@@ -1787,6 +1939,7 @@ pnpm add @arcjet/next
 ### 16.8 Domain / DNS
 
 If using a custom subdomain for the VMWR (`cosmos.ashwingupta.dev`):
+
 1. Add CNAME in DNS provider → `cname.vercel-dns.com`.
 2. Add domain alias in Vercel project settings.
 
@@ -1798,19 +1951,21 @@ Alternatively, VMWR lives at `ashwingupta.dev/cosmos` (simpler, no DNS change ne
 
 **Recommended (optional but valuable for production):**
 
-| Tool | Purpose | Cost |
-|---|---|---|
-| Vercel Analytics | Already installed (`@vercel/analytics`) | Free |
-| Vercel Speed Insights | Already installed (`@vercel/speed-insights`) | Free |
-| Supabase Dashboard | DB query performance, slow query log | Included |
-| Sentry | Error tracking for Edge Functions | Free tier (5k errors/mo) |
+| Tool                  | Purpose                                      | Cost                     |
+| --------------------- | -------------------------------------------- | ------------------------ |
+| Vercel Analytics      | Already installed (`@vercel/analytics`)      | Free                     |
+| Vercel Speed Insights | Already installed (`@vercel/speed-insights`) | Free                     |
+| Supabase Dashboard    | DB query performance, slow query log         | Included                 |
+| Sentry                | Error tracking for Edge Functions            | Free tier (5k errors/mo) |
 
 Sentry setup (optional):
+
 ```bash
 pnpm add @sentry/nextjs
 ```
-| Env Var | Source |
-|---|---|
+
+| Env Var      | Source                  |
+| ------------ | ----------------------- |
 | `SENTRY_DSN` | Sentry project settings |
 
 ---
@@ -1820,48 +1975,70 @@ pnpm add @sentry/nextjs
 These require your input before implementation or have non-obvious tradeoffs:
 
 ### OD-01: Star ID Range
+
 - **Option A**: 0–32767 (15-bit binary: `000000000000000` – `111111111111111`). Clean.
 - **Option B**: 1–32768 (1 to 2^15 as stated). Last ID = `1000000000000000` (16 digits). Breaks the "15-char postcard" aesthetic.
 - **Recommendation**: Option A. The binary ID is a visual motif — 15 consistent digits looks better on the postcard. Mention "0-indexed from the galactic origin" in copy if asked.
+  ANS: Recommendation accepted, proceed.
 
 ### OD-02: Name Expiry + Reuse
+
 - When "Nova" expires after 90 days, can a new visitor claim "Nova"?
 - **Recommendation**: Yes — names return to pool. This is stated in the spec and makes the registry feel alive. The partial index handles this correctly.
+  ANS: Recommendation accepted, proceed.
 
 ### OD-03: Email Collection (Optional)
+
 - Currently: no email collected. No expiry notification possible.
 - **Option**: Add optional email field at claim time. Send expiry reminder at day 80.
 - Requires: email service (Resend.com — free 3k emails/month), email column in stars table, edge function for scheduled send.
 - **Recommendation**: Add in Phase 9 post-launch if demand exists. Don't build now.
+  ANS: Recommendation accepted, proceed.
 
 ### OD-04: Mobile Eligibility (Touch Devices)
+
 - "Full scroll" on mobile is harder to fake but also harder for IntersectionObserver to detect cleanly.
 - Mouse entropy score is irrelevant on touch devices (no `mousemove` events).
 - Replace mouse entropy with **touch event entropy** on mobile: track `touchmove` velocity variance instead.
 - Need to detect `navigator.maxTouchPoints > 0` and swap scoring method.
+  ANS: Recommendation accepted, proceed.
 
 ### OD-05: Galaxy Section Placement
+
 - Where in the homepage does the Virtual Cosmos section appear?
 - Current sections: Hero → About → Skills → Experience → Featured → Research → Projects → Contact.
 - **Recommendation**: Place between Research and Projects (mid-page). Visitor who has scrolled to Research has already seen ~70% of content. Galaxy section acts as a visual palate cleanser and reward signal before final sections.
 
+  ANS: intro to galaxy and eligibility are shown to the use in of 2 cases -
+
+* User just opened the site, small welcome screen overwriting main website displays cosmos details with proceed to site appearing post 30s of welcome screen, use this 30s to setup everything on the main site and the galaxy located at /VirCos
+* User completed all eligible criteria and is at contact section, pop up card currently says 'Somewhere between the hero and here, you decided to keep going. Thank you for taking the time to know me a little more than you already did. Want to check out my articles next? Read them here.' add second option to visit galaxy as viewer/claimer
+  OR
+* Display the criteria failed and ask if user wants to revisit and complete criteria or end his session and close website. Redirect as per user input
+
 ### OD-06: Star Selection — Random vs. User-Chosen
+
 - Currently: random assignment from available pool.
 - Alternative: show visitor a small preview of 5 random available stars in the galaxy, let them pick one.
 - Adds delight but increases complexity (temporary reservation needed to prevent race condition on "picked but not yet claimed" state).
 - **Recommendation**: Random for Phase 1. Add "pick your region of the galaxy" in a future phase.
+  ANS: Fully random until further information provided by me (Ashwin)
 
 ### OD-07: VMWR Privacy Disclosure
+
 - VMWR is a public registry. Names entered are publicly visible for 90 days.
 - Must show clear disclosure before claim: "The name you enter will be publicly visible in the Virtual Milky Way Registry for 90 days."
 - **Legal note**: Do not collect PII. Star names should be pseudonyms/occasion names, not real full names. Add this to the claim modal copy.
+  ANS: Recommend only, do not flag or force random names, legal matters can possibly be handled by saying, we told the user not to reveal PII, he didn't listen
 
 ### OD-08: Supabase Region
+
 - Choose Supabase project region matching Vercel deployment region.
 - Vercel defaults to `us-east-1` (iad1). Supabase equivalent: `us-east-1`.
 - Latency between Vercel Edge Function and Supabase matters for claim endpoint. Same region = ~1ms. Cross-region = 50–150ms.
+  ANS: will take care
 
 ---
 
-*Last updated: 2026-05-30*  
-*Author: Ashwin Gupta*
+_Last updated: 2026-05-30_  
+_Author: Ashwin Gupta_

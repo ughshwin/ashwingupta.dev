@@ -69,6 +69,7 @@ const {
     <PageBackground client:load transition:persist="site-bg" />
     <ClockWidget client:load transition:persist="clock-widget" />
     <BottomRightHUD client:load transition:persist="bottom-right-hud" />
+    <div transition:persist="bottom-fade" style="position:fixed;bottom:0;left:0;right:0;height:5.5rem;background:linear-gradient(to top,rgba(6,6,8,0.72) 0%,transparent 100%);pointer-events:none;z-index:48;" />
     <slot />
   </body>
 </html>
