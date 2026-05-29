@@ -6,8 +6,8 @@ import { useHashScroll } from "../hooks/useHashScroll";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronUp } from "lucide-react";
 import { ClockWidget } from "./components/ClockWidget";
+import { BottomRightHUD } from "./components/BottomRightHUD";
 
 const About = lazy(() =>
   import("./components/About").then((m) => ({ default: m.About })),
@@ -115,10 +115,6 @@ export default function App() {
     return () => clearInterval(id);
   }, [showThankYou]);
 
-  const btnSize = isMobile ? 42 : 52;
-  const btnR = btnSize / 2 - 2;
-  const btnCirc = 2 * Math.PI * btnR;
-
   return (
     <>
       {/* Page content - blurred when thank-you is showing */}
@@ -146,84 +142,13 @@ export default function App() {
         <SpeedInsights />
       </div>
 
-      {/* Back to top - outside blurred container so it stays sharp */}
-      <AnimatePresence>
-        {showTop && (
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.25 }}
-            onClick={() => momentumScrollTo.current?.(0)}
-            style={{
-              position: "fixed",
-              bottom: "2rem",
-              right: "2rem",
-              zIndex: 100,
-              width: `${btnSize}px`,
-              height: `${btnSize}px`,
-              borderRadius: "50%",
-              border: "none",
-              background: "rgba(10,10,10,0.6)",
-              color: "rgba(255,255,255,0.55)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: isMobile ? "pointer" : "none",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              transition: "color 0.2s",
-              padding: 0,
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.color =
-                "rgba(255,255,255,0.95)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.color =
-                "rgba(255,255,255,0.55)";
-            }}
-          >
-            <svg
-              width={btnSize}
-              height={btnSize}
-              style={{
-                position: "absolute",
-                inset: 0,
-                transform: "rotate(-90deg)",
-              }}
-            >
-              <circle
-                cx={btnSize / 2}
-                cy={btnSize / 2}
-                r={btnR}
-                fill="none"
-                stroke="rgba(255,255,255,0.08)"
-                strokeWidth="1.5"
-              />
-              <circle
-                cx={btnSize / 2}
-                cy={btnSize / 2}
-                r={btnR}
-                fill="none"
-                stroke="#4ade80"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeDasharray={btnCirc}
-                strokeDashoffset={btnCirc * (1 - scrollProgress)}
-                style={{ transition: "stroke-dashoffset 0.15s ease" }}
-              />
-            </svg>
-            <ChevronUp
-              size={isMobile ? 16 : 19}
-              strokeWidth={1.5}
-              style={{ position: "relative" }}
-            />
-          </motion.button>
-        )}
-      </AnimatePresence>
-
       <ClockWidget />
+      <BottomRightHUD
+        showTop={showTop}
+        scrollProgress={scrollProgress}
+        isMobile={isMobile}
+        onScrollToTop={() => momentumScrollTo.current?.(0)}
+      />
 
       {/* Thank you banner - outside blurred container, transparent bg clips via combined blur */}
       <AnimatePresence>
