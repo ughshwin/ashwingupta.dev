@@ -81,6 +81,9 @@ export default function App() {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       const max = el.scrollHeight - el.clientHeight;
+      // Sync from actual scrollTop when idle so external scrolls (e.g. instant
+      // nav jump on mount) don't leave target stale and snap back to top.
+      if (!rafId) target = el.scrollTop;
       target = Math.max(0, Math.min(target + e.deltaY, max));
       if (!rafId) rafId = requestAnimationFrame(animate);
     };

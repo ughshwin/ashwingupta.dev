@@ -20,7 +20,14 @@ export function scrollToSection(id: string, behavior: ScrollBehavior = "smooth")
     target.getBoundingClientRect().top -
     container.getBoundingClientRect().top +
     paddingTop;
-  container.scrollTo({ top: offset, behavior });
+  // Route smooth scrolls through the custom RAF scroller so its internal
+  // `target` variable stays in sync — prevents snap-back on first wheel event.
+  const portfolioScroll = (window as any).__portfolioScrollTop as ((top: number) => void) | undefined;
+  if (behavior === "smooth" && portfolioScroll) {
+    portfolioScroll(offset);
+  } else {
+    container.scrollTo({ top: offset, behavior });
+  }
 }
 
 export function useHashScroll() {
