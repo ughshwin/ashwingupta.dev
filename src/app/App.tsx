@@ -6,8 +6,6 @@ import { useHashScroll } from "../hooks/useHashScroll";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { motion, AnimatePresence } from "motion/react";
-import { ClockWidget } from "./components/ClockWidget";
-import { BottomRightHUD } from "./components/BottomRightHUD";
 
 const About = lazy(() =>
   import("./components/About").then((m) => ({ default: m.About })),
@@ -44,12 +42,9 @@ const Contact = lazy(() =>
 
 export default function App() {
   const isMobile = useIsMobile();
-  const [showTop, setShowTop] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [showThankYou, setShowThankYou] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const thankYouFired = useRef(false);
-  const momentumScrollTo = useRef<(top: number) => void>(null);
   useHashScroll();
 
   useEffect(() => {
@@ -57,11 +52,10 @@ export default function App() {
       ".hologram-interface",
     ) as HTMLElement | null;
     if (!el) return;
+
     const onScroll = () => {
       const max = el.scrollHeight - el.clientHeight;
       const progress = max > 0 ? el.scrollTop / max : 0;
-      setShowTop(el.scrollTop > el.clientHeight * 0.6);
-      setScrollProgress(progress);
       if (progress >= 0.98 && !thankYouFired.current) {
         thankYouFired.current = true;
         setShowThankYou(true);
@@ -91,7 +85,7 @@ export default function App() {
       if (!rafId) rafId = requestAnimationFrame(animate);
     };
 
-    momentumScrollTo.current = (top: number) => {
+    (window as any).__portfolioScrollTop = (top: number) => {
       target = Math.max(0, Math.min(top, el.scrollHeight - el.clientHeight));
       if (!rafId) rafId = requestAnimationFrame(animate);
     };
@@ -101,6 +95,7 @@ export default function App() {
       el.removeEventListener("scroll", onScroll);
       el.removeEventListener("wheel", onWheel);
       if (rafId) cancelAnimationFrame(rafId);
+      delete (window as any).__portfolioScrollTop;
     };
   }, []);
 
@@ -142,13 +137,6 @@ export default function App() {
         <SpeedInsights />
       </div>
 
-      <ClockWidget />
-      <BottomRightHUD
-        showTop={showTop}
-        scrollProgress={scrollProgress}
-        isMobile={isMobile}
-        onScrollToTop={() => momentumScrollTo.current?.(0)}
-      />
 
       {/* Thank you banner - outside blurred container, transparent bg clips via combined blur */}
       <AnimatePresence>

@@ -1,6 +1,8 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import { PageBackground } from "../app/components/PageBackground";
+import { ClockWidget } from "../app/components/ClockWidget";
+import { BottomRightHUD } from "../app/components/BottomRightHUD";
 import "@fontsource/playfair-display/800.css";
 import "@fontsource/playfair-display/400-italic.css";
 import "@fontsource/dm-sans/400.css";
@@ -65,6 +67,8 @@ const {
   </head>
   <body>
     <PageBackground client:load transition:persist="site-bg" />
+    <ClockWidget client:load transition:persist="clock-widget" />
+    <BottomRightHUD client:load transition:persist="bottom-right-hud" />
     <slot />
   </body>
 </html>

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronUp, Timer } from "lucide-react";
+import { useIsMobile } from "../../hooks/useMediaQuery";
 
 const FONT_MONO = "'SF Mono', 'Fira Mono', 'Consolas', monospace";
 
@@ -40,6 +41,58 @@ function useMouseCoords() {
   return pos;
 }
 
+function useScrollState(
+  progressCircleRef: React.RefObject<SVGCircleElement | null>,
+  btnCirc: number,
+) {
+  const [showTop, setShowTop] = useState(false);
+  const progressRef = useRef(0);
+
+  useEffect(() => {
+    let cleanup: (() => void) | null = null;
+
+    const init = () => {
+      cleanup?.();
+      const holoEl = document.querySelector(
+        ".hologram-interface",
+      ) as HTMLElement | null;
+
+      const getTop = () => (holoEl ? holoEl.scrollTop : window.scrollY);
+      const getMax = () =>
+        holoEl
+          ? holoEl.scrollHeight - holoEl.clientHeight
+          : document.body.scrollHeight - window.innerHeight;
+      const getVH = () => (holoEl ? holoEl.clientHeight : window.innerHeight);
+
+      const onScroll = () => {
+        const top = getTop();
+        const max = getMax();
+        const p = max > 0 ? top / max : 0;
+        progressRef.current = p;
+        setShowTop(top > getVH() * 0.6);
+        if (progressCircleRef.current) {
+          progressCircleRef.current.style.strokeDashoffset = String(
+            btnCirc * (1 - p),
+          );
+        }
+      };
+
+      const target = holoEl ?? window;
+      target.addEventListener("scroll", onScroll, { passive: true });
+      cleanup = () => target.removeEventListener("scroll", onScroll);
+    };
+
+    init();
+    document.addEventListener("astro:page-load", init);
+    return () => {
+      cleanup?.();
+      document.removeEventListener("astro:page-load", init);
+    };
+  }, [btnCirc, progressCircleRef]);
+
+  return { showTop, progressRef };
+}
+
 function fmtElapsed(secs: number) {
   const h = Math.floor(secs / 3600);
   const m = Math.floor((secs % 3600) / 60);
@@ -50,28 +103,30 @@ function fmtElapsed(secs: number) {
 }
 
 function fmtCoord(n: number) {
-  return (n >= 0 ? "+" : "") + n.toFixed(4);
+  const fixed = n.toFixed(4);
+  return (parseFloat(fixed) > 0 ? "+" : "") + fixed;
 }
 
-type Props = {
-  showTop: boolean;
-  scrollProgress: number;
-  isMobile: boolean;
-  onScrollToTop: () => void;
-};
+function scrollToTop() {
+  const fn = (window as any).__portfolioScrollTop;
+  if (fn) {
+    fn(0);
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
 
-export function BottomRightHUD({
-  showTop,
-  scrollProgress,
-  isMobile,
-  onScrollToTop,
-}: Props) {
+export function BottomRightHUD() {
+  const isMobile = useIsMobile();
   const elapsed = useSessionTime();
   const { x, y } = useMouseCoords();
 
   const btnSize = isMobile ? 42 : 52;
   const btnR = btnSize / 2 - 2;
   const btnCirc = 2 * Math.PI * btnR;
+
+  const progressCircleRef = useRef<SVGCircleElement>(null);
+  const { showTop, progressRef } = useScrollState(progressCircleRef, btnCirc);
 
   return (
     <div
@@ -86,7 +141,7 @@ export function BottomRightHUD({
         gap: "0.5rem",
       }}
     >
-      {/* Button slot — fixed height so widgets never shift */}
+      {/* Fixed-height slot so widgets never shift when button appears */}
       <div
         style={{
           height: `${btnSize}px`,
@@ -102,7 +157,7 @@ export function BottomRightHUD({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
               transition={{ duration: 0.25 }}
-              onClick={onScrollToTop}
+              onClick={scrollToTop}
               style={{
                 width: `${btnSize}px`,
                 height: `${btnSize}px`,
@@ -147,6 +202,7 @@ export function BottomRightHUD({
                   strokeWidth="1.5"
                 />
                 <circle
+                  ref={progressCircleRef}
                   cx={btnSize / 2}
                   cy={btnSize / 2}
                   r={btnR}
@@ -155,8 +211,7 @@ export function BottomRightHUD({
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeDasharray={btnCirc}
-                  strokeDashoffset={btnCirc * (1 - scrollProgress)}
-                  style={{ transition: "stroke-dashoffset 0.15s ease" }}
+                  strokeDashoffset={btnCirc * (1 - progressRef.current)}
                 />
               </svg>
               <ChevronUp
