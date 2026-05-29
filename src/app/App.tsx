@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronUp } from "lucide-react";
+import { ClockWidget } from "./components/ClockWidget";
 
 const About = lazy(() =>
   import("./components/About").then((m) => ({ default: m.About })),
@@ -48,6 +49,7 @@ export default function App() {
   const [showThankYou, setShowThankYou] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const thankYouFired = useRef(false);
+  const momentumScrollTo = useRef<(top: number) => void>(null);
   useHashScroll();
 
   useEffect(() => {
@@ -67,7 +69,39 @@ export default function App() {
       }
     };
     el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
+
+    let target = el.scrollTop;
+    let rafId: number | null = null;
+
+    const animate = () => {
+      const diff = target - el.scrollTop;
+      if (Math.abs(diff) < 0.5) {
+        el.scrollTop = target;
+        rafId = null;
+        return;
+      }
+      el.scrollTop += diff * 0.1;
+      rafId = requestAnimationFrame(animate);
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const max = el.scrollHeight - el.clientHeight;
+      target = Math.max(0, Math.min(target + e.deltaY, max));
+      if (!rafId) rafId = requestAnimationFrame(animate);
+    };
+
+    momentumScrollTo.current = (top: number) => {
+      target = Math.max(0, Math.min(top, el.scrollHeight - el.clientHeight));
+      if (!rafId) rafId = requestAnimationFrame(animate);
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      el.removeEventListener("wheel", onWheel);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   useEffect(() => {
@@ -120,11 +154,7 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.25 }}
-            onClick={() =>
-              document
-                .querySelector(".hologram-interface")
-                ?.scrollTo({ top: 0, behavior: "smooth" })
-            }
+            onClick={() => momentumScrollTo.current?.(0)}
             style={{
               position: "fixed",
               bottom: "2rem",
@@ -192,6 +222,8 @@ export default function App() {
           </motion.button>
         )}
       </AnimatePresence>
+
+      <ClockWidget />
 
       {/* Thank you banner - outside blurred container, transparent bg clips via combined blur */}
       <AnimatePresence>
