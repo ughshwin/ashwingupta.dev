@@ -8,7 +8,7 @@
   <!-- Home -->
   <url>
     <loc>https://www.ashwingupta.dev/</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -16,57 +16,57 @@
   <!-- Section pages -->
   <url>
     <loc>https://www.ashwingupta.dev/about</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ashwingupta.dev/stack</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ashwingupta.dev/experience</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ashwingupta.dev/recommendations</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.ashwingupta.dev/featured</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ashwingupta.dev/research</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ashwingupta.dev/projects</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ashwingupta.dev/contact</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
 
-  <!-- Project detail pages -->
+  <!-- Project card pages (/projects/[slug]) -->
   <url>
     <loc>https://www.ashwingupta.dev/projects/ashwingupta-dev</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -131,12 +131,12 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Work detail pages -->
+  <!-- Work detail pages (/work/[slug]) -->
   <url>
     <loc>https://www.ashwingupta.dev/work/ashwingupta-dev</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ashwingupta.dev/work/pageindexollama</loc>
@@ -187,7 +187,13 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Research detail pages -->
+  <!-- Research detail pages (/research/[slug]) -->
+  <url>
+    <loc>https://www.ashwingupta.dev/research/pinns</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
   <url>
     <loc>https://www.ashwingupta.dev/research/controla</loc>
     <lastmod>2026-05-25</lastmod>
@@ -203,14 +209,8 @@
   <url>
     <loc>https://www.ashwingupta.dev/research/pinns-whitepaper</loc>
     <lastmod>2026-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.ashwingupta.dev/research/pinns</loc>
-    <lastmod>2026-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.ashwingupta.dev/research/scholaros</loc>
@@ -222,13 +222,19 @@
   <!-- Articles -->
   <url>
     <loc>https://www.ashwingupta.dev/articles</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.ashwingupta.dev/articles/the-space-between-stars</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.ashwingupta.dev/articles/the-layer-nobody-talks-about</loc>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
