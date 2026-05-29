@@ -35,46 +35,54 @@ const dontDo = [
 
 const SPRING_ICON = "https://cdn.simpleicons.org/spring";
 
-const highlights: { title: string; sub: string; icon: string }[] = [
+const highlights: { title: string; sub: string; icon: string; time: string }[] = [
   {
     title: "Guinness World Record",
     sub: "Command Centre Ops • Most Participants - Agentic AI Day 2025\nGoogle Cloud | Hack2Skill • July 2025",
     icon: guinnessLogoUrl,
+    time: "Jul 2025",
   },
   {
     title: "$1.3M+ Annualised Savings",
     sub: "HSBC • Coforge",
     icon: hsbcLogoUrl,
+    time: "Jan 2026",
   },
   {
     title: "Best Team Award",
     sub: "HSBC Account • Coforge",
     icon: hsbcLogoUrl,
+    time: "Nov 2025",
   },
   {
     title: "Pat on Back - Think Customer Award",
     sub: "Individual Delivery Excellence • Coforge",
     icon: coforgeLogoUrl,
+    time: "Dec 2024",
   },
   {
     title: "Java Spring AI Trainer",
     sub: "130+ Participants • 81% voted preferred trainer • NPS +50",
     icon: SPRING_ICON,
+    time: "Dec '25 – May '26",
   },
   {
     title: "Best Outgoing Project",
     sub: "Mechanical Engineering • BMSCE 2023",
     icon: bmsLogoUrl,
+    time: "Aug 2024",
   },
   {
     title: "Augment.AI, Mentor and Founder",
     sub: "BMSCE's AI Club",
     icon: augmentLogoUrl,
+    time: "Jan 2022",
   },
   {
     title: "42.8K Downloads • 202K Views",
     sub: "Human Faces Kaggle Dataset",
     icon: kaggleLogoUrl,
+    time: "Present",
   },
 ];
 
@@ -449,6 +457,19 @@ export function About() {
                           >
                             {h.title}
                           </div>
+                        </div>
+                        {/* time */}
+                        <div
+                          style={{
+                            fontFamily: FONT_MONO,
+                            fontSize: "0.58rem",
+                            letterSpacing: "0.1em",
+                            color: "rgba(245,202,64,0.45)",
+                            textTransform: "uppercase",
+                            paddingLeft: "42px",
+                          }}
+                        >
+                          {h.time}
                         </div>
                         {/* sub */}
                         <div
