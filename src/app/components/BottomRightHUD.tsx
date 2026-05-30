@@ -342,18 +342,18 @@ export function BottomRightHUD() {
       <div
         style={{
           display: "flex",
-          gap: "1rem",
+          gap: isMobile ? "0.6rem" : "1rem",
           alignItems: "center",
           color: "white",
           fontFamily: FONT_MONO,
-          fontSize: "0.82rem",
+          fontSize: isMobile ? "0.7rem" : "0.82rem",
           userSelect: "none",
           pointerEvents: "none",
         }}
       >
         {/* Session timer */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <Timer size={12} strokeWidth={1.8} style={{ opacity: 0.7, flexShrink: 0 }} />
+          <Timer size={isMobile ? 10 : 12} strokeWidth={1.8} style={{ opacity: 0.7, flexShrink: 0 }} />
           <span style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}>
             {fmtElapsed(elapsed)}
           </span>
@@ -380,25 +380,27 @@ export function BottomRightHUD() {
           );
         })()}
 
-        {/* Mouse XY */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
-            <span style={{ opacity: 0.75, fontSize: "0.65rem", letterSpacing: "0.04em" }}>
-              X
-            </span>
-            <span style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}>
-              {fmtCoord(x)}
-            </span>
+        {/* Mouse XY — desktop only */}
+        {!isMobile && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
+              <span style={{ opacity: 0.75, fontSize: "0.65rem", letterSpacing: "0.04em" }}>
+                X
+              </span>
+              <span style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}>
+                {fmtCoord(x)}
+              </span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
+              <span style={{ opacity: 0.75, fontSize: "0.65rem", letterSpacing: "0.04em" }}>
+                Y
+              </span>
+              <span style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}>
+                {fmtCoord(y)}
+              </span>
+            </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
-            <span style={{ opacity: 0.75, fontSize: "0.65rem", letterSpacing: "0.04em" }}>
-              Y
-            </span>
-            <span style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}>
-              {fmtCoord(y)}
-            </span>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
