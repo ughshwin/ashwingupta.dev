@@ -73,11 +73,11 @@ function RecCard({
         display: "flex",
         flexDirection: "column",
         gap: "0.9rem",
-        border: "1px solid rgba(255,255,255,0.07)",
+        border: "1px solid rgba(255,255,255,0.15)",
         borderLeftWidth: "2px",
         borderLeftColor: "rgba(232,224,208,0.2)",
         borderRadius: "6px",
-        background: "rgba(255,255,255,0.015)",
+        background: "transparent",
       }}
     >
       <div>

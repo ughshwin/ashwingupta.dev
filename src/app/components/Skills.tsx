@@ -286,8 +286,8 @@ export function Skills() {
               <div
                 style={{
                   borderRadius: "10px",
-                  border: "1px solid rgba(255,255,255,0.11)",
-                  background: "rgba(255,255,255,0.025)",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  background: "transparent",
                   padding: "1.8rem 2rem",
                 }}
               >
