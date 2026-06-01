@@ -7,6 +7,7 @@ import {
 } from "../../hooks/useMediaQuery";
 import { useEqualRows } from "../../hooks/useCollageGrid";
 import { EqualGridRenderer } from "./CollageRenderer";
+import { researchItems, ResearchCard } from "./Research";
 import coforgeLogoImg from "../../assets/coforgeLogo.webp?url";
 import gidaLogoImg from "../../assets/gidaLogo.webp?url";
 import hdfcLogoImg from "../../assets/HDFClogo.webp?url";
@@ -125,40 +126,6 @@ export const projects: Project[] = [
     github: "https://github.com/ughshwin/PageIndexOllama",
   },
   {
-    index: "03",
-    slug: "research-it",
-    title: "Research-It - Fully Local RAG System",
-    company: "Open Source",
-    logo: "https://cdn.simpleicons.org/github/ffffff",
-    logoHeight: 18,
-    status: "Shipped",
-    devStatus: "completed",
-    tags: [
-      "LEANN / HNSW Indexing",
-      "Dense Embeddings",
-      "Ollama / Local LLMs",
-      "Multi-Source Ingestion",
-      "PyMuPDF • BeautifulSoup",
-      "Privacy-First",
-    ],
-    impact:
-      "Fully offline academic document QA • reproducible HNSW indexes • zero API dependency",
-    summary: [
-      "Academic RAG assumed **cloud inference by default** - air-gapped institutions and low-VRAM machines had no private path from ingestion to QA.",
-      "Built a **local-first retrieval stack**: LEANN/HNSW indexes, dense embeddings, Ollama inference, and normalized ingestion across PDFs, HTML, and paper dirs.",
-      "Chunk overlap, tuned **Top-K** and context windows; PyMuPDF and BeautifulSoup cleanup fix retrieval quality, before errors reach query time.",
-      "**API-free academic QA** on **sub-1GB quantized models** • reproducible HNSW artifacts for air-gapped use • ingestion and retrieval run without cloud credentials.",
-    ],
-    bullets: [
-      "Sensitive academic papers had **no private processing path** - all RAG required external inference APIs; researchers on **CPU-only or low-VRAM hardware** had no viable local inference option; institutions with air-gap requirements were blocked by all existing tooling.",
-      "Researchers with sensitive papers had no offline RAG that handled mixed sources - local PDFs, arXiv URLs, paper directories - without exposing data to external inference APIs or cloud indexing.",
-      "Fully local RAG: **LEANN/HNSW vector indexing** with dense embeddings (facebook/contriever), Ollama-backed inference, multi-source ingestion (PDFs, academic HTML, directories). Smart chunking with overlap, **configurable Top-K (3–4)** and **context windows (1024–1536 tokens)**. Quantized model support for CPU-only hardware.",
-      "Reproducible index artifacts enable **air-gapped operation**. Context-window and Top-K settings tuned for recall vs. coherence tradeoff. PyMuPDF + BeautifulSoup handle varied PDF quality before indexing - not at query time.",
-      "**API-free document QA** across academic sources. Runs on **sub-1GB quantized models**. Designed for air-gapped institutional research.",
-    ],
-    github: "https://github.com/ughshwin/research-it",
-  },
-  {
     index: "04",
     slug: "hsbc-voice",
     title: "Conversational Analytics - HSBC",
@@ -225,38 +192,6 @@ export const projects: Project[] = [
     github: null,
   },
   {
-    index: "06",
-    slug: "airline-contract-intelligence",
-    title: "Airline Contract Intelligence System",
-    company: "Amex GBT",
-    logo: "https://cdn.simpleicons.org/americanexpress/2E77BC",
-    logoHeight: 18,
-    status: "Client Delivery",
-    tags: [
-      "PDF Table Extraction (Camelot • Ghostscript)",
-      "GPT-4o Normalization",
-      "One-Shot Prompting",
-      "Mixed-Format Document Handling",
-      "Contract Intelligence Pipeline",
-    ],
-    impact:
-      "~96% extraction accuracy • automated normalization across varied airline PDF schemas",
-    summary: [
-      "Airline contracts mixed **scan-quality and readable PDF tables**; carrier template drift made manual review the only reliable extraction path.",
-      "**Camelot + Ghostscript** extracted tables from both formats; **GPT-4o one-shot normalization** mapped carrier layouts into a schema-consistent output.",
-      "One-shot prompting preserves coherence across carrier templates - no per-carrier tuning; covers full format range from scan images to nested tables.",
-      "**~96% extraction accuracy** across airline contract Q&A • automated normalization replaced manual review • real-time query resolution, sales and support.",
-    ],
-    bullets: [
-      "Airline contract tables were **reviewed manually** - slow, error-prone, and couldn't scale to the volume of carrier agreements; **template drift across carriers** meant each format required separate handling logic; sales and support queries on contract terms had **no real-time resolution path**.",
-      "Airline contract PDFs for AMEX GBT mixed **image-embedded and readable tables**, with varied schemas and template drift across carriers. Manual review was slow, error-prone, and couldn't scale.",
-      "Document intelligence pipeline: **Camelot + Ghostscript** extract tables from both image-embedded and readable PDF sources. **GPT-4o with one-shot prompting** normalizes across diverse contract formats - clause normalization, table structuring, schema-consistent output.",
-      "One-shot prompting maintains contextual coherence across carrier templates **without per-carrier fine-tuning**. Camelot + Ghostscript in combination covers the full format range - from scan-quality images to nested programmatic tables.",
-      "**~96% extraction accuracy** across airline contract Q&A. Automated normalization replaced manual review. Real-time query resolution for sales and customer support.",
-    ],
-    github: null,
-  },
-  {
     index: "07",
     slug: "here-app",
     title: "Here.app – Multilingual Vehicle Intelligence Platform",
@@ -286,39 +221,6 @@ export const projects: Project[] = [
       "**RAG-based vehicle intelligence assistant** grounded in a curated specification database with image-linked attributes. **QA-tested retrieval pipeline** with dynamic data lookup across **163 languages** - localized responses grounded in the same structured data, not translated post-hoc.",
       "QA-gated retrieval enforces factual grounding before responses are served - no speculative answers on spec queries. Structured specification database acts as a single source of truth across all 163 language boundaries. Accuracy validated across full coverage before production.",
       "**~97% factual accuracy** across **163 languages**. Reduced manual support escalation on spec-heavy queries.",
-    ],
-    github: null,
-  },
-  {
-    index: "08",
-    slug: "laminar-metamorph-polymorph",
-    title: "Laminar • Metamorph • Polymorph - AI Delivery Toolchain",
-    company: "Gida Technologies",
-    logo: GIDA_LOGO,
-    logoHeight: 28,
-    status: "Client Delivery",
-    tags: [
-      "AI CMS (Laminar)",
-      "No-Code Chatbot Builder (Metamorph)",
-      "API Utility Engine (Polymorph)",
-      "163-Language Content Generation",
-      "cURL-to-20+ Language Conversion",
-      "AI-Generated Visuals",
-    ],
-    impact:
-      "Three interlinked AI tools • 163-language content generation • cURL-to-20+ language API conversion",
-    summary: [
-      "Content generation, chatbot delivery, and API conversion required **separate tools with manual handoffs** - output drifted across every project.",
-      "Built **three-part AI toolchain**: Laminar for multilingual content, Metamorph for no-code chatbots, Polymorph for API conversion scaffolds.",
-      "Each tool ships **standardized deployable artifacts** - brand-consistent visuals, multilingual content at scale, cURL-derived code across 20+ languages.",
-      "**Three fragmented workflows unified** • **163-language content generation** at scale • no-code bot delivery removed engineering dependency • API work accelerated.",
-    ],
-    bullets: [
-      "Content generation, bot deployment, and API conversion each required **separate tools and manual handoff steps** - inconsistent output quality across every client engagement; **multilingual content at scale** had no standardized generation path; chatbot delivery required **engineering involvement** for every new deployment or update.",
-      "Teams building multilingual products, chatbots, and API integrations operated with **fragmented tooling** - content generation, bot deployment, and API code conversion each required separate workflows and produced inconsistent output quality.",
-      "Designed and shipped **three interlinked AI tools**: **Laminar** - AI CMS for multilingual content generation across **163+ languages** with AI-generated visuals and multi-format export; **Metamorph** - no-code chatbot builder from prompts or documentation; **Polymorph** - cURL-to-**20+ language** API converter with endpoint scaffolding.",
-      "**Standardized output artifacts** across all three tools produce deployable outputs - not drafts. 163+ language generation maintains consistent quality without per-language customization. AI-generated visuals produce brand-consistent outputs from prompts across client deployments.",
-      "**Three fragmented workflows replaced** by a unified toolchain. **163-language content generation at scale**. No-code bot deployment removed engineering dependency from chatbot delivery.",
     ],
     github: null,
   },
@@ -426,10 +328,7 @@ export const projects: Project[] = [
 const PROJECT_DETAIL_PATHS: Partial<Record<string, string>> = {
   "ashwingupta-dev": "/work/ashwingupta-dev",
   pageindexollama: "/work/pageindexollama",
-  "research-it": "/work/research-it",
   "azure-infra-docs": "/work/azure-infra-docs",
-  "airline-contract-intelligence": "/work/airline-contract-intelligence",
-  "laminar-metamorph-polymorph": "/work/laminar-metamorph-polymorph",
   "skill-recommendation-engine": "/work/skill-recommendation-engine",
 };
 
@@ -734,6 +633,7 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
       style={{
         display: "flex",
         flexDirection: "column",
+        height: "100%",
         padding: "1.4rem",
         borderRadius: "8px",
         border: `1px solid ${hovered ? "rgba(255,255,255,0.28)" : "rgba(255,255,255,0.1)"}`,
@@ -749,6 +649,7 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
           gap: "0.85rem",
           overflow: "hidden",
           maxHeight: showOutcome ? "1000px" : "14rem",
+          minHeight: showOutcome ? undefined : "14rem",
           transition: "max-height 0.5s cubic-bezier(0.76, 0, 0.24, 1)",
           ...(!showOutcome
             ? {
@@ -920,7 +821,8 @@ export function Projects() {
   });
 
   const maxPerRow = isMobile ? 1 : isTablet ? 2 : 3;
-  const rows = useEqualRows(orderedSecondary.length, maxPerRow);
+  const totalCount = researchItems.length + orderedSecondary.length;
+  const rows = useEqualRows(totalCount, maxPerRow);
 
   return (
     <section
@@ -956,7 +858,7 @@ export function Projects() {
                 textTransform: "uppercase",
               }}
             >
-              Projects
+              Research & Systems
             </span>
             <div
               style={{
@@ -991,25 +893,19 @@ export function Projects() {
 
         {/* Content strip */}
         <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 4rem" }}>
-          <div style={{ marginBottom: "2rem" }}>
-            <p
-              style={{
-                fontFamily: FONT_MONO,
-                fontSize: "0.55rem",
-                letterSpacing: "0.2em",
-                color: "rgba(255,255,255,0.28)",
-                textTransform: "uppercase",
-                marginBottom: "1.5rem",
-              }}
-            >
-              All projects
-            </p>
-          </div>
           <EqualGridRenderer
             rows={rows}
-            renderCard={(idx) => (
-              <ProjectCard p={orderedSecondary[idx]} index={idx} />
-            )}
+            align="stretch"
+            renderCard={(idx) =>
+              idx < researchItems.length ? (
+                <ResearchCard item={researchItems[idx]} />
+              ) : (
+                <ProjectCard
+                  p={orderedSecondary[idx - researchItems.length]}
+                  index={idx}
+                />
+              )
+            }
           />
         </div>
       </div>

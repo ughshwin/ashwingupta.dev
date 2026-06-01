@@ -1,13 +1,7 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 import type React from "react";
-import {
-  useIsMobile,
-  useIsTablet,
-  useIsDesktop,
-} from "../../hooks/useMediaQuery";
-import { useEqualRows } from "../../hooks/useCollageGrid";
-import { EqualGridRenderer } from "./CollageRenderer";
+import { useIsMobile, useIsDesktop } from "../../hooks/useMediaQuery";
 
 function renderBullet(text: string): React.ReactNode {
   const parts = text.split(/\*\*(.+?)\*\*/g);
@@ -64,7 +58,7 @@ const TYPE_META: Record<
     glow: "0 0 2px rgba(96,165,250,0.35)",
   },
   commercial: {
-    label: "Patent Pending • In Development",
+    label: "Commercial Software • In Development",
     color: "#ffffff",
     border: "rgba(139,92,246,0.55)",
     bg: "rgba(93,33,182,0.22)",
@@ -74,7 +68,7 @@ const TYPE_META: Record<
 
 const RESEARCH_LABELS = ["Problem", "Method", "System design", "Insight"];
 
-const items: ResearchItem[] = [
+export const researchItems: ResearchItem[] = [
   {
     type: "paper",
     name: "NCISCT 2022",
@@ -86,18 +80,6 @@ const items: ResearchItem[] = [
       "**BERT** surfaces salient spans as pivots; **proper nouns anchor pivots**; **WordNet** and **ConceptNet** generate nearby alternatives through sense traversal",
       "WordNet supplies **hypernym→hyponym chains** with sense disambiguation; ConceptNet adds **part-of** and **related-to** structure when coverage thins; fallback ensures distractor coverage",
       "**Semantic distance** governs selection - distractors must occupy the same conceptual neighbourhood without matching the tested senses; proximity without identity is the key constraint",
-    ],
-  },
-  {
-    type: "whitepaper",
-    name: "PINNs White Paper",
-    title: "Physics-Informed Inference for Partial Observability",
-    link: "/research/pinns-whitepaper",
-    bullets: [
-      "**Partial observability** creates a blind-control problem - sparse telemetry leaves conventional solvers unable to reconstruct what sensors never captured.",
-      "**PDE constraints embedded in the training objective** - network fits telemetry while satisfying governing dynamics; physics regularizes, not post-processes.",
-      "**Staged training** rebalances telemetry fidelity against PDE adherence; convergence via **residual consistency**, boundary behavior, and physical plausibility.",
-      "Physics acts as regularizer under uncertainty - extrapolation stays bounded by governing structure; generalization depends on dynamics, not coverage, alone.",
     ],
   },
   {
@@ -115,7 +97,7 @@ const items: ResearchItem[] = [
   },
 ];
 
-function ResearchCard({ item }: { item: ResearchItem }) {
+export function ResearchCard({ item }: { item: ResearchItem }) {
   const [hovered, setHovered] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const isMobile = useIsMobile();
@@ -143,6 +125,7 @@ function ResearchCard({ item }: { item: ResearchItem }) {
       style={{
         display: "flex",
         flexDirection: "column",
+        height: "100%",
         padding: "1.6rem",
         borderRadius: "8px",
         border: `1px solid ${hovered ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.15)"}`,
@@ -161,7 +144,8 @@ function ResearchCard({ item }: { item: ResearchItem }) {
           flexDirection: "column",
           gap: "1rem",
           overflow: "hidden",
-          maxHeight: showOutcome ? "1000px" : "17rem",
+          maxHeight: showOutcome ? "1000px" : "14rem",
+          minHeight: showOutcome ? undefined : "14rem",
           transition: "max-height 0.5s cubic-bezier(0.76, 0, 0.24, 1)",
           ...(!showOutcome
             ? {
@@ -327,88 +311,5 @@ function ResearchCard({ item }: { item: ResearchItem }) {
         </span>
       </div>
     </motion.a>
-  );
-}
-
-export function Research() {
-  const isMobile = useIsMobile();
-  const isTablet = useIsTablet();
-
-  const maxPerRow = isMobile ? 1 : isTablet ? 2 : 3;
-  const rows = useEqualRows(items.length, maxPerRow);
-
-  return (
-    <section
-      id="research"
-      style={{
-        position: "relative",
-        background: "transparent",
-        padding: isMobile ? "5rem 4vw" : "4rem 0",
-      }}
-    >
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        {/* Header */}
-        <div style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
-              marginBottom: "2rem",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: FONT_MONO,
-                fontSize: "0.62rem",
-                letterSpacing: "0.2em",
-                color: "rgba(255,255,255,0.4)",
-                textTransform: "uppercase",
-              }}
-            >
-              Research
-            </span>
-            <div
-              style={{
-                flex: 1,
-                height: "1px",
-                background: "rgba(255,255,255,0.07)",
-              }}
-            />
-          </div>
-
-          <div style={{ overflow: "hidden" }}>
-            <motion.h2
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-              style={{
-                fontFamily: FONT_SERIF,
-                fontSize: isMobile
-                  ? "clamp(1.8rem, 7vw, 4rem)"
-                  : "clamp(2.6rem, 4.5vw, 4rem)",
-                fontWeight: 800,
-                lineHeight: 1.1,
-                letterSpacing: "0.02em",
-                color: "#fafaf8",
-                margin: 0,
-              }}
-            >
-              Problems worth losing sleep over.
-            </motion.h2>
-          </div>
-        </div>
-
-        {/* Content strip */}
-        <div>
-          <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 4rem" }}>
-            <EqualGridRenderer
-              rows={rows}
-              renderCard={(idx) => <ResearchCard item={items[idx]} />}
-            />
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }

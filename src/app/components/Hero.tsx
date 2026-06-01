@@ -112,18 +112,12 @@ export function Hero() {
     section: string | null;
   }[] = [
     { label: "About", href: "/about", section: "about" },
-    { label: "Stack", href: "/stack", section: "stack" },
     { label: "Experience", href: "/experience", section: "experience" },
-    {
-      label: "Recommendations",
-      href: "/recommendations",
-      section: "recommendations",
-    },
+    { label: "Impact", href: "/impact", section: "impact" },
   ];
 
   const workItems = [
     { label: "Featured", href: "/featured", section: "featured" },
-    { label: "Research", href: "/research", section: "research" },
     { label: "Projects", href: "/projects", section: "projects" },
   ];
 
@@ -132,6 +126,12 @@ export function Hero() {
     href: string;
     section: string | null;
   }[] = [
+    {
+      label: "Recommendations",
+      href: "/recommendations",
+      section: "recommendations",
+    },
+    { label: "Stack", href: "/stack", section: "stack" },
     { label: "Articles", href: "/articles", section: null },
     { label: "Contact", href: "/contact", section: "contact" },
   ];

@@ -7,11 +7,11 @@ import profilePictureUrl from "../assets/profilePicture.webp?url";
 export function getStaticPaths() {
   return [
     { params: { section: "about" } },
+    { params: { section: "impact" } },
     { params: { section: "stack" } },
     { params: { section: "experience" } },
     { params: { section: "recommendations" } },
     { params: { section: "featured" } },
-    { params: { section: "research" } },
     { params: { section: "projects" } },
     { params: { section: "contact" } },
   ];
@@ -22,12 +22,12 @@ const canonical = `https://www.ashwingupta.dev/${section}`;
 
 const titles: Record<string, string> = {
   about:           "About - Ashwin Gupta | AI Systems Engineer",
+  impact:          "Impact - Ashwin Gupta | AI Systems Engineer",
   stack:           "Stack - Ashwin Gupta | AI Systems Engineer",
   experience:      "Experience - Ashwin Gupta | AI Systems Engineer",
   recommendations: "Recommendations - Ashwin Gupta | AI Systems Engineer",
   featured:        "Featured Work - Ashwin Gupta | AI Systems Engineer",
-  research:        "Research - Ashwin Gupta | AI Systems Engineer",
-  projects:        "Projects - Ashwin Gupta | AI Systems Engineer",
+  projects:        "Projects & Research - Ashwin Gupta | AI Systems Engineer",
   contact:         "Contact - Ashwin Gupta | AI Systems Engineer",
 };
 ---

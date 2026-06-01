@@ -53,10 +53,12 @@ function RecCard({
   rec,
   index,
   isVisible,
+  centerSpan,
 }: {
   rec: (typeof recs)[number];
   index: number;
   isVisible: boolean;
+  centerSpan?: boolean;
 }) {
   const isMobile = useIsMobile();
 
@@ -78,6 +80,12 @@ function RecCard({
         borderLeftColor: "rgba(232,224,208,0.2)",
         borderRadius: "6px",
         background: "transparent",
+        // lone last card: span the row but keep one-column width, centered
+        ...(centerSpan && {
+          gridColumn: "1 / -1",
+          justifySelf: "center",
+          width: "calc((100% - 1.5rem) / 2)",
+        }),
       }}
     >
       <div>
@@ -380,6 +388,11 @@ export function Recommendations() {
                   rec={rec}
                   index={i}
                   isVisible={isVisible}
+                  centerSpan={
+                    !isMobile &&
+                    recs.length % 2 === 1 &&
+                    i === recs.length - 1
+                  }
                 />
               ))}
             </div>

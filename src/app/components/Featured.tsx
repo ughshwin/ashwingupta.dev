@@ -30,6 +30,7 @@ type FeaturedItem = {
   title: string;
   subtitle: string;
   link: string | null;
+  secondaryBadge?: string;
   bullets: [string, string, string, string];
 };
 
@@ -45,7 +46,7 @@ const TYPE_META: Record<
     glow: "0 0 4px rgba(74,222,128,0.28)",
   },
   patent: {
-    label: "Patent Pending • In Development",
+    label: "Commercial Software • In Development",
     color: "#ffffff",
     border: "rgba(139,92,246,0.55)",
     bg: "rgba(93,33,182,0.22)",
@@ -89,7 +90,7 @@ const ITEMS: FeaturedItem[] = [
     name: "controla",
     title:
       "Local-First Self-Improving Inference OS - Routing That Compounds With Every Deployment",
-    subtitle: "Personal • Patent Pending • In Active Development",
+    subtitle: "Personal • In Active Development",
     link: "/research/controla",
     bullets: [
       "Local inference routing is **stateless** - prior outcomes ignored, blind dispatch repeated indefinitely; no unified API surface across modalities.",
@@ -119,6 +120,7 @@ const ITEMS: FeaturedItem[] = [
       "Physics-Informed Neural Networks - Dual-Loss Framework for Multi-Domain Simulation",
     subtitle: "BMS College of Engineering • Final Year Thesis • 2022–23",
     link: "/research/pinns",
+    secondaryBadge: "Published • CellStrat",
     bullets: [
       "Purely data-driven physics simulation demanded large labeled datasets - sparse data let models ignore governing equations, producing physically implausible solutions.",
       "Dual-loss **PINN** framework embedding **PDE/ODE** constraints directly into the optimization objective beside data loss - physics constraints act as the regularizer.",
@@ -196,25 +198,53 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
           >
             {item.name}
           </p>
-          <span
+          <div
             style={{
-              fontFamily: FONT_MONO,
-              fontSize: "0.52rem",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              whiteSpace: "nowrap",
-              padding: "3px 9px",
-              borderRadius: "20px",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0.4rem",
+              justifyContent: "flex-end",
               flexShrink: 0,
               alignSelf: "flex-start",
-              color: meta.color,
-              border: `1px solid ${meta.border}`,
-              background: meta.bg,
-              boxShadow: meta.glow,
             }}
           >
-            {meta.label}
-          </span>
+            <span
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.52rem",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                whiteSpace: "nowrap",
+                padding: "3px 9px",
+                borderRadius: "20px",
+                color: meta.color,
+                border: `1px solid ${meta.border}`,
+                background: meta.bg,
+                boxShadow: meta.glow,
+              }}
+            >
+              {meta.label}
+            </span>
+            {item.secondaryBadge && (
+              <span
+                style={{
+                  fontFamily: FONT_MONO,
+                  fontSize: "0.52rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  whiteSpace: "nowrap",
+                  padding: "3px 9px",
+                  borderRadius: "20px",
+                  color: "#10b981",
+                  border: "1px solid rgba(16,185,129,0.45)",
+                  background: "rgba(16,185,129,0.08)",
+                  boxShadow: "0 0 4px rgba(16,185,129,0.28)",
+                }}
+              >
+                {item.secondaryBadge}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Title */}

@@ -26,11 +26,11 @@ const ExperienceTimeline = lazy(() =>
     default: m.ExperienceTimeline,
   })),
 );
+const Impact = lazy(() =>
+  import("./components/Impact").then((m) => ({ default: m.Impact })),
+);
 const Featured = lazy(() =>
   import("./components/Featured").then((m) => ({ default: m.Featured })),
-);
-const Research = lazy(() =>
-  import("./components/Research").then((m) => ({ default: m.Research })),
 );
 const Projects = lazy(() =>
   import("./components/Projects").then((m) => ({ default: m.Projects })),
@@ -127,12 +127,12 @@ export default function App() {
           <Hero />
           <Suspense fallback={null}>
             <About />
-            <Skills />
             <ExperienceTimeline />
-            <Recommendations />
+            <Impact />
             <Featured />
-            <Research />
             <Projects />
+            <Recommendations />
+            <Skills />
             <Contact />
           </Suspense>
         </HologramInterface>

@@ -11,7 +11,7 @@ const currentStatus = [
   {
     label: "Controla",
     detail:
-      "Local inference OS with contextual EWMA weight learning. Patent pending. Not open-sourced yet.",
+      "Local inference OS with contextual EWMA weight learning. Not open-sourced yet.",
   },
   {
     label: "ScholarOS",

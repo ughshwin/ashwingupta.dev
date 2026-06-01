@@ -6,6 +6,9 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://www.ashwingupta.dev",
   output: "static",
+  redirects: {
+    "/research": "/projects",
+  },
   integrations: [
     react(),
     sitemap({

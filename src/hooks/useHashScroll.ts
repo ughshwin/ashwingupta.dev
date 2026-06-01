@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const SECTION_IDS = ["hero", "about", "stack", "experience", "recommendations", "featured", "research", "projects", "contact"];
+const SECTION_IDS = ["hero", "about", "impact", "stack", "experience", "recommendations", "featured", "projects", "contact"];
 
 function getSectionFromPath(path: string): string {
   const section = path.replace(/^\//, "");

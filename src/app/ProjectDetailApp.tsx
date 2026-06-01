@@ -12,7 +12,7 @@ export default function ProjectDetailApp({ slug }: Readonly<{ slug: string }>) {
     if (typeof window === "undefined") return "/#projects";
     const from = new URLSearchParams(window.location.search).get("from");
     if (from === "featured") return "/#featured";
-    if (from === "research") return "/#research";
+    if (from === "research") return "/#projects";
     return "/#projects";
   })();
 
