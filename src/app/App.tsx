@@ -1,44 +1,19 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Hero } from "./components/Hero";
 import { HologramInterface } from "./components/HologramInterface";
+import { About } from "./components/About";
+import { ExperienceTimeline } from "./components/ExperienceTimeline";
+import { Impact } from "./components/Impact";
+import { Featured } from "./components/Featured";
+import { Projects } from "./components/Projects";
+import { Recommendations } from "./components/Recommendations";
+import { Skills } from "./components/Skills";
+import { Contact } from "./components/Contact";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import { useHashScroll } from "../hooks/useHashScroll";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { motion, AnimatePresence } from "motion/react";
-
-const About = lazy(() =>
-  import("./components/About").then((m) => ({ default: m.About })),
-);
-const Recommendations = lazy(() =>
-  import("./components/Recommendations").then((m) => ({
-    default: m.Recommendations,
-  })),
-);
-const Currently = lazy(() =>
-  import("./components/Currently").then((m) => ({ default: m.Currently })),
-);
-const Skills = lazy(() =>
-  import("./components/Skills").then((m) => ({ default: m.Skills })),
-);
-const ExperienceTimeline = lazy(() =>
-  import("./components/ExperienceTimeline").then((m) => ({
-    default: m.ExperienceTimeline,
-  })),
-);
-const Impact = lazy(() =>
-  import("./components/Impact").then((m) => ({ default: m.Impact })),
-);
-const Featured = lazy(() =>
-  import("./components/Featured").then((m) => ({ default: m.Featured })),
-);
-const Projects = lazy(() =>
-  import("./components/Projects").then((m) => ({ default: m.Projects })),
-);
-
-const Contact = lazy(() =>
-  import("./components/Contact").then((m) => ({ default: m.Contact })),
-);
 
 export default function App() {
   const isMobile = useIsMobile();
@@ -125,16 +100,14 @@ export default function App() {
       >
         <HologramInterface>
           <Hero />
-          <Suspense fallback={null}>
-            <About />
-            <ExperienceTimeline />
-            <Impact />
-            <Featured />
-            <Projects />
-            <Recommendations />
-            <Skills />
-            <Contact />
-          </Suspense>
+          <About />
+          <ExperienceTimeline />
+          <Impact />
+          <Featured />
+          <Projects />
+          <Recommendations />
+          <Skills />
+          <Contact />
         </HologramInterface>
         <Analytics />
         <SpeedInsights />

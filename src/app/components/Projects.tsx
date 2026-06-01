@@ -74,9 +74,9 @@ export const projects: Project[] = [
     impact:
       "Live at ashwingupta.dev • 90% image reduction • 72% JS bundle cut • 400 CSS DOM nodes eliminated • ambient HUD system with geolocation, exploration tracking, and persistent cross-page widgets",
     summary: [
-      "The original portfolio claimed performance engineering while shipping **400 animated DOM nodes** and a **2 MB JPEG hero** — self-defeating on load.",
-      "Rebuilt as a **three-layer spatial interface** — all visual effects collapsed into a single Canvas RAF loop, offscreen pre-rendering, lazy loading, WebP preloads. Structural optimization, not cosmetic.",
-      "Extended with an **ambient HUD system** — geolocation-to-nearest-airport clocks, scroll-depth exploration tracker with color-staged progress arc, normalized mouse XY — all persistent across Astro View Transitions.",
+      "The original portfolio claimed performance engineering while shipping **400 animated DOM nodes** and a **2 MB JPEG hero** - self-defeating on load.",
+      "Rebuilt as a **three-layer spatial interface** - all visual effects collapsed into a single Canvas RAF loop, offscreen pre-rendering, lazy loading, WebP preloads. Structural optimization, not cosmetic.",
+      "Extended with an **ambient HUD system** - geolocation-to-nearest-airport clocks, scroll-depth exploration tracker with color-staged progress arc, normalized mouse XY - all persistent across Astro View Transitions.",
       "**90% image reduction** • **72% JS cut** • **400 DOM nodes eliminated** • frame time **18–25ms → 4–6ms** • **17 pages** tracked at scroll-depth resolution.",
     ],
     bullets: [
@@ -86,8 +86,8 @@ export const projects: Project[] = [
       "Scanline texture pre-rendered to offscreen canvas (**1 drawImage vs 270 fillRect/frame**). Edge cache rebuilt every 3 frames. RAF paused on visibility change. Mouse tracking gated behind RAF. **Stable 60 FPS under CPU throttle**.",
       "Image: **2 MB → 211 KB (90%)**. JS bundle: **72% cut**. DOM nodes: **400 CSS-animated eliminated**. Font requests: **3 → 0**. Canvas frame time: **18–25 ms → 4–6 ms**.",
       "Ambient interface layer: **geolocation → Haversine nearest-IATA** across a curated airport dataset. Shows visitor's local timezone clock alongside home (BLR). Falls back to `Intl.DateTimeFormat` if permission denied. Normalized **mouse XY** mapped to [-1, 1] and **session timer** complete the bottom-right HUD.",
-      "**Exploration tracker** built on scroll-depth weighting across 18 distinct pages — not binary page visits. Each page contributes proportionally by max scroll reached. Color arc interpolates RGB across red → yellow → blue → green brackets. Persists in **localStorage** across sessions.",
-      "**Radial-arc scroll-to-top** resets cleanly per navigation via `astro:page-load`. Scroll container detection handles both `.hologram-interface` (homepage) and `.thinking-scroll` (article pages). All HUD widgets use `transition:persist` — zero flicker across View Transitions.",
+      "**Exploration tracker** built on scroll-depth weighting across 18 distinct pages - not binary page visits. Each page contributes proportionally by max scroll reached. Color arc interpolates RGB across red → yellow → blue → green brackets. Persists in **localStorage** across sessions.",
+      "**Radial-arc scroll-to-top** resets cleanly per navigation via `astro:page-load`. Scroll container detection handles both `.hologram-interface` (homepage) and `.thinking-scroll` (article pages). All HUD widgets use `transition:persist` - zero flicker across View Transitions.",
     ],
     github: "https://github.com/ughshwin/ashwingupta.dev",
   },

@@ -59,5 +59,5 @@ const websiteSchema = {
   jsonLd={[personSchema, websiteSchema]}
 >
   <link slot="head" rel="preload" as="image" href={profilePictureUrl} fetchpriority="high" type="image/webp" />
-  <App client:idle />
+  <App client:load />
 </BaseLayout>

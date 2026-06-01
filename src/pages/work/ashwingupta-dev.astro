@@ -46,7 +46,7 @@ const metrics = [
         <section class="th-section">
           <h2 class="th-section-title">The Problem With Self-Defeating Baselines</h2>
           <p class="th-body">
-            The designer baseline shipped 400 CSS-animated DOM particles, a 2 MB JPEG hero, Google Fonts loaded per-component, and 72 unvetted dependencies. Every technical visitor's first data point was a performance failure on the site claiming performance engineering. The standard response — clean it up, swap some images — doesn't address the structural problem. The site needed to signal systems thinking, and it was doing the opposite at the source.
+            The designer baseline shipped 400 CSS-animated DOM particles, a 2 MB JPEG hero, Google Fonts loaded per-component, and 72 unvetted dependencies. Every technical visitor's first data point was a performance failure on the site claiming performance engineering. The standard response - clean it up, swap some images - doesn't address the structural problem. The site needed to signal systems thinking, and it was doing the opposite at the source.
           </p>
         </section>
 
@@ -56,7 +56,7 @@ const metrics = [
             Rebuilt end-to-end as a three-layer spatial interface: environment shell, Canvas 2D particle field, hologram surface. All visual effects collapsed into a single Canvas RAF loop, eliminating 400 CSS-animated DOM nodes entirely. Images converted to WebP with <strong>fetchpriority</strong> preload on the hero. Below-fold sections split via React.lazy and Suspense so the initial bundle only contains what the first viewport needs.
           </p>
           <p class="th-body">
-            Scanline texture pre-rendered to an offscreen canvas — 1 drawImage per frame instead of 270 fillRect calls. Edge cache rebuilt every 3 frames. RAF paused on visibility change. Mouse tracking gated behind RAF. Each technique eliminates work at the source rather than hiding it. Optimization is structural, not cosmetic.
+            Scanline texture pre-rendered to an offscreen canvas - 1 drawImage per frame instead of 270 fillRect calls. Edge cache rebuilt every 3 frames. RAF paused on visibility change. Mouse tracking gated behind RAF. Each technique eliminates work at the source rather than hiding it. Optimization is structural, not cosmetic.
           </p>
         </section>
 
@@ -70,26 +70,26 @@ const metrics = [
         <section class="th-section">
           <h2 class="th-section-title">The Ambient Interface System</h2>
           <p class="th-body">
-            After the performance baseline was locked in, the portfolio grew an ambient HUD layer — persistent fixed widgets that add spatial context without intruding on content.
+            After the performance baseline was locked in, the portfolio grew an ambient HUD layer - persistent fixed widgets that add spatial context without intruding on content.
           </p>
           <p class="th-body">
-            Bottom-left: a geolocation widget that resolves the visitor's coordinates via <strong>navigator.geolocation</strong> — falling back to <strong>Intl.DateTimeFormat</strong> timezone if permission is denied — to the nearest IATA airport code using <strong>Haversine distance</strong> across a curated set of major airports worldwide. Paired with a live clock and GMT offset display for both the visitor's location and home (BLR).
+            Bottom-left: a geolocation widget that resolves the visitor's coordinates via <strong>navigator.geolocation</strong> - falling back to <strong>Intl.DateTimeFormat</strong> timezone if permission is denied - to the nearest IATA airport code using <strong>Haversine distance</strong> across a curated set of major airports worldwide. Paired with a live clock and GMT offset display for both the visitor's location and home (BLR).
           </p>
           <p class="th-body">
-            Bottom-right: normalized <strong>mouse XY mapped to [-1, 1]</strong> viewport coordinates, a session elapsed timer, and a radial SVG progress arc for back-to-top navigation. The arc tracks scroll position per-page, resets cleanly on Astro View Transitions via <strong>astro:page-load</strong>, and detects the correct scroll container — <strong>.hologram-interface</strong> on the homepage, <strong>.thinking-scroll</strong> on article and work pages.
+            Bottom-right: normalized <strong>mouse XY mapped to [-1, 1]</strong> viewport coordinates, a session elapsed timer, and a radial SVG progress arc for back-to-top navigation. The arc tracks scroll position per-page, resets cleanly on Astro View Transitions via <strong>astro:page-load</strong>, and detects the correct scroll container - <strong>.hologram-interface</strong> on the homepage, <strong>.thinking-scroll</strong> on article and work pages.
           </p>
           <p class="th-body">
-            All HUD widgets use <strong>transition:persist</strong> across Astro's View Transitions — they survive page navigation without remounting, without state bleed from the previous page, and without a single frame of flicker.
+            All HUD widgets use <strong>transition:persist</strong> across Astro's View Transitions - they survive page navigation without remounting, without state bleed from the previous page, and without a single frame of flicker.
           </p>
         </section>
 
         <section class="th-section">
           <h2 class="th-section-title">The Exploration Tracker</h2>
           <p class="th-body">
-            A progress widget embedded in the right HUD that measures how much of the site a visitor has actually read — not binary page visits, but <strong>scroll-depth weighted contribution</strong> per page. Of the 17 distinct content pages tracked, each contributes proportionally based on the maximum scroll depth reached during the visit. Arriving at a page and leaving immediately contributes near zero. Scrolling to the bottom gives full credit for that page's 1/18 share of the total.
+            A progress widget embedded in the right HUD that measures how much of the site a visitor has actually read - not binary page visits, but <strong>scroll-depth weighted contribution</strong> per page. Of the 17 distinct content pages tracked, each contributes proportionally based on the maximum scroll depth reached during the visit. Arriving at a page and leaving immediately contributes near zero. Scrolling to the bottom gives full credit for that page's 1/18 share of the total.
           </p>
           <p class="th-body">
-            The progress arc color-stages smoothly: <strong>red (0–20%)</strong>, yellow (20–60%), blue (60–90%), <strong>green (90–100%)</strong> — via linear RGB interpolation across five stops, no abrupt bracket jumps. The arc fill, stroke, and icon tint all transition together at 0.6s ease. State persists in <strong>localStorage</strong> across sessions.
+            The progress arc color-stages smoothly: <strong>red (0–20%)</strong>, yellow (20–60%), blue (60–90%), <strong>green (90–100%)</strong> - via linear RGB interpolation across five stops, no abrupt bracket jumps. The arc fill, stroke, and icon tint all transition together at 0.6s ease. State persists in <strong>localStorage</strong> across sessions.
           </p>
         </section>
 

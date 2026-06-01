@@ -96,7 +96,7 @@ const AIRPORTS: Airport[] = [
   { code: "CPT", lat: -33.9648, lng: 18.6017, tz: "Africa/Johannesburg" },
   { code: "CMN", lat: 33.3675, lng: -7.5898, tz: "Africa/Casablanca" },
   { code: "ADD", lat: 8.9779, lng: 38.799, tz: "Africa/Addis_Ababa" },
-  // Americas — North
+  // Americas - North
   { code: "JFK", lat: 40.6413, lng: -73.7781, tz: "America/New_York" },
   { code: "LAX", lat: 33.9416, lng: -118.4085, tz: "America/Los_Angeles" },
   { code: "ORD", lat: 41.9742, lng: -87.9073, tz: "America/Chicago" },
@@ -114,10 +114,15 @@ const AIRPORTS: Airport[] = [
   { code: "YVR", lat: 49.1967, lng: -123.1815, tz: "America/Vancouver" },
   { code: "YUL", lat: 45.4706, lng: -73.7408, tz: "America/Toronto" },
   { code: "MEX", lat: 19.4363, lng: -99.0721, tz: "America/Mexico_City" },
-  // Americas — South
+  // Americas - South
   { code: "GRU", lat: -23.4356, lng: -46.4731, tz: "America/Sao_Paulo" },
   { code: "GIG", lat: -22.8099, lng: -43.2506, tz: "America/Sao_Paulo" },
-  { code: "EZE", lat: -34.8222, lng: -58.5358, tz: "America/Argentina/Buenos_Aires" },
+  {
+    code: "EZE",
+    lat: -34.8222,
+    lng: -58.5358,
+    tz: "America/Argentina/Buenos_Aires",
+  },
   { code: "SCL", lat: -33.3928, lng: -70.7856, tz: "America/Santiago" },
   { code: "BOG", lat: 4.7016, lng: -74.1469, tz: "America/Bogota" },
   { code: "LIM", lat: -12.0219, lng: -77.1143, tz: "America/Lima" },
@@ -200,14 +205,24 @@ function ClockRow({ code, tz }: { code: string; tz: string }) {
         lineHeight: 1,
       }}
     >
-      <MapPin size={12} strokeWidth={1.8} style={{ flexShrink: 0, opacity: 0.7 }} />
-      <span style={{ letterSpacing: "0.04em", opacity: 0.75, fontSize: "0.65rem" }}>
+      <MapPin
+        size={12}
+        strokeWidth={1.8}
+        style={{ flexShrink: 0, opacity: 0.7 }}
+      />
+      <span
+        style={{ letterSpacing: "0.04em", opacity: 0.75, fontSize: "0.65rem" }}
+      >
         {code}
       </span>
-      <span style={{ letterSpacing: "0.04em", opacity: 0.45, fontSize: "0.6rem" }}>
+      <span
+        style={{ letterSpacing: "0.04em", opacity: 0.45, fontSize: "0.6rem" }}
+      >
         {offset}
       </span>
-      <span style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}>
+      <span
+        style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}
+      >
         {time}
       </span>
     </div>

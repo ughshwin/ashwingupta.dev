@@ -338,6 +338,43 @@ const canonical = "https://www.ashwingupta.dev/articles/the-space-between-stars"
         </section>
 
         <section class="th-section">
+          <h2 class="th-section-title">The Phone With Nothing to Spare</h2>
+          <p class="th-body">
+            Then someone opened the site on their phone and it didn't scroll.
+          </p>
+          <p class="th-body">
+            Not slowly, not jerkily. It loaded - the first screen sat there, composed and still - and then
+            refused to move. A second phone, the same model, scrolled it perfectly. Same build, same browser, two
+            devices that should have behaved identically. The only difference, it turned out, was that one of
+            them was in Low Power Mode.
+          </p>
+          <p class="th-body">
+            The cause was the cleverness itself. To keep the first paint fast, the homepage deferred its own work:
+            it waited for the browser to report a quiet moment before bringing itself to life, and it loaded most
+            of its sections on demand rather than all at once. On a rested phone that quiet moment arrives
+            instantly and the page fills out before you've finished reading the first line. On a phone in Low
+            Power Mode there is no quiet moment - the browser hoards every spare cycle - so the page stayed a
+            single screen of content with nothing beneath it to scroll to. <em>The whole design quietly assumed a
+            device with energy to spare.</em>
+          </p>
+          <p class="th-body">
+            The fix was humbling in how much it gave back. Instead of asking the browser to assemble the page at
+            runtime, the entire thing is now rendered to plain HTML ahead of time - present, complete, and
+            scrollable before a single line of JavaScript runs. The animation, the intercepted scroll, the
+            constellation: all of it still layers on top, but as enhancement, not as a precondition for the page
+            existing at all. These article pages had always worked exactly this way, quietly, which is precisely
+            why they never had the problem.
+          </p>
+          <p class="th-body">
+            It's the same lesson the rest of this page keeps circling, only pointed back at me. <strong>Smoothness
+            you can't see includes the smoothness of a page that simply works on a tired phone.</strong> The most
+            over-engineered thing on the site was never the comet or the cursor - it was the unspoken assumption
+            that the machine on the other end had anything left to give. The most considered system is the one
+            that asks the least of the person arriving.
+          </p>
+        </section>
+
+        <section class="th-section">
           <h2 class="th-section-title">One Continuous Beam</h2>
           <p class="th-body">
             The last thing I reworked wasn't a component at all. It was the order.

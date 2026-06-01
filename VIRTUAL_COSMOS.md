@@ -1,4 +1,4 @@
-# Virtual Cosmos — Implementation Plan & BRD
+# Virtual Cosmos - Implementation Plan & BRD
 
 > **Status**: Pre-implementation  
 > **Target**: Production-grade global deployment  
@@ -17,7 +17,7 @@
 7. [Security Architecture](#7-security-architecture)
 8. [Backend Schema & Data Model](#8-backend-schema--data-model)
 9. [API Design](#9-api-design)
-10. [VMWR — Virtual Milky Way Registry](#10-vmwr--virtual-milky-way-registry)
+10. [VMWR - Virtual Milky Way Registry](#10-vmwr--virtual-milky-way-registry)
 11. [Postcard Generation](#11-postcard-generation)
 12. [Gift Flow](#12-gift-flow)
 13. [Global Scale & Robustness](#13-global-scale--robustness)
@@ -34,20 +34,20 @@
 
 ### Core Concept
 
-- Galaxy is a permanent fixture of the portfolio homepage — the **Virtual Cosmos** section.
+- Galaxy is a permanent fixture of the portfolio homepage - the **Virtual Cosmos** section.
 - Stars are identified by a 15-digit binary ID (`000000000000000` – `111111111111111`).
-- Star naming is earned, not instant — gating ensures only genuine visitors participate.
+- Star naming is earned, not instant - gating ensures only genuine visitors participate.
 - Named stars expire after 90 days, returning to the pool.
-- Names are globally unique at any point in time — no two active stars can share a name.
+- Names are globally unique at any point in time - no two active stars can share a name.
 - Visitors can name a star for themselves, or gift one to someone else for an occasion.
 - VMWR is a public, always-live registry of all currently active named stars.
 
 ### Why This Exists on a Portfolio
 
 - Proof of technical depth (WebGL, distributed systems, Edge architecture).
-- Creates genuine social memory — visitors remember and share their star.
+- Creates genuine social memory - visitors remember and share their star.
 - Differentiates the portfolio from every other developer portfolio on the internet.
-- Binary star ID is a deliberate CS aesthetic — readable only by those in the know.
+- Binary star ID is a deliberate CS aesthetic - readable only by those in the know.
 
 ---
 
@@ -58,7 +58,7 @@
 - Render 32,768 stars arranged in a Milky Way spiral galaxy structure.
 - Must run at 60fps on modern desktop and mobile hardware.
 - Must not block initial page load or degrade Core Web Vitals.
-- Galaxy section loads lazily — WebGL context initializes only when section enters viewport.
+- Galaxy section loads lazily - WebGL context initializes only when section enters viewport.
 - Star twinkling and slow galaxy rotation are continuous animations, zero CPU cost per frame.
 
 ### BR-02: Eligibility Criteria
@@ -69,7 +69,7 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 | ---------------------- | ------------------------------------------------------------------------------------------------- |
 | Time on site           | ≥ 3 minutes (180,000ms) of active tab time                                                        |
 | Meaningful interaction | ≥ 1 click on a content item: article, project, research entry, featured item                      |
-| Full homepage scroll   | Must scroll through entire homepage (not jump via nav — must physically scroll past all sections) |
+| Full homepage scroll   | Must scroll through entire homepage (not jump via nav - must physically scroll past all sections) |
 
 ### BR-03: Star Naming
 
@@ -95,7 +95,7 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 - Every successful claim generates a downloadable/shareable postcard image.
 - Format: PNG, 1200×630px (Open Graph dimensions).
 - Contains: binary star ID, star name, claim date, expiry date, gift wording if applicable.
-- Generated client-side (Canvas API) — no server-side image generation.
+- Generated client-side (Canvas API) - no server-side image generation.
 - Shareable via Web Share API on mobile; download link on desktop.
 
 ### BR-07: VMWR
@@ -113,14 +113,14 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 - Behavioral bot detection layered with third-party challenge (Turnstile).
 - Rate limiting: 1 star claim per IP per 24 hours.
 - Eligibility tokens are single-use, signed, time-limited.
-- All writes are server-side via Vercel Edge Functions — browser never touches DB directly.
+- All writes are server-side via Vercel Edge Functions - browser never touches DB directly.
 - SQL injection prevented at client (input validation), transport (parameterized queries only), and DB (RLS).
 
 ### BR-09: Global Scale
 
 - Must handle traffic spikes from social sharing (postcard going viral).
-- VMWR read traffic served from cache — DB read load near zero at scale.
-- All claim logic runs at Vercel Edge (global PoP network) — low latency worldwide.
+- VMWR read traffic served from cache - DB read load near zero at scale.
+- All claim logic runs at Vercel Edge (global PoP network) - low latency worldwide.
 - Zero downtime deploys via Vercel.
 
 ---
@@ -137,7 +137,7 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 
 - Galaxy renders within 2s of section entering viewport.
 - Galaxy does not cause layout shift or block scroll.
-- A subtle CTA appears: "Earn your star — explore the portfolio."
+- A subtle CTA appears: "Earn your star - explore the portfolio."
 
 ### US-02: Eligible Visitor Naming a Star
 
@@ -191,7 +191,7 @@ A visitor earns star-naming rights when **all three** conditions are satisfied:
 
 - Star ID stored in localStorage on successful claim.
 - On return visit, "Your star" widget in the galaxy section shows the stored star.
-- If star has expired: "Your star [ID] has expired — scroll through to earn a new one."
+- If star has expired: "Your star [ID] has expired - scroll through to earn a new one."
 
 ---
 
@@ -275,7 +275,7 @@ VMWR Read:
 
 ### Technology Choice
 
-**Three.js `BufferGeometry` + `Points` — single draw call for all 32,768 stars.**
+**Three.js `BufferGeometry` + `Points` - single draw call for all 32,768 stars.**
 
 | Approach         | 32k stars @ 60fps                    | Choice  |
 | ---------------- | ------------------------------------ | ------- |
@@ -291,7 +291,7 @@ three: ^0.170.0
 @types/three: ^0.170.0
 ```
 
-Code-split — loaded only for the Virtual Cosmos section.
+Code-split - loaded only for the Virtual Cosmos section.
 
 ### Galaxy Generation Algorithm
 
@@ -299,7 +299,7 @@ All star positions computed once in a **Web Worker** on first load, stored in `F
 
 ```ts
 // workers/galaxy-gen.worker.ts
-// Runs off main thread — keeps scroll and interaction fully responsive during init
+// Runs off main thread - keeps scroll and interaction fully responsive during init
 
 function generateMilkyWay(count: number): GalaxyBuffers {
   const positions = new Float32Array(count * 3);
@@ -387,13 +387,13 @@ function generateMilkyWay(count: number): GalaxyBuffers {
 ### Vertex Shader (Twinkling + Named Star Glow)
 
 ```glsl
-// All animation GPU-side — zero CPU per frame
+// All animation GPU-side - zero CPU per frame
 uniform float uTime;
 uniform float uPixelRatio;
 
 attribute float seed;
 attribute float size;
-attribute float isNamed;   // 0.0 or 1.0 — set when star names load from API
+attribute float isNamed;   // 0.0 or 1.0 - set when star names load from API
 
 void main() {
   vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
@@ -449,7 +449,7 @@ export function VirtualCosmos() {
       async ([entry]) => {
         if (!entry.isIntersecting || rendererRef.current) return;
 
-        // Dynamic import — Three.js only loads when section is visible
+        // Dynamic import - Three.js only loads when section is visible
         const { GalaxyRenderer } = await import("../lib/galaxy/GalaxyRenderer");
         rendererRef.current = new GalaxyRenderer(containerRef.current!);
         observer.disconnect();
@@ -468,7 +468,7 @@ export function VirtualCosmos() {
 ### Star Picking (Hover/Click on 32k Points)
 
 ```ts
-// Throttled raycasting — runs at most once per animation frame
+// Throttled raycasting - runs at most once per animation frame
 class StarPicker {
   private raycaster = new THREE.Raycaster();
   private mouse = new THREE.Vector2();
@@ -500,7 +500,7 @@ class StarPicker {
 }
 ```
 
-For truly massive interaction load, fall back to a spatial hash grid (divide galaxy space into cells, check only neighboring cells on raycast — O(1) average).
+For truly massive interaction load, fall back to a spatial hash grid (divide galaxy space into cells, check only neighboring cells on raycast - O(1) average).
 
 ---
 
@@ -542,7 +542,7 @@ export class EligibilityTracker {
   }
 
   private trackTime() {
-    // Use Page Visibility API — pause timer when tab is hidden
+    // Use Page Visibility API - pause timer when tab is hidden
     let accumulatedTime = 0;
     let lastVisible = performance.now();
 
@@ -570,7 +570,7 @@ export class EligibilityTracker {
   }
 
   private trackInteractions() {
-    // Content selectors — expand as sections are added
+    // Content selectors - expand as sections are added
     const CONTENT_SELECTORS = [
       '[data-track="project"]',
       '[data-track="research"]',
@@ -602,7 +602,7 @@ export class EligibilityTracker {
   }
 
   private trackScroll() {
-    // Use IntersectionObserver on the footer — harder to fake than scrollY check
+    // Use IntersectionObserver on the footer - harder to fake than scrollY check
     const footer = document.querySelector("footer");
     if (!footer) return;
 
@@ -744,10 +744,10 @@ Every clickable content item in the portfolio must carry a `data-track` attribut
 
 | Component                                      | Attribute                 |
 | ---------------------------------------------- | ------------------------- |
-| `Projects.tsx` — project cards                 | `data-track="project"`    |
-| `Research.tsx` — research entries              | `data-track="research"`   |
-| `Featured.tsx` — featured items                | `data-track="featured"`   |
-| `ExperienceTimeline.tsx` — company/role expand | `data-track="experience"` |
+| `Projects.tsx` - project cards                 | `data-track="project"`    |
+| `Research.tsx` - research entries              | `data-track="research"`   |
+| `Featured.tsx` - featured items                | `data-track="featured"`   |
+| `ExperienceTimeline.tsx` - company/role expand | `data-track="experience"` |
 
 ---
 
@@ -799,7 +799,7 @@ The `SUPABASE_SERVICE_ROLE_KEY` is **only** used in Vercel Edge Functions (serve
 ### 7.3 Eligibility JWT
 
 ```ts
-// lib/jwt.ts — runs in Vercel Edge Function
+// lib/jwt.ts - runs in Vercel Edge Function
 import { SignJWT, jwtVerify } from "jose";
 
 const SECRET = new TextEncoder().encode(process.env.CLAIM_JWT_SECRET);
@@ -974,7 +974,7 @@ CREATE UNIQUE INDEX stars_active_name_lower_idx
 CREATE INDEX stars_expires_at_idx ON stars (expires_at);
 CREATE INDEX stars_star_id_idx    ON stars (star_id);
 
--- Historical log (soft archive — never deleted, for "hall of fame" feature)
+-- Historical log (soft archive - never deleted, for "hall of fame" feature)
 CREATE TABLE star_history (
   id          BIGSERIAL       PRIMARY KEY,
   star_id     SMALLINT        REFERENCES stars(star_id),
@@ -1007,7 +1007,7 @@ CREATE TRIGGER star_archive_trigger
 ### 8.2 Seed Script
 
 ```ts
-// scripts/seed-stars.ts — run once at project setup
+// scripts/seed-stars.ts - run once at project setup
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -1100,10 +1100,10 @@ $$;
 Always connect to Supabase via the **PgBouncer pooler URL** (not direct connection):
 
 ```
-# Direct (DO NOT USE for edge functions — exhausts connections)
+# Direct (DO NOT USE for edge functions - exhausts connections)
 SUPABASE_URL=postgresql://...@db.xxx.supabase.co:5432/postgres
 
-# Pooler (USE THIS — transaction mode, scales to thousands of concurrent requests)
+# Pooler (USE THIS - transaction mode, scales to thousands of concurrent requests)
 SUPABASE_URL=postgresql://...@xxx.pooler.supabase.com:6543/postgres?pgbouncer=true
 ```
 
@@ -1111,7 +1111,7 @@ SUPABASE_URL=postgresql://...@xxx.pooler.supabase.com:6543/postgres?pgbouncer=tr
 
 ## 9. API Design
 
-All endpoints are **Vercel Edge Functions** (not Node.js serverless — Edge runs globally at PoP nearest user).
+All endpoints are **Vercel Edge Functions** (not Node.js serverless - Edge runs globally at PoP nearest user).
 
 ### POST `/api/request-eligibility-token`
 
@@ -1246,11 +1246,11 @@ Single star detail (for VMWR detail view / postcard share URL).
 
 ---
 
-## 10. VMWR — Virtual Milky Way Registry
+## 10. VMWR - Virtual Milky Way Registry
 
 ### Route
 
-`/cosmos` — new top-level page (added to Astro routes + vercel.json rewrites).
+`/cosmos` - new top-level page (added to Astro routes + vercel.json rewrites).
 
 ### Layout
 
@@ -1264,7 +1264,7 @@ Single star detail (for VMWR detail view / postcard share URL).
 │  ┌─────────┬──────────────┬────────┬──────────┐ │
 │  │ Star ID │ Name         │Occasion│ Expires  │ │
 │  ├─────────┼──────────────┼────────┼──────────┤ │
-│  │ 011101… │ Nova         │   —    │ 89 days  │ │
+│  │ 011101… │ Nova         │   -    │ 89 days  │ │
 │  │ 000010… │ Andromeda    │ Wedding│ 42 days  │ │
 │  └─────────┴──────────────┴────────┴──────────┘ │
 │                                                 │
@@ -1501,7 +1501,7 @@ Assume a viral postcard sharing event drives 50,000 unique visitors in 24 hours.
 | `/api/request-eligibility-token` | 5k req/24h   | KV rate limit (1/IP/24h)                               |
 | `/api/claim-star`                | 1k req/24h   | Fully validated, atomic DB write                       |
 
-**Supabase hit rate at peak: ~3,000 queries/24h** — trivial even on free tier.
+**Supabase hit rate at peak: ~3,000 queries/24h** - trivial even on free tier.
 
 ### VMWR Cache Strategy
 
@@ -1555,7 +1555,7 @@ export async function invalidateVMWRCache() {
 If all 32,768 stars are simultaneously active (extremely unlikely but theoretically possible):
 
 ```ts
-// api/claim-star.ts — after 'pool_exhausted' error from DB
+// api/claim-star.ts - after 'pool_exhausted' error from DB
 const { data: nextExpiry } = await supabase
   .from("stars")
   .select("expires_at")
@@ -1574,14 +1574,14 @@ return Response.json(
 );
 ```
 
-UI shows: "All 32,768 stars are named — a star becomes available on [date]."
+UI shows: "All 32,768 stars are named - a star becomes available on [date]."
 
 ### Graceful Degradation
 
 If Supabase is unavailable:
 
 - VMWR shows last cached version from Vercel KV.
-- Claim flow shows: "Star naming is temporarily unavailable. Your eligibility is saved — try again shortly."
+- Claim flow shows: "Star naming is temporarily unavailable. Your eligibility is saved - try again shortly."
 - Galaxy renderer continues to function (pure client-side).
 
 ### Vercel Configuration
@@ -1682,10 +1682,10 @@ Steps:
 
 1. `pnpm add three @types/three`
 2. Create `src/lib/galaxy/` directory.
-3. Implement `galaxy-gen.worker.ts` — star position generation.
-4. Implement `GalaxyRenderer.ts` — Three.js setup, vertex/fragment shaders, animation loop.
-5. Implement `StarPicker.ts` — raycaster with RAF throttle.
-6. Create `VirtualCosmos.tsx` section component — lazy init via IntersectionObserver.
+3. Implement `galaxy-gen.worker.ts` - star position generation.
+4. Implement `GalaxyRenderer.ts` - Three.js setup, vertex/fragment shaders, animation loop.
+5. Implement `StarPicker.ts` - raycaster with RAF throttle.
+6. Create `VirtualCosmos.tsx` section component - lazy init via IntersectionObserver.
 7. Add `VirtualCosmos` to `App.tsx` between appropriate sections.
 8. **Verify**: 60fps on desktop Chrome + mobile Safari. No LCP regression. No layout shift.
 
@@ -1699,8 +1699,8 @@ Steps:
 
 1. Implement `src/lib/eligibility/tracker.ts` (full code above).
 2. Add `data-track` attributes to `Projects.tsx`, `Research.tsx`, `Featured.tsx`, `ExperienceTimeline.tsx`.
-3. Wire `EligibilityTracker` into `App.tsx` — start on mount.
-4. Add "Earn your star" CTA to galaxy section — visible before eligible, "You've earned a star" badge after.
+3. Wire `EligibilityTracker` into `App.tsx` - start on mount.
+4. Add "Earn your star" CTA to galaxy section - visible before eligible, "You've earned a star" badge after.
 5. **Verify**: Manually trigger all three conditions in order. Badge appears. DevTools: check all three flags flip correctly. Verify tab-hidden time does not count.
 
 ---
@@ -1713,7 +1713,7 @@ Steps:
 
 1. Create Supabase project (see [Section 16](#16-required-credentials--integrations)).
 2. Run schema SQL (Section 8.1).
-3. Run seed script (Section 8.2) — creates all 32,768 rows.
+3. Run seed script (Section 8.2) - creates all 32,768 rows.
 4. Enable RLS, apply policies (Section 7.2).
 5. Create `claim_star` Postgres function (Section 8.3).
 6. Configure pg_cron daily job.
@@ -1731,10 +1731,10 @@ Steps:
 1. Enable Vercel KV in project (see Section 16).
 2. Install deps: `pnpm add jose @arcjet/next @vercel/kv`.
 3. Create `src/api/` directory.
-4. Implement `request-eligibility-token.ts` — behavioral scoring, KV rate limit, JWT sign.
-5. Implement `claim-star.ts` — Arcjet + Turnstile + JWT verify + nonce consume + DB call.
-6. Implement `vmwr.ts` — KV cache + paginated Supabase query.
-7. Implement `check-name.ts` — KV rate limit + DB uniqueness check.
+4. Implement `request-eligibility-token.ts` - behavioral scoring, KV rate limit, JWT sign.
+5. Implement `claim-star.ts` - Arcjet + Turnstile + JWT verify + nonce consume + DB call.
+6. Implement `vmwr.ts` - KV cache + paginated Supabase query.
+7. Implement `check-name.ts` - KV rate limit + DB uniqueness check.
 8. Update `vercel.json` with edge runtime declarations.
 9. **Verify**: Hit each endpoint with curl. Check rate limits fire correctly. Check bot-risk scoring with fake payload values. Verify nonce cannot be reused.
 
@@ -1746,9 +1746,9 @@ Steps:
 
 Steps:
 
-1. Implement `ClaimModal.tsx` — name input, live uniqueness check (debounced 500ms), self/gift toggle, gift fields.
+1. Implement `ClaimModal.tsx` - name input, live uniqueness check (debounced 500ms), self/gift toggle, gift fields.
 2. Implement Turnstile widget integration (client-side JS snippet + server validation).
-3. Implement `useClaim` hook — orchestrates: get eligibility token → show Turnstile → submit claim → store in localStorage.
+3. Implement `useClaim` hook - orchestrates: get eligibility token → show Turnstile → submit claim → store in localStorage.
 4. On success: show star ID (binary), name, expiry, postcard button.
 5. Named star immediately glows gold in galaxy view.
 6. "Your Star" widget: on revisit, reads localStorage, shows stored star, warns if expired.
@@ -1763,8 +1763,8 @@ Steps:
 Steps:
 
 1. Create Astro page `src/pages/cosmos.astro`.
-2. Create `VMWR.tsx` React component — table + search + sort + pagination.
-3. Integrate galaxy view on VMWR page — same `GalaxyRenderer`, load named star IDs from VMWR API, update `isNamed` buffer attribute.
+2. Create `VMWR.tsx` React component - table + search + sort + pagination.
+3. Integrate galaxy view on VMWR page - same `GalaxyRenderer`, load named star IDs from VMWR API, update `isNamed` buffer attribute.
 4. Add `/cosmos` to `vercel.json` rewrites.
 5. Add nav link to cosmos page.
 6. Implement Hall of Fame tab (query `star_history`).
@@ -1780,7 +1780,7 @@ Steps:
 
 1. Implement `src/lib/postcard/generate.ts` (full code in Section 11).
 2. Load portfolio fonts (DM Mono, DM Sans) into Canvas using `FontFace` API.
-3. Implement gift mode in `ClaimModal.tsx` — toggle and additional fields.
+3. Implement gift mode in `ClaimModal.tsx` - toggle and additional fields.
 4. Test postcard on both desktop (download) and mobile (Web Share API).
 5. Verify gift postcard wording is correct.
 6. Verify `gift_from` never appears in VMWR API response.
@@ -1795,7 +1795,7 @@ Steps:
 Steps:
 
 1. Enable Vercel Pro (or ensure project is on correct plan for Edge Functions).
-2. Upgrade Supabase to Pro — enable read replica.
+2. Upgrade Supabase to Pro - enable read replica.
 3. Configure Arcjet production key.
 4. Configure Cloudflare Turnstile production keys.
 5. Load test `/api/vmwr` with k6 or Artillery: 1000 req/sec for 60 seconds. Verify KV cache absorbs load.
@@ -1809,7 +1809,7 @@ Steps:
 
 ## 16. Required Credentials & Integrations
 
-> **ACTION REQUIRED** — The following accounts, keys, and configurations must be set up before Phase 3 onwards can be implemented. Each item specifies exactly what is needed.
+> **ACTION REQUIRED** - The following accounts, keys, and configurations must be set up before Phase 3 onwards can be implemented. Each item specifies exactly what is needed.
 
 ---
 
@@ -1852,7 +1852,7 @@ Steps:
 | `KV_REST_API_TOKEN`           | Yes                     | Used by `@vercel/kv` client  |
 | `KV_REST_API_READ_ONLY_TOKEN` | Yes                     | Not needed for this use case |
 
-**Plan**: Free tier (30k commands/day) sufficient for development. Monitor in production — upgrade to Pro KV ($20/mo) if command count exceeds limit during traffic spikes.
+**Plan**: Free tier (30k commands/day) sufficient for development. Monitor in production - upgrade to Pro KV ($20/mo) if command count exceeds limit during traffic spikes.
 
 ---
 
@@ -1943,7 +1943,7 @@ If using a custom subdomain for the VMWR (`cosmos.ashwingupta.dev`):
 1. Add CNAME in DNS provider → `cname.vercel-dns.com`.
 2. Add domain alias in Vercel project settings.
 
-Alternatively, VMWR lives at `ashwingupta.dev/cosmos` (simpler, no DNS change needed — just add to vercel.json rewrites).
+Alternatively, VMWR lives at `ashwingupta.dev/cosmos` (simpler, no DNS change needed - just add to vercel.json rewrites).
 
 ---
 
@@ -1978,20 +1978,20 @@ These require your input before implementation or have non-obvious tradeoffs:
 
 - **Option A**: 0–32767 (15-bit binary: `000000000000000` – `111111111111111`). Clean.
 - **Option B**: 1–32768 (1 to 2^15 as stated). Last ID = `1000000000000000` (16 digits). Breaks the "15-char postcard" aesthetic.
-- **Recommendation**: Option A. The binary ID is a visual motif — 15 consistent digits looks better on the postcard. Mention "0-indexed from the galactic origin" in copy if asked.
+- **Recommendation**: Option A. The binary ID is a visual motif - 15 consistent digits looks better on the postcard. Mention "0-indexed from the galactic origin" in copy if asked.
   ANS: Recommendation accepted, proceed.
 
 ### OD-02: Name Expiry + Reuse
 
 - When "Nova" expires after 90 days, can a new visitor claim "Nova"?
-- **Recommendation**: Yes — names return to pool. This is stated in the spec and makes the registry feel alive. The partial index handles this correctly.
+- **Recommendation**: Yes - names return to pool. This is stated in the spec and makes the registry feel alive. The partial index handles this correctly.
   ANS: Recommendation accepted, proceed.
 
 ### OD-03: Email Collection (Optional)
 
 - Currently: no email collected. No expiry notification possible.
 - **Option**: Add optional email field at claim time. Send expiry reminder at day 80.
-- Requires: email service (Resend.com — free 3k emails/month), email column in stars table, edge function for scheduled send.
+- Requires: email service (Resend.com - free 3k emails/month), email column in stars table, edge function for scheduled send.
 - **Recommendation**: Add in Phase 9 post-launch if demand exists. Don't build now.
   ANS: Recommendation accepted, proceed.
 
@@ -2016,7 +2016,7 @@ These require your input before implementation or have non-obvious tradeoffs:
   OR
 * Display the criteria failed and ask if user wants to revisit and complete criteria or end his session and close website. Redirect as per user input
 
-### OD-06: Star Selection — Random vs. User-Chosen
+### OD-06: Star Selection - Random vs. User-Chosen
 
 - Currently: random assignment from available pool.
 - Alternative: show visitor a small preview of 5 random available stars in the galaxy, let them pick one.

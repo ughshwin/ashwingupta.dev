@@ -23,11 +23,11 @@ const SITE_PAGES = [
 ];
 
 const EXPLORED_COLOR_STOPS = [
-  { at: 0,   r: 239, g: 68,  b: 68  },
-  { at: 20,  r: 234, g: 179, b: 8   },
-  { at: 60,  r: 59,  g: 130, b: 246 },
-  { at: 90,  r: 74,  g: 222, b: 128 },
-  { at: 100, r: 74,  g: 222, b: 128 },
+  { at: 0, r: 239, g: 68, b: 68 },
+  { at: 20, r: 234, g: 179, b: 8 },
+  { at: 60, r: 59, g: 130, b: 246 },
+  { at: 90, r: 74, g: 222, b: 128 },
+  { at: 100, r: 74, g: 222, b: 128 },
 ];
 
 function exploredColor(pct: number): { r: number; g: number; b: number } {
@@ -53,10 +53,17 @@ function useExplored() {
   useEffect(() => {
     const KEY = "__portfolio_explored_v2";
     let depths: Record<string, number> = {};
-    try { depths = JSON.parse(localStorage.getItem(KEY) ?? "{}"); } catch {}
+    try {
+      depths = JSON.parse(localStorage.getItem(KEY) ?? "{}");
+    } catch {}
 
     const computePct = () =>
-      Math.min(100, (Object.values(depths).reduce((s, v) => s + Math.min(v, 1), 0) / SITE_PAGES.length) * 100);
+      Math.min(
+        100,
+        (Object.values(depths).reduce((s, v) => s + Math.min(v, 1), 0) /
+          SITE_PAGES.length) *
+          100,
+      );
 
     const getScrollEl = () =>
       (document.querySelector(".hologram-interface") as HTMLElement | null) ??
@@ -71,7 +78,10 @@ function useExplored() {
       if (!SITE_PAGES.includes(currentPath)) return;
       const scrollEl = getScrollEl();
       const getTop = () => (scrollEl ? scrollEl.scrollTop : window.scrollY);
-      const getMax = () => scrollEl ? scrollEl.scrollHeight - scrollEl.clientHeight : document.body.scrollHeight - window.innerHeight;
+      const getMax = () =>
+        scrollEl
+          ? scrollEl.scrollHeight - scrollEl.clientHeight
+          : document.body.scrollHeight - window.innerHeight;
       if (getMax() <= 0) {
         depths = { ...depths, [currentPath]: 1 };
         localStorage.setItem(KEY, JSON.stringify(depths));
@@ -97,7 +107,10 @@ function useExplored() {
     setPct(computePct());
     init();
     document.addEventListener("astro:page-load", init);
-    return () => { cleanupScroll?.(); document.removeEventListener("astro:page-load", init); };
+    return () => {
+      cleanupScroll?.();
+      document.removeEventListener("astro:page-load", init);
+    };
   }, []);
   return pct;
 }
@@ -158,8 +171,12 @@ function useScrollState(
         progressCircleRef.current.style.strokeDashoffset = String(btnCirc);
       }
 
-      const holoEl = document.querySelector(".hologram-interface") as HTMLElement | null;
-      const thinkingEl = document.querySelector(".thinking-scroll") as HTMLElement | null;
+      const holoEl = document.querySelector(
+        ".hologram-interface",
+      ) as HTMLElement | null;
+      const thinkingEl = document.querySelector(
+        ".thinking-scroll",
+      ) as HTMLElement | null;
       const scrollEl = holoEl ?? thinkingEl ?? null;
 
       const getTop = () => (scrollEl ? scrollEl.scrollTop : window.scrollY);
@@ -167,7 +184,8 @@ function useScrollState(
         scrollEl
           ? scrollEl.scrollHeight - scrollEl.clientHeight
           : document.body.scrollHeight - window.innerHeight;
-      const getVH = () => (scrollEl ? scrollEl.clientHeight : window.innerHeight);
+      const getVH = () =>
+        scrollEl ? scrollEl.clientHeight : window.innerHeight;
 
       const onScroll = () => {
         const top = getTop();
@@ -218,7 +236,9 @@ function scrollToTop() {
     fn(0);
     return;
   }
-  const thinkingEl = document.querySelector(".thinking-scroll") as HTMLElement | null;
+  const thinkingEl = document.querySelector(
+    ".thinking-scroll",
+  ) as HTMLElement | null;
   if (thinkingEl) {
     thinkingEl.scrollTo({ top: 0, behavior: "smooth" });
     return;
@@ -350,8 +370,17 @@ export function BottomRightHUD() {
       >
         {/* Session timer */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <Timer size={isMobile ? 10 : 12} strokeWidth={1.8} style={{ opacity: 0.7, flexShrink: 0 }} />
-          <span style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}>
+          <Timer
+            size={isMobile ? 10 : 12}
+            strokeWidth={1.8}
+            style={{ opacity: 0.7, flexShrink: 0 }}
+          />
+          <span
+            style={{
+              fontVariantNumeric: "tabular-nums",
+              letterSpacing: "0.03em",
+            }}
+          >
             {fmtElapsed(elapsed)}
           </span>
         </div>
@@ -366,33 +395,114 @@ export function BottomRightHUD() {
           const circ = 2 * Math.PI * rad;
           const offset = circ * (1 - explored / 100);
           return (
-            <div style={{ width: sz, height: sz, position: "relative", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <svg width={sz} height={sz} style={{ position: "absolute", inset: 0, transform: "rotate(-90deg)" }}>
-                <circle cx={sz / 2} cy={sz / 2} r={rad - 0.75} fill={fillColor} stroke="none" style={{ transition: "fill 0.6s ease" }} />
-                <circle cx={sz / 2} cy={sz / 2} r={rad} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" />
-                <circle cx={sz / 2} cy={sz / 2} r={rad} fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={offset} style={{ transition: "stroke 0.6s ease, stroke-dashoffset 0.4s ease" }} />
+            <div
+              style={{
+                width: sz,
+                height: sz,
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <svg
+                width={sz}
+                height={sz}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  transform: "rotate(-90deg)",
+                }}
+              >
+                <circle
+                  cx={sz / 2}
+                  cy={sz / 2}
+                  r={rad - 0.75}
+                  fill={fillColor}
+                  stroke="none"
+                  style={{ transition: "fill 0.6s ease" }}
+                />
+                <circle
+                  cx={sz / 2}
+                  cy={sz / 2}
+                  r={rad}
+                  fill="none"
+                  stroke="rgba(255,255,255,0.08)"
+                  strokeWidth="1.5"
+                />
+                <circle
+                  cx={sz / 2}
+                  cy={sz / 2}
+                  r={rad}
+                  fill="none"
+                  stroke={strokeColor}
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeDasharray={circ}
+                  strokeDashoffset={offset}
+                  style={{
+                    transition: "stroke 0.6s ease, stroke-dashoffset 0.4s ease",
+                  }}
+                />
               </svg>
-              <Compass size={isMobile ? 11 : 13} strokeWidth={1.5} style={{ position: "relative", color: strokeColor, transition: "color 0.6s ease" }} />
+              <Compass
+                size={isMobile ? 11 : 13}
+                strokeWidth={1.5}
+                style={{
+                  position: "relative",
+                  color: strokeColor,
+                  transition: "color 0.6s ease",
+                }}
+              />
             </div>
           );
         })()}
 
-        {/* Mouse XY — desktop only */}
+        {/* Mouse XY - desktop only */}
         {!isMobile && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
-              <span style={{ opacity: 0.75, fontSize: "0.65rem", letterSpacing: "0.04em" }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}
+          >
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}
+            >
+              <span
+                style={{
+                  opacity: 0.75,
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.04em",
+                }}
+              >
                 X
               </span>
-              <span style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}>
+              <span
+                style={{
+                  fontVariantNumeric: "tabular-nums",
+                  letterSpacing: "0.03em",
+                }}
+              >
                 {fmtCoord(x)}
               </span>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
-              <span style={{ opacity: 0.75, fontSize: "0.65rem", letterSpacing: "0.04em" }}>
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}
+            >
+              <span
+                style={{
+                  opacity: 0.75,
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.04em",
+                }}
+              >
                 Y
               </span>
-              <span style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}>
+              <span
+                style={{
+                  fontVariantNumeric: "tabular-nums",
+                  letterSpacing: "0.03em",
+                }}
+              >
                 {fmtCoord(y)}
               </span>
             </div>

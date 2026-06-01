@@ -1,14 +1,29 @@
 import { useEffect } from "react";
 
-const SECTION_IDS = ["hero", "about", "impact", "stack", "experience", "recommendations", "featured", "projects", "contact"];
+const SECTION_IDS = [
+  "hero",
+  "about",
+  "impact",
+  "stack",
+  "experience",
+  "recommendations",
+  "featured",
+  "projects",
+  "contact",
+];
 
 function getSectionFromPath(path: string): string {
   const section = path.replace(/^\//, "");
   return SECTION_IDS.includes(section) ? section : "";
 }
 
-export function scrollToSection(id: string, behavior: ScrollBehavior = "smooth") {
-  const container = document.querySelector(".hologram-interface") as HTMLElement | null;
+export function scrollToSection(
+  id: string,
+  behavior: ScrollBehavior = "smooth",
+) {
+  const container = document.querySelector(
+    ".hologram-interface",
+  ) as HTMLElement | null;
   if (!container) return;
   const target = document.getElementById(id);
   if (!target) return;
@@ -21,8 +36,10 @@ export function scrollToSection(id: string, behavior: ScrollBehavior = "smooth")
     container.getBoundingClientRect().top +
     paddingTop;
   // Route smooth scrolls through the custom RAF scroller so its internal
-  // `target` variable stays in sync — prevents snap-back on first wheel event.
-  const portfolioScroll = (window as any).__portfolioScrollTop as ((top: number) => void) | undefined;
+  // `target` variable stays in sync - prevents snap-back on first wheel event.
+  const portfolioScroll = (window as any).__portfolioScrollTop as
+    | ((top: number) => void)
+    | undefined;
   if (behavior === "smooth" && portfolioScroll) {
     portfolioScroll(offset);
   } else {
@@ -32,13 +49,16 @@ export function scrollToSection(id: string, behavior: ScrollBehavior = "smooth")
 
 export function useHashScroll() {
   useEffect(() => {
-    const container = document.querySelector(".hologram-interface") as HTMLElement | null;
+    const container = document.querySelector(
+      ".hologram-interface",
+    ) as HTMLElement | null;
     if (!container) return;
 
     // On mount: read pathname (e.g. /about) with hash fallback
     const pathSection = getSectionFromPath(window.location.pathname);
     const hashSection = window.location.hash.slice(1);
-    const initial = pathSection || (SECTION_IDS.includes(hashSection) ? hashSection : "");
+    const initial =
+      pathSection || (SECTION_IDS.includes(hashSection) ? hashSection : "");
 
     if (initial && initial !== "hero") {
       let attempts = 0;

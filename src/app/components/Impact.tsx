@@ -18,12 +18,19 @@ const VBW = 1300;
 const VBH = 640;
 const CX = VBW / 2;
 const CY = VBH / 2;
-const RX = 460; // ellipse radii — wide + short so vertices keep outward room
+const RX = 460; // ellipse radii - wide + short so vertices keep outward room
 const RY = 210;
 const PAD = 22; // keep stars off the stage edges
 const CLEAR = 92; // keep inward stars off the centre readout
 
-type Node = { im: Impact; color: string; x: number; y: number; fx: number; fy: number };
+type Node = {
+  im: Impact;
+  color: string;
+  x: number;
+  y: number;
+  fx: number;
+  fy: number;
+};
 type Edge = { x1: number; y1: number; x2: number; y2: number };
 type Anchor = { x: number; y: number; color: string };
 type Label = { label: string; color: string; x: number; y: number };
@@ -48,7 +55,10 @@ function maxR(x: number, y: number, ang: number) {
 // Distinct radii across [lo,hi], evenly spread + light jitter (varied trail lengths).
 function evenR(count: number, lo: number, hi: number, rand: () => number) {
   const step = (hi - lo) / (count - 1 || 1);
-  return Array.from({ length: count }, (_, k) => lo + step * k + (rand() - 0.5) * step * 0.45);
+  return Array.from(
+    { length: count },
+    (_, k) => lo + step * k + (rand() - 0.5) * step * 0.45,
+  );
 }
 
 const slot = (j: number, count: number, base: number, arc: number) =>
@@ -126,7 +136,7 @@ function buildLayout(groups: { cat: Impact["category"]; items: Impact[] }[]) {
       desired *= 1 + (Math.random() - 0.5) * 0.4; // ±20%
       const dx = Math.cos(ang);
       const dy = Math.sin(ang);
-      // length cap #1: stay inside this vertex's Voronoi cell — i.e. never get
+      // length cap #1: stay inside this vertex's Voronoi cell - i.e. never get
       // closer to another vertex than to our own. This is the boundary that
       // stops a star from trespassing into a neighbouring category's region.
       let vor = Infinity;
@@ -151,8 +161,12 @@ function buildLayout(groups: { cat: Impact["category"]; items: Impact[] }[]) {
 
     const pIn = goldenPerm(inner.length);
     const pOut = goldenPerm(outer.length);
-    inner.forEach((im, j) => place(im, slot(j, inner.length, v.inA, arcIn), rIn[pIn[j]]));
-    outer.forEach((im, j) => place(im, slot(j, outer.length, v.a, arcOut), rOut[pOut[j]]));
+    inner.forEach((im, j) =>
+      place(im, slot(j, inner.length, v.inA, arcIn), rIn[pIn[j]]),
+    );
+    outer.forEach((im, j) =>
+      place(im, slot(j, outer.length, v.a, arcOut), rOut[pOut[j]]),
+    );
 
     anchors.push({ x: v.x, y: v.y, color });
 
@@ -193,11 +207,13 @@ function ConstellationStar({
         ? {
             href: im.href,
             target: im.href!.startsWith("http") ? "_blank" : undefined,
-            rel: im.href!.startsWith("http") ? "noopener noreferrer" : undefined,
+            rel: im.href!.startsWith("http")
+              ? "noopener noreferrer"
+              : undefined,
           }
         : {})}
       className="impact-star"
-      aria-label={`${im.value} — ${im.label} (${im.item})`}
+      aria-label={`${im.value} - ${im.label} (${im.item})`}
       onMouseEnter={() => onActive(im)}
       onMouseLeave={() => onActive(null)}
       onFocus={() => onActive(im)}
@@ -364,7 +380,9 @@ export function Impact() {
         <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 4rem" }}>
           {isMobile ? (
             // ── Accessible grouped tiles (mobile / fallback) ──
-            <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
+            >
               {grouped.map(({ cat, items }) => {
                 const { label, color } = CATEGORY_META[cat];
                 return (
@@ -423,6 +441,7 @@ export function Impact() {
                                 whiteSpace: "nowrap",
                                 flexShrink: 0,
                                 minWidth: "84px",
+                                textAlign: "center",
                               }}
                             >
                               {im.value}
@@ -471,7 +490,13 @@ export function Impact() {
               <svg
                 viewBox={`0 0 ${VBW} ${VBH}`}
                 preserveAspectRatio="none"
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: "100%",
+                  height: "100%",
+                  pointerEvents: "none",
+                }}
                 aria-hidden="true"
               >
                 {layout.edges.map((e, i) => (
@@ -623,7 +648,7 @@ export function Impact() {
                         >
                           {ITEM_META[active.item].client}
                         </span>
-                        {"  —  "}
+                        {"  -  "}
                         {ITEM_META[active.item].context}
                       </div>
                     )}
@@ -639,7 +664,7 @@ export function Impact() {
                       lineHeight: 1.6,
                     }}
                   >
-                    Hover a point — every number is delivered, not projected.
+                    Hover a point - every number is delivered, not projected.
                   </span>
                 )}
               </div>
