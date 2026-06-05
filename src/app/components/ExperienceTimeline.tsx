@@ -181,6 +181,7 @@ const ENTRIES: Entry[] = [
       "Compute: $118K→$8K/month (~$1.3M/yr) • Azure infra intelligence • Amex GBT RAG",
       "Best Team Award - HSBC Account",
       "Pat on Back - Think Customer • individual delivery innovation & excellence",
+      "Keep It Up Award • ownership of professional growth & skill visibility",
       "Java Spring AI trainer • 130+ participants • 81% voted-preferred • NPS +50",
     ],
   },

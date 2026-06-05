@@ -61,6 +61,12 @@ const highlights: { title: string; sub: string; icon: string; time: string }[] =
     time: "Dec 2024",
   },
   {
+    title: "Keep It Up Award",
+    sub: "Ownership of Professional Growth & Skill Visibility • Coforge",
+    icon: coforgeLogoUrl,
+    time: "Jun 2026",
+  },
+  {
     title: "Java Spring AI Trainer",
     sub: "130+ Participants • 81% voted preferred trainer • NPS +50",
     icon: SPRING_ICON,
