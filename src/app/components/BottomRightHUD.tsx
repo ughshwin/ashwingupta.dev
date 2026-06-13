@@ -252,7 +252,7 @@ export function BottomRightHUD() {
   const explored = useExplored();
   const { x, y } = useMouseCoords();
 
-  const btnSize = isMobile ? 42 : 52;
+  const btnSize = isMobile ? 34 : 46;
   const btnR = btnSize / 2 - 2;
   const btnCirc = 2 * Math.PI * btnR;
 
@@ -263,7 +263,7 @@ export function BottomRightHUD() {
     <div
       style={{
         position: "fixed",
-        bottom: "1.25rem",
+        bottom: "calc(1.25rem + env(safe-area-inset-bottom, 0px))",
         right: "2rem",
         zIndex: 100,
         display: "flex",
@@ -279,6 +279,7 @@ export function BottomRightHUD() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          alignSelf: "flex-end",
         }}
       >
         <AnimatePresence>
@@ -294,14 +295,12 @@ export function BottomRightHUD() {
                 height: `${btnSize}px`,
                 borderRadius: "50%",
                 border: "none",
-                background: "rgba(10,10,10,0.6)",
+                background: "rgba(10,10,10,0.8)",
                 color: "rgba(255,255,255,0.55)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 cursor: isMobile ? "pointer" : "none",
-                backdropFilter: "blur(8px)",
-                WebkitBackdropFilter: "blur(8px)",
                 transition: "color 0.2s",
                 padding: 0,
                 position: "relative",
@@ -329,7 +328,7 @@ export function BottomRightHUD() {
                   cy={btnSize / 2}
                   r={btnR}
                   fill="none"
-                  stroke="rgba(255,255,255,0.08)"
+                  stroke="rgba(255,255,255,0.16)"
                   strokeWidth="1.5"
                 />
                 <circle
@@ -346,7 +345,7 @@ export function BottomRightHUD() {
                 />
               </svg>
               <ChevronUp
-                size={isMobile ? 16 : 19}
+                size={isMobile ? 13 : 15}
                 strokeWidth={1.5}
                 style={{ position: "relative" }}
               />

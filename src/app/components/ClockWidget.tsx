@@ -148,24 +148,6 @@ function nearestAirport(lat: number, lng: number): Airport {
   );
 }
 
-function getGMTOffset(tz: string): string {
-  const parts = new Intl.DateTimeFormat("en", {
-    timeZone: tz,
-    timeZoneName: "shortOffset",
-  }).formatToParts(new Date());
-  return parts.find((p) => p.type === "timeZoneName")?.value ?? "GMT";
-}
-
-function useGMTOffset(tz: string) {
-  const [offset, setOffset] = useState(() => getGMTOffset(tz));
-  useEffect(() => {
-    setOffset(getGMTOffset(tz));
-    const id = setInterval(() => setOffset(getGMTOffset(tz)), 60_000);
-    return () => clearInterval(id);
-  }, [tz]);
-  return offset;
-}
-
 function useClockTime(tz: string) {
   const [time, setTime] = useState(() =>
     new Intl.DateTimeFormat("en-GB", {
@@ -195,7 +177,6 @@ function useClockTime(tz: string) {
 
 function ClockRow({ code, tz }: { code: string; tz: string }) {
   const time = useClockTime(tz);
-  const offset = useGMTOffset(tz);
   return (
     <div
       style={{
@@ -214,11 +195,6 @@ function ClockRow({ code, tz }: { code: string; tz: string }) {
         style={{ letterSpacing: "0.04em", opacity: 0.75, fontSize: "0.65rem" }}
       >
         {code}
-      </span>
-      <span
-        style={{ letterSpacing: "0.04em", opacity: 0.45, fontSize: "0.6rem" }}
-      >
-        {offset}
       </span>
       <span
         style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "0.03em" }}
