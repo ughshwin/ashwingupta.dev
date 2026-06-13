@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 import { projects, renderBullet } from "./Projects";
@@ -71,7 +71,7 @@ export function ProjectPage({
       }}
     >
       {/* Back */}
-      <motion.a
+      <m.a
         href={backHref}
         initial={{ opacity: 0, x: -8 }}
         animate={{ opacity: 1, x: 0 }}
@@ -99,10 +99,10 @@ export function ProjectPage({
         }}
       >
         ← Back to {backSection}
-      </motion.a>
+      </m.a>
 
       {/* Header */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
@@ -155,6 +155,8 @@ export function ProjectPage({
           <img
             src={p.logo}
             alt={p.company}
+            loading="lazy"
+            decoding="async"
             style={{
               height: `${p.logoHeight}px`,
               width: "auto",
@@ -178,7 +180,7 @@ export function ProjectPage({
             {p.company}
           </span>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Divider */}
       <div
@@ -190,7 +192,7 @@ export function ProjectPage({
       />
 
       {/* Full bullets */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.15, duration: 0.4 }}
@@ -202,7 +204,7 @@ export function ProjectPage({
         }}
       >
         {p.bullets.map((b, i) => (
-          <motion.div
+          <m.div
             key={i}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -235,12 +237,12 @@ export function ProjectPage({
             >
               {renderBullet(b)}
             </span>
-          </motion.div>
+          </m.div>
         ))}
-      </motion.div>
+      </m.div>
 
       {/* Impact */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.35 }}
@@ -258,10 +260,10 @@ export function ProjectPage({
         }}
       >
         ↳ {p.impact}
-      </motion.div>
+      </m.div>
 
       {/* Tags */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.55, duration: 0.35 }}
@@ -288,11 +290,11 @@ export function ProjectPage({
             {t}
           </span>
         ))}
-      </motion.div>
+      </m.div>
 
       {/* GitHub link */}
       {p.github && (
-        <motion.a
+        <m.a
           href={p.github}
           target="_blank"
           rel="noopener noreferrer"
@@ -327,7 +329,7 @@ export function ProjectPage({
         >
           <ArrowUpRight size={13} />
           View on GitHub
-        </motion.a>
+        </m.a>
       )}
     </div>
   );

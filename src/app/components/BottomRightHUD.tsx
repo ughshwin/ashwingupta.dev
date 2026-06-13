@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import { ChevronUp, Timer, Compass } from "lucide-react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 
@@ -260,6 +260,7 @@ export function BottomRightHUD() {
   const { showTop, progressRef } = useScrollState(progressCircleRef, btnCirc);
 
   return (
+    <LazyMotion features={domAnimation}>
     <div
       style={{
         position: "fixed",
@@ -284,7 +285,7 @@ export function BottomRightHUD() {
       >
         <AnimatePresence>
           {showTop && (
-            <motion.button
+            <m.button
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
@@ -349,7 +350,7 @@ export function BottomRightHUD() {
                 strokeWidth={1.5}
                 style={{ position: "relative" }}
               />
-            </motion.button>
+            </m.button>
           )}
         </AnimatePresence>
       </div>
@@ -509,5 +510,6 @@ export function BottomRightHUD() {
         )}
       </div>
     </div>
+    </LazyMotion>
   );
 }

@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 
 const FONT_SERIF = '"Playfair Display", Georgia, serif';
@@ -202,6 +202,8 @@ function Icon({ u, size }: { u: Unit; size: number }) {
         <img
           src={`/logos/${u.f}`}
           alt=""
+          loading="lazy"
+          decoding="async"
           style={{
             maxWidth: "100%",
             maxHeight: "100%",
@@ -216,6 +218,8 @@ function Icon({ u, size }: { u: Unit; size: number }) {
     <img
       src={`/logos/${u.f}`}
       alt=""
+      loading="lazy"
+      decoding="async"
       style={{
         width: `${size}px`,
         height: `${size}px`,
@@ -339,7 +343,7 @@ export function Skills() {
           }}
         >
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -356,9 +360,9 @@ export function Skills() {
               }}
             >
               What I run in production.
-            </motion.h2>
+            </m.h2>
           </div>
-          <motion.p
+          <m.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -371,7 +375,7 @@ export function Skills() {
             }}
           >
             Profiled under load. Not just imported.
-          </motion.p>
+          </m.p>
         </div>
 
         {/* RIGHT - tech stack by category */}

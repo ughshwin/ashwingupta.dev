@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 import bmsLogoUrl from "../../assets/BMSlogo.webp?url";
 import coforgeLogoUrl from "../../assets/coforgeLogo.webp?url";
@@ -33,7 +33,7 @@ const dontDo = [
   "I don't take off-the-shelf work. If the implementation is a Google search away, I'm not the right person.",
 ];
 
-const SPRING_ICON = "https://cdn.simpleicons.org/spring";
+const SPRING_ICON = "/logos/spring.svg";
 
 const highlights: { title: string; sub: string; icon: string; time: string }[] = [
   {
@@ -142,7 +142,7 @@ export function About() {
           </div>
 
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -159,7 +159,7 @@ export function About() {
               }}
             >
               Inference is easy. Everything around it isn't.
-            </motion.h2>
+            </m.h2>
           </div>
         </div>
 
@@ -167,7 +167,7 @@ export function About() {
         <div>
           <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 2rem" }}>
             {/* Brand thesis */}
-            <motion.p
+            <m.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
@@ -183,7 +183,7 @@ export function About() {
               }}
             >
               Honest where it matters. Available when it's hard.
-            </motion.p>
+            </m.p>
 
             {/* Two-column grid */}
             <div
@@ -196,7 +196,7 @@ export function About() {
             >
               {/* LEFT - story paragraphs */}
               <div style={{ alignSelf: "start" }}>
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
@@ -220,9 +220,9 @@ export function About() {
                   physics-constrained optimisation on eVTOL design under Dr.
                   Harursampath, five projects in eight months, at the edge of
                   what was understood.
-                </motion.p>
+                </m.p>
 
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
@@ -244,9 +244,9 @@ export function About() {
                   the concurrency architecture, the observability that tells you
                   what actually broke and when. That's the part nobody wants to
                   own. That's where I went.
-                </motion.p>
+                </m.p>
 
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 }}
@@ -270,7 +270,7 @@ export function About() {
                   full pipeline, cross-stack observability built before the
                   second incident happened. 7× session capacity. $1.3M
                   annualised savings. MTTR from ~1hr to ~10mins.
-                </motion.p>
+                </m.p>
               </div>
 
               {/* RIGHT - pillars + What I Don't Do */}
@@ -282,7 +282,7 @@ export function About() {
                 }}
               >
                 {pillars.map(({ title, desc }, i) => (
-                  <motion.div
+                  <m.div
                     key={i}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -337,10 +337,10 @@ export function About() {
                         </p>
                       </div>
                     </div>
-                  </motion.div>
+                  </m.div>
                 ))}
 
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -387,7 +387,7 @@ export function About() {
                       </p>
                     ))}
                   </div>
-                </motion.div>
+                </m.div>
               </div>
             </div>
 
@@ -441,6 +441,8 @@ export function About() {
                             src={h.icon}
                             alt=""
                             aria-hidden="true"
+                            loading="lazy"
+                            decoding="async"
                             style={{
                               width: "28px",
                               height: "28px",

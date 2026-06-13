@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useState } from "react";
 import {
   useIsMobile,
@@ -58,7 +58,7 @@ export const projects: Project[] = [
     slug: "ashwingupta-dev",
     title: "ashwingupta.dev - Design Handoff to Production",
     company: "Personal",
-    logo: "https://cdn.simpleicons.org/vercel/ffffff",
+    logo: "/logos/vercel.svg",
     logoHeight: 18,
     status: "Shipped",
     devStatus: "completed",
@@ -96,7 +96,7 @@ export const projects: Project[] = [
     slug: "pageindexollama",
     title: "PageIndexOllama - Local-First Fork of PageIndex",
     company: "Open Source",
-    logo: "https://cdn.simpleicons.org/github/ffffff",
+    logo: "/logos/github.svg",
     logoHeight: 18,
     status: "Shipped",
     devStatus: "completed",
@@ -130,7 +130,7 @@ export const projects: Project[] = [
     slug: "hsbc-voice",
     title: "Conversational Analytics - HSBC",
     company: "HSBC",
-    logo: "https://cdn.simpleicons.org/hsbc/DB0011",
+    logo: "/logos/hsbc.svg",
     logoHeight: 22,
     status: "Client Delivery",
     tags: [
@@ -295,7 +295,7 @@ export const projects: Project[] = [
     slug: "scholaros",
     title: "ScholarOS - Structured Research Execution Platform",
     company: "Personal",
-    logo: "https://cdn.simpleicons.org/github/ffffff",
+    logo: "/logos/github.svg",
     logoHeight: 18,
     status: "In Development",
     tags: [
@@ -354,7 +354,7 @@ function FeaturedCard({
     : "rgba(232,224,208,0.25)";
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -407,6 +407,8 @@ function FeaturedCard({
             <img
               src={p.logo}
               alt={p.company}
+              loading="lazy"
+              decoding="async"
               style={{
                 height: `${p.logoHeight}px`,
                 width: "auto",
@@ -578,7 +580,7 @@ function FeaturedCard({
           </span>
         ))}
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -614,7 +616,7 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
         : "rgba(250,204,21,0.06)";
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -709,6 +711,8 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
           <img
             src={p.logo}
             alt={p.company}
+            loading="lazy"
+            decoding="async"
             style={{
               height: `${Math.min(p.logoHeight, 32)}px`,
               width: "auto",
@@ -797,7 +801,7 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
           ↗
         </span>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -870,7 +874,7 @@ export function Projects() {
           </div>
 
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -887,7 +891,7 @@ export function Projects() {
               }}
             >
               Systems that had to hold.
-            </motion.h2>
+            </m.h2>
           </div>
         </div>
 

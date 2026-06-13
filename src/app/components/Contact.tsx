@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { Mail, Github, Linkedin, MapPin, FileDown } from "lucide-react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
@@ -247,7 +247,7 @@ export function Contact() {
             />
           </div>
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -264,7 +264,7 @@ export function Contact() {
               }}
             >
               Hard problems welcome.
-            </motion.h2>
+            </m.h2>
           </div>
         </div>
 
@@ -300,7 +300,7 @@ export function Contact() {
             >
               {/* LEFT - description */}
               <div>
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
@@ -336,9 +336,9 @@ export function Contact() {
                   >
                     Optimising: Residuals • Not: Roles
                   </span>
-                </motion.div>
+                </m.div>
 
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
@@ -357,18 +357,18 @@ export function Contact() {
                   shop about LLMs, distributed systems, scientific ML, or why
                   this site is unreasonably over-engineered for a portfolio, I'm
                   always up for that.
-                </motion.p>
+                </m.p>
               </div>
 
               {/* RIGHT - contact links */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
                 style={{ display: "flex", flexDirection: "column", gap: "0" }}
               >
                 {links.map(({ label, value, href, icon, download }, i) => (
-                  <motion.a
+                  <m.a
                     key={i}
                     href={href}
                     download={download ?? undefined}
@@ -451,7 +451,7 @@ export function Contact() {
                             {(label === "Email"
                               ? copyToastMessage
                               : downloadToastMessage) && (
-                              <motion.p
+                              <m.p
                                 key={
                                   label === "Email"
                                     ? copyToastMessage!
@@ -479,7 +479,7 @@ export function Contact() {
                                 {label === "Email"
                                   ? copyToastMessage
                                   : downloadToastMessage}
-                              </motion.p>
+                              </m.p>
                             )}
                           </AnimatePresence>
                         )}
@@ -493,9 +493,9 @@ export function Contact() {
                     >
                       ↗
                     </span>
-                  </motion.a>
+                  </m.a>
                 ))}
-              </motion.div>
+              </m.div>
             </div>
 
             {/* Footer */}

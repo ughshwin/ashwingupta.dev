@@ -11,9 +11,7 @@ import { Skills } from "./components/Skills";
 import { Contact } from "./components/Contact";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import { useHashScroll } from "../hooks/useHashScroll";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
-import { motion, AnimatePresence } from "motion/react";
+import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 
 export default function App() {
   const isMobile = useIsMobile();
@@ -95,7 +93,7 @@ export default function App() {
   }, [showThankYou]);
 
   return (
-    <>
+    <LazyMotion features={domAnimation}>
       {/* Page content - blurred when thank-you is showing */}
       <div
         className="spatial-scene"
@@ -115,8 +113,6 @@ export default function App() {
           <Skills />
           <Contact />
         </HologramInterface>
-        <Analytics />
-        <SpeedInsights />
       </div>
 
       {/* Awwwards ribbon - fixed, constant through scroll */}
@@ -177,7 +173,7 @@ export default function App() {
       {/* Thank you banner - outside blurred container, transparent bg clips via combined blur */}
       <AnimatePresence>
         {showThankYou && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.97 }}
@@ -285,7 +281,7 @@ export default function App() {
                       stroke="rgba(255,255,255,0.07)"
                       strokeWidth="2"
                     />
-                    <motion.circle
+                    <m.circle
                       cx="26"
                       cy="26"
                       r="22"
@@ -324,9 +320,9 @@ export default function App() {
                 </span>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
-    </>
+    </LazyMotion>
   );
 }

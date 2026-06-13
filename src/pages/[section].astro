@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import App from "../app/App";
+import SiteAnalytics from "../app/SiteAnalytics";
 import "../styles/index.css";
 import profilePictureUrl from "../assets/profilePicture.webp?url";
 
@@ -39,4 +40,5 @@ const titles: Record<string, string> = {
 >
   <link slot="head" rel="preload" as="image" href={profilePictureUrl} fetchpriority="high" type="image/webp" />
   <App client:idle />
+  <SiteAnalytics client:idle />
 </BaseLayout>

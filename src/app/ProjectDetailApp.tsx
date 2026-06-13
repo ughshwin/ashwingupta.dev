@@ -4,6 +4,7 @@ import { AIBackground } from "./components/AIBackground";
 import { HologramInterface } from "./components/HologramInterface";
 import { ProjectPage } from "./components/ProjectPage";
 import { useIsMobile } from "../hooks/useMediaQuery";
+import { LazyMotion, domAnimation } from "motion/react";
 
 export default function ProjectDetailApp({ slug }: Readonly<{ slug: string }>) {
   const isMobile = useIsMobile();
@@ -22,7 +23,9 @@ export default function ProjectDetailApp({ slug }: Readonly<{ slug: string }>) {
       <AIBackground />
       <Cursor />
       <HologramInterface>
-        <ProjectPage slug={slug} backHref={backHref} />
+        <LazyMotion features={domAnimation}>
+          <ProjectPage slug={slug} backHref={backHref} />
+        </LazyMotion>
       </HologramInterface>
     </div>
   );

@@ -9,6 +9,8 @@ import "@fontsource/dm-sans/400.css";
 import "@fontsource/dm-sans/500.css";
 import "@fontsource/dm-sans/600.css";
 import "@fontsource/dm-mono/400.css";
+import dmSans400Url from "@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2?url";
+import playfair800Url from "@fontsource/playfair-display/files/playfair-display-latin-800-normal.woff2?url";
 interface Props {
   title?: string;
   description?: string;
@@ -34,6 +36,8 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonical} />
+    <link rel="preload" href={dmSans400Url} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={playfair800Url} as="font" type="font/woff2" crossorigin="anonymous" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -66,9 +70,9 @@ const {
     <slot name="head" />
   </head>
   <body>
-    <PageBackground client:load transition:persist="site-bg" />
-    <ClockWidget client:load transition:persist="clock-widget" />
-    <BottomRightHUD client:load transition:persist="bottom-right-hud" />
+    <PageBackground client:idle transition:persist="site-bg" />
+    <ClockWidget client:idle transition:persist="clock-widget" />
+    <BottomRightHUD client:idle transition:persist="bottom-right-hud" />
     <div transition:persist="bottom-fade" style="position:fixed;bottom:0;left:0;right:0;height:5.5rem;background:linear-gradient(to top,rgba(6,6,8,0.72) 0%,transparent 100%);pointer-events:none;z-index:48;" />
     <slot />
   </body>

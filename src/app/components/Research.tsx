@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useState } from "react";
 import type React from "react";
 import { useIsMobile, useIsDesktop } from "../../hooks/useMediaQuery";
@@ -105,7 +105,7 @@ export function ResearchCard({ item }: { item: ResearchItem }) {
   const showOutcome = hovered || revealed;
 
   return (
-    <motion.a
+    <m.a
       href={item.link}
       target={item.link.startsWith("/") ? undefined : "_blank"}
       rel={item.link.startsWith("/") ? undefined : "noopener noreferrer"}
@@ -310,6 +310,6 @@ export function ResearchCard({ item }: { item: ResearchItem }) {
           ↗
         </span>
       </div>
-    </motion.a>
+    </m.a>
   );
 }

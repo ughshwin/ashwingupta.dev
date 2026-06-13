@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 import {
   impacts,
@@ -354,7 +354,7 @@ export function Impact() {
           </div>
 
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               whileInView={{ y: 0 }}
               viewport={{ once: true }}
@@ -372,7 +372,7 @@ export function Impact() {
               }}
             >
               Proof, not promises.
-            </motion.h2>
+            </m.h2>
           </div>
         </div>
 

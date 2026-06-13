@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useState } from "react";
 import type React from "react";
 import { useIsMobile, useIsDesktop } from "../../hooks/useMediaQuery";
@@ -367,7 +367,7 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
 
   if (isLink) {
     return (
-      <motion.a
+      <m.a
         href={item.link!}
         target={item.link!.startsWith("/") ? undefined : "_blank"}
         rel={item.link!.startsWith("/") ? undefined : "noopener noreferrer"}
@@ -387,12 +387,12 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
         style={sharedStyle}
       >
         {inner}
-      </motion.a>
+      </m.a>
     );
   }
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -405,7 +405,7 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
       style={sharedStyle}
     >
       {inner}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -462,7 +462,7 @@ export function Featured() {
           </div>
 
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -479,7 +479,7 @@ export function Featured() {
               }}
             >
               What the arc produced.
-            </motion.h2>
+            </m.h2>
           </div>
         </div>
 

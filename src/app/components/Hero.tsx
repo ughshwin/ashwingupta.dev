@@ -1,5 +1,5 @@
 import { Github, Linkedin, Mail, FileDown, Menu, X } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useRef, useCallback, useState, useEffect } from "react";
 import { useIsMobile, useIsTouchDevice } from "../../hooks/useMediaQuery";
 import { scrollToSection } from "../../hooks/useHashScroll";
@@ -171,7 +171,7 @@ export function Hero() {
       }}
     >
       {/* Horizontal rule top */}
-      <motion.div
+      <m.div
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
@@ -191,7 +191,7 @@ export function Hero() {
       {isMobile ? (
         <>
           {/* Hamburger button */}
-          <motion.button
+          <m.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.1, duration: 0.6 }}
@@ -217,7 +217,7 @@ export function Hero() {
           >
             <AnimatePresence mode="wait" initial={false}>
               {menuOpen ? (
-                <motion.span
+                <m.span
                   key="close"
                   initial={{ opacity: 0, rotate: -45 }}
                   animate={{ opacity: 1, rotate: 0 }}
@@ -226,9 +226,9 @@ export function Hero() {
                   style={{ display: "flex" }}
                 >
                   <X size={16} />
-                </motion.span>
+                </m.span>
               ) : (
-                <motion.span
+                <m.span
                   key="menu"
                   initial={{ opacity: 0, rotate: 45 }}
                   animate={{ opacity: 1, rotate: 0 }}
@@ -237,15 +237,15 @@ export function Hero() {
                   style={{ display: "flex" }}
                 >
                   <Menu size={16} />
-                </motion.span>
+                </m.span>
               )}
             </AnimatePresence>
-          </motion.button>
+          </m.button>
 
           {/* Mobile full-screen overlay menu */}
           <AnimatePresence>
             {menuOpen && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -273,7 +273,7 @@ export function Hero() {
                   }}
                 >
                   {navBeforeWork.map(({ label, href, section }, i) => (
-                    <motion.a
+                    <m.a
                       key={href}
                       href={href}
                       initial={{ opacity: 0, x: -12 }}
@@ -300,11 +300,11 @@ export function Hero() {
                       }}
                     >
                       {label}
-                    </motion.a>
+                    </m.a>
                   ))}
 
                   {/* Work expandable row */}
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{
@@ -332,7 +332,7 @@ export function Hero() {
                       }}
                     >
                       <span>Work</span>
-                      <motion.span
+                      <m.span
                         animate={{ rotate: mobileWorkOpen ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
                         style={{
@@ -342,12 +342,12 @@ export function Hero() {
                         }}
                       >
                         ▾
-                      </motion.span>
+                      </m.span>
                     </button>
 
                     <AnimatePresence initial={false}>
                       {mobileWorkOpen && (
-                        <motion.div
+                        <m.div
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
@@ -384,13 +384,13 @@ export function Hero() {
                               {label}
                             </a>
                           ))}
-                        </motion.div>
+                        </m.div>
                       )}
                     </AnimatePresence>
-                  </motion.div>
+                  </m.div>
 
                   {navAfterWork.map(({ label, href, section }, i) => (
-                    <motion.a
+                    <m.a
                       key={href}
                       href={href}
                       initial={{ opacity: 0, x: -12 }}
@@ -420,16 +420,16 @@ export function Hero() {
                       }}
                     >
                       {label}
-                    </motion.a>
+                    </m.a>
                   ))}
                 </nav>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </>
       ) : (
         /* Desktop horizontal nav */
-        <motion.nav
+        <m.nav
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1, duration: 0.6 }}
@@ -522,7 +522,7 @@ export function Hero() {
 
             <AnimatePresence>
               {workOpen && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
@@ -580,7 +580,7 @@ export function Hero() {
                       {label}
                     </a>
                   ))}
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
           </div>
@@ -612,7 +612,7 @@ export function Hero() {
               {label}
             </a>
           ))}
-        </motion.nav>
+        </m.nav>
       )}
 
       {/* Main content */}
@@ -631,7 +631,7 @@ export function Hero() {
         <div ref={layerText} style={{ willChange: "transform" }}>
           {/* Eyebrow - tagline */}
           <div style={{ overflow: "hidden", marginBottom: "2rem" }}>
-            <motion.div
+            <m.div
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{
@@ -659,12 +659,12 @@ export function Hero() {
                 Not what a model outputs - how the system decides, executes, and
                 holds under load.
               </span>
-            </motion.div>
+            </m.div>
           </div>
 
           {/* Giant name */}
           <div style={{ overflow: "visible", marginBottom: "-0.05em" }}>
-            <motion.h1
+            <m.h1
               initial={{ y: "105%" }}
               animate={{ y: 0 }}
               transition={{
@@ -686,7 +686,7 @@ export function Hero() {
               }}
             >
               Ashwin
-            </motion.h1>
+            </m.h1>
           </div>
           <div
             style={{
@@ -694,7 +694,7 @@ export function Hero() {
               marginBottom: isMobile ? "2rem" : "3rem",
             }}
           >
-            <motion.h1
+            <m.h1
               initial={{ y: "105%" }}
               animate={{ y: 0 }}
               transition={{
@@ -717,11 +717,11 @@ export function Hero() {
               }}
             >
               Gupta
-            </motion.h1>
+            </m.h1>
           </div>
 
           {/* Role + Company */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0, duration: 0.7 }}
@@ -782,10 +782,10 @@ export function Hero() {
                 Jun 2024 – Present
               </p>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Status + socials row */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.7 }}
@@ -800,7 +800,7 @@ export function Hero() {
             {/* Toast - absolutely positioned so it never affects row width */}
             <AnimatePresence mode="wait">
               {toastMessage && (
-                <motion.div
+                <m.div
                   key={toastMessage}
                   initial={{ opacity: 0, y: 4, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -823,7 +823,7 @@ export function Hero() {
                   }}
                 >
                   {toastMessage}
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
 
@@ -846,7 +846,7 @@ export function Hero() {
                   label: "LinkedIn",
                 },
               ].map(({ href, icon, label }) => (
-                <motion.a
+                <m.a
                   key={label}
                   href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
@@ -888,11 +888,11 @@ export function Hero() {
                   }}
                 >
                   {icon}
-                </motion.a>
+                </m.a>
               ))}
               {/* Download Resume - desktop only in this row */}
               {!isMobile && (
-                <motion.a
+                <m.a
                   href={resumeUrl}
                   download="Ashwin_Gupta_Senior_AI_Engineer.pdf"
                   onClick={handleResumeDownload}
@@ -934,13 +934,13 @@ export function Hero() {
                   >
                     Download Resume
                   </span>
-                </motion.a>
+                </m.a>
               )}
             </div>
 
             {/* Row 2 - Download Resume, mobile only */}
             {isMobile && (
-              <motion.a
+              <m.a
                 href={resumeUrl}
                 download="Ashwin_Gupta_Senior_AI_Engineer.pdf"
                 onClick={handleResumeDownload}
@@ -981,7 +981,7 @@ export function Hero() {
                 >
                   Download Resume
                 </span>
-              </motion.a>
+              </m.a>
             )}
 
             {/* Building not Browsing status */}
@@ -1019,11 +1019,11 @@ export function Hero() {
                 Optimising: Residuals • Not: Roles
               </span>
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* RIGHT - photo */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
@@ -1108,7 +1108,7 @@ export function Hero() {
               </span>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Scroll indicator */}

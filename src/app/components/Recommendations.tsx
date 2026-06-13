@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 
@@ -63,7 +63,7 @@ function RecCard({
   const isMobile = useIsMobile();
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
@@ -144,7 +144,7 @@ function RecCard({
       >
         {rec.relationship} • {rec.date}
       </p>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -332,7 +332,7 @@ export function Recommendations() {
           </div>
 
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               animate={isVisible ? { y: 0 } : { y: "100%" }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -349,7 +349,7 @@ export function Recommendations() {
               }}
             >
               In their words.
-            </motion.h2>
+            </m.h2>
           </div>
         </div>
 
