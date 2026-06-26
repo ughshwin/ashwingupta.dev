@@ -12,6 +12,7 @@ const CLR = {
   iisc: "#c87eff",
   gida: "#ffaa2e",
   coforge: "#2ed4c8",
+  skan: "#ff6b6b",
   iiitb: "#88c0ff",
 } as const;
 
@@ -171,9 +172,9 @@ const ENTRIES: Entry[] = [
     weight: "recent",
     role: "AI Engineer",
     company: "Coforge",
-    period: "Jun 2024 – Present",
+    period: "Jun 2024 – Jun 2026",
     start: new Date(2024, 5),
-    end: "present",
+    end: new Date(2026, 5, 5),
     bullets: [
       "Conversational Analytics (HSBC) - SBC→STT→LLM on GCP/RHEL • authored LLD + orchestration architecture",
       "GIL fix: CPU-pinned procs + asyncio/uvloop • 20→140–160 sessions/VM • 1,600+ concurrent",
@@ -183,6 +184,20 @@ const ENTRIES: Entry[] = [
       "Pat on Back - Think Customer • individual delivery innovation & excellence",
       "Keep It Up Award • ownership of professional growth & skill visibility",
       "Java Spring AI trainer • 130+ participants • 81% voted-preferred • NPS +50",
+    ],
+  },
+  {
+    id: "skan",
+    track: "professional",
+    weight: "recent",
+    role: "AI Engineer",
+    company: "SkanAI",
+    period: "Jun 2026 – Present",
+    start: new Date(2026, 5, 15),
+    end: "present",
+    bullets: [
+      "AI Engineer - applied LLMs & agentic systems",
+      "Process intelligence platform",
     ],
   },
   {
@@ -207,13 +222,16 @@ const EDU = ENTRIES.filter((e) => e.track === "education");
 
 const ORIGIN = new Date(2019, 0, 1);
 const AXIS_END = new Date(2027, 6, 1);
-const TODAY = new Date(2026, 4, 1);
+// Live "now" - recomputed each page load so the in-progress (present) role's
+// projection auto-extends as real time passes.
+const TODAY = new Date();
 const YEAR_MARKS = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
 
 function toMonths(d: Date): number {
   return (
     (d.getFullYear() - ORIGIN.getFullYear()) * 12 +
-    (d.getMonth() - ORIGIN.getMonth())
+    (d.getMonth() - ORIGIN.getMonth()) +
+    (d.getDate() - 1) / 30
   );
 }
 const TOTAL_MONTHS = toMonths(AXIS_END);
@@ -228,7 +246,7 @@ function assignLanes(entries: Entry[]): Map<EntryId, number> {
   const laneEnd: number[] = [];
   const out = new Map<EntryId, number>();
   for (const e of sorted) {
-    const endM = toMonths(e.end === "present" ? TODAY : (e.end as Date)) + 1;
+    const endM = toMonths(e.end === "present" ? TODAY : (e.end as Date)) + 0.2;
     let lane = laneEnd.findIndex((m) => m <= toMonths(e.start));
     if (lane === -1) lane = laneEnd.length;
     laneEnd[lane] = endM;
@@ -284,7 +302,7 @@ function buildMobileDims(vpW: number, vpH: number) {
 
   const bH = (s: Date, e: Date | "present") => {
     const endM = e === "present" ? toMonths(TODAY) : toMonths(e as Date);
-    return Math.max(monthPx * 2, (endM - toMonths(s)) * monthPx);
+    return Math.max(monthPx * 0.5, (endM - toMonths(s)) * monthPx);
   };
 
   // Two separate strip bands - mirrors the desktop's dual-track layout,
@@ -353,7 +371,7 @@ function buildDims(vpW: number, vpH: number) {
   // Duration height for projection strips - time-proportional
   const bH = (s: Date, e: Date | "present") => {
     const endM = e === "present" ? toMonths(TODAY) : toMonths(e as Date);
-    return Math.max(monthPx * 2, (endM - toMonths(s)) * monthPx);
+    return Math.max(monthPx * 0.5, (endM - toMonths(s)) * monthPx);
   };
 
   // ── Pro side: all strips in one band near spine, all cards in one column ─

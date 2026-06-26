@@ -53,7 +53,7 @@ export default function App() {
         rafId = null;
         return;
       }
-      el.scrollTop += diff * 0.1;
+      el.scrollTop += diff * 0.08;
       rafId = requestAnimationFrame(animate);
     };
 

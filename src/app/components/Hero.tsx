@@ -753,7 +753,7 @@ export function Hero() {
                   lineHeight: 1.5,
                 }}
               >
-                AI Systems Engineer
+                AI Engineer
               </p>
             </div>
             <div>
@@ -777,9 +777,9 @@ export function Hero() {
                   lineHeight: 1.5,
                 }}
               >
-                Coforge
+                SkanAI
                 <br />
-                Jun 2024 – Present
+                Jun 2026 – Present
               </p>
             </div>
           </m.div>
