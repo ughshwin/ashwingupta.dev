@@ -1,0 +1,24 @@
+name: Searchability
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build:verified
+      - run: node scripts/test-seo-verifier.mjs
+      - run: node scripts/test-content-verifier.mjs
+      - run: git diff --exit-code -- astro.config.mjs vercel.json public/llms.txt src/data

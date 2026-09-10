@@ -1,4 +1,5 @@
 ---
+import { personSchema, websiteSchema } from "../lib/structured-data";
 import { ClientRouter } from "astro:transitions";
 import { PageBackground } from "../app/components/PageBackground";
 import { ClockWidget } from "../app/components/ClockWidget";
@@ -26,6 +27,11 @@ const {
   image = "https://www.ashwingupta.dev/og-image.jpg",
   jsonLd = [],
 } = Astro.props;
+const pageSchemas = jsonLd.map((schema) => ({
+  ...schema,
+  ...(["Article", "ScholarlyArticle", "WebPage", "ProfilePage", "CollectionPage"].includes((schema as Record<string, string>)["@type"]) ? { image } : {}),
+}));
+const article = jsonLd.find((schema) => ["Article", "ScholarlyArticle"].includes((schema as Record<string, string>)["@type"])) as Record<string, string> | undefined;
 ---
 
 <!doctype html>
@@ -44,7 +50,8 @@ const {
     <meta name="author" content="Ashwin Gupta" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? "article" : "website"} />
+    {article?.datePublished && <meta property="article:published_time" content={article.datePublished} />}
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -62,8 +69,8 @@ const {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
 
-    {jsonLd.map((schema) => (
-      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    {[personSchema, websiteSchema, ...pageSchemas].map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, "\\u003c")} />
     ))}
 
     <ClientRouter />

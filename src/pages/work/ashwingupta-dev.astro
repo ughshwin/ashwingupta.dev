@@ -1,4 +1,5 @@
 ---
+import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
 
@@ -17,10 +18,17 @@ const metrics = [
   title="ashwingupta.dev - Design Handoff to Production | Ashwin Gupta"
   description="Three-layer spatial portfolio rebuilt for performance. 90% image reduction, 72% JS cut, 400 animated DOM nodes eliminated, stable 60fps under CPU throttle."
   canonical={canonical}
+  jsonLd={contentSchemas({
+    type: "SoftwareSourceCode",
+    name: "ashwingupta.dev - Design Handoff to Production",
+    url: canonical,
+    description: "Three-layer spatial portfolio rebuilt for performance. 90% image reduction, 72% JS cut, 400 animated DOM nodes eliminated, stable 60fps under CPU throttle.",
+    codeRepository: githubUrl,
+  })}
 >
   <div class="spatial-scene">
     <div class="thinking-scroll">
-      <div class="thinking-body">
+      <div class="thinking-body" role="main">
 
         <a href="/#projects" class="back-link">← Back to projects</a>
 
@@ -100,7 +108,7 @@ const metrics = [
         </div>
 
         <div class="th-footer">
-          <span>© 2026 Ashwin Gupta • AI Engineer • Bangalore, India</span>
+          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
         </div>
 
       </div>

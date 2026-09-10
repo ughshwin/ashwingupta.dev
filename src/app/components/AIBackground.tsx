@@ -543,10 +543,15 @@ export function AIBackground() {
     };
 
     // ── visibility guard - pause RAF when tab hidden ──────────────────────
+    let initialized = false;
+    let disposed = false;
+    let initTimer: ReturnType<typeof setTimeout> | undefined;
+    let initIdle: number | undefined;
     const handleVisibility = () => {
       if (document.hidden) {
         cancelAnimationFrame(animRef.current);
-      } else {
+      } else if (initialized && !disposed) {
+        cancelAnimationFrame(animRef.current);
         draw();
       }
     };
@@ -556,17 +561,19 @@ export function AIBackground() {
     canvas.height = window.innerHeight;
 
     const runInit = () => {
+      if (disposed) return;
+      initialized = true;
       initNodes();
       initParticles();
       initDustMotes();
       if (!isMobile) buildScanlines(canvas.width, canvas.height);
-      draw();
+      if (!document.hidden) draw();
     };
 
     if (typeof requestIdleCallback === "undefined") {
-      setTimeout(runInit, 100);
+      initTimer = setTimeout(runInit, 100);
     } else {
-      requestIdleCallback(runInit, { timeout: 1000 });
+      initIdle = requestIdleCallback(runInit, { timeout: 1000 });
     }
 
     window.addEventListener("resize", debouncedResize);
@@ -575,6 +582,9 @@ export function AIBackground() {
     ro.observe(document.body);
 
     return () => {
+      disposed = true;
+      clearTimeout(initTimer);
+      if (initIdle !== undefined) cancelIdleCallback(initIdle);
       cancelAnimationFrame(animRef.current);
       clearTimeout(resizeTimer);
       window.removeEventListener("resize", debouncedResize);

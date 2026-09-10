@@ -1,4 +1,5 @@
 ---
+import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
 
@@ -10,10 +11,17 @@ const githubUrl = "https://github.com/ughshwin/PageIndexOllama";
   title="PageIndexOllama - Local-First Fork of PageIndex | Ashwin Gupta"
   description="Provider-agnostic tree-RAG. Offline execution via Ollama, llama.cpp, and vLLM. Finish-reason normalization eliminates silent traversal corruption on provider switch."
   canonical={canonical}
+  jsonLd={contentSchemas({
+    type: "SoftwareSourceCode",
+    name: "PageIndexOllama - Local-First Fork of PageIndex",
+    url: canonical,
+    description: "Provider-agnostic tree-RAG. Offline execution via Ollama, llama.cpp, and vLLM. Finish-reason normalization eliminates silent traversal corruption on provider switch.",
+    codeRepository: githubUrl,
+  })}
 >
   <div class="spatial-scene">
     <div class="thinking-scroll">
-      <div class="thinking-body">
+      <div class="thinking-body" role="main">
 
         <a href="/#projects" class="back-link">← Back to projects</a>
 
@@ -59,7 +67,7 @@ const githubUrl = "https://github.com/ughshwin/PageIndexOllama";
         </div>
 
         <div class="th-footer">
-          <span>© 2026 Ashwin Gupta • AI Engineer • Bangalore, India</span>
+          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
         </div>
 
       </div>

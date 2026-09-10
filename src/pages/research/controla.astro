@@ -1,4 +1,5 @@
 ---
+import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
 
@@ -9,10 +10,16 @@ const canonical = "https://www.ashwingupta.dev/research/controla";
   title="controla - Local Inference That Learns | Ashwin Gupta"
   description="Routing that compounds with every deployment. controla is a local-first inference OS with contextual EWMA weight learning."
   canonical={canonical}
+  jsonLd={contentSchemas({
+    type: "CreativeWork",
+    name: "controla - Local Inference That Learns",
+    url: canonical,
+    description: "Routing that compounds with every deployment. controla is a local-first inference OS with contextual EWMA weight learning.",
+  })}
 >
   <div class="spatial-scene">
     <div class="thinking-scroll">
-      <div class="thinking-body">
+      <div class="thinking-body" role="main">
 
         <!-- Back link -->
         <a href="/#featured" class="back-link">← Back to featured</a>
@@ -130,7 +137,7 @@ const canonical = "https://www.ashwingupta.dev/research/controla";
 
         <!-- Footer -->
         <div class="th-footer">
-          <span>© 2026 Ashwin Gupta • AI Engineer • Bangalore, India</span>
+          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
         </div>
 
       </div>

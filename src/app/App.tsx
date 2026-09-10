@@ -17,8 +17,7 @@ export default function App() {
   const isMobile = useIsMobile();
   const [showThankYou, setShowThankYou] = useState(false);
   const [countdown, setCountdown] = useState(10);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [thumbRatio, setThumbRatio] = useState(0.2);
+  const progressThumbRef = useRef<HTMLDivElement>(null);
   const thankYouFired = useRef(false);
   useHashScroll();
 
@@ -28,32 +27,45 @@ export default function App() {
     ) as HTMLElement | null;
     if (!el) return;
 
+    let thankYouTimer: ReturnType<typeof setTimeout> | undefined;
     const onScroll = () => {
       const max = el.scrollHeight - el.clientHeight;
       const progress = max > 0 ? el.scrollTop / max : 0;
-      setScrollProgress(progress);
-      setThumbRatio(
-        el.scrollHeight > 0 ? el.clientHeight / el.scrollHeight : 1,
-      );
+      // Preserve the exact pill geometry without rendering the entire page.
+      const thumb = progressThumbRef.current;
+      if (thumb) {
+        const ratio = el.scrollHeight > 0 ? el.clientHeight / el.scrollHeight : 1;
+        const height = Math.max(ratio * 100, 8);
+        const heightValue = height + "%";
+        const topValue = progress * (100 - height) + "%";
+        if (thumb.style.height !== heightValue) thumb.style.height = heightValue;
+        if (thumb.style.top !== topValue) thumb.style.top = topValue;
+      }
       if (progress >= 0.98 && !thankYouFired.current) {
         thankYouFired.current = true;
         setShowThankYou(true);
-        setTimeout(() => setShowThankYou(false), 10000);
+        thankYouTimer = setTimeout(() => setShowThankYou(false), 10000);
       }
     };
     el.addEventListener("scroll", onScroll, { passive: true });
 
     let target = el.scrollTop;
     let rafId: number | null = null;
+    let lastFrameTime: number | null = null;
 
-    const animate = () => {
+    const animate = (now: number) => {
+      const elapsed = lastFrameTime === null ? 1000 / 60 : Math.min(now - lastFrameTime, 64);
+      lastFrameTime = now;
       const diff = target - el.scrollTop;
       if (Math.abs(diff) < 0.5) {
         el.scrollTop = target;
         rafId = null;
+        lastFrameTime = null;
         return;
       }
-      el.scrollTop += diff * 0.08;
+      // The same 8% easing at 60 Hz, without slow motion on dropped frames.
+      const easing = 1 - Math.pow(1 - 0.08, elapsed / (1000 / 60));
+      el.scrollTop += diff * easing;
       rafId = requestAnimationFrame(animate);
     };
 
@@ -77,6 +89,7 @@ export default function App() {
       el.removeEventListener("scroll", onScroll);
       el.removeEventListener("wheel", onWheel);
       if (rafId) cancelAnimationFrame(rafId);
+      clearTimeout(thankYouTimer);
       delete (window as any).__portfolioScrollTop;
     };
   }, []);
@@ -158,12 +171,13 @@ export default function App() {
         }}
       >
         <div
+          ref={progressThumbRef}
           style={{
             position: "absolute",
             left: 0,
             width: "100%",
-            height: `${Math.max(thumbRatio * 100, 8)}%`,
-            top: `${scrollProgress * (100 - Math.max(thumbRatio * 100, 8))}%`,
+            height: "20%",
+            top: "0%",
             borderRadius: "3px",
             background: "rgba(255,255,255,0.22)",
           }}

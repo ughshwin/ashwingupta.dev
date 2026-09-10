@@ -1,4 +1,6 @@
 ---
+import publication from "../../data/article-publication.json";
+import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
 
@@ -9,10 +11,17 @@ const canonical = "https://www.ashwingupta.dev/articles/the-layer-nobody-talks-a
   title="The Layer Nobody Talks About - Ashwin Gupta"
   description="On NVIDIA, ASML, Apple, Mold-Tek, and how I'd think about building a business if I ever did. A personal framework, not advice."
   canonical={canonical}
+  jsonLd={contentSchemas({
+    type: "Article",
+    datePublished: publication["the-layer-nobody-talks-about"].datePublished,
+    name: "The Layer Nobody Talks About",
+    url: canonical,
+    description: "On NVIDIA, ASML, Apple, Mold-Tek, and how I'd think about building a business if I ever did. A personal framework, not advice.",
+  })}
 >
   <div class="spatial-scene">
     <div class="thinking-scroll">
-      <div class="thinking-body">
+      <div class="thinking-body" role="main">
 
         <a href="/articles" class="back-link">← Back to articles</a>
 
@@ -262,7 +271,7 @@ const canonical = "https://www.ashwingupta.dev/articles/the-layer-nobody-talks-a
         </p>
 
         <div class="th-footer">
-          <span>© 2026 Ashwin Gupta • AI Engineer • Jaipur, India</span>
+          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Jaipur, India</span>
         </div>
 
       </div>

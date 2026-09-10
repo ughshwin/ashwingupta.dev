@@ -53,9 +53,12 @@ export function Contact() {
       setVpH(vh);
       setSectionH(vh + maxOffset);
     };
-    requestAnimationFrame(measure);
+    const measureFrame = requestAnimationFrame(measure);
     window.addEventListener("resize", measure, { passive: true });
-    return () => window.removeEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(measureFrame);
+      window.removeEventListener("resize", measure);
+    };
   }, [isMobile]);
 
   useEffect(() => {
@@ -76,12 +79,15 @@ export function Contact() {
       cachedTopRef.current = acc;
     };
 
+    let previousOffset = -1;
     const onScroll = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         if (cachedTopRef.current === null) measureTop();
         const raw = scroller.scrollTop - (cachedTopRef.current ?? 0);
         const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
+        if (offset === previousOffset) return;
+        previousOffset = offset;
         if (innerRef.current) {
           innerRef.current.style.transform = `translateY(-${offset}px)`;
         }
@@ -94,15 +100,11 @@ export function Contact() {
     };
 
     scroller.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener(
-      "resize",
-      () => {
-        cachedTopRef.current = null;
-      },
-      { passive: true },
-    );
+    const invalidateTop = () => { cachedTopRef.current = null; };
+    window.addEventListener("resize", invalidateTop, { passive: true });
     return () => {
       scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", invalidateTop);
       cancelAnimationFrame(rafRef.current);
     };
   }, [isMobile]);

@@ -1,4 +1,5 @@
 ---
+import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
 
@@ -11,10 +12,23 @@ const publicationUrl = "https://mailchi.mp/cellstrat/the-data-your-monitors-are-
   title="Physics-Informed Neural Networks - Dual-Loss Framework | Ashwin Gupta"
   description="Dual-loss PINN framework for multi-domain physics simulation. Best Outgoing Project - BMSCE 2022–23. 6 validated benchmarks across fluid, structural, and thermal domains. Enterprise deployment framework published with CellStrat."
   canonical={canonical}
+  jsonLd={contentSchemas({
+    type: "ScholarlyArticle",
+    name: "Physics-Informed Neural Networks - Dual-Loss Framework",
+    url: canonical,
+    description: "Dual-loss PINN framework for multi-domain physics simulation. Best Outgoing Project - BMSCE 2022–23. 6 validated benchmarks across fluid, structural, and thermal domains. Enterprise deployment framework published with CellStrat.",
+    citation: publicationUrl,
+    associatedMedia: {
+      "@type": "MediaObject",
+      name: "PINNs whitepaper",
+      contentUrl: new URL(pdfUrl, canonical).href,
+      encodingFormat: "application/pdf",
+    },
+  })}
 >
   <div class="spatial-scene">
     <div class="thinking-scroll">
-      <div class="thinking-body">
+      <div class="thinking-body" role="main">
 
         <a href="/#featured" class="back-link">← Back to featured</a>
 
@@ -159,7 +173,7 @@ const publicationUrl = "https://mailchi.mp/cellstrat/the-data-your-monitors-are-
         </div>
 
         <div class="th-footer">
-          <span>© 2026 Ashwin Gupta • AI Engineer • Bangalore, India</span>
+          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
         </div>
 
       </div>

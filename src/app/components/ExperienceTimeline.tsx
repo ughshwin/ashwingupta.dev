@@ -582,20 +582,17 @@ export function ExperienceTimeline() {
       });
     };
 
-    requestAnimationFrame(() => {
+    const measureFrame = requestAnimationFrame(() => {
       measureTop();
       onScroll();
     });
     scroller.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener(
-      "resize",
-      () => {
-        cachedTop = null;
-      },
-      { passive: true },
-    );
+    const invalidateTop = () => { cachedTop = null; };
+    window.addEventListener("resize", invalidateTop, { passive: true });
     return () => {
       scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", invalidateTop);
+      cancelAnimationFrame(measureFrame);
       cancelAnimationFrame(rafRef.current);
     };
   }, [isMobile, dims.maxOffset, mDims.maxOffset]);

@@ -1,0 +1,32 @@
+# Ashwin Gupta
+
+> AI Systems Engineer based in Bangalore, India. Current employment: AI Engineer at SkanAI, June 2026–present.
+
+This portfolio describes production AI systems, inference routing, concurrency architecture, retrieval-augmented generation, and physics-informed machine learning. Case studies distinguish delivered work from systems in development.
+
+## Profile
+- [Ashwin Gupta](https://www.ashwingupta.dev/): Authoritative profile, experience, impact, and contact information. Section URLs such as /about and /projects are entry points into this same document.
+
+## Work
+- [HSBC conversational analytics](https://www.ashwingupta.dev/work/hsbc): Voice infrastructure, concurrency, observability, and cost engineering.
+- [PageIndexOllama](https://www.ashwingupta.dev/work/pageindexollama): Local-first tree-based retrieval and provider abstraction.
+- [Portfolio engineering](https://www.ashwingupta.dev/work/ashwingupta-dev): Interface architecture and performance engineering.
+- [Azure infrastructure documentation](https://www.ashwingupta.dev/work/azure-infra-docs): Documentation grounded in live infrastructure inventory.
+- [Here.app](https://www.ashwingupta.dev/work/here-app): Multilingual vehicle intelligence and grounded retrieval.
+- [Skill recommendation engine](https://www.ashwingupta.dev/work/skill-recommendation-engine): Graph-based recommendations and low-latency inference.
+
+## Research and experimental systems
+- [Controla](https://www.ashwingupta.dev/research/controla): Local inference routing with contextual weight learning; in development.
+- [ScholarOS](https://www.ashwingupta.dev/research/scholaros): Evidence-bound research execution; in development.
+- [Physics-informed neural networks](https://www.ashwingupta.dev/research/pinns): Dual-loss framework, benchmarks, and publication references.
+- [PHYSCLIP](https://www.ashwingupta.dev/research/physclip): Contrastive physics regime classification.
+
+## Writing
+- [Articles](https://www.ashwingupta.dev/articles): Authored essays.
+- [The Space Between Stars](https://www.ashwingupta.dev/articles/the-space-between-stars): Design and the portfolio's visual language.
+- [The Layer Nobody Talks About](https://www.ashwingupta.dev/articles/the-layer-nobody-talks-about): Business strategy and infrastructure layers.
+
+## External profiles
+- [GitHub](https://github.com/ughshwin)
+- [LinkedIn](https://www.linkedin.com/in/ashwingupta3012/)
+- [Kaggle](https://www.kaggle.com/ashwingupta3012)

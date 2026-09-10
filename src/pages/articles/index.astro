@@ -1,4 +1,5 @@
 ---
+import { PERSON_ID, WEBSITE_ID } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
 
@@ -30,10 +31,26 @@ const articles = [
   title="Articles | Ashwin Gupta"
   description="Writing on design, AI systems, and anything with a defensible opinion behind it."
   canonical={canonical}
+  jsonLd={[{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": canonical + "#webpage",
+    url: canonical,
+    name: "Articles by Ashwin Gupta",
+    author: { "@id": PERSON_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: articles.map((article, index) => ({
+        "@type": "ListItem", position: index + 1,
+        name: article.title, url: canonical + "/" + article.slug,
+      })),
+    },
+  }]}
 >
   <div class="spatial-scene">
     <div class="thinking-scroll">
-      <div class="thinking-body">
+      <div class="thinking-body" role="main">
 
         <a href="/" class="back-link">← Back</a>
 
@@ -64,7 +81,7 @@ const articles = [
         </div>
 
         <div class="th-footer">
-          <span>© 2026 Ashwin Gupta • AI Engineer • Bangalore, India</span>
+          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
         </div>
 
       </div>

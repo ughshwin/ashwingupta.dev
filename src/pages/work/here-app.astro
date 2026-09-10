@@ -1,4 +1,5 @@
 ---
+import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
 
@@ -16,10 +17,16 @@ const metrics = [
   title="163-Language Vehicle Intelligence - HDFC ERGO | Ashwin Gupta"
   description="Multilingual RAG for vehicle intelligence at HDFC ERGO. ~97% factual accuracy across 163 languages. Case study."
   canonical={canonical}
+  jsonLd={contentSchemas({
+    type: "CreativeWork",
+    name: "163-Language Vehicle Intelligence - HDFC ERGO",
+    url: canonical,
+    description: "Multilingual RAG for vehicle intelligence at HDFC ERGO. ~97% factual accuracy across 163 languages. Case study.",
+  })}
 >
   <div class="spatial-scene">
     <div class="hologram-interface case-study-scroll">
-      <div class="case-study-body">
+      <div class="case-study-body" role="main">
 
         <a href="/#featured" class="back-link">← Back to featured</a>
 
@@ -100,7 +107,7 @@ const metrics = [
         </section>
 
         <div class="cs-footer">
-          <span>© 2026 Ashwin Gupta • AI Engineer • Bangalore, India</span>
+          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
         </div>
 
       </div>

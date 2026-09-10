@@ -57,6 +57,24 @@ function useExplored() {
       depths = JSON.parse(localStorage.getItem(KEY) ?? "{}");
     } catch {}
 
+    let persistTimer: ReturnType<typeof setTimeout> | undefined;
+    let dirty = false;
+    const persist = () => {
+      clearTimeout(persistTimer);
+      persistTimer = undefined;
+      if (!dirty) return;
+      try { localStorage.setItem(KEY, JSON.stringify(depths)); } catch {}
+      dirty = false;
+    };
+    const schedulePersist = () => {
+      dirty = true;
+      // Keep the display live; persist at most once per 300 ms, off the scroll path.
+      if (persistTimer === undefined) persistTimer = setTimeout(persist, 300);
+    };
+    const onVisibility = () => { if (document.hidden) persist(); };
+    window.addEventListener("pagehide", persist);
+    document.addEventListener("visibilitychange", onVisibility);
+
     const computePct = () =>
       Math.min(
         100,
@@ -73,6 +91,7 @@ function useExplored() {
 
     const init = () => {
       cleanupScroll?.();
+      persist();
       cleanupScroll = null;
       const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
       if (!SITE_PAGES.includes(currentPath)) return;
@@ -84,7 +103,7 @@ function useExplored() {
           : document.body.scrollHeight - window.innerHeight;
       if (getMax() <= 0) {
         depths = { ...depths, [currentPath]: 1 };
-        localStorage.setItem(KEY, JSON.stringify(depths));
+        schedulePersist();
         setPct(computePct());
         return;
       }
@@ -94,8 +113,8 @@ function useExplored() {
         const p = getTop() / max;
         const prev = depths[currentPath] ?? 0;
         if (p > prev) {
-          depths = { ...depths, [currentPath]: p };
-          localStorage.setItem(KEY, JSON.stringify(depths));
+          depths[currentPath] = p;
+          schedulePersist();
           setPct(computePct());
         }
       };
@@ -109,6 +128,9 @@ function useExplored() {
     document.addEventListener("astro:page-load", init);
     return () => {
       cleanupScroll?.();
+      persist();
+      window.removeEventListener("pagehide", persist);
+      document.removeEventListener("visibilitychange", onVisibility);
       document.removeEventListener("astro:page-load", init);
     };
   }, []);
@@ -139,14 +161,25 @@ function useSessionTime() {
 function useMouseCoords() {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   useEffect(() => {
+    let raf = 0;
+    let clientX = 0, clientY = 0;
     const onMove = (e: MouseEvent) => {
-      setPos({
-        x: (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2),
-        y: -(e.clientY - window.innerHeight / 2) / (window.innerHeight / 2),
+      clientX = e.clientX;
+      clientY = e.clientY;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        setPos({
+          x: (clientX - window.innerWidth / 2) / (window.innerWidth / 2),
+          y: -(clientY - window.innerHeight / 2) / (window.innerHeight / 2),
+        });
       });
     };
     window.addEventListener("mousemove", onMove, { passive: true });
-    return () => window.removeEventListener("mousemove", onMove);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+    };
   }, []);
   return pos;
 }

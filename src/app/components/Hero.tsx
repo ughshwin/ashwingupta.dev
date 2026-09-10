@@ -753,7 +753,7 @@ export function Hero() {
                   lineHeight: 1.5,
                 }}
               >
-                AI Engineer
+                AI Systems Engineer
               </p>
             </div>
             <div>

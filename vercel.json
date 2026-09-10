@@ -1,4 +1,5 @@
 {
+  "trailingSlash": false,
   "headers": [
     {
       "source": "/_astro/:path*",
@@ -11,13 +12,85 @@
     }
   ],
   "rewrites": [
-    { "source": "/about",           "destination": "/" },
-    { "source": "/stack",           "destination": "/" },
-    { "source": "/experience",      "destination": "/" },
-    { "source": "/recommendations", "destination": "/" },
-    { "source": "/featured",        "destination": "/" },
-    { "source": "/research",        "destination": "/" },
-    { "source": "/projects",        "destination": "/" },
-    { "source": "/contact",         "destination": "/" }
-  ]
+    {
+      "source": "/about",
+      "destination": "/"
+    },
+    {
+      "source": "/stack",
+      "destination": "/"
+    },
+    {
+      "source": "/experience",
+      "destination": "/"
+    },
+    {
+      "source": "/recommendations",
+      "destination": "/"
+    },
+    {
+      "source": "/featured",
+      "destination": "/"
+    },
+    {
+      "source": "/projects",
+      "destination": "/"
+    },
+    {
+      "source": "/contact",
+      "destination": "/"
+    },
+    {
+      "source": "/impact",
+      "destination": "/"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/projects/ashwingupta-dev",
+      "destination": "/work/ashwingupta-dev",
+      "statusCode": 301
+    },
+    {
+      "source": "/projects/pageindexollama",
+      "destination": "/work/pageindexollama",
+      "statusCode": 301
+    },
+    {
+      "source": "/projects/hsbc-voice",
+      "destination": "/work/hsbc",
+      "statusCode": 301
+    },
+    {
+      "source": "/projects/azure-infra-docs",
+      "destination": "/work/azure-infra-docs",
+      "statusCode": 301
+    },
+    {
+      "source": "/projects/here-app",
+      "destination": "/work/here-app",
+      "statusCode": 301
+    },
+    {
+      "source": "/projects/skill-recommendation-engine",
+      "destination": "/work/skill-recommendation-engine",
+      "statusCode": 301
+    },
+    {
+      "source": "/projects/pinns",
+      "destination": "/research/pinns",
+      "statusCode": 301
+    },
+    {
+      "source": "/projects/scholaros",
+      "destination": "/research/scholaros",
+      "statusCode": 301
+    },
+    {
+      "source": "/research",
+      "destination": "/projects",
+      "statusCode": 301
+    }
+  ],
+  "buildCommand": "npm run build:verified"
 }

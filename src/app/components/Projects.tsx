@@ -1,3 +1,4 @@
+import projectRoutes from "../../data/project-routes.json";
 import { m } from "motion/react";
 import { useState } from "react";
 import {
@@ -325,12 +326,7 @@ export const projects: Project[] = [
   },
 ];
 
-const PROJECT_DETAIL_PATHS: Partial<Record<string, string>> = {
-  "ashwingupta-dev": "/work/ashwingupta-dev",
-  pageindexollama: "/work/pageindexollama",
-  "azure-infra-docs": "/work/azure-infra-docs",
-  "skill-recommendation-engine": "/work/skill-recommendation-engine",
-};
+const PROJECT_DETAIL_PATHS: Record<string, string> = projectRoutes;
 
 const SUMMARY_LABELS = ["Problem", "System", "Design", "Outcome"];
 
@@ -616,7 +612,8 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
         : "rgba(250,204,21,0.06)";
 
   return (
-    <m.div
+    <m.a
+      href={PROJECT_DETAIL_PATHS[p.slug]}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -624,13 +621,15 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
       transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => {
-        if (isMobile && !revealed) {
+      onClick={(event) => {
+        if (
+          isMobile && !revealed && event.detail !== 0 &&
+          !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey
+        ) {
+          event.preventDefault();
           setRevealed(true);
           return;
         }
-        window.location.href =
-          PROJECT_DETAIL_PATHS[p.slug] ?? `/projects/${p.slug}`;
       }}
       style={{
         display: "flex",
@@ -642,6 +641,8 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
         background: "transparent",
         transition: "border-color 0.2s",
         cursor: "pointer",
+        textDecoration: "none",
+        color: "inherit",
       }}
     >
       <div
@@ -801,7 +802,7 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
           ↗
         </span>
       </div>
-    </m.div>
+    </m.a>
   );
 }
 

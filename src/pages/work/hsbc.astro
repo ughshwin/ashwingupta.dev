@@ -1,4 +1,5 @@
 ---
+import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
 
@@ -18,10 +19,16 @@ const metrics = [
   title="Conversational Analytics - HSBC | Ashwin Gupta"
   description="Conversational analytics platform for banking at scale. 1,600+ concurrent sessions. $1.3M annualized savings. Case study."
   canonical={canonical}
+  jsonLd={contentSchemas({
+    type: "CreativeWork",
+    name: "Conversational Analytics - HSBC",
+    url: canonical,
+    description: "Conversational analytics platform for banking at scale. 1,600+ concurrent sessions. $1.3M annualized savings. Case study.",
+  })}
 >
   <div class="spatial-scene">
     <div class="hologram-interface case-study-scroll">
-      <div class="case-study-body">
+      <div class="case-study-body" role="main">
 
         <a href="/#featured" class="back-link">← Back to featured</a>
 
@@ -467,7 +474,7 @@ sequenceDiagram
         </div>
 
         <div class="cs-footer">
-          <span>© 2026 Ashwin Gupta • AI Engineer • Bangalore, India</span>
+          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
         </div>
 
       </div>

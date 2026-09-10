@@ -142,6 +142,9 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Project specific ignores
+ruvector.db
 portfolio-6f25a0fe97f53dfae20e21b03e571fb773979618
 records
 reference
@@ -179,3 +182,21 @@ PERFORMANCE_AUDIT.md
 export-vscode-extensions.ps1
 vscode-extensions-export
 runvector.db
+runvector.db-*
+ruvector.db-*
+
+# Version the canonical route map and SEO regression check.
+!/src/data/
+/src/data/*
+!/src/data/project-routes.json
+!/scripts/
+/scripts/*
+!/scripts/verify-seo.mjs
+
+!/src/data/article-publication.json
+!/scripts/sync-seo.mjs
+!/scripts/verify-seo-live.mjs
+!/scripts/test-seo-verifier.mjs
+!/scripts/crawler-policy.mjs
+!/scripts/verify-content.mjs
+!/scripts/test-content-verifier.mjs
