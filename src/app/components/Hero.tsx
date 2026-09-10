@@ -779,7 +779,7 @@ export function Hero() {
               >
                 SkanAI
                 <br />
-                Jun 2026 – Present
+                15 Jun 2026 – Present
               </p>
             </div>
           </m.div>

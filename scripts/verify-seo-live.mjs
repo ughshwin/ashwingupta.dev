@@ -54,10 +54,12 @@ export async function verifyLive({base=ORIGIN,fetchImpl=fetch}={}){
     const res=await request('/'+alias);assert.equal(res.status,200);publicIndexable(res);
     const html=await res.text();validatePage(html,'/');assert.ok(html.includes('id="'+alias+'"'),'Section content missing');
   }));
-  for(const p of pages.filter(p=>p!=='/'))jobs.push(()=>check('Slash normalization '+p,async()=>{
+  const slashPaths=[...pages.filter(p=>p!=='/'),...aliases.map(a=>'/'+a),...Object.keys(projectRoutes).map(slug=>'/projects/'+slug),'/research'];
+  for(const p of slashPaths)jobs.push(()=>check('Slash normalization '+p,async()=>{
     const res=await request(p+'/');
     assert.ok([301,308].includes(res.status),'Expected a permanent redirect');
-    assert.equal(new URL(res.headers.get('location'),base).pathname,p,'Unexpected slash redirect destination');
+    const target=p==='/research'?'/projects':p.startsWith('/projects/')?projectRoutes[p.slice('/projects/'.length)]:undefined;
+    assert.ok([p,target].includes(new URL(res.headers.get('location'),base).pathname),'Unexpected slash redirect destination');
   }));
   for(const [slug,target] of Object.entries(projectRoutes))jobs.push(()=>check('Redirect /projects/'+slug,async()=>{
     const res=await request('/projects/'+slug);assert.equal(res.status,301,'Expected HTTP 301');

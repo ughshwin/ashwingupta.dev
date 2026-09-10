@@ -3,6 +3,8 @@ import profileImage from "../assets/profilePicture.webp?url";
 export const SITE_URL = "https://www.ashwingupta.dev/";
 export const PERSON_ID = SITE_URL + "#ashwin-gupta";
 export const WEBSITE_ID = SITE_URL + "#website";
+export const PAPER_URL = "https://ijiset.com/conference/NCISCT-2022/IJISET-NCISCT-220520.pdf";
+export const PAPER_ID = PAPER_URL + "#article";
 
 export const personSchema = {
   "@context": "https://schema.org",
@@ -13,6 +15,21 @@ export const personSchema = {
   "image": new URL(profileImage, SITE_URL).href,
   "jobTitle": "AI Systems Engineer",
   "worksFor": { "@type": "Organization", "name": "SkanAI" },
+  "memberOf": [
+    {
+      "@type": "EmployeeRole",
+      "roleName": "AI Engineer",
+      "startDate": "2026-06-15",
+      "memberOf": { "@type": "Organization", "name": "SkanAI" }
+    },
+    {
+      "@type": "EmployeeRole",
+      "roleName": "AI Engineer",
+      "startDate": "2024-06",
+      "endDate": "2026-06-05",
+      "memberOf": { "@type": "Organization", "name": "Coforge" }
+    }
+  ],
   "alumniOf": [
     { "@type": "EducationalOrganization", "name": "BMS College of Engineering" }
   ],
@@ -115,4 +132,32 @@ export const profileSchema = {
   inLanguage: "en",
   mainEntity: { "@id": PERSON_ID },
   isPartOf: { "@id": WEBSITE_ID },
+  citation: { "@id": PAPER_ID },
+};
+
+// Publisher-indexed title, authors, issue and month; no invented publication day or DOI.
+export const paperSchema = {
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "@id": PAPER_ID,
+  name: "Generating MCQs using Graphs and Language Models",
+  headline: "Generating MCQs using Graphs and Language Models",
+  url: PAPER_URL,
+  datePublished: "2022-05",
+  inLanguage: "en",
+  author: [{ "@id": PERSON_ID }, { "@type": "Person", name: "Gururaja H S" }],
+  isPartOf: {
+    "@type": "PublicationIssue",
+    name: "NCISCT-2022 Special Issue",
+    isPartOf: {
+      "@type": "PublicationVolume",
+      volumeNumber: "9",
+      isPartOf: {
+        "@type": "Periodical",
+        name: "International Journal of Innovative Science, Engineering & Technology",
+        issn: "2348-7968"
+      }
+    }
+  },
+  encoding: { "@type": "MediaObject", contentUrl: PAPER_URL, encodingFormat: "application/pdf" }
 };

@@ -172,7 +172,7 @@ const ENTRIES: Entry[] = [
     weight: "recent",
     role: "AI Engineer",
     company: "Coforge",
-    period: "Jun 2024 – Jun 2026",
+    period: "Jun 2024 – 5 Jun 2026",
     start: new Date(2024, 5),
     end: new Date(2026, 5, 5),
     bullets: [
@@ -192,7 +192,7 @@ const ENTRIES: Entry[] = [
     weight: "recent",
     role: "AI Engineer",
     company: "SkanAI",
-    period: "Jun 2026 – Present",
+    period: "15 Jun 2026 – Present",
     start: new Date(2026, 5, 15),
     end: "present",
     bullets: [

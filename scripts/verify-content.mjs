@@ -58,6 +58,11 @@ export function verifyContent(root = 'dist') {
     const metadata=nodes.filter(n=>n.tagName==='script'&&attr(n,'type')==='application/ld+json').map(n=>JSON.parse(n.childNodes.map(c=>c.value??'').join('')));
     const person=metadata.find(s=>s['@type']==='Person');
     assert.ok(person.image,`${p}: Person portrait`);
+    const currentRole=person.memberOf?.find(role=>role.memberOf?.name==='SkanAI');
+    const previousRole=person.memberOf?.find(role=>role.memberOf?.name==='Coforge');
+    assert.equal(currentRole?.startDate,'2026-06-15',`${p}: confirmed SkanAI start date`);
+    assert.equal(currentRole?.endDate,undefined,`${p}: SkanAI role remains current`);
+    assert.equal(previousRole?.endDate,'2026-06-05',`${p}: confirmed Coforge end date`);
     assert.ok(!person.alumniOf.some(s=>s.name==='IIIT Bangalore'),`${p}: ongoing diploma must not be represented as completed`);
     const page=metadata.find(s=>['WebPage','ProfilePage','CollectionPage'].includes(s['@type']));
     assert.ok(page?.image,`${p}: page image metadata`);
@@ -69,6 +74,23 @@ export function verifyContent(root = 'dist') {
       const paper=metadata.find(s=>s['@type']==='ScholarlyArticle');
       assert.equal(paper.associatedMedia?.encodingFormat,'application/pdf');
       assert.ok(nodes.some(n=>n.tagName==='a'&&new URL(attr(n,'href')||'/',ORIGIN).href===paper.associatedMedia.contentUrl),'Whitepaper metadata must match a real page link');
+    }
+    if(p==='/research/scholaros'){
+      const work=metadata.find(s=>s['@id']===ORIGIN+p+'#content');
+      assert.equal(work['@type'],'CreativeWork');
+      assert.equal(work.codeRepository,undefined,'Private repository is not advertised as public source evidence');
+    }
+    if(p==='/'){
+      assert.ok(content.includes('15 Jun 2026')&&content.includes('5 Jun 2026'),'Confirmed dates must appear in visible homepage content');
+      assert.ok(!content.includes('Jun 2024 – Present'),'Coforge must not be shown as current');
+      const publication=metadata.find(s=>s['@type']==='ScholarlyArticle'&&s.url?.includes('IJISET-NCISCT-220520.pdf'));
+      assert.equal(publication?.name,'Generating MCQs using Graphs and Language Models');
+      assert.equal(publication.datePublished,'2022-05','Publisher gives a month, not an invented day');
+      assert.equal(publication.author[0]['@id'],person['@id']);
+      assert.equal(publication.author[1].name,'Gururaja H S');
+      assert.equal(page.citation?.['@id'],publication['@id']);
+      assert.ok(nodes.some(n=>n.tagName==='a'&&attr(n,'href')===publication.url),'Publication metadata must match an existing visible link');
+      assert.ok(nodes.some(n=>n.tagName==='meta'&&attr(n,'property')==='og:type'&&attr(n,'content')==='website'),'Citing a paper must not turn the profile into an article');
     }
     if(p==='/')for(const name of ['SkanAI','Coforge','Gida Technologies','IISc','CellStrat','OutLawed','IIIT Bangalore','BMS College of Engineering'])assert.ok(content.includes(name),'Missing server-rendered experience: '+name);
     graph.set(p,[...new Set(links)]);

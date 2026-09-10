@@ -91,12 +91,29 @@ The apex host currently uses a temporary 307 redirect to www. Change the Vercel
 domain redirect to permanent (308) in domain settings. This is independent of the
 trailing-slash configuration in this repository.
 
-The public ScholarOS repository link returned 404; confirm whether it is private,
-renamed, or unavailable. Do not publish private work solely to clear this audit.
-The indexed resume still describes Coforge as current, while the homepage names
-SkanAI. The Featured HSBC card also retains a Present date. These factual
-consistency issues need owner-reviewed updates; visual text and the PDF were
-preserved under the pixel-identity constraint.
+The owner confirmed ScholarOS is private. Its public case study remains indexed;
+the private URL is no longer advertised as public codeRepository metadata. The
+existing GitHub control keeps its design and is labeled access-restricted for
+assistive technology. No repository permissions were changed.
+
+The owner confirmed SkanAI began on 2026-06-15 and Coforge ended on 2026-06-05.
+The homepage timeline, hero, Featured HSBC date, llms.txt and dated EmployeeRole
+metadata now agree. The resume is explicitly excluded from this update and may
+still appear in search with older employment information.
+
+The existing NCISCT-2022 paper link now has a profile citation: Generating MCQs
+using Graphs and Language Models, Ashwin Gupta and Gururaja H S, IJISET volume 9,
+special issue, May 2022. Publisher-indexed metadata establishes month-level
+publication precision; no exact day, DOI or citation count has been invented.
+
+The owner supplied Search Console exports dated 2026-09-10, with chart data through
+2026-09-04: 18 indexed, 46 not indexed. The 28 discovered-but-not-indexed examples
+are all trailing-slash variants (8 section aliases, 8 legacy project URLs and 12
+canonical document variants). Redirect/canonical exclusions are intentional for
+those variants; inspect and request indexing of canonical destinations instead.
+The exports do not include example URLs for the 9 404s or 5 crawled-not-indexed
+pages. Do not invent redirects without those URLs. The live verifier covers slash
+variants of canonical pages, section aliases, legacy project URLs and /research.
 
 Preserve case-study metrics as reported claims unless their methodology and
 independent evidence are available. Add genuine supporting links through public

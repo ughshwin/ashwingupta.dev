@@ -29,9 +29,9 @@ const {
 } = Astro.props;
 const pageSchemas = jsonLd.map((schema) => ({
   ...schema,
-  ...(["Article", "ScholarlyArticle", "WebPage", "ProfilePage", "CollectionPage"].includes((schema as Record<string, string>)["@type"]) ? { image } : {}),
+  ...((schema as Record<string, string>).url === canonical && ["Article", "ScholarlyArticle", "WebPage", "ProfilePage", "CollectionPage"].includes((schema as Record<string, string>)["@type"]) ? { image } : {}),
 }));
-const article = jsonLd.find((schema) => ["Article", "ScholarlyArticle"].includes((schema as Record<string, string>)["@type"])) as Record<string, string> | undefined;
+const article = jsonLd.find((schema) => (schema as Record<string, string>).url === canonical && ["Article", "ScholarlyArticle"].includes((schema as Record<string, string>)["@type"])) as Record<string, string> | undefined;
 ---
 
 <!doctype html>

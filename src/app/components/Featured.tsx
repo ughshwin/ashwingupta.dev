@@ -76,7 +76,7 @@ const ITEMS: FeaturedItem[] = [
     name: "Conversational Analytics",
     title:
       "Real-Time Conversational AI - SIP Voice Infrastructure at Production Scale",
-    subtitle: "Coforge - HSBC • Jun 2024 – Present",
+    subtitle: "Coforge - HSBC • Jun 2024 – 5 Jun 2026",
     link: "/work/hsbc",
     bullets: [
       "GIL-bound threading serialised all audio onto one core on a **32-core VM** - **20 concurrent calls**, 31 cores idle, CPU utilisation capped below **20%**.",

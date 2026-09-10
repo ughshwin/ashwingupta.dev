@@ -1,6 +1,6 @@
 # Ashwin Gupta
 
-> AI Systems Engineer based in Bangalore, India. Current employment: AI Engineer at SkanAI, June 2026–present.
+> AI Systems Engineer based in Bangalore, India. Current employment: AI Engineer at SkanAI since 15 June 2026. Previous employment: AI Engineer at Coforge, June 2024–5 June 2026.
 
 This portfolio describes production AI systems, inference routing, concurrency architecture, retrieval-augmented generation, and physics-informed machine learning. Case studies distinguish delivered work from systems in development.
 
@@ -17,7 +17,7 @@ This portfolio describes production AI systems, inference routing, concurrency a
 
 ## Research and experimental systems
 - [Controla](https://www.ashwingupta.dev/research/controla): Local inference routing with contextual weight learning; in development.
-- [ScholarOS](https://www.ashwingupta.dev/research/scholaros): Evidence-bound research execution; in development.
+- [ScholarOS](https://www.ashwingupta.dev/research/scholaros): Evidence-bound research execution; in development. This case study is public; the source repository is private.
 - [Physics-informed neural networks](https://www.ashwingupta.dev/research/pinns): Dual-loss framework, benchmarks, and publication references.
 - [PHYSCLIP](https://www.ashwingupta.dev/research/physclip): Contrastive physics regime classification.
 
@@ -30,3 +30,6 @@ This portfolio describes production AI systems, inference routing, concurrency a
 - [GitHub](https://github.com/ughshwin)
 - [LinkedIn](https://www.linkedin.com/in/ashwingupta3012/)
 - [Kaggle](https://www.kaggle.com/ashwingupta3012)
+
+## Published paper
+- [Generating MCQs using Graphs and Language Models](https://ijiset.com/conference/NCISCT-2022/IJISET-NCISCT-220520.pdf): Ashwin Gupta and Gururaja H S; IJISET, volume 9, special issue, May 2022 (NCISCT-2022). The publisher may present a browser verification page to automated requests.

@@ -1,5 +1,5 @@
 ---
-import { profileSchema } from "../lib/structured-data";
+import { profileSchema, paperSchema } from "../lib/structured-data";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import App from "../app/App";
 import SiteAnalytics from "../app/SiteAnalytics";
@@ -14,7 +14,7 @@ const canonical = "https://www.ashwingupta.dev/";
   title="Ashwin Gupta - AI Systems Engineer"
   description="Inference routing. Concurrency architecture. Physics-informed ML. An AI Systems Engineer who thinks in systems and in design - building what surrounds the model, not just the model itself. Bangalore."
   canonical={canonical}
-  jsonLd={[profileSchema]}
+  jsonLd={[profileSchema, paperSchema]}
 >
   <link slot="head" rel="preload" as="image" href={profilePictureUrl} fetchpriority="high" type="image/webp" />
   <App client:load />
