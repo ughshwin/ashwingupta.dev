@@ -8,6 +8,7 @@ const FONT_MONO = "'SF Mono', 'Fira Mono', 'Consolas', monospace";
 const SITE_PAGES = [
   "/",
   "/articles",
+  "/articles/what-it-takes-to-leave-a-system-alone",
   "/articles/the-space-between-stars",
   "/articles/the-layer-nobody-talks-about",
   "/work/hsbc",
