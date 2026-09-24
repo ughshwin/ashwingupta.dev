@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState<boolean>(() => {
-    if (globalThis.window !== undefined) {
-      return globalThis.window.matchMedia(query).matches;
-    }
-    return false;
-  });
+  // Match the server's first render, then resolve media in the effect. Reading
+  // window here caused mobile hydration to discard and rebuild the entire page.
+  const [matches, setMatches] = useState(false);
 
   useEffect(() => {
     if (globalThis.window === undefined) return;

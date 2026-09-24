@@ -10,6 +10,7 @@ const projectRedirects = Object.fromEntries(Object.entries(projectRoutes).map(([
 export default defineConfig({
   site: "https://www.ashwingupta.dev",
   output: "static",
+  prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
   redirects: {
     "/research": "/projects",
     ...projectRedirects,

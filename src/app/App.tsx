@@ -22,6 +22,11 @@ export default function App() {
   useHashScroll();
 
   useEffect(() => {
+    document.documentElement.dataset.portfolioReady = 'true';
+    window.dispatchEvent(new Event('portfolio:content-ready'));
+  }, []);
+
+  useEffect(() => {
     const el = document.querySelector(
       ".hologram-interface",
     ) as HTMLElement | null;

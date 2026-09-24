@@ -1,0 +1,245 @@
+---
+const destinations = [
+  { href: '/featured', title: 'Show me what you’ve built.', detail: 'Ideas that made it into the real world.', reply: 'Let’s start with the things that shipped.' },
+  { href: '/work/hsbc', title: 'What happens at scale?', detail: 'A global bank. 7× capacity. A few good decisions.', reply: 'This one starts with a voice system under pressure.' },
+  { href: '/articles/what-it-takes-to-leave-a-system-alone', title: 'When do you stop building?', detail: 'The AI project I chose to leave unfinished.', reply: 'The hard part was deciding whether the next fix was worth it.' },
+  { href: '/articles/the-space-between-stars', title: 'Why all the stars?', detail: 'A designer’s eye. An engineer’s way of thinking.', reply: 'I wanted you to feel curious before you read a word.' },
+];
+---
+
+<div id="entrance" transition:persist="entrance" role="dialog" aria-modal="true" aria-labelledby="entrance-title" hidden>
+  <div class="entrance-menu">
+    <p class="entrance-eyebrow">Hey, I’m Ashwin<span> — </span>I build AI systems.</p>
+    <h2 id="entrance-title"><span class="entrance-title-line">A little chaos.</span><br /><em class="entrance-title-line">A lot of intent.</em></h2>
+    <p class="entrance-invitation">Follow your curiosity. I’ll take it from here.</p>
+    <nav aria-label="Choose where to begin">
+      {destinations.map(({ href, title, detail, reply }) => (
+        <a class="entrance-link" href={href} data-reply={reply} data-astro-prefetch="hover">
+          <span class="entrance-star" aria-hidden="true"><i /><i /><i /></span>
+          <span class="entrance-label">{title}<small>{detail}</small></span>
+          <span class="entrance-arrow" aria-hidden="true">↗</span>
+        </a>
+      ))}
+      <a class="entrance-full" href="/" data-reply="No map needed. Make yourself at home.">Let me look around <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+  <p class="entrance-footnote" aria-hidden="true">No wrong turns. Just different stories.</p>
+  <span class="entrance-status" role="status" aria-live="polite"></span>
+</div>
+
+<script>
+  import { navigate } from 'astro:transitions/client';
+  import { prefetch } from 'astro:prefetch';
+  import { scrollToSection } from '../hooks/useHashScroll';
+  import { RELEASE_MS } from '../lib/entrance-motion';
+  import { assembleEntranceText } from '../lib/entrance-text';
+
+  const shell = document.getElementById('entrance')!;
+  const links = Array.from(shell.querySelectorAll<HTMLAnchorElement>('a'));
+  let active = !!document.documentElement.dataset.entrance;
+  let selected = false;
+  let ready = false;
+  let stopText = () => {};
+  const footnote = shell.querySelector<HTMLElement>('.entrance-footnote')!;
+  const defaultReply = footnote.textContent!;
+  const respond = (link?: HTMLAnchorElement) => {
+    if (!selected) footnote.textContent = link?.dataset.reply || defaultReply;
+  };
+  for (const link of links) {
+    link.addEventListener('pointerenter', () => respond(link));
+    link.addEventListener('pointerleave', () => respond(links.find(item => item === document.activeElement)));
+    link.addEventListener('focus', () => respond(link));
+    link.addEventListener('blur', () => respond());
+  }
+  let safety: ReturnType<typeof setTimeout>;
+  const delay = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
+  const phase = (value: string) => {
+    document.documentElement.dataset.entrance = value;
+    window.dispatchEvent(new CustomEvent('portfolio:entrance', { detail: value }));
+  };
+  const remember = () => { try { sessionStorage.setItem('portfolio:entered', '2'); } catch {} };
+  const unlock = () => {
+    document.querySelector<HTMLElement>('#site-content')?.removeAttribute('inert');
+    document.querySelector<HTMLElement>('#site-chrome')?.removeAttribute('inert');
+  };
+  const finish = (focus = true) => {
+    if (!active) return;
+    active = false;
+    stopText();
+    clearTimeout(safety);
+    remember();
+    delete document.documentElement.dataset.entrance;
+    shell.hidden = true;
+    unlock();
+    window.dispatchEvent(new CustomEvent('portfolio:entrance', { detail: 'done' }));
+    if (focus) {
+      const target = document.querySelector<HTMLElement>(location.pathname === '/featured' ? '#featured h2' : '#site-content h1');
+      if (target) { target.tabIndex = -1; target.focus({ preventScroll: true }); }
+    }
+  };
+
+  if (active) {
+    shell.hidden = false;
+    document.querySelector('#site-content')?.setAttribute('inert', '');
+    document.querySelector('#site-chrome')?.setAttribute('inert', '');
+    // The head bootstrap fails open if this module never loads. Once mounted,
+    // the menu remains usable even if the decorative canvas fails to hydrate.
+    document.documentElement.dataset.entranceMounted = 'true';
+    const hydrated = new Promise<void>(resolve => {
+      if (document.documentElement.dataset.portfolioReady) resolve();
+      else window.addEventListener('portfolio:content-ready', () => resolve(), { once: true });
+    });
+    const contentReady = Promise.all([document.fonts.ready, hydrated]);
+    const canvasReady = new Promise<void>(resolve => {
+      if (document.querySelector('canvas[data-particles-ready]')) resolve();
+      else window.addEventListener('portfolio:particles-ready', () => resolve(), { once: true });
+    });
+    void (async () => {
+      await Promise.race([Promise.all([contentReady, canvasReady]), delay(1800)]);
+      if (!active) return;
+      await delay(500);
+      if (!active) return;
+      await document.fonts.ready;
+      if (!active || selected) return;
+      // The particle layer must be mounted before taking the live field snapshot.
+      await canvasReady;
+      if (!active || selected) return;
+      const text = assembleEntranceText(shell);
+      stopText = text.stop;
+      phase('assembling');
+      // Respect save-data/slow connections; no speculative page execution.
+      for (const link of links) prefetch(link.pathname);
+      await text.finished;
+      if (!active || selected) return;
+      shell.dataset.copyVisible = 'true';
+      await delay(700);
+      if (!active || selected) return;
+      phase('ready');
+      ready = true;
+      shell.tabIndex = -1;
+      shell.focus({ preventScroll: true });
+    })();
+  }
+
+  const choose = async (link: HTMLAnchorElement) => {
+    if (selected || !active) return;
+    selected = true;
+    stopText();
+    remember();
+    link.dataset.selected = 'true';
+    shell.setAttribute('aria-busy', 'true');
+    shell.querySelector('.entrance-status')!.textContent = `Opening ${link.textContent?.trim().replace(/\s+/g, ' ')}`;
+    phase('selected');
+    // Start loading immediately; allow a brief selection beat before the burst.
+    const sameDocument = link.pathname === '/' || link.pathname === '/featured';
+    let loaded: Promise<unknown> = Promise.resolve();
+    if (!sameDocument) {
+      loaded = navigate(link.pathname).catch(() => { location.assign(link.href); });
+    }
+    safety = setTimeout(() => { finish(false); if (!sameDocument) location.assign(link.href); }, 7000);
+    await delay(80);
+    if (!active) return;
+    phase('releasing');
+    await loaded;
+    if (!active) return;
+    if (sameDocument) {
+      scrollToSection(link.pathname === '/featured' ? 'featured' : 'hero', 'instant');
+      history.replaceState(history.state, '', link.pathname);
+    }
+    phase('revealing');
+    unlock();
+    await delay(RELEASE_MS);
+    finish();
+  };
+
+  shell.addEventListener('click', event => {
+    const link = (event.target as Element).closest<HTMLAnchorElement>('a');
+    if (!link || !active || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
+    event.preventDefault();
+    void choose(link);
+  });
+  document.addEventListener('keydown', event => {
+    if (!active) return;
+    if (event.key === 'Escape') { event.preventDefault(); void choose(links[links.length - 1]); }
+    if (event.key === 'Tab' && !selected) {
+      if (!ready) { event.preventDefault(); return; }
+      const first = links[0], last = links[links.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      else if (event.shiftKey && document.activeElement === shell) { event.preventDefault(); last.focus(); }
+    }
+  });
+  document.addEventListener('astro:before-swap', event => {
+    if (!active) return;
+    const next = (event as Event & { newDocument: Document }).newDocument;
+    next.documentElement.dataset.entrance = document.documentElement.dataset.entrance;
+    next.documentElement.dataset.entranceMounted = 'true';
+    next.querySelector('#site-content')?.setAttribute('inert', '');
+    next.querySelector('#site-chrome')?.setAttribute('inert', '');
+  });
+  window.addEventListener('pagehide', () => finish(false));
+</script>
+
+<style is:global>
+  #site-content, #site-chrome { transition: opacity 650ms ease; }
+  html[data-entrance]:not([data-entrance="revealing"]) #site-content,
+  html[data-entrance]:not([data-entrance="revealing"]) #site-chrome { opacity: 0; visibility: hidden; pointer-events: none; }
+  #entrance[hidden] { display: none; }
+  #entrance { position: fixed; inset: 0; z-index: 1100; display: grid; place-items: center; overflow: auto; color: #eeede9; font-family: 'DM Sans', sans-serif; outline: none; }
+  .entrance-menu { width: min(390px, 78vw); opacity: 0; pointer-events: none; transition: transform 900ms cubic-bezier(.16,1,.3,1); }
+  .entrance-text-particles { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  [data-entrance="assembling"] .entrance-menu { opacity: 1; }
+  #entrance-title { opacity: var(--headline-solid, 0); }
+  .entrance-title-line { display: inline-block; }
+  .entrance-menu > :not(#entrance-title) { opacity: 0; transform: translateY(12px); transition: opacity 700ms ease, transform 700ms cubic-bezier(.16,1,.3,1); }
+  #entrance[data-copy-visible="true"] .entrance-menu > :not(#entrance-title), [data-entrance="selected"] .entrance-menu > :not(#entrance-title) { opacity: 1; transform: translateY(0); }
+  [data-entrance="ready"] .entrance-menu, [data-entrance="selected"] .entrance-menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  [data-entrance="releasing"] .entrance-menu, [data-entrance="revealing"] .entrance-menu { opacity: 0; transform: translateY(-8px); transition-duration: 280ms; pointer-events: none; }
+  .entrance-eyebrow { font: 12px/1.6 'DM Sans', sans-serif; color: #b0b6ba; text-align: center; margin: 0 0 14px; }
+  .entrance-eyebrow span { color: #5abdb2; padding: 0 5px; }
+  #entrance-title { font: 500 clamp(30px, 4.8vh, 46px)/1.08 'Playfair Display', Georgia, serif; text-align: center; letter-spacing: -.045em; margin: 0 0 12px; }
+  #entrance-title em { display: inline-block; font-weight: 400; color: #b9ded7; transform: rotate(-3deg); }
+  .entrance-invitation { margin: 0 0 20px; text-align: center; font-size: 12px; line-height: 1.6; color: #a9b0b5; }
+  .entrance-link { position: relative; display: flex; align-items: center; gap: 17px; min-height: 60px; padding: 6px 12px; text-decoration: none; color: #e1e2e3; border-radius: 12px; transition: background 240ms, color 240ms, transform 400ms cubic-bezier(.16,1,.3,1); }
+  .entrance-link:nth-child(2) { margin-left: 12px; }
+  .entrance-link:nth-child(3) { margin-left: 5px; }
+  .entrance-link:nth-child(4) { margin-left: 16px; }
+  .entrance-link:hover, .entrance-link:focus-visible, .entrance-link[data-selected] { background: #9fdfd90c; color: #fff; transform: translateX(4px); }
+  .entrance-link:focus-visible, .entrance-full:focus-visible { outline: 1px solid #7ecfc5; outline-offset: 4px; }
+  .entrance-star { position: relative; flex: 0 0 5px; height: 5px; border-radius: 50%; background: #a3c9c2; box-shadow: 0 0 9px #b9ded755; transition: box-shadow 300ms; }
+  .entrance-star::before { content: ''; position: absolute; width: 1px; height: 45px; top: 10px; left: 2px; background: linear-gradient(#a3c9c230, transparent); transform: rotate(-12deg); transform-origin: top; }
+  .entrance-link:nth-child(4) .entrance-star::before { display: none; }
+  .entrance-star i { position: absolute; inset: 1px; border-radius: 50%; background: #c5f2e9; opacity: 0; transition: transform 550ms cubic-bezier(.16,1,.3,1), opacity 300ms; }
+  .entrance-link:is(:hover, :focus-visible, [data-selected]) .entrance-star { box-shadow: 0 0 16px #b9ded7; }
+  .entrance-link:is(:hover, :focus-visible, [data-selected]) .entrance-star i { opacity: .7; transform: translate(-13px, -8px); }
+  .entrance-link:is(:hover, :focus-visible, [data-selected]) .entrance-star i:nth-child(2) { transform: translate(-20px, 3px); transition-delay: 35ms; }
+  .entrance-link:is(:hover, :focus-visible, [data-selected]) .entrance-star i:nth-child(3) { transform: translate(-9px, 11px); transition-delay: 70ms; }
+  .entrance-label { font-size: 15px; font-weight: 500; line-height: 1.5; }
+  .entrance-label small { display: block; color: #969da4; font-size: 11px; font-weight: 400; margin-top: 2px; }
+  .entrance-arrow { margin-left: auto; color: #9bbdb9; font-size: 19px; transition: transform 180ms; }
+  .entrance-link:is(:hover, :focus-visible) .entrance-arrow { transform: translate(3px,-3px) rotate(8deg); }
+  .entrance-link:first-child .entrance-label { color: #bbdfd8; }
+  .entrance-full { display: flex; align-items: center; justify-content: center; gap: 16px; min-height: 50px; margin-top: 10px; font-size: 14px; color: #d4d7d8; text-decoration: none; }
+  .entrance-full:hover { color: #b2e4da; }
+  .entrance-footnote { position: absolute; bottom: max(25px, env(safe-area-inset-bottom)); left: 20px; right: 20px; text-align: center; font: italic 13px/1.5 'Playfair Display', Georgia, serif; color: #a3b5b2; opacity: 0; transition: opacity 600ms; }
+  #entrance[data-copy-visible="true"] .entrance-footnote { opacity: 1; transition-duration: 700ms; }
+  .entrance-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  @media (max-width: 600px), (max-height: 650px) {
+    .entrance-menu { width: min(304px, 76vw); }
+    .entrance-eyebrow { font-size: 10px; margin-bottom: 9px; }
+    #entrance-title { font-size: 31px; margin-bottom: 10px; }
+    .entrance-invitation { font-size: 10px; margin-bottom: 12px; }
+    .entrance-link { min-height: 48px; padding: 2px 4px; gap: 9px; }
+    .entrance-label { font-size: 12.5px; }
+    .entrance-label small { font-size: 9.5px; }
+    .entrance-full { min-height: 48px; margin-top: 3px; font-size: 13px; }
+  }
+  @media (max-height: 440px) { #entrance { place-items: start center; } .entrance-menu { margin: 20px 0; } .entrance-footnote { display: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    /* Keep the staged reveal; reduced motion only removes the copy's movement. */
+    .entrance-menu > :not(#entrance-title) { transform: none; }
+    #entrance[data-copy-visible="true"] .entrance-menu > :not(#entrance-title) { transition: opacity 700ms ease !important; }
+    #entrance *, #entrance *::before { transition: none !important; }
+    .entrance-link:is(:hover, :focus-visible, [data-selected]) { transform: none; }
+  }
+</style>
