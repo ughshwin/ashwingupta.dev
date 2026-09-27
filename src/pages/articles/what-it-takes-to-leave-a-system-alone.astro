@@ -40,7 +40,7 @@ const description = "What it takes to leave a system alone: shared state, audit 
         <p class="th-body">I built SyDaG to take over that work. It never reached a working end-to-end proof of concept. I stopped development myself when the effort I initially expected to take four or five weeks began looking like at least half a calendar year to get close to usable.</p>
         <p class="th-body">Even that estimate left the most important question unanswered: <em>how much work would it require from us when the next process arrived?</em></p>
 
-        <div class="th-section-divider"><span class="th-section-divider-mark">• • •</span></div>
+
 
         <section class="th-section">
           <h2 class="th-section-title">The Work We Were Trying to Remove</h2>
@@ -91,7 +91,7 @@ const description = "What it takes to leave a system alone: shared state, audit 
           <p class="th-body">I could not judge a change to the guards solely by whether the next run advanced. That would favour permissiveness without establishing trust. Equally, a stricter review was not automatically an improvement if it could not identify a reachable completion condition. I had to preserve both requirements while adjusting the system, and the repeated need to make that adjustment was precisely the human involvement I had hoped to reduce.</p>
         </section>
 
-        <div class="th-section-divider"><span class="th-section-divider-mark">• • •</span></div>
+
 
         <section class="th-section">
           <h2 class="th-section-title">The Environment Kept Moving</h2>
@@ -151,7 +151,7 @@ const description = "What it takes to leave a system alone: shared state, audit 
           <p class="th-body">Once I no longer expected it to meet that requirement at an acceptable cost, I stopped.</p>
         </section>
 
-        <div class="th-section-divider"><span class="th-section-divider-mark">• • •</span></div>
+
         <p class="th-author-note">This is a retrospective on an unfinished internal engineering effort. The timelines are my working estimates; the reliability problems describe our experience with this workflow, rather than a general limit on what coding agents can achieve.</p>
         <div class="th-footer"><span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span></div>
       </div>
@@ -175,6 +175,8 @@ const description = "What it takes to leave a system alone: shared state, audit 
 
   .thinking-body {
     --prose-gap: 1.1rem;
+    /* Preserve the former divider: two prose gaps plus its 0.7rem line box. */
+    --section-gap: calc(var(--prose-gap) + var(--prose-gap) + 0.7rem);
     width: max(320px, 60vw);
     margin: 0 auto;
     padding: 5rem 0 8rem;
@@ -248,23 +250,8 @@ const description = "What it takes to leave a system alone: shared state, audit 
     margin: 2.5rem 0;
   }
 
-  .th-section-divider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: var(--prose-gap) 0;
-  }
-
-  .th-section-divider-mark {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    line-height: 1;
-    letter-spacing: 0.4em;
-    color: rgba(255, 255, 255, 0.45);
-  }
-
   /* Sections */
-  .th-section { margin: 0 0 var(--prose-gap); }
+  .th-section { margin: var(--section-gap) 0 0; }
 
   .th-section-title {
     font-family: 'Playfair Display', Georgia, serif;
@@ -295,7 +282,7 @@ const description = "What it takes to leave a system alone: shared state, audit 
     line-height: 1.7;
     color: rgba(255, 255, 255, 0.28);
     font-style: italic;
-    margin: 0 0 6rem;
+    margin: var(--section-gap) 0 6rem;
   }
 
   /* Footer */
