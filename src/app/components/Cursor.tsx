@@ -108,17 +108,19 @@ export function Cursor() {
   if (isTouchDevice) return null;
   return (
     <div ref={wrap} className="site-pointer" aria-hidden="true">
-      <svg className="site-pointer-icon" width="29" height="29" viewBox="0 0 26 26">
-        <path
-          d="M4.8 4.2 C3.6 3.8 3.1 4.5 3.5 5.7 L8.7 21.1 C9.1 22.4 10.6 22.4 11 21.1 L13.5 14.1 L20.6 11.6 C21.9 11.2 21.9 9.7 20.6 9.3 Z"
-          fill="rgba(4, 9, 16, 0.82)"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinejoin="round"
-          strokeLinecap="round"
-        />
-      </svg>
-      {PARTICLES.map((particle, index) => <span key={index} className="site-pointer-particle" style={particle} />)}
+      <div className="site-pointer-body">
+        <svg className="site-pointer-icon" width="29" height="29" viewBox="0 0 26 26">
+          <path
+            d="M4.8 4.2 C3.6 3.8 3.1 4.5 3.5 5.7 L8.7 21.1 C9.1 22.4 10.6 22.4 11 21.1 L13.5 14.1 L20.6 11.6 C21.9 11.2 21.9 9.7 20.6 9.3 Z"
+            fill="rgba(4, 9, 16, 0.82)"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        </svg>
+        {PARTICLES.map((particle, index) => <span key={index} className="site-pointer-particle" style={particle} />)}
+      </div>
     </div>
   );
 }
