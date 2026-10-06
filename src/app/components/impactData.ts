@@ -1,5 +1,6 @@
-// Machine-readable impact catalog driving the Impact constellation.
+// Machine-readable impact catalog driving the Impact outcome columns.
 // Human source of truth: /IMPACT.md. Keep the two in sync.
+import { formatKaggleCount, KAGGLE_DATASET_URL, KAGGLE_RECORDED_COUNTS, type KaggleCount } from "../../lib/kaggle-stats";
 
 export type ImpactCategory =
   | "scale"
@@ -40,10 +41,11 @@ export type Impact = {
   category: ImpactCategory;
   magnitude: 1 | 2 | 3 | 4 | 5;
   href?: string;
+  liveStat?: KaggleCount;
 };
 
 // Per-project context (client + one-line description), keyed by `item`.
-// Source: /IMPACT.md § "Per-item detail". Shown in the focus readout.
+// Source: /IMPACT.md § "Per-item detail".
 export const ITEM_META: Record<string, { client: string; context: string }> = {
   "HSBC Conversational Analytics": {
     client: "Coforge",
@@ -364,12 +366,22 @@ export const impacts: Impact[] = [
     magnitude: 2,
   },
   {
-    value: "42.8K",
-    label: "downloads, Human Faces Kaggle set (202K views)",
+    value: formatKaggleCount(KAGGLE_RECORDED_COUNTS.downloads),
+    label: "downloads, Human Faces Kaggle set",
     item: "Open data",
     category: "reach",
     magnitude: 3,
-    href: "/about",
+    href: KAGGLE_DATASET_URL,
+    liveStat: "downloads",
+  },
+  {
+    value: formatKaggleCount(KAGGLE_RECORDED_COUNTS.views),
+    label: "views, Human Faces Kaggle set",
+    item: "Open data",
+    category: "reach",
+    magnitude: 3,
+    href: KAGGLE_DATASET_URL,
+    liveStat: "views",
   },
   {
     value: "NPS +50",

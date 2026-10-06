@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { m } from "motion/react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
+import { useKaggleDatasetStats } from "../../hooks/useKaggleDatasetStats";
+import { formatKaggleCount, KAGGLE_RECORDED_COUNTS } from "../../lib/kaggle-stats";
 import bmsLogoUrl from "../../assets/BMSlogo.webp?url";
 import coforgeLogoUrl from "../../assets/coforgeLogo.webp?url";
 import augmentLogoUrl from "../../assets/augmentAILogo.webp?url";
@@ -85,7 +87,7 @@ const highlights: { title: string; sub: string; icon: string; time: string }[] =
     time: "Jan 2022",
   },
   {
-    title: "42.8K Downloads • 202K Views",
+    title: `${formatKaggleCount(KAGGLE_RECORDED_COUNTS.downloads)} Downloads • ${formatKaggleCount(KAGGLE_RECORDED_COUNTS.views)} Views`,
     sub: "Human Faces Kaggle Dataset",
     icon: kaggleLogoUrl,
     time: "Present",
@@ -94,6 +96,12 @@ const highlights: { title: string; sub: string; icon: string; time: string }[] =
 
 export function About() {
   const isMobile = useIsMobile();
+  const { counts } = useKaggleDatasetStats();
+  const displayedHighlights = highlights.map((highlight) =>
+    highlight.sub === "Human Faces Kaggle Dataset"
+      ? { ...highlight, title: `${formatKaggleCount(counts.downloads)} Downloads • ${formatKaggleCount(counts.views)} Views` }
+      : highlight,
+  );
 
   return (
     <section
@@ -416,7 +424,7 @@ export function About() {
                     willChange: "transform",
                   }}
                 >
-                  {[...highlights, ...highlights].map((h, i) => (
+                  {[...displayedHighlights, ...displayedHighlights].map((h, i) => (
                     <Fragment key={i}>
                       {/* card */}
                       <div
