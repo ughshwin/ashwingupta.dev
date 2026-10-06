@@ -79,6 +79,8 @@ const destinations = [
   };
 
   if (active) {
+    // A failed font/canvas/hydration promise must never leave the profile hidden.
+    safety = setTimeout(() => finish(false), 12000);
     shell.hidden = false;
     document.querySelector('#site-content')?.setAttribute('inert', '');
     document.querySelector('#site-chrome')?.setAttribute('inert', '');
@@ -116,6 +118,7 @@ const destinations = [
       if (!active || selected) return;
       phase('ready');
       ready = true;
+      clearTimeout(safety);
       shell.tabIndex = -1;
       shell.focus({ preventScroll: true });
     })();

@@ -1,5 +1,5 @@
 // Search crawlers and user-directed retrieval clients; training opt-ins are separate.
-export const CRAWLERS = ['OAI-SearchBot', 'ChatGPT-User', 'Claude-SearchBot', 'Claude-User', 'Googlebot', 'bingbot'];
+export const CRAWLERS = ['OAI-SearchBot', 'ChatGPT-User', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Googlebot', 'bingbot'];
 
 export function allowsPath(robots, agent, pathname) {
   const groups = [];

@@ -14,10 +14,13 @@ assert.equal(allowsPath('User-agent: Googlebot\nDisallow:\nUser-agent: Claude-Se
 const fixture=fs.mkdtempSync(path.join(os.tmpdir(),'portfolio-content-test-'));
 try {
   fs.cpSync('dist',fixture,{recursive:true});
-  assert.equal(verifyContent(fixture).length,14);
+  const expectedPages=[...fs.readFileSync(path.join(fixture,'sitemap-0.xml'),'utf8').matchAll(/<loc>/g)].length;
+  assert.equal(verifyContent(fixture).length,expectedPages);
   const home=path.join(fixture,'index.html');const good=fs.readFileSync(home,'utf8');
   for(const [label,mutate] of [
     ['missing landmark',s=>s.replace('role="main"','')],
+    ['duplicate primary heading',s=>s.replace('<h1','<h1>Extra heading</h1><h1')],
+    ['missing analytics coverage',s=>s.replace(/component-url="[^"]*\/SiteAnalytics\.[^"]*"/,'component-url="/missing.js"')],
     ['broken link',s=>s.replace('href="/work/hsbc"','href="/work/missing"')],
     ['missing experience',s=>s.replaceAll('OutLawed','Removed employer')],
     ['missing anchor',s=>s.replace('href="/work/hsbc"','href="/work/hsbc#missing"')],

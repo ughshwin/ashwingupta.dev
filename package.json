@@ -12,9 +12,12 @@
     "sync:seo": "node scripts/sync-seo.mjs",
     "check:seo:config": "node scripts/sync-seo.mjs --check",
     "prebuild": "npm run check:seo:config",
+    "postbuild": "node scripts/build-discovery.mjs",
     "build:verified": "npm run build && npm run check:seo && npm run check:content",
     "check:seo:live": "node scripts/verify-seo-live.mjs",
-    "check:content": "node scripts/verify-content.mjs"
+    "check:content": "node scripts/verify-content.mjs",
+    "notify:indexnow": "node scripts/notify-indexnow.mjs",
+    "notify:indexnow:preview": "node scripts/notify-indexnow.mjs --dry-run"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.0",

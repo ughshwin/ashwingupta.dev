@@ -5,6 +5,7 @@ import { PageBackground } from "../app/components/PageBackground";
 import { ClockWidget } from "../app/components/ClockWidget";
 import { BottomRightHUD } from "../app/components/BottomRightHUD";
 import Entrance from "../components/Entrance.astro";
+import SiteAnalytics from "../app/SiteAnalytics";
 import "@fontsource/playfair-display/800.css";
 import "@fontsource/playfair-display/400-italic.css";
 import "@fontsource/dm-sans/400.css";
@@ -22,8 +23,8 @@ interface Props {
 }
 
 const {
-  title = "Ashwin Gupta - AI Systems Engineer",
-  description = "Inference routing. Concurrency architecture. Physics-informed ML. An AI Systems Engineer who thinks in systems and in design - building what surrounds the model, not just the model itself. Bangalore.",
+  title = "Ashwin Gupta | AI Systems Engineer in Bangalore",
+  description = "Ashwin Gupta is an AI Systems Engineer at SkanAI in Bangalore. Explore production AI, RAG, inference infrastructure, open-source projects, and research.",
   canonical = "https://www.ashwingupta.dev/",
   image = "https://www.ashwingupta.dev/og-image.jpg",
   jsonLd = [],
@@ -43,6 +44,7 @@ const article = jsonLd.find((schema) => (schema as Record<string, string>).url =
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="Articles by Ashwin Gupta" href="https://www.ashwingupta.dev/rss.xml" />
     <link rel="preload" href={dmSans400Url} as="font" type="font/woff2" crossorigin="anonymous" />
     <link rel="preload" href={playfair800Url} as="font" type="font/woff2" crossorigin="anonymous" />
 
@@ -75,6 +77,20 @@ const article = jsonLd.find((schema) => (schema as Record<string, string>).url =
     ))}
 
     <ClientRouter />
+    <noscript>
+      <style is:inline>
+        /* Motion's initial styles must not hide the server-rendered document. */
+        #site-content [style*="opacity:0;"],
+        #site-content [style$="opacity:0"],
+        #site-content [style*="opacity: 0;"],
+        #site-content [style$="opacity: 0"] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        #site-content [style*="translateY(100%)"],
+        #site-content [style*="translateY(105%)"] { transform: none !important; }
+      </style>
+    </noscript>
     <script is:inline>
       // Run before paint. No JS means no gate; deep links always open directly.
       if (!window.__portfolioEntranceChecked) {
@@ -104,5 +120,6 @@ const article = jsonLd.find((schema) => (schema as Record<string, string>).url =
     </div>
     <div id="site-content"><slot /></div>
     <Entrance />
+    <SiteAnalytics client:idle transition:persist="site-analytics" />
   </body>
 </html>

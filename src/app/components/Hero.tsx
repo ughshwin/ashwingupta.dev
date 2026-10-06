@@ -663,62 +663,66 @@ export function Hero() {
           </div>
 
           {/* Giant name */}
-          <div style={{ overflow: "visible", marginBottom: "-0.05em" }}>
-            <m.h1
-              initial={{ y: "105%" }}
-              animate={{ y: 0 }}
-              transition={{
-                delay: 0.5,
-                duration: 0.9,
-                ease: [0.76, 0, 0.24, 1],
-              }}
+          <h1 style={{ margin: 0, font: "inherit" }}>
+            <span style={{ display: "block", overflow: "visible", marginBottom: "-0.05em" }}>
+              <m.span
+                initial={{ y: "105%" }}
+                animate={{ y: 0 }}
+                transition={{
+                  delay: 0.5,
+                  duration: 0.9,
+                  ease: [0.76, 0, 0.24, 1],
+                }}
+                style={{
+                  fontFamily:
+                    '"Editorial New", "Playfair Display", Georgia, serif',
+                  fontSize: isMobile
+                    ? "clamp(2.8rem, 10vw, 8.5rem)"
+                    : "clamp(3.8rem, 10vw, 8.5rem)",
+                  fontWeight: 800,
+                  lineHeight: 0.9,
+                  letterSpacing: "0.02em",
+                  color: "#fafaf8",
+                  margin: 0,
+                  display: "block",
+                }}
+              >
+                Ashwin
+              </m.span>
+            </span>
+            <span
               style={{
-                fontFamily:
-                  '"Editorial New", "Playfair Display", Georgia, serif',
-                fontSize: isMobile
-                  ? "clamp(2.8rem, 10vw, 8.5rem)"
-                  : "clamp(3.8rem, 10vw, 8.5rem)",
-                fontWeight: 800,
-                lineHeight: 0.9,
-                letterSpacing: "0.02em",
-                color: "#fafaf8",
-                margin: 0,
-              }}
-            >
-              Ashwin
-            </m.h1>
-          </div>
-          <div
-            style={{
-              overflow: "visible",
-              marginBottom: isMobile ? "2rem" : "3rem",
-            }}
-          >
-            <m.h1
-              initial={{ y: "105%" }}
-              animate={{ y: 0 }}
-              transition={{
-                delay: 0.65,
-                duration: 0.9,
-                ease: [0.76, 0, 0.24, 1],
-              }}
-              style={{
-                fontFamily:
-                  '"Editorial New", "Playfair Display", Georgia, serif',
-                fontSize: isMobile
-                  ? "clamp(2.8rem, 10vw, 8.5rem)"
-                  : "clamp(3.8rem, 10vw, 8.5rem)",
-                fontWeight: 800,
-                lineHeight: 1.1,
-                letterSpacing: "0.02em",
-                color: "#fafaf8",
-                margin: 0,
                 display: "block",
+                overflow: "visible",
+                marginBottom: isMobile ? "2rem" : "3rem",
               }}
             >
-              Gupta
-            </m.h1>
-          </div>
+              <m.span
+                initial={{ y: "105%" }}
+                animate={{ y: 0 }}
+                transition={{
+                  delay: 0.65,
+                  duration: 0.9,
+                  ease: [0.76, 0, 0.24, 1],
+                }}
+                style={{
+                  fontFamily:
+                    '"Editorial New", "Playfair Display", Georgia, serif',
+                  fontSize: isMobile
+                    ? "clamp(2.8rem, 10vw, 8.5rem)"
+                    : "clamp(3.8rem, 10vw, 8.5rem)",
+                  fontWeight: 800,
+                  lineHeight: 1.1,
+                  letterSpacing: "0.02em",
+                  color: "#fafaf8",
+                  margin: 0,
+                  display: "block",
+                }}
+              >
+                Gupta
+              </m.span>
+            </span>
+          </h1>
 
           {/* Role + Company */}
           <m.div

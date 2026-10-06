@@ -85,8 +85,14 @@ for(const p of Object.values(routes))assert.ok(home.includes('href="'+p+'"'),'cr
 assert.ok(!/href="\/projects\/[^"#]+/.test(home),'no duplicate project links');
 assert.ok(home.includes('AI Systems Engineer'));
 assert.ok(read('src/app/components/ExperienceTimeline.tsx').includes('role: "AI Engineer"'),'employment title preserved');
-for(const match of read('dist/llms.txt').matchAll(/\]\((https:\/\/www\.ashwingupta\.dev[^)]*)\)/g)){
+const readingGuide=read('dist/llms.txt');
+for(const p of pages)assert.ok(readingGuide.includes(']('+origin+p+')'),'Missing canonical reading link '+p);
+for(const match of readingGuide.matchAll(/\]\((https:\/\/www\.ashwingupta\.dev[^)]*)\)/g)){
   assert.ok(pages.includes(new URL(match[1]).pathname),'llms.txt canonical destination '+match[1]);
 }
 assert.ok(read('dist/robots.txt').includes('Allow: /'));
+const feed=read('dist/rss.xml');
+for(const slug of seenArticles)assert.ok(feed.includes('<link>'+origin+'/articles/'+slug+'</link>'),'Missing RSS article '+slug);
+assert.ok(home.includes('type="application/rss+xml"'),'RSS autodiscovery missing');
+assert.equal(read('dist/indexnow-key.txt'),read('public/indexnow-key.txt'),'IndexNow ownership file missing or stale');
 console.log('SEO checks passed: '+pages.length+' canonical pages, '+aliases.length+' section aliases, '+Object.keys(routes).length+' project redirects, shared entities, sitemap, and crawlable links.');

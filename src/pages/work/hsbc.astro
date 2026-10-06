@@ -543,6 +543,7 @@ sequenceDiagram
     document.querySelectorAll('.cs-tab-btn').forEach(function(btn) {
       btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
     });
+    document.querySelector('.case-study-body')?.classList.add('cs-tabs-ready');
   }
 
   function tryInit() {
@@ -710,7 +711,7 @@ sequenceDiagram
 
   /* ── Toggle ── */
   .cs-tab-toggle {
-    display: flex;
+    display: none;
     gap: 2rem;
     margin: 2rem 0 2.5rem;
     padding-bottom: 0.75rem;
@@ -739,8 +740,10 @@ sequenceDiagram
   .cs-tab-btn:hover { color: rgba(255, 255, 255, 0.85); }
 
   /* ── Panels ── */
-  .cs-tab-panel { display: none; }
-  .cs-tab-panel.active { display: block; }
+  /* All sections are readable until the tab controls have initialized. */
+  .cs-tab-panel { display: block; }
+  .cs-tabs-ready .cs-tab-toggle { display: flex; }
+  .cs-tabs-ready .cs-tab-panel:not(.active) { display: none; }
 
   /* ── Diagrams ── */
   .cs-diagram-container {

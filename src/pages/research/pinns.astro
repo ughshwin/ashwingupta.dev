@@ -195,6 +195,7 @@ const publicationUrl = "https://mailchi.mp/cellstrat/the-data-your-monitors-are-
     document.querySelectorAll('.th-tab-btn').forEach(function(btn) {
       btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
     });
+    document.querySelector('.thinking-body')?.classList.add('th-tabs-ready');
   }
 
   document.addEventListener('astro:page-load', initTabs);
@@ -306,7 +307,7 @@ const publicationUrl = "https://mailchi.mp/cellstrat/the-data-your-monitors-are-
 
   /* ── Tabs ── */
   .th-tab-toggle {
-    display: flex;
+    display: none;
     gap: 2rem;
     margin: 0 0 2.5rem;
     padding-bottom: 0.75rem;
@@ -334,8 +335,10 @@ const publicationUrl = "https://mailchi.mp/cellstrat/the-data-your-monitors-are-
 
   .th-tab-btn:hover { color: rgba(255, 255, 255, 0.85); }
 
-  .th-tab-panel { display: none; }
-  .th-tab-panel.active { display: block; }
+  /* JavaScript enhances the document; it is not required to read either panel. */
+  .th-tab-panel { display: block; }
+  .th-tabs-ready .th-tab-toggle { display: flex; }
+  .th-tabs-ready .th-tab-panel:not(.active) { display: none; }
 
   .th-pub-meta {
     font-family: 'DM Mono', monospace;

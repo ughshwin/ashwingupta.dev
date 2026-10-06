@@ -200,3 +200,6 @@ ruvector.db-*
 !/scripts/crawler-policy.mjs
 !/scripts/verify-content.mjs
 !/scripts/test-content-verifier.mjs
+!/scripts/build-discovery.mjs
+!/scripts/notify-indexnow.mjs
+!/scripts/test-indexnow.mjs

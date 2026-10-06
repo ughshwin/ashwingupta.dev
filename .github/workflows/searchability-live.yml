@@ -21,3 +21,5 @@ jobs:
           node-version: '22'
       # Fixed production host: never take a request target from webhook input.
       - run: node scripts/verify-seo-live.mjs
+      # Notify participating engines only after production passes verification.
+      - run: node scripts/notify-indexnow.mjs

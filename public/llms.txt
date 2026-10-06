@@ -23,6 +23,7 @@ This portfolio describes production AI systems, inference routing, concurrency a
 
 ## Writing
 - [Articles](https://www.ashwingupta.dev/articles): Authored essays.
+- [What It Takes to Leave a System Alone](https://www.ashwingupta.dev/articles/what-it-takes-to-leave-a-system-alone): Shared state, audit convergence, and the recurring engineering cost of autonomous systems; why development of SyDaG stopped before an end-to-end proof of concept.
 - [The Space Between Stars](https://www.ashwingupta.dev/articles/the-space-between-stars): Design and the portfolio's visual language.
 - [The Layer Nobody Talks About](https://www.ashwingupta.dev/articles/the-layer-nobody-talks-about): Business strategy and infrastructure layers.
 

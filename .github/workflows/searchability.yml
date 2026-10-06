@@ -21,4 +21,5 @@ jobs:
       - run: npm run build:verified
       - run: node scripts/test-seo-verifier.mjs
       - run: node scripts/test-content-verifier.mjs
+      - run: node scripts/test-indexnow.mjs
       - run: git diff --exit-code -- astro.config.mjs vercel.json public/llms.txt src/data

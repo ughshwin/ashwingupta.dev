@@ -91,6 +91,16 @@ export async function verifyLive({base=ORIGIN,fetchImpl=fetch}={}){
     const body=await res.text();assert.ok(body.startsWith('# Ashwin Gupta'));assert.ok(body.includes('AI Systems Engineer'));
     for(const p of pages)assert.ok(body.includes(']('+ORIGIN+p+')'),'Missing canonical reading link '+p);
   }));
+  jobs.push(()=>check('Article RSS feed',async()=>{
+    const res=await request('/rss.xml');assert.equal(res.status,200);
+    assert.match(res.headers.get('content-type')??'',/(?:application\/(?:rss\+)?xml|text\/xml)/i);
+    const feed=await res.text();assert.ok(feed.includes('<rss version="2.0"'));
+    for(const slug of Object.keys(publication))assert.ok(feed.includes('<link>'+ORIGIN+'/articles/'+slug+'</link>'),'Missing feed article '+slug);
+  }));
+  jobs.push(()=>check('IndexNow ownership file',async()=>{
+    const res=await request('/indexnow-key.txt');assert.equal(res.status,200);
+    assert.equal((await res.text()).trim(),fs.readFileSync('public/indexnow-key.txt','utf8').trim(),'Production ownership key differs from checkout');
+  }));
   for(const agent of CRAWLERS)jobs.push(()=>check('Crawler access '+agent,async()=>{
     for(const page of pages){
       const res=await request(page,agent);assert.equal(res.status,200,page+' crawler HTTP status');publicIndexable(res);

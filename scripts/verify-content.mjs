@@ -31,13 +31,16 @@ export function verifyContent(root = 'dist') {
       assert.ok(!/\b(noindex|none|nosnippet)\b/i.test(attr(n,'content')??''),`${p}: restrictive indexing or snippet directive`);
     }
     const main = one(n=>n.tagName==='main'||attr(n,'role')==='main','main landmark');
+    one(n=>n.tagName==='astro-island'&&attr(n,'component-url')?.includes('/SiteAnalytics.'),'analytics island');
     const title = normalized(one(n=>n.tagName==='title','title'));
     const description = attr(one(n=>n.tagName==='meta'&&attr(n,'name')==='description','description'),'content');
     assert.ok(title && !titles.has(title),`${p}: unique nonempty title`); titles.add(title);
     assert.ok(description && !descriptions.has(description),`${p}: unique nonempty description`); descriptions.add(description);
     const content = normalized(main);
     assert.ok(content.length>200,`${p}: substantive server-rendered content`);
-    assert.ok(walk(main).some(n=>n.tagName==='h1'),`${p}: primary heading is in main content`);
+    const headings=walk(main).filter(n=>n.tagName==='h1');
+    assert.equal(headings.length,1,`${p}: exactly one primary heading in main content`);
+    if(p==='/')assert.equal(normalized(headings[0]),'Ashwin Gupta','The primary heading identifies the full person name');
     const ids = new Set();
     for(const n of nodes){const id=attr(n,'id');if(id){assert.ok(!ids.has(id),`${p}: duplicate ID ${id}`);ids.add(id);}}
     const links=[];
@@ -103,5 +106,5 @@ export function verifyContent(root = 'dist') {
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
   const rows=verifyContent();
-  console.log(`Content checks passed: ${rows.length} reachable canonical pages; server-rendered text, experience, main landmarks, unique metadata, internal links/anchors, images, whitepaper, and six crawler policies.`);
+  console.log(`Content checks passed: ${rows.length} reachable canonical pages; server-rendered text, experience, main landmarks, unique metadata, internal links/anchors, images, whitepaper, and ${CRAWLERS.length} crawler policies.`);
 }
