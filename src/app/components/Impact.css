@@ -84,6 +84,7 @@
 }
 
 .impact-outcome-value {
+  text-align: right;
   color: var(--impact-outcome-color);
   font: 600 1.05rem/1.35 "DM Sans", sans-serif;
   letter-spacing: -0.02em;
