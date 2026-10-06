@@ -468,14 +468,6 @@ export const impacts: Impact[] = [
     href: "/research/pinns",
   },
   {
-    value: "Best Project",
-    label: "Best Outgoing Project, BMSCE 2022–23",
-    item: "PINNs",
-    category: "research",
-    magnitude: 3,
-    href: "/research/pinns",
-  },
-  {
     value: "5 / 8mo",
     label: "physics-constrained eVTOL projects, IISc",
     item: "Research arc",
