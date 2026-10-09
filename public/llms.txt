@@ -8,6 +8,7 @@ This portfolio describes production AI systems, inference routing, concurrency a
 - [Ashwin Gupta](https://www.ashwingupta.dev/): Authoritative profile, experience, impact, and contact information. Section URLs such as /about and /projects are entry points into this same document.
 
 ## Work
+- [Process Dashboard](https://www.ashwingupta.dev/work/process-dashboard): SkanAI's team-standard process workspace, with all eight artefact phases live. Single-command onboarding, consolidated artefacts, case and frame review, and study/artefact kickoff reduced from 3–4 hours to 10–15 minutes.
 - [HSBC conversational analytics](https://www.ashwingupta.dev/work/hsbc): Voice infrastructure, concurrency, observability, and cost engineering.
 - [PageIndexOllama](https://www.ashwingupta.dev/work/pageindexollama): Local-first tree-based retrieval and provider abstraction.
 - [Portfolio engineering](https://www.ashwingupta.dev/work/ashwingupta-dev): Interface architecture and performance engineering.

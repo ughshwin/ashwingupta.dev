@@ -57,6 +57,11 @@
       "statusCode": 301
     },
     {
+      "source": "/projects/process-dashboard",
+      "destination": "/work/process-dashboard",
+      "statusCode": 301
+    },
+    {
       "source": "/projects/hsbc-voice",
       "destination": "/work/hsbc",
       "statusCode": 301

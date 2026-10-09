@@ -198,6 +198,7 @@ const ENTRIES: Entry[] = [
     bullets: [
       "AI Engineer - applied LLMs & agentic systems",
       "Process intelligence platform",
+      "Built the team's standard Process Dashboard • one-command onboarding • study & artefact kickoff: 3–4 hrs → 10–15 min",
     ],
   },
   {

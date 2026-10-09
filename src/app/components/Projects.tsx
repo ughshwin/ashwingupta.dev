@@ -31,6 +31,7 @@ export type Project = {
   company: string;
   logo: string;
   logoHeight: number;
+  logoMaxWidth?: number;
   status: string;
   devStatus?: string;
   tags: string[];
@@ -125,6 +126,44 @@ export const projects: Project[] = [
       "**Fully offline tree-RAG** with Ollama - no API keys. Seamless provider switching via stable internal contracts. Regression risk reduced through e2e coverage across document types and model sizes.",
     ],
     github: "https://github.com/ughshwin/PageIndexOllama",
+  },
+  {
+    index: "03",
+    slug: "process-dashboard",
+    title: "Process Dashboard - One Workspace for Every Process",
+    company: "SkanAI",
+    logo: "/logos/skan.svg",
+    logoHeight: 16,
+    logoMaxWidth: 16,
+    status: "Team Standard",
+    devStatus: "completed",
+    tags: [
+      "Process Intelligence",
+      "Single-Command Onboarding",
+      "Native Capture Decoding",
+      "Evidence-Linked Case Review",
+      "Markdown / Mermaid / Data Tables",
+      "HTML / JavaScript • Bash / Python",
+    ],
+    impact:
+      "3–4 hrs → 10–15 min study and artefact kickoff • one command to onboard a process • adopted as the team's standard dashboard",
+    summary: [
+      "Every incoming clickstream needed a **new dashboard**; process artefacts were scattered across local folders, and Markdown reviews required **another tool**.",
+      "Built a **reusable process workspace** that brings clickstreams, case documents, frame metadata, and phase artefacts into **one interactive dashboard**.",
+      "**One command** onboards a process without copying source data. **All eight phases are live**, keeping the full artefact lifecycle in the same workspace.",
+      "Study and artefact kickoff: **3–4 hours → 10–15 minutes**. Adopted as the **standard dashboard across the team**.",
+    ],
+    bullets: [
+      "Each new process clickstream meant building another viewer before the study could start. Setup and artefact kickoff took **3–4 hours**, with no standard dashboard to reuse.",
+      "Process definitions, flows, validation reports, and later-phase artefacts were **scattered across local directories**. Even exported Markdown had to be opened in Notion or a VS Code preview to audit it.",
+      "Built a **single consolidated workspace per process**: clickstream study, case-by-case documents, frame-by-frame metadata, and process artefacts are available in one visual, interactive dashboard.",
+      "Replaced the bespoke initial clickstream viewer with **single-command process onboarding**. Built-in Markdown preview lets the team inspect documents alongside the process evidence.",
+      "**Static HTML and JavaScript**, with **Bash/Python onboarding** and shared UI symlinks. Native capture decoding normalizes events and reads indexed JPEG containers in the browser; source evidence stays in place.",
+      "**Evidence-linked case review** keeps frames beside process flows or summaries. Cited frame ranges jump back to captures; JSON/CSV tables, Mermaid diagrams, and sandboxed review pages render in the same workspace.",
+      "Supports the **full eight-phase artefact lifecycle**, with **all eight phases live** in a data-driven artefact registry. Discovery, deliverables, and review evidence stay together; explicit stubs document missing deliverables.",
+      "Reduced **study and artefact kickoff from 3–4 hours to 10–15 minutes**. The team adopted it as its standard dashboard for new processes.",
+    ],
+    github: null,
   },
   {
     index: "04",
@@ -242,7 +281,7 @@ export const projects: Project[] = [
       "NVIDIA T4",
     ],
     impact:
-      "+30% recommendation relevance • sub-50ms latency • single NVIDIA T4 under production load",
+      "+30% recommendation relevance • sub-50ms latency • single NVIDIA T4 under full test load",
     summary: [
       "Skill recommendations ignored **hierarchical relationships**, taxonomy changes forced **full batch retraining**, and live inference missed the **sub-50ms** SLA.",
       "Built a **weighted directed graph** over multilevel skill hierarchies with typed edges, lightweight scoring - structure, not retraining, drives relevance.",
@@ -253,8 +292,8 @@ export const projects: Project[] = [
       "The recommendation system **ignored hierarchical skill relationships** - related skills treated as independent nodes with no structural modeling; **every taxonomy expansion triggered full batch retraining**, blocking updates until recompute completed; inference latency under production concurrency **exceeded the sub-50ms SLA** required for live platform use.",
       "Prismforce needed real-time skill recommendations against a **large, evolving taxonomy**. The existing system missed hierarchical skill relationships, went stale under profile updates, and couldn't hit **sub-50ms latency** for live platform use.",
       "Real-time recommendation engine using a **weighted directed graph** encoding multi-level skill hierarchy relationships as typed edges with dynamic weight updates. **Lightweight mathematical scoring heuristics** minimize computational overhead per inference call. Update model handles **dynamic node additions without full graph recomputation**.",
-      "**Deterministic traversal logic** produces consistent outputs under frequent profile and taxonomy updates. Heuristics keep inference paths predictable and bounded. **Latency profiled under realistic production concurrency** on NVIDIA T4 before deployment.",
-      "**~30% improvement** in recommendation relevance. **Sub-50ms inference** on NVIDIA T4 under production load. **Dynamic updates eliminated batch retraining** on taxonomy expansion.",
+      "**Deterministic traversal logic** produces consistent outputs under frequent profile and taxonomy updates. Heuristics keep inference paths predictable and bounded. **Latency profiled under realistic concurrency during testing** on NVIDIA T4 before deployment.",
+      "**~30% improvement** in recommendation relevance. **Sub-50ms inference** on NVIDIA T4 under full test load. **Dynamic updates eliminated batch retraining** on taxonomy expansion.",
     ],
     github: null,
   },
@@ -408,7 +447,7 @@ function FeaturedCard({
               style={{
                 height: `${p.logoHeight}px`,
                 width: "auto",
-                maxWidth: "60px",
+                maxWidth: `${p.logoMaxWidth ?? 60}px`,
                 objectFit: "contain",
                 opacity: 0.85,
               }}
@@ -717,7 +756,7 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
             style={{
               height: `${Math.min(p.logoHeight, 32)}px`,
               width: "auto",
-              maxWidth: "56px",
+              maxWidth: `${p.logoMaxWidth ?? 56}px`,
               objectFit: "contain",
               opacity: 0.8,
             }}

@@ -47,6 +47,11 @@ export type Impact = {
 // Per-project context (client + one-line description), keyed by `item`.
 // Source: /IMPACT.md § "Per-item detail".
 export const ITEM_META: Record<string, { client: string; context: string }> = {
+  "Process Dashboard": {
+    client: "SkanAI",
+    context:
+      "The team's standard workspace for clickstream study, case and frame review, and all eight live artefact phases.",
+  },
   "HSBC Conversational Analytics": {
     client: "Coforge",
     context:
@@ -178,7 +183,7 @@ export const impacts: Impact[] = [
   },
   {
     value: "1× T4",
-    label: "full production load, single GPU",
+    label: "full test load, single GPU",
     item: "Skill Recommendation Engine",
     category: "scale",
     magnitude: 3,
@@ -202,6 +207,22 @@ export const impacts: Impact[] = [
   },
 
   // ── Cost & Efficiency ──
+  {
+    value: "hrs→min",
+    label: "study & artefact kickoff: 3–4 hrs → 10–15 min",
+    item: "Process Dashboard",
+    category: "cost",
+    magnitude: 4,
+    href: "/work/process-dashboard",
+  },
+  {
+    value: "1 command",
+    label: "process onboarding replaces a bespoke dashboard",
+    item: "Process Dashboard",
+    category: "cost",
+    magnitude: 3,
+    href: "/work/process-dashboard",
+  },
   {
     value: "~$1.3M",
     label: "annualized compute savings",
@@ -393,6 +414,22 @@ export const impacts: Impact[] = [
   },
 
   // ── Systems Breadth ──
+  {
+    value: "8 phases",
+    label: "live artefact lifecycle in one process workspace",
+    item: "Process Dashboard",
+    category: "systems",
+    magnitude: 3,
+    href: "/work/process-dashboard",
+  },
+  {
+    value: "Team-wide",
+    label: "adopted as the standard process dashboard",
+    item: "Process Dashboard",
+    category: "systems",
+    magnitude: 3,
+    href: "/work/process-dashboard",
+  },
   {
     value: "19",
     label: "inference backends under one API",

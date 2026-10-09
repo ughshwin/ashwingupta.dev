@@ -1,0 +1,181 @@
+---
+import { contentSchemas } from "../../lib/structured-data";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/work/process-dashboard";
+const description = "SkanAI's standard process dashboard: all eight artefact phases live, single-command onboarding, and clickstream review in one workspace. Study and artefact kickoff: 3–4 hours to 10–15 minutes.";
+const metrics = [
+  { value: "10–15 min", label: "Study & artefact kickoff · was 3–4 hrs" },
+  { value: "1 command", label: "Onboard a new process" },
+  { value: "Team standard", label: "Adopted across the team" },
+];
+const changes = [
+  { task: "Start a process study", before: "Build a new clickstream dashboard for each process", after: "Onboard the process into a shared viewer with one command" },
+  { task: "Review a case", before: "Piece together captures, metadata, and separate documents", after: "Read the flow or summary beside frames, with evidence links back to captures" },
+  { task: "Audit artefacts", before: "Search local folders; open Markdown in Notion or VS Code", after: "Preview documents, tables, diagrams, and review pages in one workspace" },
+  { task: "Reuse the workspace", before: "Repeat dashboard setup for the next clickstream", after: "Reuse the same interface with a separate instance for each process" },
+];
+// The lifecycle comes from the process guide; all eight phases are live.
+const phases = [
+  { number: "01", title: "Process definition", live: true, detail: "The live artefact library brings together process definitions, applications, behaviours, case grounding, deliverables, audit evidence, and human review. Missing files show definitions of the expected artefacts." },
+  { number: "02", title: "BPMN & process contracts", live: true, detail: "BPMN, process contracts, variant drivers, rules, and generated step flows are consolidated in the process workspace for review." },
+  { number: "03", title: "Static validation & replay", live: true, detail: "Static checks, ordered replay, validation reports, and source-correction findings stay alongside the process definitions and contracts." },
+  { number: "04", title: "Application & seed data", live: true, detail: "The runnable application, screen catalogue, seeded cases, and validation package are brought together under the same process context." },
+  { number: "05", title: "Humanized flows", live: true, detail: "Behaviour catalogues, humanizer configuration, generated flows, and their validation are available in the same artefact lifecycle." },
+  { number: "06", title: "Ground truth & automation", live: true, detail: "Atomic plans, automation drivers, ground-truth events, and replay reports form a consolidated evidence package within the dashboard." },
+  { number: "07", title: "Pilot synchronization", live: true, detail: "A representative pilot aligns captured events, images, and ground truth before batch execution. Its aligned package and synchronization report remain in the process workspace." },
+  { number: "08", title: "Batch recording & synchronization", live: true, detail: "Batch assignments, raw runs, aligned case packages, and recording reports complete the lifecycle: one dashboard carries the process from study through the complete dataset." },
+];
+---
+
+<BaseLayout
+  title="Process Dashboard - SkanAI | Ashwin Gupta"
+  description={description}
+  canonical={canonical}
+  jsonLd={contentSchemas({ type: "CreativeWork", name: "Process Dashboard - SkanAI", url: canonical, description })}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <main class="thinking-body">
+        <a href="/#projects" class="back-link">← Back to projects</a>
+
+        <header class="th-header">
+          <img class="th-logo" src="/logos/skan.svg" alt="SkanAI" width="24" height="24" decoding="async" />
+          <div class="th-badge">Internal Tooling • SkanAI • Team Standard</div>
+          <h1 class="th-title">Process Dashboard</h1>
+          <p class="th-deck">One process. One workspace.</p>
+          <p class="th-subtitle">A reusable home for clickstream study, case documents, frame metadata, and process artefacts. One command replaces the initial dashboard build; the evidence and the work stay together.</p>
+        </header>
+
+        <div class="th-divider"></div>
+        <div class="metrics-grid">
+          {metrics.map(({ value, label }) => (
+            <div class="metric-block">
+              <span class="metric-value">{value}</span>
+              <span class="metric-label">{label}</span>
+            </div>
+          ))}
+        </div>
+        <div class="th-divider"></div>
+
+        <section class="th-section" aria-labelledby="problem">
+          <h2 id="problem" class="th-section-title">The Problem</h2>
+          <p class="th-body">Every incoming process clickstream started with the same overhead: create a new dashboard before anyone could study it. There was no standard viewer to reuse. <strong>Process study and artefact creation kickoff took 3–4 hours.</strong></p>
+          <p class="th-body">After the study, the process became a collection of scattered files. Definitions, flows, reports, and supporting documents lived in different local directories. No single asset held everything belonging to a process. Even a Markdown export meant switching to Notion or a VS Code preview to read and audit it.</p>
+        </section>
+
+        <section class="th-section" aria-labelledby="system">
+          <h2 id="system" class="th-section-title">The System</h2>
+          <p class="th-body">Built a <strong>process-agnostic dashboard with one workspace per process</strong>. Two views share the same context: Clickstream for cases, captured frames, and event metadata; Process Artefacts for discovery evidence, deliverables, audit material, and human review.</p>
+          <p class="th-body"><strong>Single-command onboarding</strong> creates a process-specific instance, mounts its source folders, and can serve it immediately. Shared UI files and process sources are linked into the instance rather than copied. The next process reuses the same interface, and source edits remain visible in its workspace.</p>
+          <div class="command-block">
+            <span class="command-label">One process-specific instance</span>
+            <code>./onboard.sh my-process /path/to/my-process --serve --port 8000</code>
+          </div>
+          <p class="th-body">The dashboard is <strong>static HTML and JavaScript</strong>, with Bash and Python handling onboarding. It runs over local HTTP with no build step or application backend. A browser-side adapter supports expanded CSV/image datasets and native capture packages: it normalizes event metadata, decodes indexed JPEG containers, and keeps the original event available for inspection.</p>
+        </section>
+
+        <section class="th-section" aria-labelledby="review">
+          <h2 id="review" class="th-section-title">Review without losing the evidence</h2>
+          <p class="th-body">Case flows and summaries sit beside the captured frames in a resizable split view. Cited frame ranges lead back to the corresponding captures; target and cursor overlays help inspect what happened. Event metadata remains available alongside the study.</p>
+          <p class="th-body">Markdown renders inside the dashboard. JSON and CSV become tables; Mermaid becomes diagrams; decision points and rules have an explorer; human-review pages open in sandboxed frames. A preview router keeps supported document links within the process workspace.</p>
+          <p class="th-body">Deep links preserve the selected case and capture. Refresh restores review state, while dataset-scoped pins keep important cases close at hand. Configured subprocess ranges keep frames, playback, and documents tied to the selected part of a case.</p>
+          <div class="comparison-scroll" tabindex="0" role="region" aria-label="Workflow before and after the dashboard">
+            <table class="comparison-table">
+              <caption>What changed in the daily workflow</caption>
+              <thead><tr><th scope="col">Task</th><th scope="col">Before</th><th scope="col">With the dashboard</th></tr></thead>
+              <tbody>
+                {changes.map(({ task, before, after }) => (
+                  <tr><th scope="row">{task}</th><td>{before}</td><td>{after}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="th-section" aria-labelledby="lifecycle">
+          <h2 id="lifecycle" class="th-section-title">All eight phases, live in one workspace</h2>
+          <p class="th-body">One consolidated owner holds everything belonging to a process, from initial study through the complete simulation dataset. <strong>Discovery and all eight phases of artefact creation are live</strong>, with navigation and document loading managed through a data-driven registry.</p>
+          <p class="th-body">Each phase defines its artefact slots and renderers. Files are probed when that phase opens. Real files take precedence; explicit stubs explain expected deliverables when they are absent, keeping the lifecycle visible even while a process is still in progress.</p>
+          <div class="phase-list">
+            {phases.map(({ number, title, live, detail }) => (
+              <details class:list={["phase-item", { "phase-live": live }]}>
+                <summary>
+                  <span class="phase-number">{number}</span>
+                  <span class="phase-title">{title}</span>
+                  <span class="phase-status">{live ? "Live" : "Planned"}</span>
+                </summary>
+                <p class="th-body phase-detail">{detail}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section class="th-section" aria-labelledby="outcomes">
+          <h2 id="outcomes" class="th-section-title">Outcomes</h2>
+          <p class="th-body"><strong>Process study and artefact kickoff dropped from 3–4 hours to 10–15 minutes.</strong> This measures the time to get a process onboarded and work underway, rather than the duration of the full eight-phase creation workflow.</p>
+          <p class="th-body">The team adopted it as the <strong>standard dashboard for process work</strong>. A new clickstream now enters a familiar workspace. Case documents, frame metadata, and the current artefact package can be reviewed together, with one place to return to as the process develops.</p>
+        </section>
+
+        <div class="th-footer"><span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span></div>
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body { background: #060608; margin: 0; padding: 0; }
+  .thinking-scroll { overflow-y: auto; height: 100vh; height: 100dvh; position: relative; z-index: 10; }
+  .thinking-body { width: min(60vw, 960px); margin: 0 auto; padding: 7rem 0 8rem; }
+  .back-link { display: inline-flex; align-items: center; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); text-decoration: none; margin-bottom: 3.5rem; transition: color 0.2s; }
+  .back-link:hover { color: rgba(255,255,255,0.9); }
+  .th-header { margin-bottom: 2.5rem; }
+  .th-logo { display: block; width: 24px; height: 24px; margin-bottom: 1.25rem; }
+  .th-badge { font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.18em; text-transform: uppercase; color: #22d3ee; margin-bottom: 1rem; }
+  .th-title { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem,5vw,3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: 0.03em; color: #fafaf8; margin: 0 0 0.75rem; }
+  .th-deck { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.2rem,3vw,1.65rem); color: #e8e0d0; margin: 0 0 1.2rem; }
+  .th-subtitle { font-family: 'DM Sans', sans-serif; font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.55); margin: 0; }
+  .th-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 2rem 0; }
+  .metrics-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1.5rem; margin: 2rem 0; }
+  .metric-block { display: flex; flex-direction: column; gap: 8px; }
+  .metric-value { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.25rem,2.4vw,2rem); font-weight: 800; color: #22d3ee; line-height: 1.1; }
+  .metric-label { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.45); line-height: 1.6; }
+  .th-section { margin-bottom: 3.5rem; }
+  .th-section-title { font-family: 'Playfair Display', Georgia, serif; font-size: 1.25rem; font-weight: 800; color: #fafaf8; margin: 0 0 1.2rem; letter-spacing: 0.03em; }
+  .th-body { font-family: 'DM Sans', sans-serif; font-size: 0.95rem; line-height: 1.8; color: rgba(255,255,255,0.62); margin: 0 0 1rem; }
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+  .command-block { margin: 1.5rem 0; padding: 1.2rem; border: 1px solid rgba(34,211,238,0.2); border-radius: 8px; background: rgba(34,211,238,0.03); }
+  .command-label { display: block; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: #22d3ee; margin-bottom: 0.7rem; }
+  .command-block code { font-family: 'DM Mono', monospace; font-size: 0.75rem; line-height: 1.8; color: #e8e0d0; overflow-wrap: anywhere; }
+  .comparison-scroll { overflow-x: auto; margin-top: 2rem; }
+  .comparison-table { width: 100%; border-collapse: collapse; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; line-height: 1.6; text-align: left; }
+  .comparison-table caption { text-align: left; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); padding-bottom: 1rem; }
+  .comparison-table th, .comparison-table td { padding: 1rem 1rem 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); vertical-align: top; }
+  .comparison-table thead th { color: #22d3ee; font-weight: 500; }
+  .comparison-table tbody th { color: #e8e0d0; font-weight: 500; width: 22%; }
+  .comparison-table td { color: rgba(255,255,255,0.6); width: 39%; }
+  .phase-list { margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); }
+  .phase-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .phase-item summary { display: grid; grid-template-columns: 2rem minmax(0,1fr) auto; gap: 0.75rem; align-items: center; cursor: pointer; padding: 1.1rem 0; list-style: none; }
+  .phase-item summary::-webkit-details-marker { display: none; }
+  .phase-number { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4); }
+  .phase-title { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; line-height: 1.5; color: #e8e0d0; }
+  .phase-title::after { content: ' +'; color: rgba(255,255,255,0.4); }
+  .phase-item[open] .phase-title::after { content: ' −'; }
+  .phase-status { font-family: 'DM Mono', monospace; font-size: 0.52rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+  .phase-live .phase-number, .phase-live .phase-status { color: #4ade80; }
+  .phase-detail { margin: 0 0 1.25rem 2.75rem; }
+  .back-link:focus-visible, .phase-item summary:focus-visible, .comparison-scroll:focus-visible { outline: 2px solid #22d3ee; outline-offset: 5px; }
+  .th-footer { margin-top: 6rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.07); font-family: 'DM Mono', monospace; font-size: 0.58rem; line-height: 1.7; letter-spacing: 0.12em; color: rgba(255,255,255,0.25); text-transform: uppercase; }
+  @media (max-width: 900px) { .thinking-body { width: 84vw; } }
+  @media (max-width: 639px) {
+    .thinking-body { width: 90vw; padding-top: 5rem; }
+    .metrics-grid { grid-template-columns: 1fr; gap: 1.4rem; }
+    .metric-value { font-size: 1.7rem; }
+    .comparison-table { min-width: 540px; }
+    .phase-item summary { grid-template-columns: 1.5rem minmax(0,1fr) auto; gap: 0.5rem; }
+    .phase-title { font-size: 0.82rem; }
+    .phase-detail { margin-left: 2rem; }
+  }
+</style>

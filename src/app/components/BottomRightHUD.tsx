@@ -17,6 +17,7 @@ const SITE_PAGES = [
   "/work/pageindexollama",
   "/work/azure-infra-docs",
   "/work/skill-recommendation-engine",
+  "/work/process-dashboard",
   "/research/pinns",
   "/research/controla",
   "/research/physclip",
