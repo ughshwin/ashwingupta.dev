@@ -1,0 +1,53 @@
+{
+  "verifiedAt": "2026-10-31T18:15:27.664Z",
+  "routes": 68,
+  "checks": {
+    "verifiedBuild": true,
+    "typeCheck": true,
+    "migrationParity": true,
+    "contentVerifierFixtures": true,
+    "httpVerifierFixtures": true,
+    "indexNowOfflineFixtures": true,
+    "allSectionSourceEditRenderIntegration": true
+  },
+  "browser": {
+    "viewports": [
+      1280,
+      390
+    ],
+    "hsbcDiagramCount": 8,
+    "hsbcGeometryAndLabelsMatch": true,
+    "pinnsTabsWork": true,
+    "emailCopyFeedbackWorks": true,
+    "mobileOverflow": false,
+    "singleSidebarCvLink": true,
+    "recommendationsCentered": true
+  },
+  "intentionalContentChanges": [
+    "Layout studies now use Software Engineer 1 at SkanAI.",
+    "Layout studies use the canonical IISc - NMCAD Lab company name."
+  ],
+  "sourceRestoredAfterRenderIntegration": true,
+  "swarm": {
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "high",
+    "sectionAgents": 13,
+    "concurrentSectionAgents": 3,
+    "parentCompletedSharedChromeVerification": true,
+    "sections": [
+      "overview",
+      "about",
+      "experience",
+      "impact",
+      "featured",
+      "projects",
+      "recommendations",
+      "stack",
+      "contact",
+      "articles",
+      "research",
+      "case_studies",
+      "shared_chrome"
+    ]
+  }
+}

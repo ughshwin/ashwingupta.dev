@@ -1,0 +1,98 @@
+[
+  {
+    "width": 1280,
+    "cvCount": 1,
+    "cvInRail": true,
+    "impactLinks": 0,
+    "impactTitleAlignment": [
+      "center"
+    ],
+    "impactUnderlines": [
+      "none"
+    ],
+    "navFont": "13px",
+    "overflow": false,
+    "recommendations": [
+      {
+        "centerDelta": 0,
+        "footerAfterQuote": true,
+        "name": "Arun Kumar Vastrakar"
+      },
+      {
+        "centerDelta": 0,
+        "footerAfterQuote": true,
+        "name": "Raja Sekhar Amirapu"
+      },
+      {
+        "centerDelta": 0,
+        "footerAfterQuote": true,
+        "name": "Snehasish Chakraborty"
+      },
+      {
+        "centerDelta": 0,
+        "footerAfterQuote": true,
+        "name": "Kartik Mehta"
+      },
+      {
+        "centerDelta": 0,
+        "footerAfterQuote": true,
+        "name": "Tulsi Patro"
+      }
+    ],
+    "email": {
+      "borderRadius": "0px",
+      "insideEmail": true,
+      "message": "Email copied to clipboard!",
+      "overflow": false,
+      "visible": true
+    }
+  },
+  {
+    "width": 390,
+    "cvCount": 1,
+    "cvInRail": true,
+    "impactLinks": 0,
+    "impactTitleAlignment": [
+      "center"
+    ],
+    "impactUnderlines": [
+      "none"
+    ],
+    "navFont": "12px",
+    "overflow": false,
+    "recommendations": [
+      {
+        "centerDelta": 0,
+        "footerAfterQuote": true,
+        "name": "Arun Kumar Vastrakar"
+      },
+      {
+        "centerDelta": 0,
+        "footerAfterQuote": true,
+        "name": "Raja Sekhar Amirapu"
+      },
+      {
+        "centerDelta": 0,
+        "footerAfterQuote": true,
+        "name": "Snehasish Chakraborty"
+      },
+      {
+        "centerDelta": 0,
+        "footerAfterQuote": true,
+        "name": "Kartik Mehta"
+      },
+      {
+        "centerDelta": 0,
+        "footerAfterQuote": true,
+        "name": "Tulsi Patro"
+      }
+    ],
+    "email": {
+      "borderRadius": "0px",
+      "insideEmail": true,
+      "message": "Email copied to clipboard!",
+      "overflow": false,
+      "visible": true
+    }
+  }
+]

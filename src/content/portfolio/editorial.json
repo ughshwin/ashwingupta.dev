@@ -1,0 +1,103 @@
+{
+  "work": [
+    {
+      "number": "01",
+      "category": "Production systems",
+      "client": "HSBC · Coforge",
+      "title": "Making room for 1,600 conversations.",
+      "description": "Re-architected a voice analytics pipeline around CPU-pinned processes and asynchronous orchestration. Capacity, latency, and operating cost treated as one engineering problem.",
+      "result": "7× session capacity per VM",
+      "tags": "Python / asyncio / GCP / SIP",
+      "projectId": "hsbc-voice"
+    },
+    {
+      "number": "02",
+      "category": "Applied AI",
+      "client": "HDFC ERGO · Gida",
+      "title": "Vehicle intelligence, in 163 languages.",
+      "description": "Built multilingual retrieval for Here.app, with quality-gated answers and factual evaluation at the centre of the system.",
+      "result": "97% factual accuracy",
+      "tags": "RAG / Multilingual retrieval / Evaluation",
+      "projectId": "here-app"
+    },
+    {
+      "number": "03",
+      "category": "Open source",
+      "client": "PageIndexOllama",
+      "title": "Document reasoning that runs locally.",
+      "description": "Extended tree-based RAG with provider routing, bounded concurrency, and fallback handling across Ollama, llama.cpp, and vLLM.",
+      "result": "Offline execution · no API keys",
+      "tags": "Python / Local inference / Tree RAG",
+      "projectId": "pageindexollama"
+    }
+  ],
+  "experience": [
+    {
+      "experienceId": "skan",
+      "description": "Applied LLMs and agentic systems for process intelligence."
+    },
+    {
+      "experienceId": "coforge",
+      "description": "Enterprise voice analytics, inference orchestration, infrastructure automation, and AI training."
+    },
+    {
+      "experienceId": "gida",
+      "description": "Multilingual retrieval, recommendation systems, and AI delivery tooling."
+    },
+    {
+      "experienceId": "iisc",
+      "description": "Physics-constrained ML for aerodynamic and structural optimisation."
+    },
+    {
+      "experienceId": "cellstrat",
+      "description": "Enterprise NLP, document processing, and model delivery."
+    }
+  ],
+  "writing": [
+    {
+      "title": "When do you stop building?",
+      "description": "The AI project I chose to leave unfinished.",
+      "category": "Engineering judgement",
+      "articleId": "what-it-takes-to-leave-a-system-alone"
+    },
+    {
+      "title": "The layer nobody talks about",
+      "description": "A personal framework for thinking about where value is built.",
+      "category": "Systems & business",
+      "articleId": "the-layer-nobody-talks-about"
+    }
+  ],
+  "editions": {
+    "gazette": {
+      "number": "01",
+      "name": "The Systems Gazette",
+      "genre": "The newspaper",
+      "description": "Warm paper. Confident serifs. A front page that puts the evidence first.",
+      "rationale": "A newspaper rhythm for an engineering career: a clear lead story, a column of context, and results you can scan."
+    },
+    "fieldnotes": {
+      "number": "02",
+      "name": "Fieldnotes",
+      "genre": "The magazine",
+      "description": "Oversized type. Forest green. Space to let the work speak.",
+      "rationale": "A contemporary magazine treatment with an oversized introduction, a portrait, and generously spaced project features."
+    },
+    "review": {
+      "number": "03",
+      "name": "{{chrome.review.name}}",
+      "genre": "The journal",
+      "description": "Precise structure. Cobalt annotations. An engineer’s journal.",
+      "rationale": "A compact technical journal with a persistent contents column, concise project abstracts, and visible engineering decisions."
+    }
+  },
+  "education": [
+    {
+      "experienceId": "iiitb",
+      "detailTemplate": "{role} · {startYear}–{endYear} (in progress)"
+    },
+    {
+      "experienceId": "bmsce",
+      "detailTemplate": "{role} · {startYear}–{endYear}"
+    }
+  ]
+}

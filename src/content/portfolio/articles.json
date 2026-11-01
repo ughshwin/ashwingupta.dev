@@ -1,0 +1,47 @@
+{
+  "what-it-takes-to-leave-a-system-alone": {
+    "slug": "what-it-takes-to-leave-a-system-alone",
+    "title": "What It Takes to Leave a System Alone",
+    "subtitle": "The recurring cost of keeping an autonomous system coherent—and the engineering decision to stop.",
+    "tags": [
+      "AI Systems",
+      "Reliability",
+      "Engineering"
+    ],
+    "excerpt": "Three weeks of scripting per process prompted an attempt at autonomous execution. State coordination, audit convergence, and infrastructure upkeep changed the economics—and led me to stop.",
+    "datePublished": "2026-09-22",
+    "source": "Article added to the site at the owner's request on this date.",
+    "descriptionTemplate": "What it takes to leave a system alone: shared state, audit convergence, and the recurring engineering cost that led me to stop building {{articles.what-it-takes-to-leave-a-system-alone.systemName}}.",
+    "systemName": "SyDaG"
+  },
+  "the-layer-nobody-talks-about": {
+    "slug": "the-layer-nobody-talks-about",
+    "title": "The Layer Nobody Talks About",
+    "subtitle": "If I ever build something, this is exactly how I'd think about where to stand.",
+    "tags": [
+      "Business",
+      "Strategy",
+      "Investing"
+    ],
+    "excerpt": "On NVIDIA, ASML, Apple, and Mold-Tek - and the pattern they all share. Why the real money is almost always one layer further back than where everyone is looking. A personal framework, not investment advice.",
+    "datePublished": "2026-05-28",
+    "source": "First commit adding the article; accepted by the site owner as the publication-date proxy.",
+    "commit": "3b22d0b466051dc0c9781d1c0134d6058a143624",
+    "descriptionTemplate": "On NVIDIA, ASML, Apple, Mold-Tek, and how I'd think about building a business if I ever did. A personal framework, not advice."
+  },
+  "the-space-between-stars": {
+    "slug": "the-space-between-stars",
+    "title": "The Space Between Stars",
+    "subtitle": "Why My Portfolio Lives in the Cosmos",
+    "tags": [
+      "Design",
+      "AI Systems",
+      "Portfolio"
+    ],
+    "excerpt": "On visual captivity, the cosmos as a metaphor for complex systems, and why a portfolio is always an argument - written by someone who was a designer before they were an engineer.",
+    "datePublished": "2026-05-24",
+    "source": "First commit adding the article; accepted by the site owner as the publication-date proxy.",
+    "commit": "73b421d68f122b62e312db86235933c5c7de39aa",
+    "descriptionTemplate": "On visual captivity, the cosmos as a metaphor for complex AI systems, and why a portfolio is always an argument - by {{profile.name}}."
+  }
+}

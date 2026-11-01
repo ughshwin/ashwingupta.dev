@@ -1,65 +1,36 @@
+import { chromeCopy } from '../content/portfolio/chrome';
+import { profile, schemaEmployment, alumni } from '../content/portfolio/profile';
+import { currentEmployment } from '../content/portfolio/experience';
+import publications from '../content/portfolio/publications.json';
+import { projectById } from '../content/portfolio/catalog';
+const paper = publications.ncisct2022;
 import profileImage from "../assets/profilePicture.webp?url";
 
-export const SITE_URL = "https://www.ashwingupta.dev/";
-export const PERSON_ID = SITE_URL + "#ashwin-gupta";
+export const SITE_URL = profile.siteUrl;
+export const PERSON_ID = SITE_URL + chromeCopy.schema.personFragment;
 export const WEBSITE_ID = SITE_URL + "#website";
-export const PAPER_URL = "https://ijiset.com/conference/NCISCT-2022/IJISET-NCISCT-220520.pdf";
+export const PAPER_URL = projectById(paper.projectId).href;
 export const PAPER_ID = PAPER_URL + "#article";
 
 export const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   "@id": PERSON_ID,
-  "name": "Ashwin Gupta",
+  "name": profile.name,
   "url": SITE_URL,
   "image": new URL(profileImage, SITE_URL).href,
-  "jobTitle": "AI Systems Engineer",
-  "worksFor": { "@type": "Organization", "name": "SkanAI" },
-  "memberOf": [
-    {
-      "@type": "EmployeeRole",
-      "roleName": "AI Engineer",
-      "startDate": "2026-06-15",
-      "memberOf": { "@type": "Organization", "name": "SkanAI" }
-    },
-    {
-      "@type": "EmployeeRole",
-      "roleName": "AI Engineer",
-      "startDate": "2024-06",
-      "endDate": "2026-06-05",
-      "memberOf": { "@type": "Organization", "name": "Coforge" }
-    }
-  ],
-  "alumniOf": [
-    { "@type": "EducationalOrganization", "name": "BMS College of Engineering" }
-  ],
-  "knowsAbout": [
-    "AI Systems Engineering",
-    "Real-Time AI",
-    "AI Infrastructure",
-    "AI Observability",
-    "Inference Routing",
-    "Concurrency Architecture",
-    "Physics-Informed Machine Learning",
-    "Retrieval-Augmented Generation",
-    "LLM Inference",
-    "Distributed Systems",
-    "AsyncIO Concurrency",
-    "Vector Search",
-    "Editorial Design",
-    "Systems Design"
-  ],
-  "sameAs": [
-    "https://github.com/ughshwin",
-    "https://www.linkedin.com/in/ashwingupta3012/",
-    "https://www.kaggle.com/ashwingupta3012"
-  ],
-  "email": "ashwingupta3012@gmail.com",
-  "description": "AI Systems Engineer building the architecture around the model - inference routing, concurrency systems, and physics-informed ML - at the intersection of engineering rigour and design thinking.",
+  "jobTitle": currentEmployment.role,
+  "worksFor": { "@type": "Organization", "name": currentEmployment.company },
+  "memberOf": schemaEmployment.map(entry => ({ "@type": "EmployeeRole", roleName: entry.role, startDate: entry.start, ...(entry.end ? {endDate: entry.end} : {}), memberOf: {"@type":"Organization",name:entry.company} })),
+  "alumniOf": alumni.map(entry => ({"@type":"EducationalOrganization",name:entry.company})),
+  "knowsAbout": profile.knowsAbout,
+  "sameAs": Object.values(profile.socials),
+  "email": profile.email,
+  "description": profile.description,
   "address": {
     "@type": "PostalAddress",
-    "addressLocality": "Bangalore",
-    "addressCountry": "IN"
+    "addressLocality": profile.location.city,
+    "addressCountry": profile.location.countryCode
   }
 };
 
@@ -67,7 +38,7 @@ export const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": WEBSITE_ID,
-  name: "Ashwin Gupta - AI Systems Engineer",
+  name: chromeCopy.schema.profileName,
   url: SITE_URL,
   inLanguage: "en",
   author: { "@id": PERSON_ID },
@@ -85,7 +56,7 @@ type ContentOptions = {
   associatedMedia?: { "@type": "MediaObject"; contentUrl: string; encodingFormat: string; name: string };
 };
 
-// Publication dates are supplied explicitly, with provenance in article-publication.json.
+// Publication dates are supplied explicitly, with provenance in content/portfolio/articles.json.
 export function contentSchemas({ type, name, url, description, ...details }: ContentOptions) {
   return [
     {
@@ -116,7 +87,7 @@ export function contentSchemas({ type, name, url, description, ...details }: Con
       "@type": "BreadcrumbList",
       "@id": url + "#breadcrumb",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 1, name: chromeCopy.schema.homeLabel, item: SITE_URL },
         { "@type": "ListItem", position: 2, name, item: url },
       ],
     },
@@ -128,7 +99,7 @@ export const profileSchema = {
   "@type": "ProfilePage",
   "@id": SITE_URL + "#webpage",
   url: SITE_URL,
-  name: "Ashwin Gupta - AI Systems Engineer",
+  name: chromeCopy.schema.profileName,
   inLanguage: "en",
   mainEntity: { "@id": PERSON_ID },
   isPartOf: { "@id": WEBSITE_ID },
@@ -140,22 +111,22 @@ export const paperSchema = {
   "@context": "https://schema.org",
   "@type": "ScholarlyArticle",
   "@id": PAPER_ID,
-  name: "Generating MCQs using Graphs and Language Models",
-  headline: "Generating MCQs using Graphs and Language Models",
+  name: paper.title,
+  headline: paper.title,
   url: PAPER_URL,
-  datePublished: "2022-05",
+  datePublished: paper.datePublished,
   inLanguage: "en",
-  author: [{ "@id": PERSON_ID }, { "@type": "Person", name: "Gururaja H S" }],
+  author: [{ "@id": PERSON_ID }, ...paper.coauthors.map(name => ({"@type":"Person",name}))],
   isPartOf: {
     "@type": "PublicationIssue",
-    name: "NCISCT-2022 Special Issue",
+    name: paper.issue,
     isPartOf: {
       "@type": "PublicationVolume",
-      volumeNumber: "9",
+      volumeNumber: paper.volume,
       isPartOf: {
         "@type": "Periodical",
-        name: "International Journal of Innovative Science, Engineering & Technology",
-        issn: "2348-7968"
+        name: paper.journal,
+        issn: paper.issn
       }
     }
   },

@@ -1,40 +1,40 @@
 ---
+import { resolveCopy } from '../../content/portfolio/copy';
+
+import documentContentSource from "../../content/portfolio/documents/research--scholaros.json";
 import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
+const documentContent = resolveCopy(documentContentSource);
 
-const canonical = "https://www.ashwingupta.dev/research/scholaros";
-const githubUrl = "https://github.com/ughshwin/ScholarOS";
+const canonical = documentContent.metadata.canonical;
+const githubUrl = documentContent.metadata.githuburl;
 
-const metrics = [
-  { value: "5,479", label: "Chunks processed" },
-  { value: "180", label: "Claims extracted" },
-  { value: "76", label: "Contradictions detected" },
-  { value: "100%", label: "Determinism rate" },
-];
+const metrics = documentContent.data.metrics;
+
 ---
 
 <BaseLayout
-  title="ScholarOS - Structured Research Execution Platform | Ashwin Gupta"
-  description="Research as structured execution - five deterministic MCP services over a DAG orchestrator. Evidence-bound outputs, bounded hypothesis critique, fully local."
+  title={documentContent.metadata.baselayout_title}
+  description={documentContent.metadata.baselayout_description}
   canonical={canonical}
   jsonLd={contentSchemas({
     type: "CreativeWork",
-    name: "ScholarOS - Structured Research Execution Platform",
+    name: documentContent.metadata.schema_name,
     url: canonical,
-    description: "Research as structured execution - five deterministic MCP services over a DAG orchestrator. Evidence-bound outputs, bounded hypothesis critique, fully local.",
+    description: documentContent.metadata.baselayout_description,
   })}
 >
   <div class="spatial-scene">
     <div class="thinking-scroll">
       <div class="thinking-body" role="main">
 
-        <a href="/#projects" class="back-link">← Back to projects</a>
+        <a href={documentContent.links.back_to_section} class="back-link">{documentContent.blocks.intro_back_link}</a>
 
         <header class="th-header">
-          <div class="th-badge">In Development • Personal</div>
-          <h1 class="th-title">ScholarOS - Research as Structured Execution</h1>
-          <p class="th-subtitle">Five deterministic MCP services over a DAG orchestrator. Every claim bound to source evidence. No hallucinated synthesis in governance outputs.</p>
+          <div class="th-badge">{documentContent.blocks.intro_th_badge}</div>
+          <h1 class="th-title">{documentContent.blocks.scholaros_research_as_structured_execution_th_title}</h1>
+          <p class="th-subtitle">{documentContent.blocks.scholaros_research_as_structured_execution_th_subtitle}</p>
         </header>
 
         <div class="th-divider"></div>
@@ -51,56 +51,56 @@ const metrics = [
         <div class="th-divider"></div>
 
         <section class="th-section">
-          <h2 class="th-section-title">The Problem With Research Copilots</h2>
+          <h2 class="th-section-title">{documentContent.blocks.the_problem_with_research_copilots_th_section_title}</h2>
           <p class="th-body">
-            Generic AI tools applied to academic research produce fluent text with no evidence traceability. Hallucinated synthesis is structurally indistinguishable from grounded synthesis - you cannot tell from the output alone whether a claim was derived from the literature or confabulated. Every research workflow - literature review, contradiction detection, hypothesis validation, evidence extraction, proposal drafting - requires a separate manual process with no shared execution model.
+            {documentContent.blocks.the_problem_with_research_copilots_th_body}
           </p>
           <p class="th-body">
-            Hypothesis stress-testing is the worst case: the same model that generated the hypothesis is asked to critique it. No adversarial challenge, no convergence gate, no provenance on the resulting claim. The output looks like analysis but carries none of the guarantees.
-          </p>
-        </section>
-
-        <section class="th-section">
-          <h2 class="th-section-title">The Architecture</h2>
-          <p class="th-body">
-            ScholarOS is a structured research execution platform - five capabilities delivered as a DAG-executed MCP workflow, not a chatbox. Every output is bound to source evidence. Nine services process research artifacts with rule-based, schema-defined, reproducible logic. No service imports another service - all data flows through the orchestrator via MCP tool invocations, eliminating hidden state.
-          </p>
-          <p class="th-body">
-            The five capabilities: <strong>Literature Mapping</strong> (HDBSCAN clustering, LLM cluster labeling, paper ranking); <strong>Contradiction & Consensus</strong> (claim extraction, metric normalization, polarity/value divergence detection, Belief Engine confidence assignment); <strong>Hypothesis & Critique</strong> (bounded Hypothesis/Critic loop, max 5 iterations, grounded to source claim identifiers); <strong>Multimodal Evidence Extraction</strong> (tables, figures, metrics from PDFs to structured output); <strong>Proposal Assistant</strong> (validated hypotheses to Markdown/LaTeX with citation assembly).
-          </p>
-          <p class="th-body">
-            Data layer: Chroma (vector), SQLite (metadata), Redis (session). Local inference: Ollama qwen2.5:32b, sentence-transformers all-MiniLM-L6-v2.
+            {documentContent.blocks.the_problem_with_research_copilots_th_body_2}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">The Pipeline</h2>
+          <h2 class="th-section-title">{documentContent.blocks.the_architecture_th_section_title}</h2>
           <p class="th-body">
-            The MCP Orchestrator executes workflows as DAGs with pause/resume, session management, and full trace logging. Only hypothesis critique is agentic - bounded to five iterations with required grounding to source claim identifiers. All other stages are deterministic with provenance tracked through typed artifacts.
+            {documentContent.blocks.the_architecture_th_body}
           </p>
           <p class="th-body">
-            100% determinism rate means identical inputs produce identical outputs. No stochastic processes in the deterministic pipeline. Nine independently testable services with no global state. Agent reasoning is explicitly bounded: convergence detection terminates the hypothesis loop before it runs unconstrained.
+            {documentContent.blocks.the_architecture_th_body_2} <strong>{documentContent.blocks.the_architecture_strong}</strong> {documentContent.blocks.the_architecture_th_body_3} <strong>{documentContent.blocks.the_architecture_strong_2}</strong> {documentContent.blocks.the_architecture_th_body_4} <strong>{documentContent.blocks.the_architecture_strong_3}</strong> {documentContent.blocks.the_architecture_th_body_5} <strong>{documentContent.blocks.the_architecture_strong_4}</strong> {documentContent.blocks.the_architecture_th_body_6} <strong>{documentContent.blocks.the_architecture_strong_5}</strong> {documentContent.blocks.the_architecture_th_body_7}
+          </p>
+          <p class="th-body">
+            {documentContent.blocks.the_architecture_th_body_8}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">Outputs & Current State</h2>
+          <h2 class="th-section-title">{documentContent.blocks.the_pipeline_th_section_title}</h2>
           <p class="th-body">
-            Five output artifact types: ClusterMap (JSON), Contradiction Report (JSON), Validated Hypotheses (JSON), Research Proposals (Markdown • LaTeX), Extracted Evidence (CSV • JSON). Fully local and self-hostable - no external API dependency for any deterministic pipeline stage.
+            {documentContent.blocks.the_pipeline_th_body}
           </p>
           <p class="th-body">
-            March 2026 validation run: 5,479 chunks processed, 180 claims extracted, 76 contradictions detected. Each claim is bound to source evidence. Contradiction detection marks where consensus breaks - keeping outputs falsifiable and useful beyond individual sessions.
+            {documentContent.blocks.the_pipeline_th_body_2}
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">{documentContent.blocks.outputs_current_state_th_section_title}</h2>
+          <p class="th-body">
+            {documentContent.blocks.outputs_current_state_th_body}
+          </p>
+          <p class="th-body">
+            {documentContent.blocks.outputs_current_state_th_body_2}
           </p>
         </section>
 
         <div style="margin-bottom: 3.5rem;">
-          <a href={githubUrl} target="_blank" rel="noopener noreferrer nofollow" aria-label="View private ScholarOS repository on GitHub (requires access)" class="cta-link">
-            ↗ View on GitHub
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer nofollow" aria-label={documentContent.blocks.repository_access_label} class="cta-link">
+            {documentContent.blocks.outputs_current_state_cta_link}
           </a>
         </div>
 
         <div class="th-footer">
-          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
+          <span>{documentContent.blocks.outputs_current_state_span}</span>
         </div>
 
       </div>

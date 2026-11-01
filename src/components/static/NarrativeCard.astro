@@ -1,0 +1,16 @@
+---
+import { inlineCopy } from '../../lib/static-assets';
+interface Props {
+  href: string; name: string; title: string; subtitle?: string;
+  badge: string; secondaryBadge?: string; bullets: string[]; labels: string[];
+}
+const { href,name,title,subtitle,badge,secondaryBadge,bullets,labels } = Astro.props;
+---
+<a class="rv-card" href={href} target={href.startsWith('https:') ? '_blank' : undefined} rel={href.startsWith('https:') ? 'noopener noreferrer' : undefined}>
+  <div class="rv-label">{badge}{secondaryBadge && <> · {secondaryBadge}</>}</div>
+  <span class="rv-serif">{name}</span>
+  <p class="native-project-title">{title}</p>
+  {subtitle && <p class="native-project-subtitle">{subtitle}</p>}
+  {bullets.map((bullet,index)=><div class="rv-pair"><span class="rv-label">{labels[index]}</span><p set:html={inlineCopy(bullet)} /></div>)}
+  <div class="native-card-arrow" aria-hidden="true">↗</div>
+</a>

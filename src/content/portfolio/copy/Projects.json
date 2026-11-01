@@ -1,0 +1,16 @@
+{
+  "research_systems": "Research & Systems",
+  "systems_that_had_to_hold": "Systems that had to hold.",
+  "summaryLabels": [
+    "Problem",
+    "System",
+    "Design",
+    "Outcome"
+  ],
+  "statusLabels": {
+    "award": "Best Outgoing Project • 2022–23",
+    "client": "Client Delivery",
+    "completed": "Shipped",
+    "development": "In Development"
+  }
+}

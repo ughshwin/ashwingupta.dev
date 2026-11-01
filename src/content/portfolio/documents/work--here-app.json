@@ -1,0 +1,58 @@
+{
+  "metadata": {
+    "canonical": "{{origin}}{{projects.here-app.href}}",
+    "baselayout_title": "{{projects.here-app.metrics.languagesSupported}}-Language Vehicle Intelligence - HDFC ERGO | {{profile.name}}",
+    "baselayout_description": "Multilingual RAG for vehicle intelligence at HDFC ERGO. {{projects.here-app.metrics.factualAccuracy}} factual accuracy across {{projects.here-app.metrics.languagesSupported}} languages. Case study.",
+    "schema_name": "{{projects.here-app.metrics.languagesSupported}}-Language Vehicle Intelligence - HDFC ERGO"
+  },
+  "blocks": {
+    "intro_back_link": "← Back to featured",
+    "intro_cs_context_badge": "Client Delivery • {{experience.gida.company}} / HDFC ERGO",
+    "header_title": "{{projects.here-app.metrics.languagesSupported}}-Language Vehicle Intelligence - Multilingual RAG at Enterprise Scale",
+    "header_subtitle": "Vehicle specification queries answered accurately across {{projects.here-app.metrics.languagesSupported}} languages. QA-gated retrieval grounded in a single structured source of truth.",
+    "the_problem_cs_section_title": "The Problem",
+    "the_problem_cs_body": "HDFC ERGO needed vehicle intelligence that could answer precise specification queries across their entire product catalogue - and answer them correctly, in the user's language, every time. Standard chatbot approaches failed: the same query in different languages returned contradictory results, creating a trust problem at scale.",
+    "the_problem_cs_body_2": "Manual escalation was the only reliable fallback. Every spec-heavy query the chatbot got wrong became a support ticket. At HDFC ERGO's scale - one of India's largest general insurers - this was a volume bottleneck with a measurable cost.",
+    "why_standard_rag_fails_at_163_languages_cs_section_title": "Why Standard RAG Fails at {{projects.here-app.metrics.languagesSupported}} Languages",
+    "why_standard_rag_fails_at_163_languages_cs_body": "The naive approach to multilingual RAG is post-hoc translation: generate a response in one language, then translate it. This works for general prose but fails for structured specification data, where terminology must be exact. A wheel size or engine displacement doesn't translate - it must be retrieved correctly in the target language from the start.",
+    "why_standard_rag_fails_at_163_languages_cs_body_2": "The system treats all {{projects.here-app.metrics.languagesSupported}} languages as first-class targets throughout the retrieval and generation pipeline. Language-aware chunking and per-language factual validation are built into the retrieval process itself, not bolted on afterward.",
+    "the_system_cs_section_title": "The System",
+    "the_system_cs_body": "A RAG-based vehicle intelligence assistant grounded in a curated specification database with image-linked attributes. Every response is anchored to a single structured source of truth - no speculative answers on spec queries, no hallucinated specifications.",
+    "the_system_cs_body_2": "QA-gated retrieval validates lookup quality before generation. If retrieval doesn't meet quality thresholds, the generation step doesn't run. This gate is what makes the {{projects.here-app.metrics.factualAccuracy}} accuracy number hold at scale - errors are caught before they become delivered answers.",
+    "the_system_cs_body_3": "Dynamic data lookup operates across all {{projects.here-app.metrics.languagesSupported}} languages with localised responses grounded in the same structured data. The specification database acts as a single canonical source regardless of which language the query arrives in.",
+    "outcomes_cs_section_title": "Outcomes",
+    "outcomes_outcome_metric": "{{projects.here-app.metrics.factualAccuracy}} factual accuracy",
+    "outcomes_outcome_detail": "Across vehicle specification queries in all {{projects.here-app.metrics.languagesSupported}} languages",
+    "outcomes_outcome_metric_2": "{{projects.here-app.metrics.languagesSupported}} languages",
+    "outcomes_outcome_detail_2": "As first-class retrieval targets - not post-processed translation",
+    "outcomes_outcome_metric_3": "Reduced manual escalation",
+    "outcomes_outcome_detail_3": "Autonomous spec-query resolution at HDFC ERGO scale",
+    "outcomes_outcome_metric_4": "QA-gated retrieval",
+    "outcomes_outcome_detail_4": "Errors caught before generation - not after delivery",
+    "outcomes_span": "© 2026 {{profile.name}} • {{profile.headline}} • {{profile.location.city}}, {{profile.location.country}}"
+  },
+  "links": {
+    "back_to_section": "/#featured"
+  },
+  "diagrams": {},
+  "data": {
+    "metrics": [
+      {
+        "value": "{{projects.here-app.metrics.factualAccuracy}}",
+        "label": "Factual accuracy on spec queries"
+      },
+      {
+        "value": "{{projects.here-app.metrics.languagesSupported}}",
+        "label": "Languages supported"
+      },
+      {
+        "value": "{{projects.here-app.metrics.structuredSources}}",
+        "label": "Structured source of truth"
+      },
+      {
+        "value": "↓",
+        "label": "Manual escalation on spec queries"
+      }
+    ]
+  }
+}

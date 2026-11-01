@@ -1,0 +1,31 @@
+{
+  "work": "Work",
+  "not_what_a_model_outputs_how": "Not what a model outputs - how the system decides, executes, and holds under load.",
+  "role": "Role",
+  "company": "Company",
+  "download_resume": "Download Resume",
+  "resume_asset": "resume",
+  "menu": {
+    "open": "Open menu",
+    "close": "Close menu"
+  },
+  "feedback": {
+    "email_copied": "Email copied to clipboard!",
+    "email_copy_failed": "Could not copy email",
+    "resume_downloaded": "Resume downloaded!"
+  },
+  "socialLinks": {
+    "email": {
+      "href": "mailto:{{profile.email}}",
+      "label": "Email"
+    },
+    "github": {
+      "href": "{{profile.socials.github}}",
+      "label": "GitHub"
+    },
+    "linkedin": {
+      "href": "{{profile.socials.linkedin}}",
+      "label": "LinkedIn"
+    }
+  }
+}

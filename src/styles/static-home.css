@@ -1,0 +1,39 @@
+/* The canonical site is the static Technical Review. Keep a clear gutter for
+   the supplied fixed ribbon, including when the rail becomes mobile contents. */
+.review-edition *, .review-edition *::before, .review-edition *::after { box-sizing:border-box; }
+.review-edition .rv-frame { padding-left:72px; }
+#awwwards a, #awwwards svg { display:block; width:53.08px; height:171.358px; }
+#awwwards a:focus-visible { outline:3px solid var(--rv-accent); outline-offset:3px; }
+@media print { #awwwards { display:none; } }
+.rv-native .native-awards-title { margin-top:32px; font-size:13px; }
+.rv-native .native-project-title { font-size:13px !important; margin:0 0 10px !important; }
+.rv-native .native-project-subtitle { font-size:11px !important; margin:0 0 15px !important; }
+.rv-native .native-card-arrow { margin-top:18px !important; color:var(--rv-accent); }
+.rv-native .native-employer { font-size:13px !important; margin-bottom:8px !important; }
+.rv-native .rv-experience-list ul { padding-left:18px; margin:8px 0 0; }
+.rv-native .rv-experience-list li { font-size:14px; margin:7px 0 !important; }
+.rv-native .rv-label { font-family:'DM Mono',monospace !important; }
+.rv-native #hero > p.rv-label { display:block; margin:0; font-size:10px; max-width:none; }
+.rv-native #hero .rv-role-meta .rv-label { margin-bottom:8px; }
+.rv-native #hero .rv-role-meta p { font-size:14px; line-height:1.8; }
+.rv-native .native-tags { margin-bottom:15px !important; }
+.rv-native .impact-outcome-value { display:block; }
+.rv-native .impact-outcome-readout, .rv-native .impact-outcome-copy { width:100%; }
+.rv-native .impact-outcome-readout, .rv-native .impact-outcome-readout * { text-align:center !important; }
+.rv-native .impact-outcome-readout { align-items:center !important; }
+.rv-native .rv-highlights .rv-preline { font-size:12px; }
+.rv-native #contact .rv-contact-link > div { display:block; }
+.rv-native #contact .rv-contact-link p { overflow-wrap:anywhere; font-size:14px; margin:0; }
+.rv-native #contact .rv-contact-link > span { grid-row:auto; }
+.rv-native #contact .rv-contact-link > div .rv-label { margin:0; }
+.rv-native #contact .rv-contact-link .rv-copy-feedback { border-radius:0; }
+.rv-native #stack .native-skill-category h3 { font-family:'DM Sans',sans-serif; font-size:16px; }
+.rv-native .rv-grid .recommendation-card:last-child:nth-child(odd) { grid-column:1 / -1; width:calc((100% - 24px)/2); justify-self:center; }
+@media(max-width:900px) { .review-edition .rv-frame { padding-left:72px; } }
+@media(max-width:580px) {
+  .review-edition .rv-frame { padding-left:68px; padding-right:16px; }
+  .rv-native .rv-grid .recommendation-card:last-child:nth-child(odd) { width:100%; }
+  .rv-native #hero .rv-role-meta { flex-wrap:wrap; gap:18px; }
+  .rv-native .rv-highlights { grid-template-columns:1fr !important; }
+  .rv-native #stack .rv-tech-list { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}

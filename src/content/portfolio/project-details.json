@@ -1,0 +1,238 @@
+{
+  "ashwingupta-dev": {
+    "index": "01",
+    "company": "Personal",
+    "logo": "/favicon.svg",
+    "logoHeight": 18,
+    "tags": [
+      "Spatial UI Architecture",
+      "TypeScript / React",
+      "Canvas 2D",
+      "Astro • Vercel",
+      "Performance Engineering",
+      "Ambient Interface",
+      "Domain & DNS"
+    ],
+    "impact": "Live at ashwingupta.dev • 90% image reduction • 72% JS bundle cut • 400 CSS DOM nodes eliminated • ambient HUD system with geolocation, exploration tracking, and persistent cross-page widgets",
+    "summary": [
+      "The original portfolio claimed performance engineering while shipping **400 animated DOM nodes** and a **2 MB JPEG hero** - self-defeating on load.",
+      "Rebuilt as a **three-layer spatial interface** - all visual effects collapsed into a single Canvas RAF loop, offscreen pre-rendering, lazy loading, WebP preloads. Structural optimization, not cosmetic.",
+      "Extended with an **ambient HUD system** - geolocation-to-nearest-airport clocks, scroll-depth exploration tracker with color-staged progress arc, normalized mouse XY - all persistent across Astro View Transitions.",
+      "**90% image reduction** • **72% JS cut** • **400 DOM nodes eliminated** • frame time **18–25ms → 4–6ms** • **17 pages** tracked at scroll-depth resolution."
+    ],
+    "bullets": [
+      "A portfolio site is its own proof unit. The designer baseline was self-defeating - the first thing a hiring manager measured was a **performance failure on the site claiming performance engineering**.",
+      "Designer baseline: **400 CSS-animated DOM particles**, **2 MB JPEG** hero, Google Fonts loaded per-component, **72 unvetted dependencies**. The site needed to signal systems thinking - and was doing the opposite.",
+      "Rebuilt end-to-end. **Three-layer spatial architecture** (environment, canvas particle field, hologram interface). All visual effects collapsed into a **single Canvas 2D RAF loop**. Images to WebP with fetchpriority preload. Below-fold sections split via **React.lazy + Suspense**.",
+      "Scanline texture pre-rendered to offscreen canvas (**1 drawImage vs 270 fillRect/frame**). Edge cache rebuilt every 3 frames. RAF paused on visibility change. Mouse tracking gated behind RAF. **Stable 60 FPS under CPU throttle**.",
+      "Image: **2 MB → 211 KB (90%)**. JS bundle: **72% cut**. DOM nodes: **400 CSS-animated eliminated**. Font requests: **3 → 0**. Canvas frame time: **18–25 ms → 4–6 ms**.",
+      "Ambient interface layer: **geolocation → Haversine nearest-IATA** across a curated airport dataset. Shows visitor's local timezone clock alongside home (BLR). Falls back to `Intl.DateTimeFormat` if permission denied. Normalized **mouse XY** mapped to [-1, 1] and **session timer** complete the bottom-right HUD.",
+      "**Exploration tracker** built on scroll-depth weighting across 18 distinct pages - not binary page visits. Each page contributes proportionally by max scroll reached. Color arc interpolates RGB across red → yellow → blue → green brackets. Persists in **localStorage** across sessions.",
+      "**Radial-arc scroll-to-top** resets cleanly per navigation via `astro:page-load`. Scroll container detection handles both `.hologram-interface` (homepage) and `.thinking-scroll` (article pages). All HUD widgets use `transition:persist` - zero flicker across View Transitions."
+    ],
+    "statusTone": "completed"
+  },
+  "pageindexollama": {
+    "index": "02",
+    "company": "Open Source",
+    "logo": "/logos/github.svg",
+    "logoHeight": 18,
+    "tags": [
+      "Provider Abstraction",
+      "Tree-Based RAG",
+      "Ollama / Local LLMs",
+      "Bounded Async Concurrency",
+      "Hierarchical Fallback",
+      "Python / Open Source"
+    ],
+    "impact": "Fully offline tree-RAG execution • vendor lock-in eliminated • provider-agnostic runtime",
+    "summary": [
+      "Tree-RAG was **hardwired to one provider contract** - completion differences silently corrupted recursive traversal; failures surface only at collapse.",
+      "Added a **provider-routing layer** with **finish-reason normalization**, so traversal depends on stable internal contracts, not whichever runtime answered.",
+      "Prompt externalization, bounded concurrency, and hierarchical fallback stabilize long-document runs on **local models** with uneven outputs and limited memory.",
+      "**Fully offline tree-RAG** across Ollama, llama.cpp, and vLLM - provider switching is transparent, with no external API keys required."
+    ],
+    "bullets": [
+      "All inference required a **live OpenAI API key** - offline or air-gapped execution was blocked entirely; **provider switches corrupted traversal silently** with no error surface; token encoding differences across providers produced inconsistent chunk boundaries with no visible signal.",
+      "PageIndex's tree RAG was hardcoded to **OpenAI's API contract** - inline prompt strings, non-normalized completion handling. **Local or offline deployment was impossible**. Any provider change broke traversal.",
+      "Forked and refactored: **provider-routing abstraction** resolved via env vars. **Finish-reason normalization layer** stabilizes recursive traversal across model outputs. Prompts externalized into a registry loader. **Bounded async concurrency** across TOC generation and summarization. Hierarchical fallback for large-document robustness.",
+      "Normalized completion contracts prevent finish-reason variations from corrupting **recursive traversal state**. Fallback chunk policies handle **constrained VRAM and RAM**. Structured-output hardening absorbs imperfect model responses without pipeline failure.",
+      "**Fully offline tree-RAG** with Ollama - no API keys. Seamless provider switching via stable internal contracts. Regression risk reduced through e2e coverage across document types and model sizes."
+    ],
+    "statusTone": "completed"
+  },
+  "hsbc-voice": {
+    "index": "04",
+    "company": "HSBC",
+    "logo": "/logos/hsbc.svg",
+    "logoHeight": 22,
+    "tags": [
+      "SIP/Voice Orchestration (PJSIP • RFC 3261)",
+      "CPU-Pinned Processes • asyncio + uvloop",
+      "GCP Infrastructure (Packer • GCE • HPA)",
+      "Cross-Stack Observability",
+      "LLM Inference Pipeline",
+      "Cost Engineering"
+    ],
+    "impact": "1,600+ concurrent sessions • 7× VM capacity • ~$1.3M annualized savings • MTTR ~1–2 hrs → ~10 min",
+    "summary": [
+      "GIL'd threading on a **32-core VM** left 31 cores idle - memory ballooning capped sessions at **20 per VM**; documentation **10–15 min**; incident recovery **1–2 hours**.",
+      "Migrated to **8-core VM**; **8 CPU-pinned parallel instances** via taskset escaped GIL; **asyncio + uvloop** replaced threading - each SIP session a coroutine across SBC, STT, and LLM.",
+      "Built **cross-stack log correlation**, SIPp load testing, and secure media transport - capacity, observability, and cost treated as one system.",
+      "**7× per-VM capacity** • **1,600+ sessions** sustained • **$118K → $8K/month** • MTTR **1–2 hr → ~10 min** • docs **10–15 min → 2–3 min**."
+    ],
+    "bullets": [
+      "**GIL'd threading caused memory ballooning** - concurrent sessions saturated at 20 per VM before packet loss rose above 10%; available hardware capacity was highly under-utilised; post-call documentation required **10–15 minutes of manual effort** per interaction with no automated path; fragmented cross-service logs with no correlation layer meant incidents required **1–2 hours of manual reconstruction** to identify root cause.",
+      "The platform ran on GIL'd threading with **memory ballooning** on a **32-core VM** - capped at **20 concurrent calls**, 31 cores idle. Post-call documentation: **10–15 min per interaction**. Inference cost: **~$118K/month**. Incident recovery: **1–2 hours** - fragmented logs, no unified observability layer.",
+      "Led a **4-engineer team**. Owned **Packer automation across all project modules** - standardizing GCE image builds for the full SIP stack **(SBC → STT → LLM inference)**. Migrated from **32-core n2-standard-32** to **8-core c4-standard-8**; deployed **8 CPU-pinned parallel instances** via <code>taskset</code> - one per core, escaping GIL entirely. Rewrote concurrency with **asyncio + uvloop**, eliminating memory ballooning. Built **SIPp load test suite** (2,000 concurrent users). Architected **cross-stack log-correlation** over GCP Logging APIs - **250K+ log lines in under 5 seconds**.",
+      "**<2s E2E transcription latency**, <5% packet loss at 1,600+ concurrent sessions. libsrtp + DTLS/SRTP for in-transit security. Grafana-Prometheus with MACD triggers. Migrated **n2-standard-32 → c4-standard-8**, improving transcript length **30–40% under load**.",
+      "**7× per-VM capacity (20 → 140–160 calls)**. **1,600+ sessions** sustained. Documentation: **10–15 min → 2–3 min**. Compute: **$118K → $8K/month (~$1.3M annualized savings)**. MTTR: **1–2 hours → ~10 minutes**."
+    ],
+    "statusTone": "client"
+  },
+  "azure-infra-docs": {
+    "index": "05",
+    "company": "Coforge",
+    "logo": "coforge",
+    "logoHeight": 18,
+    "tags": [
+      "Azure Resource Graph API",
+      "Live State Extraction",
+      "Network & Security Config Mapping",
+      "PlantUML Diagram Generation",
+      "Few-Shot LLM Prompting",
+      "Fabrication Guardrails"
+    ],
+    "impact": "~2–3 days → ~2–3 hours documentation turnaround • 104 resource groups/project • zero fabricated components",
+    "summary": [
+      "Azure docs relied on **manual exports and hand-drawn diagrams** - every project took **2–3 days** and drifted from live state.",
+      "Built a **live-state extraction pipeline** - subscription scan, topology mapping, and security config analysis auto-generate SDDs and PlantUML from live resource evidence.",
+      "**Few-shot prompting** grounds generation in extracted inventory; guardrails reject any component without a matching live resource - fabrication blocked from governance docs.",
+      "**2–3 days → ~2–3 hours** • **104 resource groups** per engagement • **zero fabricated components** • manual PlantUML authoring removed."
+    ],
+    "bullets": [
+      "Infrastructure documentation required **manual extraction from Azure** - 2–3 days per project; **PlantUML diagrams were authored by hand** from memory or stale exports; documented architecture drifted from live infrastructure state with **no mechanism to detect or correct divergence**.",
+      "Enterprise infrastructure documentation required manual Azure subscription extraction - **2–3 days per project**. Produced stale views, delayed governance reviews, and documented state that drifted from live infrastructure.",
+      "Built a Streamlit engine accepting a **subscription ID**, auto-generating SDDs and **PlantUML diagrams** via automated inventory extraction, network flow mapping, security config analysis, and dependency graph construction. **Few-shot LLM prompting** grounds architecture rationale in live state. **Validation guardrails** cross-check every generated component against extracted inventory.",
+      "Guardrail layer enforces that every generated component maps to a **verified live resource** - hallucinated topology can't reach governance docs. Outputs regenerated from live subscription state - no cached snapshots, no documentation drift.",
+      "Documentation: **2–3 days → ~2–3 hours**. Average **104 resource groups per project**. Eliminated manual PlantUML authoring. Live-state grounding replaced manual transcription."
+    ],
+    "statusTone": "client"
+  },
+  "here-app": {
+    "index": "07",
+    "company": "HDFC ERGO",
+    "logo": "hdfc",
+    "logoHeight": 22,
+    "tags": [
+      "RAG",
+      "163 Languages",
+      "QA-Gated Retrieval",
+      "Structured Spec Database",
+      "Dynamic Data Retrieval",
+      "Vehicle Intelligence"
+    ],
+    "impact": "~97% factual accuracy • 163 languages • reduced manual escalation on specification queries",
+    "summary": [
+      "Vehicle assistants answered **specification queries inconsistently across languages** - the same request could contradict itself, making manual escalation the safe fallback.",
+      "Built a **RAG system** over a structured vehicle database with image-linked attributes - every answer grounded in one canonical source.",
+      "**QA-gated retrieval** validates lookup quality before generation, while **163-language delivery** stays anchored to one data model instead of post-hoc translation.",
+      "**~97% factual accuracy** across **163 languages** • grounded responses reduced manual escalation on configuration, pricing, and feature-specification queries at scale."
+    ],
+    "bullets": [
+      "Vehicle spec chatbots produced **inconsistent and factually unreliable answers** - the same query in different languages could return contradictory results; **manual support escalation** was the only fallback for spec-heavy queries, creating volume bottlenecks at scale.",
+      "HDFC Bank's vehicle intelligence required accurate answers on structured specification data across **163 languages**. Standard chatbots failed on spec queries - generating inconsistent answers that increased manual support escalation.",
+      "**RAG-based vehicle intelligence assistant** grounded in a curated specification database with image-linked attributes. **QA-tested retrieval pipeline** with dynamic data lookup across **163 languages** - localized responses grounded in the same structured data, not translated post-hoc.",
+      "QA-gated retrieval enforces factual grounding before responses are served - no speculative answers on spec queries. Structured specification database acts as a single source of truth across all 163 language boundaries. Accuracy validated across full coverage before production.",
+      "**~97% factual accuracy** across **163 languages**. Reduced manual support escalation on spec-heavy queries."
+    ],
+    "statusTone": "client"
+  },
+  "skill-recommendation-engine": {
+    "index": "09",
+    "company": "Prismforce",
+    "logo": "prismforce",
+    "logoHeight": 28,
+    "tags": [
+      "Weighted Directed Graph",
+      "Multi-Level Skill Hierarchy",
+      "Dynamic Node Updates",
+      "Mathematical Scoring Heuristics",
+      "Real-Time Inference",
+      "NVIDIA T4"
+    ],
+    "impact": "+30% recommendation relevance • sub-50ms latency • single NVIDIA T4 under production load",
+    "summary": [
+      "Skill recommendations ignored **hierarchical relationships**, taxonomy changes forced **full batch retraining**, and live inference missed the **sub-50ms** SLA.",
+      "Built a **weighted directed graph** over multilevel skill hierarchies with typed edges, lightweight scoring - structure, not retraining, drives relevance.",
+      "Dynamic node insertion and deterministic traversal keep the graph current; latency was profiled at the **99th percentile** under production load.",
+      "**+30% relevance** • **sub-50ms inference** on one **NVIDIA T4** • taxonomy expansion no longer required batch retraining • live updates stayed current."
+    ],
+    "bullets": [
+      "The recommendation system **ignored hierarchical skill relationships** - related skills treated as independent nodes with no structural modeling; **every taxonomy expansion triggered full batch retraining**, blocking updates until recompute completed; inference latency under production concurrency **exceeded the sub-50ms SLA** required for live platform use.",
+      "Prismforce needed real-time skill recommendations against a **large, evolving taxonomy**. The existing system missed hierarchical skill relationships, went stale under profile updates, and couldn't hit **sub-50ms latency** for live platform use.",
+      "Real-time recommendation engine using a **weighted directed graph** encoding multi-level skill hierarchy relationships as typed edges with dynamic weight updates. **Lightweight mathematical scoring heuristics** minimize computational overhead per inference call. Update model handles **dynamic node additions without full graph recomputation**.",
+      "**Deterministic traversal logic** produces consistent outputs under frequent profile and taxonomy updates. Heuristics keep inference paths predictable and bounded. **Latency profiled under realistic production concurrency** on NVIDIA T4 before deployment.",
+      "**~30% improvement** in recommendation relevance. **Sub-50ms inference** on NVIDIA T4 under production load. **Dynamic updates eliminated batch retraining** on taxonomy expansion."
+    ],
+    "statusTone": "client"
+  },
+  "pinns": {
+    "index": "10",
+    "company": "BMS College of Engineering",
+    "logo": "bmsce",
+    "logoHeight": 28,
+    "tags": [
+      "PINNs",
+      "Dual-Loss Optimization",
+      "PDEs / ODEs",
+      "Fluid Dynamics",
+      "Structural Mechanics",
+      "Heat Transfer"
+    ],
+    "impact": "Best Outgoing Project • BMSCE 2022–23 • 6 validated benchmarks across fluid, structural, and thermal domains",
+    "summary": [
+      "Purely data-driven simulation needed **large labeled datasets** and produced **physically invalid solutions** when sparse data let models ignore governing laws.",
+      "Developed a **dual-loss PINN framework** that embeds **PDE/ODE constraints** directly into optimization - data fit and physical law are solved together.",
+      "Validated across **six benchmarks** spanning fluid, structural, and thermal domains, including Burgers' equation plus Neumann and Dirichlet variants.",
+      "**Stable convergence** across three physics domains with limited data • HVAC and server-cooling use cases explored • **Best Outgoing Project - BMSCE 2022–23**."
+    ],
+    "bullets": [
+      "Purely data-driven physics simulation required **large labeled datasets** expensive or impossible to generate experimentally; sparse training data produced **physically implausible solutions** - the model could satisfy the data loss while violating governing equations; no unified framework existed that validated across multiple physics domains simultaneously.",
+      "Physics simulation (fluid dynamics, structural mechanics, heat transfer) is **unstable under purely data-driven approaches** - requires large labeled datasets that are expensive or impossible to generate, and produces physically implausible solutions under sparse data.",
+      "**Dual-loss PINN framework** embedding governing **PDE/ODE constraints directly into the optimization objective** alongside data loss. Validated across **six benchmarks**: Burgers' equation, 1D heat conduction via pin fin, fixed-fixed column deflection, cantilever tip deflection, 1D transient cooling under **Neumann flux and Dirichlet boundary conditions**.",
+      "Physics constraints act as a **regularizer** - preventing physically implausible solutions from satisfying data loss alone. Neumann and Dirichlet boundary condition variants validated generalizability across constraint types and problem geometries.",
+      "**Stable convergence across 6 physics benchmarks** - fluid, structural, thermal - with limited labeled data. Applied use cases in HVAC thermal feedback and server cooling. **Best Outgoing Project - BMSCE 2022–23**."
+    ],
+    "statusTone": "award"
+  },
+  "scholaros": {
+    "index": "12",
+    "company": "Personal",
+    "logo": "/logos/github.svg",
+    "logoHeight": 18,
+    "tags": [
+      "MCP Orchestrator • DAG Execution",
+      "9 Deterministic Services",
+      "Hypothesis • Critic Agent Loop",
+      "Evidence-Bound Outputs",
+      "Chroma • SQLite • Redis",
+      "Local-First • Self-Hostable"
+    ],
+    "impact": "5,479 chunks • 180 claims • 76 contradictions detected • 100% determinism rate • fully local execution",
+    "summary": [
+      "Research copilots generate **fluent text without evidence traceability** - grounded synthesis and hallucination look identical, so no claim can be audited.",
+      "**Five locked MCP services** cover literature mapping, contradiction detection, hypothesis critique, evidence extraction, and assembly through **schema-defined interfaces**.",
+      "Only hypothesis critique remains agentic - **bounded to five iterations**; all other stages are deterministic with provenance preserved through **typed artifacts**.",
+      "Each claim is **bound to source evidence**; contradiction detection marks where consensus breaks, keeping outputs falsifiable and useful beyond sessions."
+    ],
+    "bullets": [
+      "Generic AI tools applied to academic research produce **fluent text with no evidence traceability** - hallucinated synthesis is structurally indistinguishable from grounded synthesis; literature review, contradiction detection, hypothesis validation, evidence extraction, and proposal drafting each require **separate manual workflows** with no shared execution model; hypothesis stress-testing relies on the same model that generated the hypothesis - no adversarial challenge, no convergence gate, **no provenance on the resulting claim**.",
+      "ScholarOS is a **structured research execution platform** - five capabilities delivered as a DAG-executed MCP workflow, not a chatbox. Every output is **bound to source evidence**. Contradiction detection runs across the full corpus, not per-query. Hypothesis critique uses a **bounded Hypothesis / Critic agent loop** with convergence detection - not unconstrained generation. Nine services process research artifacts with rule-based, schema-defined, reproducible logic. **No service imports another service** - all data flows through the orchestrator via MCP tool invocations.",
+      "**MCP Orchestrator** executes workflows as DAGs with pause/resume, session management, and full trace logging. Five capabilities: **Literature Mapping** (HDBSCAN clustering + LLM cluster labeling + paper ranking), **Contradiction & Consensus** (claim extraction → metric normalization → polarity/value divergence detection → Belief Engine confidence assignment), **Hypothesis & Critique** (bounded Hypothesis/Critic loop, max 5 iterations, grounded to source claim identifiers), **Multimodal Evidence Extraction** (tables, figures, metrics from PDFs → structured output), **Proposal Assistant** (validated hypotheses → Markdown/LaTeX with citation assembly). Data layer: **Chroma** (vector), **SQLite** (metadata), **Redis** (session). Local inference: **Ollama qwen2.5:32b**, **sentence-transformers all-MiniLM-L6-v2**.",
+      "**100% determinism rate** - identical inputs produce identical outputs; no stochastic processes in the deterministic pipeline. Nine independently testable services with no global state and no inter-service imports - all data flows through the orchestrator, **eliminating hidden state**. Agent reasoning is **explicitly bounded**: max 5 iterations per hypothesis loop with required grounding to source claim identifiers. March 2026 validation: **5,479 chunks processed**, **180 claims extracted**, **76 contradictions detected**.",
+      "**Five research output artifacts** - ClusterMap (JSON), Contradiction Report (JSON), Validated Hypotheses (JSON), Research Proposals (Markdown • LaTeX), Extracted Evidence (CSV • JSON). **Fully local and self-hostable** - no external API dependency for any deterministic pipeline stage."
+    ],
+    "statusTone": "development"
+  }
+}

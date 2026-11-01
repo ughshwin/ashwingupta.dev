@@ -1,0 +1,50 @@
+{
+  "name": "Ashwin Gupta",
+  "headline": "AI Systems Engineer",
+  "email": "ashwingupta3012@gmail.com",
+  "siteUrl": "https://www.ashwingupta.dev/",
+  "location": {
+    "city": "Bangalore",
+    "country": "India",
+    "countryCode": "IN"
+  },
+  "socials": {
+    "github": "https://github.com/ughshwin",
+    "linkedin": "https://www.linkedin.com/in/ashwingupta3012/",
+    "kaggle": "https://www.kaggle.com/ashwingupta3012"
+  },
+  "resumeFilename": "Ashwin_Gupta_Senior_AI_Engineer.pdf",
+  "schemaEmploymentIds": [
+    "skan",
+    "coforge"
+  ],
+  "description": "AI Systems Engineer building the architecture around the model - inference routing, concurrency systems, and physics-informed ML - at the intersection of engineering rigour and design thinking.",
+  "knowsAbout": [
+    "AI Systems Engineering",
+    "Real-Time AI",
+    "AI Infrastructure",
+    "AI Observability",
+    "Inference Routing",
+    "Concurrency Architecture",
+    "Physics-Informed Machine Learning",
+    "Retrieval-Augmented Generation",
+    "LLM Inference",
+    "Distributed Systems",
+    "AsyncIO Concurrency",
+    "Vector Search",
+    "Editorial Design",
+    "Systems Design"
+  ],
+  "alumniIds": [
+    "bmsce"
+  ],
+  "twitter": "@ashwingupta3012",
+  "mapsUrl": "https://maps.google.com/?q=Bangalore,India",
+  "socialImageAlt": "{{profile.name}} - {{profile.headline}}. Inference routing, concurrency architecture, physics-informed ML.",
+  "previousEmploymentId": "coforge",
+  "titleTemplate": "{{profile.name}} | {{profile.headline}} in {{profile.location.city}}",
+  "descriptionTemplate": "{{profile.name}} is a {{currentEmployment.role}} at {{currentEmployment.company}} in {{profile.location.city}}. Explore production AI, RAG, inference infrastructure, open-source projects, and research.",
+  "homeAirport": "BLR",
+  "homeTimeZone": "Asia/Kolkata",
+  "socialImagePath": "/og-image.jpg"
+}

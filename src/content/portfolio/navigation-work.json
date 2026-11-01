@@ -1,0 +1,12 @@
+[
+  {
+    "label": "Featured",
+    "href": "/featured",
+    "section": "featured"
+  },
+  {
+    "label": "Projects",
+    "href": "/projects",
+    "section": "projects"
+  }
+]

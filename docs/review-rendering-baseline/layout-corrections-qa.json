@@ -1,0 +1,172 @@
+{
+  "desktopContrast": [
+    {
+      "overflow": false,
+      "path": "/review",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/articles",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/ashwingupta-dev",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/azure-infra-docs",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/here-app",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/hsbc",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/pageindexollama",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/skill-recommendation-engine",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/research/controla",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/research/physclip",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/research/pinns",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/research/scholaros",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/articles/the-layer-nobody-talks-about",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/articles/the-space-between-stars",
+      "white": []
+    },
+    {
+      "overflow": false,
+      "path": "/review/articles/what-it-takes-to-leave-a-system-alone",
+      "white": []
+    }
+  ],
+  "mobile": [
+    {
+      "overflow": false,
+      "path": "/review",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/articles",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/ashwingupta-dev",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/azure-infra-docs",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/here-app",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/hsbc",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/pageindexollama",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/work/skill-recommendation-engine",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/research/controla",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/research/physclip",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/research/pinns",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/research/scholaros",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/articles/the-layer-nobody-talks-about",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/articles/the-space-between-stars",
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "overflow": false,
+      "path": "/review/articles/what-it-takes-to-leave-a-system-alone",
+      "scrollWidth": 375,
+      "width": 390
+    }
+  ],
+  "diagramGeometry": "Exact match: 8 diagrams, both tabs, 1280px and 390px"
+}

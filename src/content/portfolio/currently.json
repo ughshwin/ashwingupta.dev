@@ -1,0 +1,12 @@
+[
+  {
+    "projectId": "controla",
+    "label": "{{projects.controla.currentLabel}}",
+    "detail": "Local inference OS with contextual EWMA weight learning. Not open-sourced yet."
+  },
+  {
+    "projectId": "scholaros",
+    "label": "{{projects.scholaros.displayName}}",
+    "detail": "Structured research execution - five deterministic MCP services, DAG-executed, fully local. In active development."
+  }
+]

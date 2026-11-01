@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "description": "Three editorial directions for {{profile.name}}’s professional portfolio. Full HTML layout studies and rendered style guides.",
+    "navigationLabel": "Layout samples"
+  },
+  "blocks": {
+    "intro_title": "· {{profile.name}}",
+    "intro_skip_link": "Skip to content",
+    "intro_study_home": "{{profile.initials}}",
+    "intro_span": "/ Layout studies",
+    "intro_study_original": "Original site ↗"
+  },
+  "links": {
+    "a_href": "/editions",
+    "a_href_2": "/"
+  },
+  "diagrams": {},
+  "data": {}
+}

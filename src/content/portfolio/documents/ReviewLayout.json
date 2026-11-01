@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "a_title": "Email",
+    "a_title_2": "GitHub",
+    "a_title_3": "LinkedIn",
+    "contentsLabel": "Contents",
+    "contactLinksLabel": "Contact links",
+    "copyEmailLabel": "Copy email address"
+  },
+  "blocks": {
+    "intro_rv_skip": "Skip to content",
+    "intro_rv_brand": "{{profile.initials}}",
+    "intro_span": "/ {{chrome.review.name}}",
+    "intro_rv_masthead_note": "{{chrome.review.mastheadNote}}",
+    "intro_rv_kicker": "Professional profile",
+    "intro_span_2": "Articles",
+    "intro_rv_link_rv_resume": "Download CV ↓",
+    "profileLink": "Profile",
+    "overviewLink": "Overview",
+    "footerName": "{{profile.name}} / {{chrome.review.name}}",
+    "backToTop": "Back to top ↑"
+  },
+  "links": {
+    "a_href": "{{chrome.routes.home}}",
+    "a_href_2": "{{chrome.routes.articles}}"
+  },
+  "diagrams": {},
+  "data": {}
+}

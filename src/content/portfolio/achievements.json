@@ -1,0 +1,64 @@
+[
+  {
+    "id": "guinness",
+    "title": "Guinness World Record",
+    "sub": "Command Centre Ops • Most Participants - Agentic AI Day 2025\nGoogle Cloud | Hack2Skill • July 2025",
+    "icon": "guinness",
+    "time": "Jul 2025"
+  },
+  {
+    "id": "savings",
+    "title": "$1.3M+ Annualised Savings",
+    "sub": "HSBC • Coforge",
+    "icon": "hsbc",
+    "time": "Jan 2026"
+  },
+  {
+    "id": "best-team",
+    "title": "Best Team Award",
+    "sub": "HSBC Account • Coforge",
+    "icon": "hsbc",
+    "time": "Nov 2025"
+  },
+  {
+    "id": "think-customer",
+    "title": "Pat on Back - Think Customer Award",
+    "sub": "Individual Delivery Excellence • Coforge",
+    "icon": "coforge",
+    "time": "Dec 2024"
+  },
+  {
+    "id": "keep-it-up",
+    "title": "Keep It Up Award",
+    "sub": "Ownership of Professional Growth & Skill Visibility • Coforge",
+    "icon": "coforge",
+    "time": "Jun 2026"
+  },
+  {
+    "id": "spring-trainer",
+    "title": "Java Spring AI Trainer",
+    "sub": "130+ Participants • 81% voted preferred trainer • NPS +50",
+    "icon": "/logos/spring.svg",
+    "time": "Dec '25 – May '26"
+  },
+  {
+    "id": "best-project",
+    "title": "Best Outgoing Project",
+    "sub": "Mechanical Engineering • BMSCE 2023",
+    "icon": "bmsce",
+    "time": "Aug 2024"
+  },
+  {
+    "id": "augment-ai",
+    "title": "Augment.AI, Mentor and Founder",
+    "sub": "BMSCE's AI Club",
+    "icon": "augment-ai",
+    "time": "Jan 2022"
+  },
+  {
+    "id": "human-faces",
+    "icon": "kaggle",
+    "time": "Present",
+    "live": "kaggle"
+  }
+]

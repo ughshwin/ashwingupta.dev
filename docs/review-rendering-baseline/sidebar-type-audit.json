@@ -1,0 +1,44 @@
+{
+  "typography": [
+    {
+      "width": 1280,
+      "cvLinks": 1,
+      "labels": [
+        "13px \"DM Sans\", sans-serif left"
+      ],
+      "overflow": false,
+      "tagline": false
+    },
+    {
+      "width": 390,
+      "cvLinks": 1,
+      "labels": [
+        "13px \"DM Sans\", sans-serif left"
+      ],
+      "overflow": false,
+      "tagline": false
+    }
+  ],
+  "diagrams": [
+    {
+      "width": 1280,
+      "state": "before",
+      "match": true
+    },
+    {
+      "width": 1280,
+      "state": "after",
+      "match": true
+    },
+    {
+      "width": 390,
+      "state": "before",
+      "match": true
+    },
+    {
+      "width": 390,
+      "state": "after",
+      "match": true
+    }
+  ]
+}

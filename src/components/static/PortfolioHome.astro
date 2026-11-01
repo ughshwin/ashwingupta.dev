@@ -1,0 +1,107 @@
+---
+import { Mail, Github, Linkedin, MapPin } from 'lucide-react';
+import { resolveCopy } from '../../content/portfolio/copy';
+import { profile } from '../../content/portfolio/profile';
+import { currentEmployment, experienceRecords } from '../../content/portfolio/experience';
+import { experiencePeriod } from '../../content/portfolio/selectors.mjs';
+import { getAchievements } from '../../content/portfolio/achievements';
+import { impacts, impactCategories, CATEGORY_ORDER, getKaggleFreshness } from '../../content/portfolio/impact';
+import { featuredItems, featuredCopy } from '../../content/portfolio/featured';
+import { secondaryProjectCards } from '../../content/portfolio/projects';
+import { researchItems, researchCopy } from '../../content/portfolio/research';
+import { contactCopy, contactLinks } from '../../content/portfolio/contact';
+import aboutSource from '../../content/portfolio/about.json';
+import recommendationSource from '../../content/portfolio/recommendations.json';
+import skillsSource from '../../content/portfolio/skills.json';
+import heroSource from '../../content/portfolio/copy/Hero.json';
+import aboutCopySource from '../../content/portfolio/copy/About.json';
+import experienceCopySource from '../../content/portfolio/copy/ExperienceTimeline.json';
+import impactCopySource from '../../content/portfolio/copy/Impact.json';
+import projectCopySource from '../../content/portfolio/copy/Projects.json';
+import recommendationCopySource from '../../content/portfolio/copy/Recommendations.json';
+import skillCopySource from '../../content/portfolio/copy/Skills.json';
+import { staticAsset, inlineCopy } from '../../lib/static-assets';
+import NarrativeCard from './NarrativeCard.astro';
+
+const about=resolveCopy(aboutSource), recommendations=resolveCopy(recommendationSource),skills=resolveCopy(skillsSource);
+const hero=resolveCopy(heroSource), aboutCopy=resolveCopy(aboutCopySource), experienceCopy=resolveCopy(experienceCopySource);
+const impactCopy=resolveCopy(impactCopySource), projectCopy=resolveCopy(projectCopySource), recommendationCopy=resolveCopy(recommendationCopySource),skillCopy=resolveCopy(skillCopySource);
+const entries=[...experienceRecords].sort((a,b)=>b.start.localeCompare(a.start));
+const groups=CATEGORY_ORDER.map(category=>({category,items:impacts.filter(metric=>metric.category===category)})).filter(group=>group.items.length).sort((a,b)=>b.items.length-a.items.length);
+const rows=[groups.slice(0,3),groups.slice(3,5),groups.slice(5)].filter(row=>row.length);
+const freshness=getKaggleFreshness({stats:null,status:'recorded'});
+const icons:Record<string,typeof Mail>={email:Mail,github:Github,linkedin:Linkedin,location:MapPin};
+---
+<div class="rv-source rv-home rv-native" data-static-home>
+  <section id="hero">
+    <p class="rv-label">{hero.not_what_a_model_outputs_how}</p>
+    <h1>{profile.name}</h1>
+    <div class="rv-role-meta"><div><span class="rv-label">{hero.role}</span><p>{currentEmployment.role}</p></div><div><span class="rv-label">{hero.company}</span><p>{currentEmployment.company}<br />{experiencePeriod(currentEmployment)}</p></div></div>
+  </section>
+  <section id="about">
+    <div class="rv-label">{aboutCopy.sectionLabel}</div><h2>{aboutCopy.headline}</h2><p>{aboutCopy.thesis}</p>
+    <div class="rv-grid"><div>{Object.values(aboutCopy.biography).map(paragraph=><p>{paragraph}</p>)}</div><div>
+      {about.pillars.map(pillar=><div class="rv-card"><p class="rv-serif">{pillar.title}</p><p>{pillar.desc}</p></div>)}
+      <div class="rv-card"><p class="rv-label">{aboutCopy.principlesHeading}</p>{about.principles.map(principle=><p>- {principle}</p>)}</div>
+    </div></div>
+    <div class="native-awards-title">{aboutCopy.achievementsHeading}</div>
+    <div class="rv-highlights">{getAchievements().map(achievement=><div data-achievement={achievement.id}>
+      <img class="rv-logo" src={staticAsset(achievement.icon)} alt="" width="28" height="28" loading="lazy" />
+      <p class="rv-serif" data-kaggle-highlight={achievement.id==='human-faces' || undefined}>{achievement.title}</p>
+      <span class="rv-label">{achievement.time}</span><div class="rv-preline">{achievement.sub}</div>
+    </div>)}</div>
+  </section>
+  <section id="experience">
+    <span class="rv-label">{experienceCopy.experience_education}</span><h2>{experienceCopy.the_trajectory}</h2>
+    <div class="rv-experience-list">{entries.map(entry=><article class="rv-card" data-experience-id={entry.id}>
+      <div class="rv-card-meta"><span>{entry.role}</span><span class="rv-label">{experiencePeriod(entry)}</span></div>
+      <p class="native-employer">{entry.company}</p><ul>{entry.bullets.map(bullet=><li>{bullet}</li>)}</ul>
+    </article>)}</div>
+  </section>
+  <section id="impact">
+    <span class="rv-label">{impactCopy.impact}</span><h2>{impactCopy.proof_not_promises}</h2><p>{impactCopy.measurable_results_across_performance_efficiency_quality_and}</p>
+    <div class="impact-outcomes-rows">{rows.map(row=><div class="impact-outcomes-grid">{row.map(group=><section class="impact-outcome-column">
+      <h3 class="impact-outcome-heading">{impactCategories[group.category].label}</h3><ul class="impact-outcome-list">
+        {group.items.map(metric=><li class="impact-outcome-metric" data-kaggle-stat={metric.liveStat}>
+          <div class="impact-outcome-readout"><span class="impact-outcome-value" data-value={metric.value}><span class="impact-slot-visual">{metric.value}</span></span>
+          <span class="impact-outcome-copy"><span class="impact-outcome-label">{metric.label}</span><span class="impact-outcome-source" data-impact-project={metric.href}>{metric.item}</span></span>
+          {metric.liveStat&&<span class="impact-outcome-freshness" title={freshness.detail}>{freshness.label}</span>}</div>
+        </li>)}
+      </ul></section>)}</div>)}</div>
+  </section>
+  <section id="featured">
+    <span class="rv-label">{featuredCopy.featured}</span><h2>{featuredCopy.what_the_arc_produced}</h2>
+    <div class="rv-grid">{featuredItems.map(item=><NarrativeCard href={item.link} name={item.name} title={item.title} subtitle={item.subtitle} badge={featuredCopy.typeLabels[item.type]} secondaryBadge={item.secondaryBadge} bullets={item.bullets} labels={featuredCopy.stageLabels} />)}</div>
+  </section>
+  <section id="projects">
+    <span class="rv-label">{projectCopy.research_systems}</span><h2>{projectCopy.systems_that_had_to_hold}</h2>
+    <div class="rv-grid">
+      {researchItems.map(item=><NarrativeCard href={item.link} name={item.name} title={item.title} subtitle={item.subtitle} badge={researchCopy.typeLabels[item.type]} bullets={item.bullets} labels={researchCopy.stageLabels} />)}
+      {secondaryProjectCards.map(project=><a class="rv-card" href={project.href} data-project-id={project.slug}>
+        <div class="rv-card-meta"><div><img class="rv-logo" src={staticAsset(project.logo)} width="28" height="28" alt="" loading="lazy" /><span class="rv-label">{project.company}</span></div><span class="rv-label">{project.status}</span></div>
+        <span class="rv-serif">{project.title}</span><div class="native-tags">{project.tags.map(tag=><span class="rv-label">{tag}</span>)}</div>
+        {project.summary.map((bullet,index)=><div class="rv-pair"><span class="rv-label">{projectCopy.summaryLabels[index]}</span><p set:html={inlineCopy(bullet)} /></div>)}
+        <div class="native-card-arrow" aria-hidden="true">↗</div>
+      </a>)}
+    </div>
+  </section>
+  <section id="recommendations">
+    <span class="rv-label">{recommendationCopy.recommendations}</span><h2>{recommendationCopy.in_their_words}</h2>
+    <div class="rv-grid">{recommendations.map(rec=><article class="rv-card recommendation-card" data-recommendation-id={rec.id}>
+      <div class="recommendation-body"><p class="recommendation-quote">"{rec.text}"</p></div>
+      <div class="recommendation-attribution"><p class="recommendation-name">{rec.name}</p><p class="recommendation-designation">{rec.title} • {rec.company}</p><p class="recommendation-context">{rec.relationship} • {rec.date}</p></div>
+    </article>)}</div>
+  </section>
+  <section id="stack">
+    <span class="rv-label">{skillCopy.sectionLabel}</span><h2>{skillCopy.heading}</h2><p>{skillCopy.description}</p>
+    {skills.map(category=><div class="native-skill-category"><h3>{category.label}</h3><div class="rv-tech-list">{category.technologies.map(technology=><div>
+      <div>{technology.icons.map(icon=><img class="rv-logo" src={staticAsset('/logos/'+icon)} width="24" height="24" alt="" loading="lazy" />)}</div><span>{technology.name}</span>{technology.detail&&<span>{technology.detail}</span>}
+    </div>)}</div></div>)}
+  </section>
+  <section id="contact">
+    <span class="rv-label">{contactCopy.contact}</span><h2>{contactCopy.hard_problems_welcome}</h2><p>{contactCopy.heads_down_building_right_now_not_looking}</p>
+    <div class="native-contact-list">{contactLinks.filter(link=>link.id!=='resume').map(link=>{const Icon=icons[link.id];return <a class="rv-contact-link" href={link.href} target={/^https:/.test(link.href)?'_blank':undefined} rel={/^https:/.test(link.href)?'noopener noreferrer':undefined}>
+      <span>{Icon?<Icon size={14} />:<span aria-hidden="true">k</span>}</span><div><div><span class="rv-label">{link.label}</span><p>{link.value}</p></div></div><span aria-hidden="true">↗</span>
+    </a>;})}</div>
+  </section>
+</div>

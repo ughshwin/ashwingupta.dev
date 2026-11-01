@@ -1,26 +1,31 @@
 ---
+import { resolveCopy } from '../../content/portfolio/copy';
+
+import documentContentSource from "../../content/portfolio/documents/research--pinns.json";
 import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
+const documentContent = resolveCopy(documentContentSource);
 
-const canonical = "https://www.ashwingupta.dev/research/pinns";
-const pdfUrl = "/PINNs_whitepaper.pdf";
-const publicationUrl = "https://mailchi.mp/cellstrat/the-data-your-monitors-are-missing";
+const canonical = documentContent.metadata.canonical;
+const pdfUrl = documentContent.metadata.pdfurl;
+const publicationUrl = documentContent.metadata.publicationurl;
+
 ---
 
 <BaseLayout
-  title="Physics-Informed Neural Networks - Dual-Loss Framework | Ashwin Gupta"
-  description="Dual-loss PINN framework for multi-domain physics simulation. Best Outgoing Project - BMSCE 2022–23. 6 validated benchmarks across fluid, structural, and thermal domains. Enterprise deployment framework published with CellStrat."
+  title={documentContent.metadata.baselayout_title}
+  description={documentContent.metadata.baselayout_description}
   canonical={canonical}
   jsonLd={contentSchemas({
     type: "ScholarlyArticle",
-    name: "Physics-Informed Neural Networks - Dual-Loss Framework",
+    name: documentContent.metadata.schema_name,
     url: canonical,
-    description: "Dual-loss PINN framework for multi-domain physics simulation. Best Outgoing Project - BMSCE 2022–23. 6 validated benchmarks across fluid, structural, and thermal domains. Enterprise deployment framework published with CellStrat.",
+    description: documentContent.metadata.baselayout_description,
     citation: publicationUrl,
     associatedMedia: {
       "@type": "MediaObject",
-      name: "PINNs whitepaper",
+      name: documentContent.metadata.schema_name_2,
       contentUrl: new URL(pdfUrl, canonical).href,
       encodingFormat: "application/pdf",
     },
@@ -30,71 +35,71 @@ const publicationUrl = "https://mailchi.mp/cellstrat/the-data-your-monitors-are-
     <div class="thinking-scroll">
       <div class="thinking-body" role="main">
 
-        <a href="/#featured" class="back-link">← Back to featured</a>
+        <a href={documentContent.links.back_to_section} class="back-link">{documentContent.blocks.intro_back_link}</a>
 
         <header class="th-header">
           <div class="th-badges">
-            <span class="th-badge th-badge-award">Best Outgoing Project '23 • BMS College of Engineering</span>
-            <span class="th-badge th-badge-pub">Published • CellStrat 2025</span>
+            <span class="th-badge th-badge-award">{documentContent.blocks.intro_th_badge_th_badge_award}</span>
+            <span class="th-badge th-badge-pub">{documentContent.blocks.intro_th_badge_th_badge_pub}</span>
           </div>
-          <h1 class="th-title">Physics-Informed Neural Networks - Dual-Loss Framework for Multi-Domain Simulation</h1>
-          <p class="th-subtitle">Physics constraints as regularizers. Sparse data made sufficient through governing equations.</p>
+          <h1 class="th-title">{documentContent.blocks.header_title}</h1>
+          <p class="th-subtitle">{documentContent.blocks.header_subtitle}</p>
         </header>
 
         <div class="th-divider"></div>
 
         <p class="th-bridge">
-          From a final-year thesis that proved the method to an enterprise deployment framework written three years later. Same core idea - physics as a constraint - matured from validation into a production doctrine.
+          {documentContent.blocks.research_arc_bridge}
         </p>
 
         <div class="th-tab-toggle">
-          <button class="th-tab-btn active" data-tab="foundation">Foundation · 2023</button>
-          <button class="th-tab-btn" data-tab="enterprise">Enterprise Framework · 2025</button>
+          <button class="th-tab-btn active" data-tab="foundation">{documentContent.blocks.foundation_tab_label}</button>
+          <button class="th-tab-btn" data-tab="enterprise">{documentContent.blocks.enterprise_tab_label}</button>
         </div>
 
         <!-- ═══ FOUNDATION PANEL (2023 thesis) ═══ -->
         <div class="th-tab-panel active" data-panel="foundation">
 
           <section class="th-section">
-            <h2 class="th-section-title">The Problem With Data-Driven Physics</h2>
+            <h2 class="th-section-title">{documentContent.blocks.the_problem_with_data_driven_physics_th_section_title}</h2>
             <p class="th-body">
-              Purely data-driven physics simulation is fragile under sparse data. A model trained only on observations can satisfy the data loss while violating the governing equations - producing solutions that are mathematically consistent with the loss function but physically implausible. You need labeled datasets that are expensive or impossible to generate experimentally, and even with enough data, there is no guarantee the model learned the right structure.
+              {documentContent.blocks.the_problem_with_data_driven_physics_th_body}
             </p>
             <p class="th-body">
-              The standard response - more data, more compute - does not address the structural problem. The model has no reason to respect conservation laws, boundary conditions, or governing PDEs. It fits the examples it was given, and nothing more.
-            </p>
-          </section>
-
-          <section class="th-section">
-            <h2 class="th-section-title">The Framework</h2>
-            <p class="th-body">
-              The dual-loss PINN framework embeds governing PDE and ODE constraints directly into the optimization objective alongside data loss. The network minimises both simultaneously - fitting observations while satisfying the physics. The constraints act as a regularizer, preventing physically implausible solutions from emerging even when training data is sparse.
-            </p>
-            <p class="th-body">
-              This makes sparse data sufficient in a way that purely data-driven approaches cannot achieve. The governing equations carry structural information about the solution that would otherwise require thousands of labeled examples to approximate. Embedding PDEs into the objective is what makes the sparse-data regime tractable.
+              {documentContent.blocks.the_problem_with_data_driven_physics_th_body_2}
             </p>
           </section>
 
           <section class="th-section">
-            <h2 class="th-section-title">Validation Across Six Benchmarks</h2>
+            <h2 class="th-section-title">{documentContent.blocks.the_framework_th_section_title}</h2>
             <p class="th-body">
-              The framework was validated across six benchmarks spanning three physics domains: fluid dynamics (Burgers' equation), structural mechanics (fixed-fixed column deflection, cantilever tip deflection), and heat transfer (1D heat conduction via pin fin, 1D transient cooling under Neumann flux and Dirichlet boundary conditions).
+              {documentContent.blocks.the_framework_th_body}
             </p>
             <p class="th-body">
-              Neumann and Dirichlet boundary condition variants were tested explicitly to validate generalizability across constraint types and problem geometries - not just across domains. Stable convergence was achieved across all six with limited labeled data.
-            </p>
-            <p class="th-body">
-              Applied use cases explored: HVAC thermal feedback and server cooling - both domains where labeled simulation data is expensive and sparse data is the realistic operating constraint.
+              {documentContent.blocks.the_framework_th_body_2}
             </p>
           </section>
 
           <section class="th-section">
-            <h2 class="th-section-title">What This Means in Practice</h2>
+            <h2 class="th-section-title">{documentContent.blocks.validation_across_six_benchmarks_th_section_title}</h2>
             <p class="th-body">
-              Physics-informed training shifts the question from "do I have enough data?" to "do I know the governing equations?" For most engineering problems, the governing equations are known. The data is sparse because experiments are expensive. PINNs make that the right trade-off to exploit.
+              {documentContent.blocks.validation_across_six_benchmarks_th_body}
             </p>
             <p class="th-body">
-              The key consequence: extrapolation under a physics-constrained model stays bounded by governing structure, not just by training coverage. Generalization depends on dynamics, not data density alone. The model cannot satisfy data loss by producing solutions that violate physics - the constraint eliminates that entire solution class.
+              {documentContent.blocks.validation_across_six_benchmarks_th_body_2}
+            </p>
+            <p class="th-body">
+              {documentContent.blocks.validation_across_six_benchmarks_th_body_3}
+            </p>
+          </section>
+
+          <section class="th-section">
+            <h2 class="th-section-title">{documentContent.blocks.what_this_means_in_practice_th_section_title}</h2>
+            <p class="th-body">
+              {documentContent.blocks.what_this_means_in_practice_th_body}
+            </p>
+            <p class="th-body">
+              {documentContent.blocks.what_this_means_in_practice_th_body_2}
             </p>
           </section>
 
@@ -103,77 +108,77 @@ const publicationUrl = "https://mailchi.mp/cellstrat/the-data-your-monitors-are-
         <!-- ═══ ENTERPRISE PANEL (2025 white paper) ═══ -->
         <div class="th-tab-panel" data-panel="enterprise">
 
-          <div class="th-pub-meta">Published - CellStrat • Coforge • December 2025</div>
+          <div class="th-pub-meta">{documentContent.blocks.what_this_means_in_practice_th_pub_meta}</div>
 
           <section class="th-section">
-            <h2 class="th-section-title">The Enterprise Problem: Operating Blind</h2>
+            <h2 class="th-section-title">{documentContent.blocks.the_enterprise_problem_operating_blind_th_section_title}</h2>
             <p class="th-body">
-              Enterprise systems in aviation, energy, and infrastructure are governed by well-understood physics, yet their internal states are only partially observable in practice. Temperature fields, structural stress, degradation rates - the variables that matter most for safety and cost - are rarely measured directly, because dense instrumentation is expensive, unsafe, or physically impossible.
+              {documentContent.blocks.the_enterprise_problem_operating_blind_th_body}
             </p>
             <p class="th-body">
-              The constraint is not a lack of theory. <strong>It is a lack of observability.</strong> First-principles models degrade when boundary conditions drift. Purely data-driven models extrapolate poorly and fail silently under distribution shift. Heuristics encode experience but do not scale. None of them reliably infer hidden state under partial observability while staying consistent with known dynamics.
+              {documentContent.blocks.the_enterprise_problem_operating_blind_th_body_2} <strong>{documentContent.blocks.the_enterprise_problem_operating_blind_strong}</strong> {documentContent.blocks.the_enterprise_problem_operating_blind_th_body_3}
             </p>
           </section>
 
           <section class="th-section">
-            <h2 class="th-section-title">When PINNs Are Justified - and When They Are Not</h2>
+            <h2 class="th-section-title">{documentContent.blocks.when_pinns_are_justified_and_when_they_are_not_th_section_title}</h2>
             <p class="th-body">
-              The white paper is deliberately narrow about scope. PINNs are justified only when <strong>all</strong> of the following hold: known governing dynamics exist, internal states are not directly observable, data is sparse by design, the task is inverse inference (not forecasting), and physical consistency matters operationally.
+              {documentContent.blocks.when_pinns_are_justified_and_when_they_are_not_th_body} <strong>{documentContent.blocks.when_pinns_are_justified_and_when_they_are_not_strong}</strong> {documentContent.blocks.when_pinns_are_justified_and_when_they_are_not_th_body_2}
             </p>
             <p class="th-body">
-              They should be rejected outright for discrete or event-driven systems, problems without well-defined governing dynamics, scenarios with dense high-quality measurements, latency-dominated applications, and use cases requiring deterministic guarantees. <strong>PINNs do not discover physics; they assume it.</strong> Knowing when not to reach for them is half the framework.
-            </p>
-          </section>
-
-          <section class="th-section">
-            <h2 class="th-section-title">The Canonical Enterprise Pattern</h2>
-            <p class="th-body">
-              Treated not as a general AI technique but as a <strong>constrained inference engine</strong>. The network represents candidate system states as a continuous function; governing equations are embedded in the training objective so the model is penalised for violating known dynamics. Sparse telemetry enters as observational constraints rather than dense supervision, and the balance between data fidelity and physical adherence is tuned to sensor confidence and operating context.
-            </p>
-            <p class="th-body">
-              At runtime the PINN operates as a state-inference component that <strong>augments existing monitoring and certified control - it does not replace them</strong>. When the system moves outside the domain where the model is valid, inference is flagged, not silently extrapolated. This conservative deployment posture is a prerequisite for regulated environments, not an optional nicety.
+              {documentContent.blocks.when_pinns_are_justified_and_when_they_are_not_th_body_3} <strong>{documentContent.blocks.when_pinns_are_justified_and_when_they_are_not_strong_2}</strong> {documentContent.blocks.when_pinns_are_justified_and_when_they_are_not_th_body_4}
             </p>
           </section>
 
           <section class="th-section">
-            <h2 class="th-section-title">Six Workflows, Two Verticals</h2>
+            <h2 class="th-section-title">{documentContent.blocks.the_canonical_enterprise_pattern_th_section_title}</h2>
             <p class="th-body">
-              The same inference pattern is instantiated across six focused workflows, demonstrating the approach is problem-structure-specific, not domain-specific:
+              {documentContent.blocks.the_canonical_enterprise_pattern_th_body} <strong>{documentContent.blocks.the_canonical_enterprise_pattern_strong}</strong>{documentContent.blocks.the_canonical_enterprise_pattern_th_body_2}
             </p>
             <p class="th-body">
-              <strong>Aviation &amp; Transportation</strong> - aircraft subsystem thermal state estimation; structural deformation and fatigue inference between inspections; cabin and avionics climate control via a bioheat-style state observer.
-            </p>
-            <p class="th-body">
-              <strong>Energy &amp; Infrastructure</strong> - data-center thermal state estimation from sparse sensors; direct-to-chip cooling control under fast, steep gradients; long-horizon thermal degradation modelling of grid and power-electronics assets.
-            </p>
-            <p class="th-body">
-              Across all six, the contribution is the same: not higher sensing resolution, but improved observability through physics-constrained inference using existing telemetry.
+              {documentContent.blocks.the_canonical_enterprise_pattern_th_body_3} <strong>{documentContent.blocks.the_canonical_enterprise_pattern_strong_2}</strong>{documentContent.blocks.the_canonical_enterprise_pattern_th_body_4}
             </p>
           </section>
 
           <section class="th-section">
-            <h2 class="th-section-title">The Honest Trade-offs</h2>
+            <h2 class="th-section-title">{documentContent.blocks.six_workflows_two_verticals_th_section_title}</h2>
             <p class="th-body">
-              PINNs trade simplicity for observability. Training is optimization-heavy and sensitive to formulation - an engineering task, not an automated pipeline. They do not fail loudly: a model can converge numerically while violating physical intuition, so validity must be judged by residual behavior and boundary consistency, not loss curves alone. They demand lifecycle management closer to high-fidelity simulation than to lightweight analytics.
+              {documentContent.blocks.six_workflows_two_verticals_th_body}
             </p>
             <p class="th-body">
-              The trade is justified only when the cost of operating blindly exceeds the cost of building and maintaining physics-informed inference. <strong>Nothing more is claimed. Nothing less is required.</strong>
+              <strong>{documentContent.blocks.six_workflows_two_verticals_strong}</strong> {documentContent.blocks.six_workflows_two_verticals_th_body_2}
+            </p>
+            <p class="th-body">
+              <strong>{documentContent.blocks.six_workflows_two_verticals_strong_2}</strong> {documentContent.blocks.six_workflows_two_verticals_th_body_3}
+            </p>
+            <p class="th-body">
+              {documentContent.blocks.six_workflows_two_verticals_th_body_4}
+            </p>
+          </section>
+
+          <section class="th-section">
+            <h2 class="th-section-title">{documentContent.blocks.the_honest_trade_offs_th_section_title}</h2>
+            <p class="th-body">
+              {documentContent.blocks.the_honest_trade_offs_th_body}
+            </p>
+            <p class="th-body">
+              {documentContent.blocks.the_honest_trade_offs_th_body_2} <strong>{documentContent.blocks.the_honest_trade_offs_strong}</strong>
             </p>
           </section>
 
           <div class="th-cta-row">
             <a href={publicationUrl} target="_blank" rel="noopener noreferrer" class="cta-link">
-              ↗ Read the Publication
+              {documentContent.blocks.the_honest_trade_offs_cta_link}
             </a>
             <a href={pdfUrl} target="_blank" rel="noopener noreferrer" class="cta-link">
-              ↓ Get the PDF
+              {documentContent.blocks.the_honest_trade_offs_cta_link_2}
             </a>
           </div>
 
         </div>
 
         <div class="th-footer">
-          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
+          <span>{documentContent.blocks.the_honest_trade_offs_span}</span>
         </div>
 
       </div>

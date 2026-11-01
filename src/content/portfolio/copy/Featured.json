@@ -1,0 +1,16 @@
+{
+  "featured": "Featured",
+  "what_the_arc_produced": "What the arc produced.",
+  "typeLabels": {
+    "production": "Client Delivery",
+    "patent": "Commercial Software • In Development",
+    "thesis": "Best Outgoing Project '23",
+    "open-source": "Open Source"
+  },
+  "stageLabels": [
+    "Context",
+    "Approach",
+    "System",
+    "Outcome"
+  ]
+}

@@ -203,3 +203,20 @@ ruvector.db-*
 !/scripts/build-discovery.mjs
 !/scripts/notify-indexnow.mjs
 !/scripts/test-indexnow.mjs
+!/scripts/verify-review.mjs
+!/scripts/build-review-svg-assets.mjs
+
+# Canonical content migration and integrity tooling
+!/scripts/portfolio-data.mjs
+!/scripts/content-snapshot.mjs
+!/scripts/capture-content-migration.mjs
+!/scripts/verify-portfolio-data.mjs
+!/scripts/verify-content-migration.mjs
+!/scripts/test-portfolio-data.mjs
+!/scripts/sync-discovery.mjs
+
+!/scripts/test-content-render.mjs
+
+# The portfolio catalogue replaces the legacy JSON maps in src/data.
+!/src/content/
+!/src/content/portfolio/

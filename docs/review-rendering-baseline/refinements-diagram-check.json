@@ -1,0 +1,26 @@
+[
+  {
+    "width": 1280,
+    "state": "before",
+    "figures": 3,
+    "match": true
+  },
+  {
+    "width": 1280,
+    "state": "after",
+    "figures": 5,
+    "match": true
+  },
+  {
+    "width": 390,
+    "state": "before",
+    "figures": 3,
+    "match": true
+  },
+  {
+    "width": 390,
+    "state": "after",
+    "figures": 5,
+    "match": true
+  }
+]

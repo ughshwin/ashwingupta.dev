@@ -1,0 +1,330 @@
+{
+  "categories": {
+    "scale": {
+      "label": "Scale & Performance"
+    },
+    "cost": {
+      "label": "Cost & Efficiency"
+    },
+    "reliability": {
+      "label": "Reliability & Ops"
+    },
+    "accuracy": {
+      "label": "Accuracy & Quality"
+    },
+    "reach": {
+      "label": "Reach & Languages"
+    },
+    "systems": {
+      "label": "Systems Breadth"
+    },
+    "research": {
+      "label": "Research & Publications"
+    }
+  },
+  "order": [
+    "scale",
+    "cost",
+    "accuracy",
+    "reliability",
+    "reach",
+    "systems",
+    "research"
+  ],
+  "entries": [
+    {
+      "label": "per-VM session capacity (20 → 140–160)",
+      "category": "scale",
+      "magnitude": 5,
+      "projectId": "hsbc-voice",
+      "value": "{{projects.hsbc-voice.metrics.sessionCapacityMultiplier}}"
+    },
+    {
+      "label": "concurrent voice sessions at peak",
+      "category": "scale",
+      "magnitude": 5,
+      "projectId": "hsbc-voice",
+      "value": "{{projects.hsbc-voice.metrics.concurrentSessions}}"
+    },
+    {
+      "label": "users validated via SIPp load test",
+      "category": "scale",
+      "magnitude": 3,
+      "projectId": "hsbc-voice",
+      "value": "2,000"
+    },
+    {
+      "label": "end-to-end latency held at peak",
+      "category": "scale",
+      "magnitude": 4,
+      "projectId": "hsbc-voice",
+      "value": "{{projects.hsbc-voice.metrics.peakLatencySlo}}"
+    },
+    {
+      "label": "packet loss at 1,600+ sessions",
+      "category": "scale",
+      "magnitude": 2,
+      "projectId": "hsbc-voice",
+      "value": "<5%"
+    },
+    {
+      "label": "recommendation inference (99th pct)",
+      "category": "scale",
+      "magnitude": 4,
+      "projectId": "skill-recommendation-engine",
+      "value": "{{projects.skill-recommendation-engine.metrics.inferenceLatency}}"
+    },
+    {
+      "label": "full production load, single GPU",
+      "category": "scale",
+      "magnitude": 3,
+      "projectId": "skill-recommendation-engine",
+      "value": "1× T4"
+    },
+    {
+      "label": "canvas frame time (18–25 → 4–6ms)",
+      "category": "scale",
+      "magnitude": 3,
+      "projectId": "ashwingupta-dev",
+      "value": "18→4ms"
+    },
+    {
+      "label": "stable under CPU throttle",
+      "category": "scale",
+      "magnitude": 2,
+      "projectId": "ashwingupta-dev",
+      "value": "60 FPS"
+    },
+    {
+      "label": "annualized compute savings",
+      "category": "cost",
+      "magnitude": 5,
+      "projectId": "hsbc-voice",
+      "value": "~$1.3M"
+    },
+    {
+      "label": "monthly compute cost",
+      "category": "cost",
+      "magnitude": 5,
+      "projectId": "hsbc-voice",
+      "value": "$118K→$8K"
+    },
+    {
+      "label": "production VMs (32 → 8 vCPU)",
+      "category": "cost",
+      "magnitude": 3,
+      "projectId": "hsbc-voice",
+      "value": "80→15"
+    },
+    {
+      "label": "infra docs: 2–3 days → 2–3 hours",
+      "category": "cost",
+      "magnitude": 4,
+      "projectId": "azure-infra-docs",
+      "value": "days→hrs"
+    },
+    {
+      "label": "image weight cut (2 MB → 211 KB)",
+      "category": "cost",
+      "magnitude": 3,
+      "projectId": "ashwingupta-dev",
+      "value": "{{projects.ashwingupta-dev.metrics.imageReduction}}"
+    },
+    {
+      "label": "JS bundle cut",
+      "category": "cost",
+      "magnitude": 3,
+      "projectId": "ashwingupta-dev",
+      "value": "{{projects.ashwingupta-dev.metrics.javascriptReduction}}"
+    },
+    {
+      "label": "CSS-animated DOM nodes eliminated",
+      "category": "cost",
+      "magnitude": 2,
+      "projectId": "ashwingupta-dev",
+      "value": "400→0"
+    },
+    {
+      "label": "incident MTTR",
+      "category": "reliability",
+      "magnitude": 4,
+      "projectId": "hsbc-voice",
+      "value": "2hr→10m"
+    },
+    {
+      "label": "post-call documentation time",
+      "category": "reliability",
+      "magnitude": 3,
+      "projectId": "hsbc-voice",
+      "value": "15→3m"
+    },
+    {
+      "label": "log lines correlated in 5–6 min",
+      "category": "reliability",
+      "magnitude": 3,
+      "projectId": "hsbc-voice",
+      "value": "250K+"
+    },
+    {
+      "label": "fabricated components (guardrail)",
+      "category": "reliability",
+      "magnitude": 3,
+      "projectId": "azure-infra-docs",
+      "value": "{{projects.azure-infra-docs.metrics.fabricatedComponents}}"
+    },
+    {
+      "label": "determinism rate",
+      "category": "reliability",
+      "magnitude": 4,
+      "projectId": "scholaros",
+      "value": "{{projects.scholaros.metrics.determinismRate}}"
+    },
+    {
+      "label": "fully offline / air-gapped",
+      "category": "reliability",
+      "magnitude": 3,
+      "projectId": "pageindexollama",
+      "value": "0 keys"
+    },
+    {
+      "label": "factual accuracy, vehicle spec queries",
+      "category": "accuracy",
+      "magnitude": 5,
+      "projectId": "here-app",
+      "value": "{{projects.here-app.metrics.factualAccuracy}}"
+    },
+    {
+      "label": "table extraction across carrier PDFs",
+      "category": "accuracy",
+      "magnitude": 4,
+      "item": "Airline Contract Intelligence",
+      "value": "~96%"
+    },
+    {
+      "label": "physics benchmarks, stable convergence",
+      "category": "accuracy",
+      "magnitude": 3,
+      "projectId": "pinns",
+      "value": "6/6"
+    },
+    {
+      "label": "recommendation relevance",
+      "category": "accuracy",
+      "magnitude": 3,
+      "projectId": "skill-recommendation-engine",
+      "value": "{{projects.skill-recommendation-engine.metrics.recommendationRelevance}}"
+    },
+    {
+      "label": "languages, first-class RAG targets",
+      "category": "reach",
+      "magnitude": 5,
+      "projectId": "here-app",
+      "value": "{{projects.here-app.metrics.languagesSupported}}"
+    },
+    {
+      "label": "languages for content generation",
+      "category": "reach",
+      "magnitude": 3,
+      "item": "Laminar (toolchain)",
+      "value": "163+"
+    },
+    {
+      "label": "languages, cURL→code conversion",
+      "category": "reach",
+      "magnitude": 2,
+      "item": "Polymorph (toolchain)",
+      "value": "20+"
+    },
+    {
+      "label": "downloads, {{kaggle.metricLabelName}}",
+      "category": "reach",
+      "magnitude": 3,
+      "liveStat": "downloads"
+    },
+    {
+      "label": "views, {{kaggle.metricLabelName}}",
+      "category": "reach",
+      "magnitude": 3,
+      "liveStat": "views"
+    },
+    {
+      "label": "Java Spring AI trainer, 130+ trained",
+      "category": "reach",
+      "magnitude": 3,
+      "item": "Training",
+      "href": "/about",
+      "value": "NPS +50"
+    },
+    {
+      "label": "inference backends under one API",
+      "category": "systems",
+      "magnitude": 4,
+      "projectId": "controla",
+      "value": "19"
+    },
+    {
+      "label": "modalities, single control plane",
+      "category": "systems",
+      "magnitude": 3,
+      "projectId": "controla",
+      "value": "7"
+    },
+    {
+      "label": "scoring dimensions per routing decision",
+      "category": "systems",
+      "magnitude": 2,
+      "projectId": "controla",
+      "value": "6"
+    },
+    {
+      "label": "capabilities · deterministic services",
+      "category": "systems",
+      "magnitude": 3,
+      "projectId": "scholaros",
+      "value": "5 · 9"
+    },
+    {
+      "label": "chunks processed (Mar 2026 validation)",
+      "category": "systems",
+      "magnitude": 2,
+      "projectId": "scholaros",
+      "value": "{{projects.scholaros.metrics.validationChunks}}"
+    },
+    {
+      "label": "contradictions detected in corpus",
+      "category": "systems",
+      "magnitude": 2,
+      "projectId": "scholaros",
+      "value": "{{projects.scholaros.metrics.validationContradictions}}"
+    },
+    {
+      "label": "peer-reviewed paper, Vol. {{publications.ncisct2022.volume}} ({{projects.ncisct-2022.displayName}})",
+      "category": "research",
+      "magnitude": 4,
+      "projectId": "ncisct-2022",
+      "value": "IJISET"
+    },
+    {
+      "label": "white paper published, Dec 2025",
+      "category": "research",
+      "magnitude": 4,
+      "projectId": "pinns",
+      "value": "CellStrat"
+    },
+    {
+      "label": "enterprise workflows / verticals (white paper)",
+      "category": "research",
+      "magnitude": 2,
+      "projectId": "pinns",
+      "value": "6 / 2"
+    },
+    {
+      "label": "physics-constrained eVTOL projects, IISc",
+      "category": "research",
+      "magnitude": 2,
+      "item": "Research arc",
+      "href": "/about",
+      "value": "5 / 8mo"
+    }
+  ]
+}

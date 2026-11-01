@@ -1,0 +1,13 @@
+{
+  "impact": "Impact",
+  "proof_not_promises": "Proof, not promises.",
+  "measurable_results_across_performance_efficiency_quality_and": "Measurable results across performance, efficiency, quality, and beyond.",
+  "freshness": {
+    "live": "Live",
+    "recorded": "Recorded",
+    "checked_at": "Checked on Kaggle at {checkedAt}.",
+    "live_detail": "Refreshes every minute while this page is visible.",
+    "stale_detail": "Showing the last successful count; refresh is temporarily unavailable.",
+    "recorded_detail": "Recorded dataset count. The latest count will appear when Kaggle responds."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "contact": "Contact",
+  "hard_problems_welcome": "Hard problems welcome.",
+  "heads_down_building_right_now_not_looking": "Heads-down building right now - not looking for roles. But if you've got a hard problem, a wild idea, or just want to talk shop about LLMs, distributed systems, scientific ML, or why this site is unreasonably over-engineered for a portfolio, I'm always up for that.",
+  "vision_design_by_ashwin_gupta": "🎨 Vision & design by {{profile.name}} • ⚡ Engineered with Claude Code • 🚀 Deployed on Vercel",
+  "feedback": {
+    "email_copied": "Email copied to clipboard!",
+    "email_copy_failed": "Could not copy email",
+    "resume_downloaded": "Resume downloaded!"
+  },
+  "links": [
+    {
+      "id": "resume",
+      "label": "Resume",
+      "value": "{{profile.resumeFilename}}",
+      "asset": "resume",
+      "download": "{{profile.resumeFilename}}"
+    },
+    {
+      "id": "email",
+      "label": "Email",
+      "value": "{{profile.email}}",
+      "href": "mailto:{{profile.email}}"
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "value": "{{profile.socials.github}}",
+      "valueFormat": "url",
+      "href": "{{profile.socials.github}}"
+    },
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "value": "{{profile.socials.linkedin}}",
+      "valueFormat": "url",
+      "href": "{{profile.socials.linkedin}}"
+    },
+    {
+      "id": "kaggle",
+      "label": "Kaggle",
+      "value": "{{profile.socials.kaggle}}",
+      "valueFormat": "url",
+      "href": "{{profile.socials.kaggle}}"
+    },
+    {
+      "id": "location",
+      "label": "Location",
+      "value": "{{profile.location.city}}, {{profile.location.country}}",
+      "href": "{{profile.mapsUrl}}"
+    }
+  ]
+}

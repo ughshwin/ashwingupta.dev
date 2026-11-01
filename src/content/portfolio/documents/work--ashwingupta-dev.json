@@ -1,0 +1,90 @@
+{
+  "metadata": {
+    "canonical": "{{origin}}{{projects.ashwingupta-dev.href}}",
+    "githuburl": "{{projects.ashwingupta-dev.github}}",
+    "baselayout_title": "{{projects.ashwingupta-dev.displayName}} | {{profile.name}}",
+    "baselayout_description": "Three-layer spatial portfolio rebuilt for performance. {{projects.ashwingupta-dev.metrics.imageReduction}} image reduction, {{projects.ashwingupta-dev.metrics.javascriptReduction}} JS cut, {{projects.ashwingupta-dev.metrics.animatedNodesEliminated}} animated DOM nodes eliminated, stable 60fps under CPU throttle.",
+    "schema_name": "{{projects.ashwingupta-dev.displayName}}"
+  },
+  "blocks": {
+    "intro_back_link": "← Back to projects",
+    "intro_th_badge": "Shipped • Personal • Live",
+    "ashwingupta_dev_th_title": "{{projects.ashwingupta-dev.shortName}}",
+    "ashwingupta_dev_th_subtitle": "A portfolio site is its own proof unit. The original claimed performance engineering while shipping every symptom of the opposite. Rebuilt end-to-end, then extended with an ambient interface system that treats the chrome as part of the argument.",
+    "the_problem_with_self_defeating_baselines_th_section_title": "The Problem With Self-Defeating Baselines",
+    "the_problem_with_self_defeating_baselines_th_body": "The designer baseline shipped 400 CSS-animated DOM particles, a 2 MB JPEG hero, Google Fonts loaded per-component, and 72 unvetted dependencies. Every technical visitor's first data point was a performance failure on the site claiming performance engineering. The standard response - clean it up, swap some images - doesn't address the structural problem. The site needed to signal systems thinking, and it was doing the opposite at the source.",
+    "the_architecture_th_section_title": "The Architecture",
+    "the_architecture_th_body": "Rebuilt end-to-end as a three-layer spatial interface: environment shell, Canvas 2D particle field, hologram surface. All visual effects collapsed into a single Canvas RAF loop, eliminating {{projects.ashwingupta-dev.metrics.animatedNodesEliminated}} CSS-animated DOM nodes entirely. Images converted to WebP with",
+    "the_architecture_strong": "fetchpriority",
+    "the_architecture_th_body_2": "preload on the hero. Below-fold sections split via React.lazy and Suspense so the initial bundle only contains what the first viewport needs.",
+    "the_architecture_th_body_3": "Scanline texture pre-rendered to an offscreen canvas - 1 drawImage per frame instead of 270 fillRect calls. Edge cache rebuilt every 3 frames. RAF paused on visibility change. Mouse tracking gated behind RAF. Each technique eliminates work at the source rather than hiding it. Optimization is structural, not cosmetic.",
+    "performance_outcomes_th_section_title": "Performance Outcomes",
+    "performance_outcomes_th_body": "Image:",
+    "performance_outcomes_strong": "2 MB → 211 KB ({{projects.ashwingupta-dev.metrics.imageReduction}} reduction)",
+    "performance_outcomes_th_body_2": ". JS bundle:",
+    "performance_outcomes_strong_2": "{{projects.ashwingupta-dev.metrics.javascriptReduction}} cut",
+    "performance_outcomes_th_body_3": ". DOM nodes:",
+    "performance_outcomes_strong_3": "{{projects.ashwingupta-dev.metrics.animatedNodesEliminated}} CSS-animated nodes eliminated",
+    "performance_outcomes_th_body_4": ". Font requests: 3 → 0. Canvas frame time:",
+    "performance_outcomes_strong_4": "18–25 ms → 4–6 ms",
+    "performance_outcomes_th_body_5": ". Stable 60 FPS under CPU throttle.",
+    "the_ambient_interface_system_th_section_title": "The Ambient Interface System",
+    "the_ambient_interface_system_th_body": "After the performance baseline was locked in, the portfolio grew an ambient HUD layer - persistent fixed widgets that add spatial context without intruding on content.",
+    "the_ambient_interface_system_th_body_2": "Bottom-left: a geolocation widget that resolves the visitor's coordinates via",
+    "the_ambient_interface_system_strong": "navigator.geolocation",
+    "the_ambient_interface_system_th_body_3": "- falling back to",
+    "the_ambient_interface_system_strong_2": "Intl.DateTimeFormat",
+    "the_ambient_interface_system_th_body_4": "timezone if permission is denied - to the nearest IATA airport code using",
+    "the_ambient_interface_system_strong_3": "Haversine distance",
+    "the_ambient_interface_system_th_body_5": "across a curated set of major airports worldwide. Paired with a live clock and GMT offset display for both the visitor's location and home ({{profile.homeAirport}}).",
+    "the_ambient_interface_system_th_body_6": "Bottom-right: normalized",
+    "the_ambient_interface_system_strong_4": "mouse XY mapped to [-1, 1]",
+    "the_ambient_interface_system_th_body_7": "viewport coordinates, a session elapsed timer, and a radial SVG progress arc for back-to-top navigation. The arc tracks scroll position per-page, resets cleanly on Astro View Transitions via",
+    "the_ambient_interface_system_strong_5": "astro:page-load",
+    "the_ambient_interface_system_th_body_8": ", and detects the correct scroll container -",
+    "the_ambient_interface_system_strong_6": ".hologram-interface",
+    "the_ambient_interface_system_th_body_9": "on the homepage,",
+    "the_ambient_interface_system_strong_7": ".thinking-scroll",
+    "the_ambient_interface_system_th_body_10": "on article and work pages.",
+    "the_ambient_interface_system_th_body_11": "All HUD widgets use",
+    "the_ambient_interface_system_strong_8": "transition:persist",
+    "the_ambient_interface_system_th_body_12": "across Astro's View Transitions - they survive page navigation without remounting, without state bleed from the previous page, and without a single frame of flicker.",
+    "the_exploration_tracker_th_section_title": "The Exploration Tracker",
+    "the_exploration_tracker_th_body": "A progress widget embedded in the right HUD that measures how much of the site a visitor has actually read - not binary page visits, but",
+    "the_exploration_tracker_strong": "scroll-depth weighted contribution",
+    "the_exploration_tracker_th_body_2": "per page. Of the 17 distinct content pages tracked, each contributes proportionally based on the maximum scroll depth reached during the visit. Arriving at a page and leaving immediately contributes near zero. Scrolling to the bottom gives full credit for that page's 1/18 share of the total.",
+    "the_exploration_tracker_th_body_3": "The progress arc color-stages smoothly:",
+    "the_exploration_tracker_strong_2": "red (0–20%)",
+    "the_exploration_tracker_th_body_4": ", yellow (20–60%), blue (60–90%),",
+    "the_exploration_tracker_strong_3": "green (90–100%)",
+    "the_exploration_tracker_th_body_5": "- via linear RGB interpolation across five stops, no abrupt bracket jumps. The arc fill, stroke, and icon tint all transition together at 0.6s ease. State persists in",
+    "the_exploration_tracker_strong_4": "localStorage",
+    "the_exploration_tracker_th_body_6": "across sessions.",
+    "the_exploration_tracker_cta_link": "↗ View on GitHub",
+    "the_exploration_tracker_span": "© 2026 {{profile.name}} • {{profile.headline}} • {{profile.location.city}}, {{profile.location.country}}"
+  },
+  "links": {
+    "back_to_section": "/#projects"
+  },
+  "diagrams": {},
+  "data": {
+    "metrics": [
+      {
+        "value": "{{projects.ashwingupta-dev.metrics.imageReduction}}",
+        "label": "Image size reduction"
+      },
+      {
+        "value": "{{projects.ashwingupta-dev.metrics.javascriptReduction}}",
+        "label": "JS bundle cut"
+      },
+      {
+        "value": "{{projects.ashwingupta-dev.metrics.animatedNodesEliminated}}",
+        "label": "Animated DOM nodes eliminated"
+      },
+      {
+        "value": "{{projects.ashwingupta-dev.metrics.canvasFrameTime}}",
+        "label": "Canvas frame time (was 18–25ms)"
+      }
+    ]
+  }
+}

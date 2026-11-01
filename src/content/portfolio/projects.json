@@ -1,0 +1,132 @@
+{
+  "cardOrder": [
+    "ashwingupta-dev",
+    "pageindexollama",
+    "hsbc-voice",
+    "azure-infra-docs",
+    "here-app",
+    "skill-recommendation-engine",
+    "pinns",
+    "scholaros"
+  ],
+  "entries": {
+    "ashwingupta-dev": {
+      "title": "ashwingupta.dev - Design Handoff to Production",
+      "displayName": "ashwingupta.dev - Design Handoff to Production",
+      "shortName": "ashwingupta.dev",
+      "href": "/work/ashwingupta-dev",
+      "github": "https://github.com/ughshwin/ashwingupta.dev",
+      "redirect": true,
+      "metrics": {
+        "imageReduction": "90%",
+        "javascriptReduction": "72%",
+        "animatedNodesEliminated": "400",
+        "canvasFrameTime": "4–6ms"
+      }
+    },
+    "pageindexollama": {
+      "title": "PageIndexOllama - Local-First Fork of PageIndex",
+      "displayName": "PageIndexOllama - Local-First Fork of PageIndex",
+      "shortName": "PageIndexOllama",
+      "href": "/work/pageindexollama",
+      "github": "https://github.com/ughshwin/PageIndexOllama",
+      "redirect": true
+    },
+    "hsbc-voice": {
+      "title": "Conversational Analytics - HSBC",
+      "displayName": "Conversational Analytics",
+      "href": "/work/hsbc",
+      "redirect": true,
+      "github": null,
+      "metrics": {
+        "sessionCapacityMultiplier": "7×",
+        "concurrentSessions": "1,600+",
+        "annualizedComputeSavings": "$1.3M",
+        "incidentMttr": "~10 min",
+        "monthlyComputeCost": "$8K",
+        "peakLatencySlo": "<300ms"
+      }
+    },
+    "azure-infra-docs": {
+      "title": "Azure Infrastructure Documentation Engine",
+      "displayName": "Azure Infrastructure Documentation Engine",
+      "href": "/work/azure-infra-docs",
+      "redirect": true,
+      "github": null,
+      "metrics": {
+        "documentationTurnaround": "2–3 hrs",
+        "resourceGroupsPerEngagement": "104",
+        "fabricatedComponents": "0"
+      }
+    },
+    "here-app": {
+      "title": "Here.app – Multilingual Vehicle Intelligence Platform",
+      "displayName": "Here.app",
+      "href": "/work/here-app",
+      "redirect": true,
+      "github": null,
+      "metrics": {
+        "factualAccuracy": "~97%",
+        "languagesSupported": "163",
+        "structuredSources": "1"
+      }
+    },
+    "skill-recommendation-engine": {
+      "title": "Graph-Based Skill Recommendation Engine",
+      "displayName": "Graph-Based Skill Recommendation Engine",
+      "href": "/work/skill-recommendation-engine",
+      "redirect": true,
+      "github": null,
+      "metrics": {
+        "recommendationRelevance": "+30%",
+        "inferenceLatency": "<50ms",
+        "taxonomyBatchRetraining": "0"
+      }
+    },
+    "pinns": {
+      "title": "Physics-Informed Neural Networks (PINNs)",
+      "displayName": "PINNs",
+      "href": "/research/pinns",
+      "whitepaperUrl": "/PINNs_whitepaper.pdf",
+      "publicationUrl": "https://mailchi.mp/cellstrat/the-data-your-monitors-are-missing",
+      "redirect": true,
+      "github": null
+    },
+    "scholaros": {
+      "title": "ScholarOS - Structured Research Execution Platform",
+      "displayName": "ScholarOS",
+      "href": "/research/scholaros",
+      "github": "https://github.com/ughshwin/ScholarOS",
+      "redirect": true,
+      "metrics": {
+        "validationChunks": "5,479",
+        "validationClaims": "180",
+        "validationContradictions": "76",
+        "determinismRate": "100%"
+      }
+    },
+    "controla": {
+      "title": "controla",
+      "displayName": "controla",
+      "currentLabel": "Controla",
+      "href": "/research/controla"
+    },
+    "physclip": {
+      "title": "PHYSCLIP",
+      "displayName": "PHYSCLIP",
+      "github": "https://github.com/ughshwin/PHYSCLIP",
+      "href": "/research/physclip"
+    },
+    "ncisct-2022": {
+      "title": "Automated Assessment Generation - Graphs & Language Models",
+      "displayName": "NCISCT 2022",
+      "href": "https://ijiset.com/conference/NCISCT-2022/IJISET-NCISCT-220520.pdf"
+    }
+  },
+  "secondaryCardOrder": [
+    "ashwingupta-dev",
+    "pageindexollama",
+    "azure-infra-docs",
+    "skill-recommendation-engine"
+  ]
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "width": 1280,
+    "route": "/review/impact#impact",
+    "entryExceptions": [],
+    "entryTextCount": 209,
+    "outsideExceptions": [],
+    "overflow": false,
+    "readoutAlignment": [
+      "center"
+    ]
+  },
+  {
+    "width": 1280,
+    "route": "/#impact",
+    "entryExceptions": [],
+    "entryTextCount": 209,
+    "outsideExceptions": [],
+    "overflow": false,
+    "readoutAlignment": [
+      "center"
+    ]
+  },
+  {
+    "width": 390,
+    "route": "/review/impact#impact",
+    "entryExceptions": [],
+    "entryTextCount": 209,
+    "outsideExceptions": [],
+    "overflow": false,
+    "readoutAlignment": [
+      "center"
+    ]
+  },
+  {
+    "width": 390,
+    "route": "/#impact",
+    "entryExceptions": [],
+    "entryTextCount": 209,
+    "outsideExceptions": [],
+    "overflow": false,
+    "readoutAlignment": [
+      "center"
+    ]
+  }
+]

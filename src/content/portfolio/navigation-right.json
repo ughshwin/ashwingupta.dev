@@ -1,0 +1,22 @@
+[
+  {
+    "label": "Recommendations",
+    "href": "/recommendations",
+    "section": "recommendations"
+  },
+  {
+    "label": "Stack",
+    "href": "/stack",
+    "section": "stack"
+  },
+  {
+    "label": "Articles",
+    "href": "/articles",
+    "section": null
+  },
+  {
+    "label": "Contact",
+    "href": "/contact",
+    "section": "contact"
+  }
+]

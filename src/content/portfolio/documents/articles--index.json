@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "canonical": "{{profile.siteUrl}}articles",
+    "baselayout_title": "Articles | {{profile.name}}",
+    "baselayout_description": "Writing on design, AI systems, and anything with a defensible opinion behind it.",
+    "schema_name": "Articles by {{profile.name}}"
+  },
+  "blocks": {
+    "intro_back_link": "← Back",
+    "intro_label_text": "Articles",
+    "writing_worth_reading_page_title": "Writing worth reading.",
+    "writing_worth_reading_span": "© 2026 {{profile.name}} • {{profile.headline}} • {{profile.location.city}}, {{profile.location.country}}",
+    "article_read_label": "Read →"
+  },
+  "links": {
+    "a_href": "/"
+  },
+  "diagrams": {},
+  "data": {}
+}

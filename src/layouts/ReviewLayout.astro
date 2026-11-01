@@ -1,0 +1,110 @@
+---
+import { chromeCopy } from '../content/portfolio/chrome';
+import { resolveCopy } from '../content/portfolio/copy';
+
+import documentContentSource from "../content/portfolio/documents/ReviewLayout.json";
+import { profile, siteTitle, siteDescription, socialImage } from "../content/portfolio/profile";
+import '@fontsource/playfair-display/400.css';
+import '@fontsource/playfair-display/400-italic.css';
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/500.css';
+import '@fontsource/dm-sans/600.css';
+import '@fontsource/dm-mono/400.css';
+import reviewStyles from '../styles/review.css?url';
+import '../styles/text-alignment.css';
+import '../styles/static-home.css';
+import { presentReview } from '../lib/review-document.mjs';
+import { editionHref, originalPath } from '../lib/edition-routes';
+import { personSchema, websiteSchema } from '../lib/structured-data';
+import resume from '../assets/Ashwin_Gupta_Senior_AI_Engineer.pdf?url';
+import SiteAnalytics from '../app/SiteAnalytics';
+import { Mail, Github, Linkedin } from 'lucide-react';
+import { ClockWidget } from '../app/components/ClockWidget';
+import { contactCopy } from '../content/portfolio/contact';
+import AwwwardsRibbon from '../components/static/AwwwardsRibbon.astro';
+const documentContent = resolveCopy(documentContentSource);
+
+const { title = siteTitle, description = siteDescription, canonical = profile.siteUrl, image = socialImage, jsonLd = [], nativeHome = false, contents: nativeContents = [] } = Astro.props;
+const logical = originalPath(Astro.url.pathname.replace(/\/$/, '') || '/');
+const home = logical === '/' || !/^\/(work|research|articles)(\/|$)/.test(logical);
+const rendered = await Astro.slots.render('default');
+const { html, contents, footerHtml } = nativeHome ? {html:rendered,contents:nativeContents,footerHtml:''} : presentReview(rendered, { home, mapHref: (href) => editionHref(href, false, logical) });
+const article = jsonLd.find(s => ['Article','ScholarlyArticle'].includes(s['@type']) && s.url === canonical);
+
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f8fa" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={chromeCopy.resources.favicon} type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={chromeCopy.resources.rssTitle} href={chromeCopy.resources.rssPath} />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1728" />
+    <meta property="og:image:height" content="910" />
+    <meta property="og:image:alt" content={profile.socialImageAlt} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:locale" content="en_US" />
+    {article && <meta property="article:published_time" content={article.datePublished} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={profile.twitter} />
+    <meta name="twitter:creator" content={profile.twitter} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    {[personSchema,websiteSchema,...jsonLd].map(schema => <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g,'\\u003c')} />)}
+    <link rel="stylesheet" href={reviewStyles} />
+    <slot name="head" />
+  </head>
+  <body class="review-edition" data-review-home={home || undefined} data-logical-path={logical}>
+    <AwwwardsRibbon />
+    <a class="rv-skip" href="#main">{documentContent.blocks.intro_rv_skip}</a>
+    <div class="rv-frame">
+      <header class="rv-masthead" data-review-chrome>
+        <a class="rv-brand" href={documentContent.links.a_href}>{documentContent.blocks.intro_rv_brand} <span>{documentContent.blocks.intro_span}</span></a>
+        <span class="rv-masthead-note">{documentContent.blocks.intro_rv_masthead_note}</span>
+      </header>
+      <div class="rv-layout">
+        <aside class="rv-rail" data-review-chrome>
+          <div class="rv-rail-inner">
+            <p class="rv-kicker">{documentContent.blocks.intro_rv_kicker}</p>
+            <a href={documentContent.links.a_href} class="rv-name">{profile.firstName}<br />{profile.lastName}.</a>
+            <p class="rv-identity">{profile.headline}<br />{profile.location.city}, {profile.location.country}</p>
+            <nav aria-label={documentContent.metadata.contentsLabel}>
+              {!home && <a href={documentContent.links.a_href}><span>←</span> <span>{documentContent.blocks.profileLink}</span></a>}
+              {home && <a href={`${documentContent.links.a_href}#hero`}><span>00</span> <span>{documentContent.blocks.overviewLink}</span></a>}
+              {contents.map((item,index) => <a href={`#${item.id}`}><span>{String(index + 1).padStart(2,'0')}</span> <span>{item.title}</span></a>)}
+              <a href={documentContent.links.a_href_2}><span>↗</span> <span>{documentContent.blocks.intro_span_2}</span></a>
+            </nav>
+            <div class="rv-rail-actions">
+              <div class="rv-rail-socials" role="group" aria-label={documentContent.metadata.contactLinksLabel}>
+                <a class="rv-social-link" href={`mailto:${profile.email}`} aria-label={documentContent.metadata.copyEmailLabel} title={documentContent.metadata.a_title}><Mail size={16} /></a>
+                <a class="rv-social-link" href={profile.socials.github} target="_blank" rel="noopener noreferrer" aria-label={documentContent.metadata.a_title_2} title={documentContent.metadata.a_title_2}><Github size={16} /></a>
+                <a class="rv-social-link" href={profile.socials.linkedin} target="_blank" rel="noopener noreferrer" aria-label={documentContent.metadata.a_title_3} title={documentContent.metadata.a_title_3}><Linkedin size={16} /></a>
+              </div>
+              <a class="rv-link rv-resume" href={resume} download>{documentContent.blocks.intro_rv_link_rv_resume}</a>
+            </div>
+          </div>
+        </aside>
+        <main id="main" class="rv-main" data-logical-document={logical}>
+          <div set:html={html} />
+        </main>
+      </div>
+      <div class="rv-utilities"><ClockWidget client:idle /></div>
+      {!home && <footer class="rv-footer" data-review-chrome><a href={documentContent.links.a_href}>{documentContent.blocks.footerName}</a><div><a href="#main">{documentContent.blocks.backToTop}</a></div></footer>}
+    </div>
+    {home && <footer class="rv-footer rv-footer-credits" data-review-chrome>{nativeHome ? <div>{contactCopy.vision_design_by_ashwin_gupta}</div> : <Fragment set:html={footerHtml} />}</footer>}
+    <SiteAnalytics client:idle />
+    <script src="../lib/review-client.ts"></script>
+  </body>
+</html>

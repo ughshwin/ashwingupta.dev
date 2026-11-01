@@ -1,0 +1,13 @@
+{
+  "context": "Requested layout corrections and transparent dark-ink Mermaid theme; browser verification at 1280px and 390px, both tabs, all eight diagram geometries and labels exactly match original captures. Site-wide justification verified at 1280px and 390px with no text-alignment exceptions; all eight diagram geometries and labels retain their original measurements. Impact source labels, bottom recommendation attributions, a single sidebar CV link, larger navigation and inline rectangular email feedback verified at 1280px and 390px; all eight diagrams retain their original geometry and labels. Content extraction verified after migration: all eight HSBC diagram geometries and labels match the original at 1280px and 390px; runtime script/style blocks and 68-route semantic parity preserved. Section swarm extraction verified: 68-route content parity and source-edit propagation passed; browser all eight HSBC diagrams retain exact original geometry/labels at 1280px and 390px. Sidebar CV, inline email feedback, centered recommendations, and both PINNs tabs verified.",
+  "hashEncoding": "UTF-8 text with LF line endings",
+  "files": {
+    "src/styles/review.css": "c7eb46061700d3f11de4995305f17a33cb0bd813a2fa7486d165c89616b0dc17",
+    "src/styles/index.css": "8a3ccf03af9c95d51bc16d7af66388211e59ee2b1fd2bec28f376db00ec3d3da",
+    "src/styles/holographic.css": "20bf60f93e7b4c32517d5bc4f509060b9c78aa4aa0c538d065f83b47e88bf3a6",
+    "src/layouts/ReviewLayout.astro": "0cf5a1511b1f54f032f2f439b8cb3ef72a5fe818ae08102f6b3811870cc23070",
+    "src/lib/review-document.mjs": "400ccae0874b1c4dafcfcbab87017c56a7f81bf5d56882fa710a3a20761f456e",
+    "src/pages/work/hsbc.astro": "ba41108562b0299963801d7b294cbbb9a0770a1373de1b04ef590c2cfa5f5dd5",
+    "src/styles/text-alignment.css": "b0276e4b71476604bd32b0c0476b75b09fd3e06a34a22ae1bfc2956a56ea369e"
+  }
+}

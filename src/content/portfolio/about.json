@@ -1,0 +1,21 @@
+{
+  "pillars": [
+    {
+      "title": "Inference as a System",
+      "desc": "Most teams ship inference as a function call. The real questions - p95 latency, 10× load, what happens when a backend goes down - are architecture questions. I answer them before the first model goes live."
+    },
+    {
+      "title": "Execution Under Constraints",
+      "desc": "Systems that perform in demos often don't survive production. Real constraints - latency budgets, VRAM ceilings, cost per token - are known at design time, not discovered at launch. I build the constraint model first."
+    },
+    {
+      "title": "Physics-Informed Scientific ML",
+      "desc": "Data-driven physics models aren't data problems - they're structure problems. Ignoring governing equations forces the model to rediscover physics from data it may never have enough of. Embedding PDEs into the objective is what makes sparse data sufficient."
+    }
+  ],
+  "principles": [
+    "I don't ship AI wrappers dressed as products. Core API calls with a nice UI aren't systems.",
+    "I don't build for its own sake. The system has to earn what it costs to run.",
+    "I don't take off-the-shelf work. If the implementation is a Google search away, I'm not the right person."
+  ]
+}

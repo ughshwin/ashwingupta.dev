@@ -1,0 +1,17 @@
+[
+  {
+    "label": "About",
+    "href": "/about",
+    "section": "about"
+  },
+  {
+    "label": "Experience",
+    "href": "/experience",
+    "section": "experience"
+  },
+  {
+    "label": "Impact",
+    "href": "/impact",
+    "section": "impact"
+  }
+]

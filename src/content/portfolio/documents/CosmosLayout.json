@@ -1,0 +1,11 @@
+{
+  "metadata": {},
+  "blocks": {
+    "intro_edition_switch": "Technical Review ↗"
+  },
+  "links": {
+    "link_href": "{{chrome.resources.rssUrl}}"
+  },
+  "diagrams": {},
+  "data": {}
+}

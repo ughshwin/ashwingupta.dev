@@ -1,3 +1,6 @@
+import { profile as contentProfile, currentEmployment as employment, experience as experienceData } from './portfolio-data.mjs';
+import { formatContentDate } from '../src/content/portfolio/selectors.mjs';
+const previousEmployment=experienceData.find(e=>e.id===contentProfile.previousEmploymentId);
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -5,7 +8,7 @@ import {pathToFileURL} from 'node:url';
 import {parse} from 'parse5';
 import {CRAWLERS, allowsPath} from './crawler-policy.mjs';
 
-const ORIGIN = 'https://www.ashwingupta.dev';
+const ORIGIN = new URL(contentProfile.siteUrl).origin;
 const walk = node => [node, ...(node.childNodes ?? []).flatMap(walk)];
 const attr = (node, name) => node.attrs?.find(a => a.name === name)?.value;
 const text = node => node.nodeName === '#text' ? node.value : ['script','style','svg','template'].includes(node.tagName) ? '' : (node.childNodes ?? []).map(text).join(' ');
@@ -40,7 +43,7 @@ export function verifyContent(root = 'dist') {
     assert.ok(content.length>200,`${p}: substantive server-rendered content`);
     const headings=walk(main).filter(n=>n.tagName==='h1');
     assert.equal(headings.length,1,`${p}: exactly one primary heading in main content`);
-    if(p==='/')assert.equal(normalized(headings[0]),'Ashwin Gupta','The primary heading identifies the full person name');
+    if(p==='/')assert.equal(normalized(headings[0]),contentProfile.name,'The primary heading identifies the full person name');
     const ids = new Set();
     for(const n of nodes){const id=attr(n,'id');if(id){assert.ok(!ids.has(id),`${p}: duplicate ID ${id}`);ids.add(id);}}
     const links=[];
@@ -61,11 +64,12 @@ export function verifyContent(root = 'dist') {
     const metadata=nodes.filter(n=>n.tagName==='script'&&attr(n,'type')==='application/ld+json').map(n=>JSON.parse(n.childNodes.map(c=>c.value??'').join('')));
     const person=metadata.find(s=>s['@type']==='Person');
     assert.ok(person.image,`${p}: Person portrait`);
-    const currentRole=person.memberOf?.find(role=>role.memberOf?.name==='SkanAI');
-    const previousRole=person.memberOf?.find(role=>role.memberOf?.name==='Coforge');
-    assert.equal(currentRole?.startDate,'2026-06-15',`${p}: confirmed SkanAI start date`);
+    const currentRole=person.memberOf?.find(role=>role.memberOf?.name===employment.company);
+    const previousRole=person.memberOf?.find(role=>role.memberOf?.name===previousEmployment.company);
+    assert.equal(currentRole?.roleName,employment.role,`${p}: confirmed SkanAI title`);
+    assert.equal(currentRole?.startDate,employment.start,`${p}: confirmed SkanAI start date`);
     assert.equal(currentRole?.endDate,undefined,`${p}: SkanAI role remains current`);
-    assert.equal(previousRole?.endDate,'2026-06-05',`${p}: confirmed Coforge end date`);
+    assert.equal(previousRole?.endDate,previousEmployment.end,`${p}: confirmed Coforge end date`);
     assert.ok(!person.alumniOf.some(s=>s.name==='IIIT Bangalore'),`${p}: ongoing diploma must not be represented as completed`);
     const page=metadata.find(s=>['WebPage','ProfilePage','CollectionPage'].includes(s['@type']));
     assert.ok(page?.image,`${p}: page image metadata`);
@@ -84,7 +88,7 @@ export function verifyContent(root = 'dist') {
       assert.equal(work.codeRepository,undefined,'Private repository is not advertised as public source evidence');
     }
     if(p==='/'){
-      assert.ok(content.includes('15 Jun 2026')&&content.includes('5 Jun 2026'),'Confirmed dates must appear in visible homepage content');
+      assert.ok(content.includes(formatContentDate(employment.start))&&content.includes(formatContentDate(previousEmployment.end)),'Confirmed dates must appear in visible homepage content');
       assert.ok(!content.includes('Jun 2024 – Present'),'Coforge must not be shown as current');
       const publication=metadata.find(s=>s['@type']==='ScholarlyArticle'&&s.url?.includes('IJISET-NCISCT-220520.pdf'));
       assert.equal(publication?.name,'Generating MCQs using Graphs and Language Models');
@@ -95,7 +99,7 @@ export function verifyContent(root = 'dist') {
       assert.ok(nodes.some(n=>n.tagName==='a'&&attr(n,'href')===publication.url),'Publication metadata must match an existing visible link');
       assert.ok(nodes.some(n=>n.tagName==='meta'&&attr(n,'property')==='og:type'&&attr(n,'content')==='website'),'Citing a paper must not turn the profile into an article');
     }
-    if(p==='/')for(const name of ['SkanAI','Coforge','Gida Technologies','IISc','CellStrat','OutLawed','IIIT Bangalore','BMS College of Engineering'])assert.ok(content.includes(name),'Missing server-rendered experience: '+name);
+    if(p==='/')for(const name of experienceData.map(entry=>entry.company))assert.ok(content.includes(name),'Missing server-rendered experience: '+name);
     graph.set(p,[...new Set(links)]);
     rows.push({path:p,words:content.split(/\s+/).length,internalDocuments:new Set(links).size});
   }

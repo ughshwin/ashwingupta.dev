@@ -1,0 +1,13 @@
+/* Site-wide reading preference, including controls and diagram text boxes.
+   Important overrides the original components' inline alignment declarations. */
+html,
+body,
+body *,
+body::before,
+body::after,
+body *::before,
+body *::after {
+  text-align: justify !important;
+  text-align-last: auto !important;
+  text-justify: inter-word !important;
+}

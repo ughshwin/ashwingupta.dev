@@ -1,52 +1,52 @@
 ---
-import publication from "../../data/article-publication.json";
+import { resolveCopy } from '../../content/portfolio/copy';
+
+import documentContentSource from "../../content/portfolio/documents/articles--the-space-between-stars.json";
+import { articlePublication as publication } from "../../content/portfolio/articles";
 import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
+const documentContent = resolveCopy(documentContentSource);
 
-const canonical = "https://www.ashwingupta.dev/articles/the-space-between-stars";
+const canonical = documentContent.metadata.canonical;
+
 ---
 
 <BaseLayout
-  title="The Space Between Stars - Ashwin Gupta"
-  description="On visual captivity, the cosmos as a metaphor for complex AI systems, and why a portfolio is always an argument - by Ashwin Gupta."
+  title={documentContent.metadata.baselayout_title}
+  description={documentContent.metadata.baselayout_description}
   canonical={canonical}
   jsonLd={contentSchemas({
     type: "Article",
     datePublished: publication["the-space-between-stars"].datePublished,
-    name: "The Space Between Stars",
+    name: documentContent.metadata.schema_name,
     url: canonical,
-    description: "On visual captivity, the cosmos as a metaphor for complex AI systems, and why a portfolio is always an argument - by Ashwin Gupta.",
+    description: documentContent.metadata.baselayout_description,
   })}
 >
   <div class="spatial-scene">
     <div class="thinking-scroll">
       <div class="thinking-body" role="main">
 
-        <a href="/articles" class="back-link">← Back to articles</a>
+        <a href={documentContent.links.a_href} class="back-link">{documentContent.blocks.intro_back_link}</a>
 
         <header class="th-header">
-          <div class="th-badge">Article • May 2026</div>
-          <h1 class="th-title">The Space Between Stars</h1>
-          <p class="th-subtitle">Why My Portfolio Lives in the Cosmos</p>
-          <p class="th-byline">by Ashwin Gupta</p>
+          <div class="th-badge">{documentContent.blocks.intro_th_badge}</div>
+          <h1 class="th-title">{documentContent.blocks.the_space_between_stars_th_title}</h1>
+          <p class="th-subtitle">{documentContent.blocks.the_space_between_stars_th_subtitle}</p>
+          <p class="th-byline">{documentContent.blocks.the_space_between_stars_th_byline}</p>
         </header>
 
         <div class="th-divider"></div>
 
         <p class="th-body">
-          There's a moment, right before you open someone's portfolio, where you already have a mental model
-          of what you're about to see. A clean white canvas. A hero section with a name in large type. A grid
-          of projects below it. Maybe a dark mode toggle in the top right corner. You've seen it a hundred times
-          - not because designers lack imagination, but because the genre has converged on a template so
-          thoroughly that the template has become invisible.
+          {documentContent.blocks.the_space_between_stars_th_body}
         </p>
         <p class="th-body">
-          I didn't want that.
+          {documentContent.blocks.the_space_between_stars_th_body_2}
         </p>
         <p class="th-body">
-          Not out of contrarianism, but out of a genuine belief about how attention works, and what it means
-          to ask a stranger to spend their time understanding who you are.
+          {documentContent.blocks.the_space_between_stars_th_body_3}
         </p>
 
         <div class="th-section-divider">
@@ -54,397 +54,227 @@ const canonical = "https://www.ashwingupta.dev/articles/the-space-between-stars"
         </div>
 
         <section class="th-section">
-          <h2 class="th-section-title">Where the Eye Came From</h2>
+          <h2 class="th-section-title">{documentContent.blocks.where_the_eye_came_from_th_section_title}</h2>
           <p class="th-body">
-            Before I was an AI systems engineer, I was a designer.
+            {documentContent.blocks.where_the_eye_came_from_th_body}
           </p>
           <p class="th-body">
-            Not in the casual sense of someone who picked up Figma and ran with it. I mean the kind of designer
-            that gets shaped by deadlines and editorial standards and the specific humiliation of a layout that
-            almost works but doesn't quite. In school, I was lead designer for both the class magazine and the
-            school magazine for four years - the class magazine won Best Magazine two years running. In Class 11,
-            I was designing and editing for the Times of India student edition. Through college, I ran design for
-            the BMSCE IEEE student branch and did graphic design for Outlawed for over two years each.
+            {documentContent.blocks.where_the_eye_came_from_th_body_2}
           </p>
           <p class="th-body">
-            That's nearly a decade of thinking about composition, hierarchy, negative space, typographic rhythm,
-            and the invisible logic that makes a reader want to turn the page before they've consciously decided
-            to. That eye was formed long before I wrote my first neural network or debugged my first RAG pipeline.
+            {documentContent.blocks.where_the_eye_came_from_th_body_3}
           </p>
           <p class="th-body">
-            I say this not to credential-stack, but because it's the honest explanation for why this portfolio
-            looks the way it does. The design choices here aren't an engineer reaching awkwardly into unfamiliar
-            territory. They're the result of someone who has spent a long time thinking about what makes visual
-            communication actually work - and who happens to also build AI systems for a living.
+            {documentContent.blocks.where_the_eye_came_from_th_body_4}
           </p>
           <p class="th-body">
-            The cosmos-themed, animation-heavy, almost aggressively immersive portfolio is what you get when
-            those two things meet.
+            {documentContent.blocks.where_the_eye_came_from_th_body_5}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">The First Second Is Not Optional</h2>
+          <h2 class="th-section-title">{documentContent.blocks.the_first_second_is_not_optional_th_section_title}</h2>
           <p class="th-body">
-            Here's something I've thought about a lot, both as a designer and as someone who works on AI systems:
-            most decisions are made before the deliberate part of the brain gets involved. A user who lands on a
-            portfolio page makes a subconscious judgment in the first second - <em>is this worth my time?</em> -
-            and the answer to that question isn't determined by the quality of the projects listed or the eloquence
-            of the bio. It's determined entirely by what they <em>feel</em> when they arrive.
+            {documentContent.blocks.the_first_second_is_not_optional_th_body} <em>{documentContent.blocks.the_first_second_is_not_optional_em}</em> {documentContent.blocks.the_first_second_is_not_optional_th_body_2} <em>{documentContent.blocks.the_first_second_is_not_optional_em_2}</em> {documentContent.blocks.the_first_second_is_not_optional_th_body_3}
           </p>
           <p class="th-body">
-            This sounds like a marketing truism, but it has real implications for how I thought about building
-            this site. If I wanted someone - a recruiter, a collaborator, a curious engineer, anyone - to
-            actually <em>read</em> about what I do and what I care about, I first had to give them a reason to
-            stay. Not a clever reason. Not a rational reason. A visceral one.
+            {documentContent.blocks.the_first_second_is_not_optional_th_body_4} <em>{documentContent.blocks.the_first_second_is_not_optional_em_3}</em> {documentContent.blocks.the_first_second_is_not_optional_th_body_5}
           </p>
           <p class="th-body">
-            Every page I designed for a magazine had to earn its reader before they committed to the article.
-            A feature spread that didn't arrest the eye in the first glance got skipped - regardless of how good
-            the writing was. Portfolios work exactly the same way, and almost none of them seem to know it.
+            {documentContent.blocks.the_first_second_is_not_optional_th_body_6}
           </p>
           <p class="th-body">
-            So I made the choice that most engineers wouldn't: I went design-heavy. Deliberately, unapologetically,
-            almost excessively so. Layered backgrounds. Depth of field. Flowing grain. Smooth scroll behaviors
-            that took more debugging time than some features I've shipped at work. A comet animation threading
-            through the experience timeline that I rebuilt three times because the timing felt wrong.
+            {documentContent.blocks.the_first_second_is_not_optional_th_body_7}
           </p>
           <p class="th-body">
-            Was this over-engineered for a portfolio? By the metrics of conventional wisdom, absolutely. By the
-            metric of <em>did it make someone pause and look closer</em> - I think it works. The design is the
-            first argument I make about myself before a single word of copy is read.
+            {documentContent.blocks.the_first_second_is_not_optional_th_body_8} <em>{documentContent.blocks.the_first_second_is_not_optional_em_4}</em> {documentContent.blocks.the_first_second_is_not_optional_th_body_9}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">Flat Canvases Don't Breathe</h2>
+          <h2 class="th-section-title">{documentContent.blocks.flat_canvases_don_t_breathe_th_section_title}</h2>
           <p class="th-body">
-            The problem with most portfolios - and I say this with genuine respect for the people who built them
-            - is that they don't feel <em>alive</em>. They feel like well-organized documents. And a well-organized
-            document is a thing you consult, not a place you inhabit.
+            {documentContent.blocks.flat_canvases_don_t_breathe_th_body} <em>{documentContent.blocks.flat_canvases_don_t_breathe_em}</em>{documentContent.blocks.flat_canvases_don_t_breathe_th_body_2}
           </p>
           <p class="th-body">
-            Years of editorial work taught me the difference. A magazine spread isn't just content on a page -
-            it has atmosphere. There's a reason why the best magazine pages feel like environments: the interplay
-            of type and image and white space creates a kind of pressure, a sense that the page has intention and
-            that the reader is inside something rather than just consuming it.
+            {documentContent.blocks.flat_canvases_don_t_breathe_th_body_3}
           </p>
           <p class="th-body">
-            Every design choice I made on this site was in service of that same goal.
+            {documentContent.blocks.flat_canvases_don_t_breathe_th_body_4}
           </p>
           <p class="th-body">
-            The multi-layered parallax background isn't decoration. It's spatial depth - the kind that signals
-            to your peripheral vision that there is more world beyond the edge of the screen. The flowing grain
-            in the background mimics the subtle texture of a real environment, the way a room feels different
-            from a void. The comet animation on the experience timeline - a small glowing trail arcing across
-            milestones - turns what is otherwise a static list of dates and company names into something that
-            feels like a journey being traced across time.
+            {documentContent.blocks.flat_canvases_don_t_breathe_th_body_5}
           </p>
           <p class="th-body">
-            The cursor is the smallest of these details and maybe the most precise. The native OS pointer
-            is gone, replaced entirely with the International Space Station - its truss, its solar panel
-            arrays, its communication dish rendered in line by line. When hovering over something
-            interactive, the dish emits arcs, five of them staggered so two are always mid-travel. This
-            is technically a hover state. But the ISS is a system: a complex, multi-component structure
-            doing one difficult thing extremely well under conditions that would destroy most designs. It
-            belongs in this environment. And when the dish fires, what is nominally a UI affordance
-            becomes something closer to a micro-narrative. The signal is going out.
+            {documentContent.blocks.flat_canvases_don_t_breathe_th_body_6}
           </p>
           <p class="th-body">
-            These aren't tricks. They're the difference between a room with furniture in it and a room that
-            feels like someone actually lives there.
+            {documentContent.blocks.flat_canvases_don_t_breathe_th_body_7}
           </p>
           <p class="th-body">
-            I chose the cosmos specifically because space does something no other visual metaphor quite achieves:
-            it makes you feel small and curious at the same time. Looking at the night sky, you don't feel anxious
-            about how much you don't know - you feel drawn to it. That orientation, that posture of curious
-            engagement, is exactly what I want a visitor to bring to reading about my work. Come in curious.
-            Stay because something keeps catching your eye.
+            {documentContent.blocks.flat_canvases_don_t_breathe_th_body_8}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">The Night Sky as Systems Thinking</h2>
+          <h2 class="th-section-title">{documentContent.blocks.the_night_sky_as_systems_thinking_th_section_title}</h2>
           <p class="th-body">
-            But the cosmos isn't just an aesthetic choice. It's the most honest metaphor I've found for the
-            kind of work I actually do.
+            {documentContent.blocks.the_night_sky_as_systems_thinking_th_body}
           </p>
           <p class="th-body">
-            When something goes wrong in an AI system - and something always goes wrong in an AI system - the
-            failure is almost never a single clean bug with a stack trace that points directly to the problem.
-            It's a confluence. It's a retrieval component that returns slightly off-context chunks, combined
-            with a prompt that was written for a subtly different input distribution, combined with a temperature
-            setting that made sense for one task and not another, combined with an evaluation harness that wasn't
-            measuring quite the right thing. Four variables, each individually reasonable, together producing an
-            outcome that makes no sense until you've traced all of them simultaneously.
+            {documentContent.blocks.the_night_sky_as_systems_thinking_th_body_2}
           </p>
           <p class="th-body">
-            Junior engineers - and this is not a criticism, it's just a stage - tend to look for the one thing.
-            The bug. The root cause. The fix. And often, for well-scoped problems, that's exactly right. But
-            AI systems at scale don't usually fail that way. They fail the way complex systems fail: through
-            the interaction of components that each look fine in isolation.
+            {documentContent.blocks.the_night_sky_as_systems_thinking_th_body_3}
           </p>
           <p class="th-body">
-            This is exactly what you're looking at when you look at the night sky.
+            {documentContent.blocks.the_night_sky_as_systems_thinking_th_body_4}
           </p>
           <p class="th-body">
-            Individual stars don't tell you much. A single point of light is just a point of light. But the
-            moment you start seeing constellations - the moment your brain overlays a framework of spatial
-            relationships onto what otherwise looks like noise - the sky starts to communicate. Not because
-            the stars changed, but because your relationship to them did. You developed an eye for arrangement.
-            You brought a model to the observation.
+            {documentContent.blocks.the_night_sky_as_systems_thinking_th_body_5}
           </p>
           <p class="th-body">
-            There's a direct line between learning to read a page layout and learning to read a broken AI
-            pipeline. In both cases, the skill isn't knowing what each element does in isolation - any junior
-            designer knows what a pull quote is, any junior engineer knows what a vector database does. The
-            skill is understanding how elements interact, where the tension is, what the composition is actually
-            doing as a whole. <strong>The eye for ordered arrangement is the same eye, whether it's trained on
-            InDesign grids or system architecture diagrams.</strong>
+            {documentContent.blocks.the_night_sky_as_systems_thinking_th_body_6} <strong>{documentContent.blocks.the_night_sky_as_systems_thinking_strong}</strong>
           </p>
           <p class="th-body">
-            That's what debugging AI systems actually requires. Not a faster search through logs. Not a better
-            error message. A mental model sophisticated enough that what looks like random floating dots starts
-            to resolve into a pattern that has causal structure. The ability to look at apparent chaos and ask:
-            <em>what would make this make sense?</em>
+            {documentContent.blocks.the_night_sky_as_systems_thinking_th_body_7}
+            <em>{documentContent.blocks.the_night_sky_as_systems_thinking_em}</em>
           </p>
           <p class="th-body">
-            I wanted the site itself to embody this idea. The background isn't just stars for aesthetic reasons
-            - it's stars because I genuinely believe that the most interesting problems in AI systems look like
-            that. Distributed, non-obvious, requiring a kind of perceptual patience that most tools don't teach
-            you and most curricula don't reward. The cosmos theme is the most honest thing I could put on my
-            homepage, because it mirrors how I actually think about the problems I work on.
+            {documentContent.blocks.the_night_sky_as_systems_thinking_th_body_8}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">The Constellation, Made Literal</h2>
+          <h2 class="th-section-title">{documentContent.blocks.the_constellation_made_literal_th_section_title}</h2>
           <p class="th-body">
-            For a long time the night sky on this site was a backdrop - a mood, a metaphor gestured at from
-            behind the content. Then I built the Impact section, and the metaphor stopped being scenery and
-            became the argument itself.
+            {documentContent.blocks.the_constellation_made_literal_th_body}
           </p>
           <p class="th-body">
-            Every quantifiable result I've delivered - the 7&times; throughput, the $1.3M in annual compute saved,
-            the sub-300ms latency held at peak - is a star. The metrics are grouped into categories, and each
-            category is anchored to a vertex of a heptagon. From each anchor the numbers fan out along faint arms
-            of light - trails that say <em>these points belong together</em>, the way a constellation's lines turn
-            scattered dots into a figure. Hover a star and a readout resolves at the centre of the shape: the
-            value, the project, the client, one line of context. The number was always there. What changes is your
-            relationship to it the moment you reach for it - the same move I described earlier, where the sky
-            starts to communicate not because the stars changed but because you brought a model to them.
+            {documentContent.blocks.the_constellation_made_literal_th_body_2} <em>{documentContent.blocks.the_constellation_made_literal_em}</em>{documentContent.blocks.the_constellation_made_literal_th_body_3}
           </p>
           <p class="th-body">
-            The interesting part - the part that connects to the work rather than just illustrating it - wasn't
-            drawing the dots. It was control. A naive scatter looks like noise; a rigid grid looks like a
-            spreadsheet wearing a costume. I wanted neither. So the arrangement is governed by a few rules that
-            are, quietly, the same rules I'd enforce in a system.
+            {documentContent.blocks.the_constellation_made_literal_th_body_4}
           </p>
           <p class="th-body">
-            The first is territorial. Each star's arm is length-capped at the exact boundary where it would drift
-            closer to a neighbouring category than to its own - a Voronoi edge. No metric can ever trespass into
-            another category's region, no matter how crowded its own corner gets. That's not a visual nicety;
-            it's <strong>bounded context</strong> drawn in light. The same discipline that keeps a retrieval
-            service from reaching into the scheduler's state keeps the cost numbers out of the reliability
-            cluster. The picture enforces the property I'd otherwise enforce in code review.
+            {documentContent.blocks.the_constellation_made_literal_th_body_5} <strong>{documentContent.blocks.the_constellation_made_literal_strong}</strong> {documentContent.blocks.the_constellation_made_literal_th_body_6}
           </p>
           <p class="th-body">
-            The second is anti-pattern by construction. Within each cluster, a star's distance from its anchor is
-            decorrelated from its angle using the golden ratio, so the points never line up into rows or an
-            accidental spiral. The eye reads the result as <em>found</em> rather than <em>plotted</em> - which is
-            the whole point, because a constellation you believe in is one that looks like it was discovered, not
-            arranged.
+            {documentContent.blocks.the_constellation_made_literal_th_body_7} <em>{documentContent.blocks.the_constellation_made_literal_em_2}</em> {documentContent.blocks.the_constellation_made_literal_th_body_8} <em>{documentContent.blocks.the_constellation_made_literal_em_3}</em> {documentContent.blocks.the_constellation_made_literal_th_body_9}
           </p>
           <p class="th-body">
-            The third is that the sky breathes. Every load nudges each star by a few degrees and a fraction of its
-            length - bounded entropy, clamped so it can never violate the first two rules. The arrangement is
-            never quite the same twice. A real night sky isn't a static asset, and neither is this one; come back
-            tomorrow and the figure has shifted, the way the actual sky does between seasons. It quietly rewards a
-            second visit.
+            {documentContent.blocks.the_constellation_made_literal_th_body_10}
           </p>
           <p class="th-body">
-            I find it fitting that the section carrying my hardest evidence is also the one that commits most fully
-            to the site's central idea. The proof and the metaphor turned out to be the same object - distributed
-            points that mean little alone and resolve into something legible the moment you bring an eye to them.
+            {documentContent.blocks.the_constellation_made_literal_th_body_11}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">The Tools, Arranged</h2>
+          <h2 class="th-section-title">{documentContent.blocks.the_tools_arranged_th_section_title}</h2>
           <p class="th-body">
-            The stack section used to be paragraphs - careful, detailed prose explaining each capability and the
-            metrics behind it. I deleted almost all of it. With the Impact constellation doing the proving, the
-            toolkit no longer needed to <em>argue</em>; it needed to be legible at a glance.
+            {documentContent.blocks.the_tools_arranged_th_body} <em>{documentContent.blocks.the_tools_arranged_em}</em>{documentContent.blocks.the_tools_arranged_th_body_2}
           </p>
           <p class="th-body">
-            So it became a field of marks, grouped by capability - languages, backend, real-time and voice, data,
-            AI, cloud - each technology shown as its actual logo rather than a word. A logo is recognised
-            pre-verbally; an engineer scanning the page finds their own stack in the time it takes to read a single
-            label. Sourcing them was its own small act of care - real vector marks, dark logos recoloured so they
-            survive on a black background, related tools collapsed into one tile so a category reads as a family
-            rather than a list. The same instinct as the constellation: arrangement that respects the difference
-            between density and noise.
+            {documentContent.blocks.the_tools_arranged_th_body_3}
           </p>
           <p class="th-body">
-            And the logos did something I didn't fully plan for: they brought colour back. After pages of near
-            monochrome - white type on a near-black void - the stack is a wash of brand colour, a deliberate
-            exhale. It sits late in the page on purpose, a breath between the weight of the work and the quiet of
-            the close. The constellation taught me the lesson and the stack repeats it: colour, used sparingly, is
-            rest for the eye - and rest is part of rhythm, not the absence of it.
+            {documentContent.blocks.the_tools_arranged_th_body_4}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">Why Over-Engineer Smoothness?</h2>
+          <h2 class="th-section-title">{documentContent.blocks.why_over_engineer_smoothness_th_section_title}</h2>
           <p class="th-body">
-            One more thing I want to be honest about: the smoothness.
+            {documentContent.blocks.why_over_engineer_smoothness_th_body}
           </p>
           <p class="th-body">
-            There's a lot of scroll logic on this site. Layout-effect hooks that measure DOM positions before
-            paint. Intersection observers stacked on top of requestAnimationFrame loops. Sticky header behaviors
-            that required three refactors to get right. Easing curves I tweaked by feel rather than formula.
+            {documentContent.blocks.why_over_engineer_smoothness_th_body_2}
           </p>
           <p class="th-body">
-            None of this is visible. That's the point.
+            {documentContent.blocks.why_over_engineer_smoothness_th_body_3}
           </p>
           <p class="th-body">
-            The most invisible investment on this site is the scroll itself. The native wheel event is
-            intercepted; the page drives its position through a loop that closes a fraction of the
-            remaining distance on every animation frame. The result is that the page moves with physical
-            weight - not instantly, not with snap, but with the kinetic sense of something that has mass.
-            Most visitors register it as "feeling smooth" without being able to say why. What they're
-            feeling is the gap between input-speed and world-speed - the same gap that makes a flight
-            simulator feel real and a PowerPoint feel like a document.
+            {documentContent.blocks.why_over_engineer_smoothness_th_body_4}
           </p>
           <p class="th-body">
-            Smoothness is the thing you only notice when it's absent. When a scroll jank interrupts an animation,
-            when a header snaps instead of slides, when a transition breaks the illusion of physical continuity
-            - that's when the user's brain surfaces from the experience and remembers they're looking at a website.
-            The spell breaks. The immersion ends.
+            {documentContent.blocks.why_over_engineer_smoothness_th_body_5}
           </p>
           <p class="th-body">
-            Print designers know this feeling instinctively. A registration error that shifts the cyan plate
-            by half a millimetre ruins an image that might otherwise be invisible. A line that doesn't hang
-            correctly pulls the reader's eye wrong without them knowing why they feel uncomfortable. The flaw
-            doesn't have to be named to be felt.
+            {documentContent.blocks.why_over_engineer_smoothness_th_body_6}
           </p>
           <p class="th-body">
-            I think about this the same way I think about latency in AI systems. A response that takes 3 seconds
-            and a response that takes 8 seconds are both "slow" - but the 3-second one might stay in the zone
-            where a user stays engaged, while the 8-second one is the moment they open a new tab. The difference
-            between a system that feels fast and a system that feels broken isn't always about the underlying
-            capability. It's about whether the perceived behavior matches the user's mental model of what
-            <em>should</em> happen.
+            {documentContent.blocks.why_over_engineer_smoothness_th_body_7}
+            <em>{documentContent.blocks.why_over_engineer_smoothness_em}</em> {documentContent.blocks.why_over_engineer_smoothness_th_body_8}
           </p>
           <p class="th-body">
-            A portfolio that stutters - even slightly - signals something. Not necessarily that the engineer
-            who built it can't write smooth code. But the human brain is pattern-matching constantly, and a
-            site that doesn't feel polished is a site that subtly undermines its own argument.
+            {documentContent.blocks.why_over_engineer_smoothness_th_body_9}
           </p>
           <p class="th-body">
-            If I'm telling you I build careful, considered systems, the first evidence I can offer is this one.
+            {documentContent.blocks.why_over_engineer_smoothness_th_body_10}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">The Phone With Nothing to Spare</h2>
+          <h2 class="th-section-title">{documentContent.blocks.the_phone_with_nothing_to_spare_th_section_title}</h2>
           <p class="th-body">
-            Then someone opened the site on their phone and it didn't scroll.
+            {documentContent.blocks.the_phone_with_nothing_to_spare_th_body}
           </p>
           <p class="th-body">
-            Not slowly, not jerkily. It loaded - the first screen sat there, composed and still - and then
-            refused to move. A second phone, the same model, scrolled it perfectly. Same build, same browser, two
-            devices that should have behaved identically. The only difference, it turned out, was that one of
-            them was in Low Power Mode.
+            {documentContent.blocks.the_phone_with_nothing_to_spare_th_body_2}
           </p>
           <p class="th-body">
-            The cause was the cleverness itself. To keep the first paint fast, the homepage deferred its own work:
-            it waited for the browser to report a quiet moment before bringing itself to life, and it loaded most
-            of its sections on demand rather than all at once. On a rested phone that quiet moment arrives
-            instantly and the page fills out before you've finished reading the first line. On a phone in Low
-            Power Mode there is no quiet moment - the browser hoards every spare cycle - so the page stayed a
-            single screen of content with nothing beneath it to scroll to. <em>The whole design quietly assumed a
-            device with energy to spare.</em>
+            {documentContent.blocks.the_phone_with_nothing_to_spare_th_body_3} <em>{documentContent.blocks.the_phone_with_nothing_to_spare_em}</em>
           </p>
           <p class="th-body">
-            The fix was humbling in how much it gave back. Instead of asking the browser to assemble the page at
-            runtime, the entire thing is now rendered to plain HTML ahead of time - present, complete, and
-            scrollable before a single line of JavaScript runs. The animation, the intercepted scroll, the
-            constellation: all of it still layers on top, but as enhancement, not as a precondition for the page
-            existing at all. These article pages had always worked exactly this way, quietly, which is precisely
-            why they never had the problem.
+            {documentContent.blocks.the_phone_with_nothing_to_spare_th_body_4}
           </p>
           <p class="th-body">
-            It's the same lesson the rest of this page keeps circling, only pointed back at me. <strong>Smoothness
-            you can't see includes the smoothness of a page that simply works on a tired phone.</strong> The most
-            over-engineered thing on the site was never the comet or the cursor - it was the unspoken assumption
-            that the machine on the other end had anything left to give. The most considered system is the one
-            that asks the least of the person arriving.
+            {documentContent.blocks.the_phone_with_nothing_to_spare_th_body_5} <strong>{documentContent.blocks.the_phone_with_nothing_to_spare_strong}</strong> {documentContent.blocks.the_phone_with_nothing_to_spare_th_body_6}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">One Continuous Beam</h2>
+          <h2 class="th-section-title">{documentContent.blocks.one_continuous_beam_th_section_title}</h2>
           <p class="th-body">
-            The last thing I reworked wasn't a component at all. It was the order.
+            {documentContent.blocks.one_continuous_beam_th_body}
           </p>
           <p class="th-body">
-            A page is a sequence, and a sequence is an argument with a shape. Get the order wrong and even good
-            sections read as a fragmented signal - a list of strong things that never adds up to a person. I
-            wanted the opposite: one continuous beam, where each section sets up the one after it and nothing asks
-            the reader to double back.
+            {documentContent.blocks.one_continuous_beam_th_body_2}
           </p>
           <p class="th-body">
-            So it runs: who I am, then how I got here, then - at the crest of that trajectory - the Impact
-            constellation, the payoff the journey was building toward. The numbers raise a question, <em>how?</em>,
-            and the work answers it immediately: the featured systems, then the broader catalogue. Only after
-            you've seen the results and the work that produced them do the recommendations arrive, so the people
-            vouching for me are vouching for something you've already witnessed rather than something you're being
-            asked to take on faith. Then the toolkit, as reference, and finally the way out.
+            {documentContent.blocks.one_continuous_beam_th_body_3} <em>{documentContent.blocks.one_continuous_beam_em}</em>{documentContent.blocks.one_continuous_beam_th_body_4}
           </p>
           <p class="th-body">
-            Identity, journey, payoff, work, validation, tools, contact. Read aloud it's almost a sentence. That's
-            the test I held it to - not whether each section was good in isolation, but whether you could fall
-            through the whole thing without the beam ever breaking.
+            {documentContent.blocks.one_continuous_beam_th_body_5}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">A Portfolio Is an Argument</h2>
+          <h2 class="th-section-title">{documentContent.blocks.a_portfolio_is_an_argument_th_section_title}</h2>
           <p class="th-body">
-            Every portfolio is an argument. Most of them argue with words: <em>here are my skills, here are
-            my projects, here is what I'm good at.</em> That's fine. Words are efficient. Words are legible.
+            {documentContent.blocks.a_portfolio_is_an_argument_th_body} <em>{documentContent.blocks.a_portfolio_is_an_argument_em}</em> {documentContent.blocks.a_portfolio_is_an_argument_th_body_2}
           </p>
           <p class="th-body">
-            But I wanted to make a different kind of argument - one that a decade of design work taught me is
-            almost always more persuasive than words. I wanted the experience of visiting the site to carry
-            information about how I think, what I value, and what I'm capable of, before a single line of
-            copy is read. I wanted the visual depth to say <em>I care about depth</em>. I wanted the smoothness
-            to say <em>I care about the details that users feel but can't name</em>. I wanted the cosmos to
-            say <em>I live comfortably in complexity, and I know how to find order in it</em>.
+            {documentContent.blocks.a_portfolio_is_an_argument_th_body_3} <em>{documentContent.blocks.a_portfolio_is_an_argument_em_2}</em>{documentContent.blocks.a_portfolio_is_an_argument_th_body_4} <em>{documentContent.blocks.a_portfolio_is_an_argument_em_3}</em>{documentContent.blocks.a_portfolio_is_an_argument_th_body_5} <em>{documentContent.blocks.a_portfolio_is_an_argument_em_4}</em>.
           </p>
           <p class="th-body">
-            The portfolio isn't over-engineered. It's precisely engineered for a goal that most portfolios
-            don't even attempt: to make you <em>feel</em> something before you decide whether to read anything.
+            {documentContent.blocks.a_portfolio_is_an_argument_th_body_6} <em>{documentContent.blocks.the_first_second_is_not_optional_em_2}</em> {documentContent.blocks.a_portfolio_is_an_argument_th_body_7}
           </p>
           <p class="th-body">
-            There is something at the bottom of the page that I haven't mentioned. Reach it - scroll
-            through everything - and the content blurs, and a message appears: <em>somewhere between
-            the hero and here, you decided to keep going. Thank you for taking the time to know me a
-            little more than you already did.</em> Ten seconds. A countdown ring. Then it's gone.
+            {documentContent.blocks.a_portfolio_is_an_argument_th_body_8} <em>{documentContent.blocks.a_portfolio_is_an_argument_em_5}</em> {documentContent.blocks.a_portfolio_is_an_argument_th_body_9}
           </p>
           <p class="th-body">
-            A visitor who reached the bottom gave their attention to the whole of it. The least the
-            site can do is notice.
+            {documentContent.blocks.a_portfolio_is_an_argument_th_body_10}
           </p>
           <p class="th-body">
-            Whether it works is something only visitors can answer. But the intent was never decoration.
+            {documentContent.blocks.a_portfolio_is_an_argument_th_body_11}
           </p>
           <p class="th-body">
-            The intent was always: make them curious enough to look closer.
+            {documentContent.blocks.a_portfolio_is_an_argument_th_body_12}
           </p>
           <p class="th-body th-body--closing">
-            And then give them something worth finding.
+            {documentContent.blocks.a_portfolio_is_an_argument_th_body_th_body_closing}
           </p>
         </section>
 
@@ -453,12 +283,11 @@ const canonical = "https://www.ashwingupta.dev/articles/the-space-between-stars"
         </div>
 
         <p class="th-author-note">
-          Ashwin Gupta is an AI systems engineer who builds things that think, and spent a long time before
-          that learning how things should look.
+          {documentContent.blocks.a_portfolio_is_an_argument_th_author_note}
         </p>
 
         <div class="th-footer">
-          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
+          <span>{documentContent.blocks.a_portfolio_is_an_argument_span}</span>
         </div>
 
       </div>

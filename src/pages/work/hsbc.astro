@@ -1,42 +1,40 @@
 ---
+import { resolveCopy } from '../../content/portfolio/copy';
+
+import documentContentSource from "../../content/portfolio/documents/work--hsbc.json";
 import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
+const documentContent = resolveCopy(documentContentSource);
 
-const canonical = "https://www.ashwingupta.dev/work/hsbc";
+const canonical = documentContent.metadata.canonical;
 
-const metrics = [
-  { value: "7×", label: "Per-VM session capacity" },
-  { value: "1,600+", label: "Concurrent sessions sustained" },
-  { value: "$1.3M", label: "Annualized compute savings" },
-  { value: "~10 min", label: "MTTR (from 1–2 hours)" },
-  { value: "$8K", label: "Monthly compute cost (from $118K)" },
-  { value: "<300ms", label: "Latency SLO held at peak load" },
-];
+const metrics = documentContent.data.metrics;
+
 ---
 
 <BaseLayout
-  title="Conversational Analytics - HSBC | Ashwin Gupta"
-  description="Conversational analytics platform for banking at scale. 1,600+ concurrent sessions. $1.3M annualized savings. Case study."
+  title={documentContent.metadata.baselayout_title}
+  description={documentContent.metadata.baselayout_description}
   canonical={canonical}
   jsonLd={contentSchemas({
     type: "CreativeWork",
-    name: "Conversational Analytics - HSBC",
+    name: documentContent.metadata.schema_name,
     url: canonical,
-    description: "Conversational analytics platform for banking at scale. 1,600+ concurrent sessions. $1.3M annualized savings. Case study.",
+    description: documentContent.metadata.baselayout_description,
   })}
 >
   <div class="spatial-scene">
     <div class="hologram-interface case-study-scroll">
       <div class="case-study-body" role="main">
 
-        <a href="/#featured" class="back-link">← Back to featured</a>
+        <a href={documentContent.links.back_to_section} class="back-link">{documentContent.blocks.intro_back_link}</a>
 
         <header class="cs-header">
-          <div class="cs-context-badge">Client Delivery • Coforge</div>
-          <h1 class="cs-title">Conversational Analytics - HSBC</h1>
+          <div class="cs-context-badge">{documentContent.blocks.intro_cs_context_badge}</div>
+          <h1 class="cs-title">{documentContent.blocks.conversational_analytics_hsbc_cs_title}</h1>
           <p class="cs-subtitle">
-            Conversational analytics platform for banking at scale. 1,600+ concurrent sessions. $1.3M annualized savings.
+            {documentContent.blocks.conversational_analytics_hsbc_cs_subtitle}
           </p>
         </header>
 
@@ -53,30 +51,30 @@ const metrics = [
 
         <div class="cs-divider"></div>
 
-        <div class="cs-delta-heading">Δ Infrastructure</div>
+        <div class="cs-delta-heading">{documentContent.blocks.conversational_analytics_hsbc_cs_delta_heading}</div>
         <table class="cs-delta-table">
           <thead>
             <tr>
               <th></th>
-              <th>Before</th>
-              <th>After</th>
+              <th>{documentContent.blocks.infrastructure_before_heading}</th>
+              <th>{documentContent.blocks.infrastructure_after_heading}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>VM</td>
-              <td>80+ 32 vCPU VMs - 1 core active, 31 idle</td>
-              <td>~15 8 vCPU VMs - all 8 cores active</td>
+              <td>{documentContent.blocks.infrastructure_vm_label}</td>
+              <td>{documentContent.blocks.infrastructure_vm_before}</td>
+              <td>{documentContent.blocks.infrastructure_vm_after}</td>
             </tr>
             <tr>
-              <td>Application</td>
-              <td>Single Python process, threading model, no supervision</td>
-              <td>8 CPU-pinned processes, asyncio + uvloop, systemd supervised</td>
+              <td>{documentContent.blocks.infrastructure_application_label}</td>
+              <td>{documentContent.blocks.infrastructure_application_before}</td>
+              <td>{documentContent.blocks.infrastructure_application_after}</td>
             </tr>
             <tr>
-              <td>Observability</td>
-              <td>No log correlation - manual incident reconstruction, 1–2 hrs</td>
-              <td>GCP Log Correlator - 250K+ lines correlated in 5–6 min</td>
+              <td>{documentContent.blocks.infrastructure_observability_label}</td>
+              <td>{documentContent.blocks.infrastructure_observability_before}</td>
+              <td>{documentContent.blocks.infrastructure_observability_after}</td>
             </tr>
           </tbody>
         </table>
@@ -84,157 +82,55 @@ const metrics = [
         <div class="cs-divider"></div>
 
         <div class="cs-tab-toggle">
-          <button class="cs-tab-btn active" data-tab="before">Before</button>
-          <button class="cs-tab-btn" data-tab="after">After</button>
+          <button class="cs-tab-btn active" data-tab="before">{documentContent.blocks.infrastructure_before_heading}</button>
+          <button class="cs-tab-btn" data-tab="after">{documentContent.blocks.infrastructure_after_heading}</button>
         </div>
 
         <!-- ═══ BEFORE PANEL ═══ -->
         <div class="cs-tab-panel active" data-panel="before">
 
           <section class="cs-section">
-            <h2 class="cs-section-title">The Constraint Environment</h2>
+            <h2 class="cs-section-title">{documentContent.blocks.the_constraint_environment_cs_section_title}</h2>
             <p class="cs-body">
-              HSBC is the world's largest bank by assets. Every engineering decision operates under compliance and security requirements that most teams never encounter. Timeline pressure was acute - services companies move fast, sometimes unreasonably so.
+              {documentContent.blocks.the_constraint_environment_cs_body}
             </p>
             <p class="cs-body">
-              The production environment: Google Cloud Platform, RHEL VMs, a real-time SIP voice stack handling live banking calls. Latency wasn't a preference - it was a contract. Packet loss above 5% was an incident. Downtime had regulatory implications.
+              {documentContent.blocks.the_constraint_environment_cs_body_2}
             </p>
             <p class="cs-body">
-              Timeline pressure was typical of services delivery - fast, often unreasonably so, with scope evolving mid-execution. The compliance environment was HSBC's: one of the world's most scrutinised financial institutions, with data handling, access controls, and operational standards that aren't negotiable. Every architectural decision had to satisfy both the engineering constraint and the compliance constraint simultaneously. There was no sandbox for testing ideas - changes went into a live banking infrastructure.
+              {documentContent.blocks.the_constraint_environment_cs_body_3}
             </p>
           </section>
 
           <section class="cs-section">
-            <h2 class="cs-section-title">What Was Actually Broken</h2>
+            <h2 class="cs-section-title">{documentContent.blocks.what_was_actually_broken_cs_section_title}</h2>
             <p class="cs-body">
-              GCP console's VM utilisation board showed we'd never cross about 20% CPU utilisation - but call quality and session capacity kept bottlenecking hard at 20 concurrent calls per VM. The whole team believed the code was incorrect. I knew the code was right. Something else was wrong.
+              {documentContent.blocks.what_was_actually_broken_cs_body}
             </p>
             <p class="cs-body">
-              Running <code>top</code> and <code>htop</code> under load revealed the answer: no matter how many concurrent calls we pushed through the pipeline, only a single CPU core was ever fully utilised. The GIL. Python's Global Interpreter Lock was serialising every audio processing thread into a single-core bottleneck, while 31 other cores sat idle on a 32-core VM.
+              {documentContent.blocks.what_was_actually_broken_cs_body_2} <code>{documentContent.blocks.what_was_actually_broken_code}</code> {documentContent.blocks.what_was_actually_broken_cs_body_3} <code>{documentContent.blocks.what_was_actually_broken_code_2}</code> {documentContent.blocks.what_was_actually_broken_cs_body_4}
             </p>
 
             <div class="cs-diagram-container">
-              <span class="cs-diagram-label">System Topology - Before</span>
-              <pre class="mermaid">
-flowchart TD
-    PSTN[PSTN / Banking Caller]
-    SBC[Session Border Controller\nSIP termination + routing]
-
-    subgraph GCP ["GCP - Production Boundary"]
-
-        subgraph SIP_VM ["GCE SIP VM - RHEL 32 vCPU"]
-            direction TB
-
-            subgraph APP ["Single Python Application Process"]
-                PJSUA2[PJSUA2 SIP Driver\nPJSIP binding]
-                GIL["Python GIL\nGlobal Interpreter Lock\nserialises all threads"]
-
-                subgraph THREADS ["Audio Processing Threads"]
-                    T1[Thread - Session 1\naudio decode + transform]
-                    T2[Thread - Session 2\naudio decode + transform]
-                    TN["Thread - Session N max 20\naudio decode + transform"]
-                end
-
-                PJSUA2 --> GIL
-                GIL --"one at a time"--> T1
-                GIL --"one at a time"--> T2
-                GIL --"one at a time"--> TN
-            end
-
-            subgraph CORES ["CPU Cores"]
-                C0["Core 0 - 100% utilised"]
-                CX["Cores 1 to 31 - IDLE\n31 cores wasted"]
-            end
-
-            APP --> C0
-        end
-
-        subgraph GKE_CLUSTER ["GKE Cluster"]
-            STT[STT Service\nspeech-to-text]
-            SUMM[Summarisation Service\nLLM post-processing]
-            STT --> SUMM
-        end
-
-        UI[Agent UI\ndashboard + transcript view]
-    end
-
-    PSTN -->|SIP| SBC
-    SBC -->|SIP - GCP boundary| PJSUA2
-    T1 -->|audio stream| STT
-    T2 -->|audio stream| STT
-    TN -->|audio stream| STT
-    SUMM --> UI
-              </pre>
+              <span class="cs-diagram-label">{documentContent.blocks.what_was_actually_broken_cs_diagram_label}</span>
+              <pre class="mermaid">{documentContent.diagrams.what_was_actually_broken_mermaid}</pre>
             </div>
 
             <div class="cs-diagram-container">
-              <span class="cs-diagram-label">Concurrency Model - Before (GIL serialisation)</span>
-              <pre class="mermaid">
-flowchart LR
-    subgraph SIP_SESSION ["Active SIP Session - PJSUA2-bound"]
-        direction TB
-        MEDIA[Media stream\naudio in/out]
-        XFORM[Audio transformation\ndecode - resample - encode]
-        MEDIA --> XFORM
-    end
-
-    subgraph PROCESS ["OS Process - single"]
-        direction TB
-        GIL_LOCK["GIL Lock\nacquired per bytecode tick"]
-        subgraph TPOOL ["Thread Pool"]
-            TA[Thread A]
-            TB[Thread B]
-            TC[Thread C]
-        end
-        GIL_LOCK --"token passed sequentially"--> TA
-        GIL_LOCK --"token passed sequentially"--> TB
-        GIL_LOCK --"token passed sequentially"--> TC
-    end
-
-    subgraph CORE_VIEW ["CPU"]
-        CORE["Core 0 - only core active\nall others idle"]
-    end
-
-    SIP_SESSION --> PROCESS
-    TA -->|"serialised - one runs, others wait"| CORE
-    TB -->|"serialised - one runs, others wait"| CORE
-    TC -->|"serialised - one runs, others wait"| CORE
-              </pre>
+              <span class="cs-diagram-label">{documentContent.blocks.what_was_actually_broken_cs_diagram_label_2}</span>
+              <pre class="mermaid">{documentContent.diagrams.what_was_actually_broken_mermaid_2}</pre>
             </div>
           </section>
 
           <section class="cs-section">
-            <h2 class="cs-section-title">Observability - Before</h2>
+            <h2 class="cs-section-title">{documentContent.blocks.observability_before_cs_section_title}</h2>
             <p class="cs-body">
-              Before the observability work: diagnosing an incident meant manually entering the agent's extension number, finding the generated conversation ID, browsing across GCE and GKE logs by hand, reconstructing timestamps across services, and building a log trace for that conversation. Manual, error-prone, 1–2 hours minimum. You could draw the wrong conclusion from a misread timestamp.
+              {documentContent.blocks.observability_before_cs_body}
             </p>
 
             <div class="cs-diagram-container">
-              <span class="cs-diagram-label">Incident Response Workflow - Before</span>
-              <pre class="mermaid">
-sequenceDiagram
-    participant ENG as On-Call Engineer
-    participant GCP as GCP Console
-    participant GCE as GCE VM Logs
-    participant GKE as GKE Pod Logs
-    participant DB as DB / Cache Logs
-    participant NOTES as Manual Reconstruction
-
-    ENG->>GCP: Enter agent extension number
-    GCP-->>ENG: Search returns conversation ID
-    ENG->>GCE: Filter GCE logs by conversation ID
-    GCE-->>ENG: Unstructured log dump
-    ENG->>GKE: Filter GKE logs by conversation ID
-    GKE-->>ENG: Unstructured log dump - different timestamp format
-    ENG->>DB: Check DB / cache logs manually
-    DB-->>ENG: Separate log format, separate time zone offsets
-    ENG->>NOTES: Manually align timestamps across all sources
-    ENG->>NOTES: Reconstruct call trace step by step
-    ENG->>NOTES: Identify failure point by process of elimination
-    Note over ENG,NOTES: Elapsed: 1-2 hours minimum
-    Note over ENG,NOTES: High error rate - wrong conclusions from misread timestamps
-    ENG->>ENG: Conclude diagnosis
-              </pre>
+              <span class="cs-diagram-label">{documentContent.blocks.observability_before_cs_diagram_label}</span>
+              <pre class="mermaid">{documentContent.diagrams.observability_before_mermaid}</pre>
             </div>
           </section>
 
@@ -244,237 +140,74 @@ sequenceDiagram
         <div class="cs-tab-panel" data-panel="after">
 
           <section class="cs-section">
-            <h2 class="cs-section-title">The Architecture Decision</h2>
+            <h2 class="cs-section-title">{documentContent.blocks.the_architecture_decision_cs_section_title}</h2>
             <p class="cs-body">
-              Escaping the GIL is not straightforward when the audio processing is bound to a SIP session. I evaluated multiprocessing, concurrent.futures, and several threading alternatives. The problem: all audio transformation had to happen inside an active SIP session managed by PJSIP via the PJSUA2 Python API.
+              {documentContent.blocks.the_architecture_decision_cs_body}
             </p>
             <p class="cs-body">
-              Offloading media processing outside the SIP session while maintaining session continuity would have required blocking processes, multiple I/O synchronisation points, and significant architectural complexity. The simpler and more reliable solution: run 8 fully independent parallel instances on the 8-core VM using RHEL's <code>taskset</code> command to pin each instance to a dedicated CPU core.
+              {documentContent.blocks.the_architecture_decision_cs_body_2} <code>{documentContent.blocks.the_architecture_decision_code}</code> {documentContent.blocks.the_architecture_decision_cs_body_3}
             </p>
             <p class="cs-body">
-              A shell runner script brought up all 8 instances. A systemd service managed startup and restarts. Each instance owned its core entirely - no GIL contention, no shared memory, no coordination overhead. The concurrency model switched from threading (serialised by GIL) to process-level parallelism (each instance isolated).
+              {documentContent.blocks.the_architecture_decision_cs_body_4}
             </p>
             <p class="cs-body">
-              The concurrency layer was simultaneously rewritten with <strong>asyncio + uvloop</strong> - replacing the threading model with an event loop. Each SIP session became a coroutine across the SBC, STT, and LLM stages, eliminating GIL contention across the full pipeline.
+              {documentContent.blocks.the_architecture_decision_cs_body_5} <strong>{documentContent.blocks.the_architecture_decision_strong}</strong> {documentContent.blocks.the_architecture_decision_cs_body_6}
             </p>
 
             <div class="cs-diagram-container">
-              <span class="cs-diagram-label">System Topology - After</span>
-              <pre class="mermaid">
-flowchart TD
-    PSTN[PSTN / Banking Caller]
-    SBC[Session Border Controller\nSIP termination + routing]
-
-    subgraph GCP ["GCP - Production Boundary"]
-
-        subgraph PROXY_VM ["GCE SIP Proxy VM"]
-            KAMAILIO[Kamailio\nSIP proxy + session distribution]
-        end
-
-        subgraph SIP_VM ["GCE SIP VM - RHEL c4-standard-8 8 vCPU"]
-            direction TB
-
-            subgraph INSTANCES ["8 CPU-pinned Parallel Processes - no GIL"]
-                I0["Instance 0 - taskset -c 0\nPython - asyncio + uvloop\nSIP sessions as coroutines"]
-                I1["Instance 1 - taskset -c 1\nPython - asyncio + uvloop"]
-                I2["Instance 2 - taskset -c 2\nPython - asyncio + uvloop"]
-                IN["Instances 3 to 7 - taskset -c 3 to 7\nPython - asyncio + uvloop each"]
-            end
-
-            subgraph CORES ["CPU Cores - all active"]
-                C0["Core 0 - 100%"]
-                C1["Core 1 - 100%"]
-                C2["Core 2 - 100%"]
-                CX["Cores 3 to 7 - 100%"]
-            end
-
-            I0 --> C0
-            I1 --> C1
-            I2 --> C2
-            IN --> CX
-        end
-
-        subgraph GKE_CLUSTER ["GKE Cluster"]
-            STT[STT Service\nspeech-to-text]
-            SUMM[Summarisation Service\nLLM post-processing]
-            STT --> SUMM
-        end
-
-        UI[Agent UI\ndashboard + transcript view]
-    end
-
-    PSTN -->|SIP| SBC
-    SBC -->|SIP - GCP boundary| KAMAILIO
-    KAMAILIO -->|SIP sessions distributed| I0
-    KAMAILIO --> I1
-    KAMAILIO --> I2
-    KAMAILIO --> IN
-    I0 -->|audio stream| STT
-    I1 --> STT
-    I2 --> STT
-    IN --> STT
-    SUMM --> UI
-              </pre>
+              <span class="cs-diagram-label">{documentContent.blocks.the_architecture_decision_cs_diagram_label}</span>
+              <pre class="mermaid">{documentContent.diagrams.the_architecture_decision_mermaid}</pre>
             </div>
 
             <div class="cs-diagram-container">
-              <span class="cs-diagram-label">Concurrency Model - After (per-instance asyncio + uvloop)</span>
-              <pre class="mermaid">
-flowchart LR
-    subgraph OS ["RHEL OS Layer"]
-        TASKSET["taskset -c N\nCPU affinity pinning\nper instance"]
-        SYSTEMD_SVC["systemd unit\nstart_instances.sh\nspawns all 8"]
-    end
-
-    subgraph INST ["Per-Instance Architecture x8 independent"]
-        direction TB
-
-        subgraph SIP_LAYER ["SIP Layer"]
-            PJSUA["PJSUA2 SIP Driver\nsession lifecycle"]
-        end
-
-        subgraph ASYNC_LAYER ["Concurrency Layer"]
-            UVLOOP["uvloop\nhigh-perf event loop\nreplaces asyncio default"]
-            subgraph COROS ["Coroutines per session"]
-                CR1["Session A\nawait STT - await LLM"]
-                CR2["Session B\nawait STT - await LLM"]
-                CRN["Session N\nno GIL - separate process"]
-            end
-            UVLOOP --> CR1
-            UVLOOP --> CR2
-            UVLOOP --> CRN
-        end
-
-        PJSUA --> UVLOOP
-    end
-
-    subgraph PINNED ["Dedicated CPU Core"]
-        CORE_N["Core N\nowned exclusively\nno context-switch contention"]
-    end
-
-    OS --> INST
-    INST --> PINNED
-              </pre>
+              <span class="cs-diagram-label">{documentContent.blocks.the_architecture_decision_cs_diagram_label_2}</span>
+              <pre class="mermaid">{documentContent.diagrams.the_architecture_decision_mermaid_2}</pre>
             </div>
 
             <div class="cs-diagram-container">
-              <span class="cs-diagram-label">Process Startup and Lifecycle</span>
-              <pre class="mermaid">
-flowchart TD
-    BOOT[System Boot / Service Restart]
-    SYSTEMD["systemd unit file\nExecStart = start_instances.sh\nRestart=always"]
-    SCRIPT["start_instances.sh\nshell runner"]
-
-    subgraph SPAWN ["Spawn Loop i = 0 to 7"]
-        TASKSET_CMD["taskset -c i python main.py\n--instance-id i --port 500i"]
-    end
-
-    MONITOR["systemd process monitor\nautorestart on non-zero exit"]
-
-    BOOT --> SYSTEMD --> SCRIPT --> SPAWN
-    SPAWN -->|"8 isolated processes"| RUNNING["8 Running Instances\nCores 0 to 7 each pinned"]
-    RUNNING --> MONITOR
-    MONITOR -->|"crash detected"| SYSTEMD
-              </pre>
+              <span class="cs-diagram-label">{documentContent.blocks.the_architecture_decision_cs_diagram_label_3}</span>
+              <pre class="mermaid">{documentContent.diagrams.the_architecture_decision_mermaid_3}</pre>
             </div>
           </section>
 
           <section class="cs-section">
-            <h2 class="cs-section-title">Observability - After</h2>
+            <h2 class="cs-section-title">{documentContent.blocks.observability_after_cs_section_title}</h2>
             <p class="cs-body">
-              The replacement: a GCP Logging API pipeline that ingested every log from every service in the stack - GCE VMs, GKE pods, ingresses, egresses, databases, caches, APIs - sorted them by conversation ID, grouped them by agent extension, highlighted failure points, and generated a complete dashboard of every agent and every conversation within the specified time window.
+              {documentContent.blocks.observability_after_cs_body}
             </p>
             <p class="cs-body">
-              Input: time window start, time window end, environment (dev / UAT / pre-prod / prod). Output: full correlated trace of all agents and all conversations, failure points marked, generated automatically. 250,000+ log lines ingested, processed, analysed, and dashboard generated in under 5–6 minutes. MTTR dropped from 1–2 hours to approximately 10 minutes.
+              {documentContent.blocks.observability_after_cs_body_2}
             </p>
 
             <div class="cs-diagram-container">
-              <span class="cs-diagram-label">GCP Log Correlator - Full Pipeline Architecture</span>
-              <pre class="mermaid">
-flowchart TD
-    subgraph INPUT ["Operator Input"]
-        direction LR
-        TS_START[Time window start]
-        TS_END[Time window end]
-        ENV_SEL[Environment selector]
-    end
-
-    subgraph SOURCES ["Log Sources"]
-        direction LR
-        S1[GCE VMs]
-        S2[GKE Pods]
-        S3[Ingress / Egress]
-        S4[Databases]
-        S5[Cache]
-        S6[API Gateway]
-        S7[STT + LLM]
-    end
-
-    subgraph PIPELINE ["GCP Log Correlator Pipeline"]
-        direction LR
-        API[GCP Logging API] --> INGEST[Ingest 250K+ lines] --> PARSE[Parse + normalise] --> EXTRACT[Extract conv IDs] --> SORT[Sort by conv + time] --> GROUP[Group by agent] --> FAILURE[Mark failures] --> DASH_GEN[Generate dashboard]
-    end
-
-    subgraph OUTPUT ["Output Dashboard"]
-        direction LR
-        ALL_AGENTS[All agents]
-        PER_CONV[Per-conv trace]
-        FAIL_MARK[Failure points]
-        TIMELINE[Unified timeline]
-    end
-
-    INPUT --> API
-    SOURCES --> API
-    DASH_GEN --> OUTPUT
-              </pre>
+              <span class="cs-diagram-label">{documentContent.blocks.observability_after_cs_diagram_label}</span>
+              <pre class="mermaid">{documentContent.diagrams.observability_after_mermaid}</pre>
             </div>
 
             <div class="cs-diagram-container">
-              <span class="cs-diagram-label">Incident Response Workflow - After</span>
-              <pre class="mermaid">
-sequenceDiagram
-    actor ENG as On-Call Engineer
-    participant CORR as Log Correlator
-    participant GCP_API as GCP Logging API
-    participant SOURCES as All Log Sources
-    participant DASH as Generated Dashboard
-
-    ENG->>CORR: Input: time_start, time_end, environment
-    CORR->>GCP_API: Scoped log fetch request
-    GCP_API->>SOURCES: Parallel fetch - GCE, GKE, DBs, caches, APIs, ingress/egress
-    SOURCES-->>GCP_API: 250K+ raw log lines
-    GCP_API-->>CORR: Raw log payload
-    CORR->>CORR: Parse + normalise timestamps
-    CORR->>CORR: Extract conversation IDs
-    CORR->>CORR: Sort by conversation ID + time
-    CORR->>CORR: Group by agent extension
-    CORR->>CORR: Detect + mark failure conditions
-    CORR->>DASH: Generate full correlation dashboard
-    DASH-->>ENG: All agents - all conversations - failures annotated
-    Note over ENG,DASH: Elapsed: ~5-6 minutes
-    ENG->>ENG: Read trace - no reconstruction needed
-              </pre>
+              <span class="cs-diagram-label">{documentContent.blocks.observability_after_cs_diagram_label_2}</span>
+              <pre class="mermaid">{documentContent.diagrams.observability_after_mermaid_2}</pre>
             </div>
 
           </section>
 
           <section class="cs-section">
-            <h2 class="cs-section-title">What a Senior Engineer Should Take Away</h2>
+            <h2 class="cs-section-title">{documentContent.blocks.what_a_senior_engineer_should_take_away_cs_section_title}</h2>
             <p class="cs-body">
-              The GIL problem is well-known in Python. What's less discussed is how session-bound media processing constrains your options for escaping it. Multiprocessing across a SIP session context is non-trivial - you can't naively offload without breaking session continuity. The CPU-pinned parallel instances approach bypasses the coordination problem entirely by accepting the trade-off: more memory overhead per instance, simpler architecture, no shared state.
+              {documentContent.blocks.what_a_senior_engineer_should_take_away_cs_body}
             </p>
             <p class="cs-body">
-              The observability work is the part most teams skip until the third incident. Cross-stack log correlation built before the first production incident is qualitatively different from log correlation bolted on after. When logs are correlated by design, you're never reconstructing - you're reading. The difference in incident response time reflects this directly.
+              {documentContent.blocks.what_a_senior_engineer_should_take_away_cs_body_2}
             </p>
             <p class="cs-body">
-              The underlying lesson: at 1,600+ concurrent sessions under a strict latency SLO for a bank, every architectural choice has a cost that's immediately measurable. There's no room for "we'll fix this later." The system had to be correct from the first deployment into production.
+              {documentContent.blocks.what_a_senior_engineer_should_take_away_cs_body_3}
             </p>
           </section>
 
         </div>
 
         <div class="cs-footer">
-          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
+          <span>{documentContent.blocks.what_a_senior_engineer_should_take_away_span}</span>
         </div>
 
       </div>
@@ -521,6 +254,22 @@ sequenceDiagram
       activationBorderColor: 'rgba(255,255,255,0.3)',
     },
   };
+
+  // review-paint:start
+  // The Review edition changes colour only. The original theme, diagram source,
+  // renderer, measurement context and both tab lifecycles remain shared.
+  if (document.body.classList.contains('review-edition')) {
+    Object.keys(MERMAID_CONFIG.themeVariables).forEach(function(key) {
+      var value = MERMAID_CONFIG.themeVariables[key];
+      if (typeof value === 'string') {
+        MERMAID_CONFIG.themeVariables[key] = value
+          .replace(/#ffffff/gi, '#1d293b')
+          .replace(/rgba\(255,255,255,([^)]+)\)/g, 'rgba(29,41,59,$1)');
+      }
+    });
+    MERMAID_CONFIG.themeVariables.edgeLabelBackground = 'transparent';
+  }
+  // review-paint:end
 
   function runMermaidIn(panel) {
     if (!panel) return;

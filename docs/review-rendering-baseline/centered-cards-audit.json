@@ -1,0 +1,242 @@
+{
+  "responsive": [
+    {
+      "awardAlignment": [
+        "center"
+      ],
+      "awardDateOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "awardIconOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "favicon": "/favicon.svg",
+      "heroOverlap": false,
+      "overflow": false,
+      "portraitBelowName": false,
+      "recommendationAlignment": [
+        "center"
+      ],
+      "titlePhotoGap": 83.171875,
+      "width": 1440
+    },
+    {
+      "awardAlignment": [
+        "center"
+      ],
+      "awardDateOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "awardIconOffsets": [
+        0.0078125,
+        0.0078125,
+        0,
+        0.0078125,
+        0.0078125,
+        0,
+        0.0078125,
+        0.0078125,
+        0
+      ],
+      "favicon": "/favicon.svg",
+      "heroOverlap": false,
+      "overflow": false,
+      "portraitBelowName": false,
+      "recommendationAlignment": [
+        "center"
+      ],
+      "titlePhotoGap": 92.1875,
+      "width": 1280
+    },
+    {
+      "awardAlignment": [
+        "center"
+      ],
+      "awardDateOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "awardIconOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "favicon": "/favicon.svg",
+      "heroOverlap": false,
+      "overflow": false,
+      "portraitBelowName": false,
+      "recommendationAlignment": [
+        "center"
+      ],
+      "titlePhotoGap": 127.390625,
+      "width": 1024
+    },
+    {
+      "awardAlignment": [
+        "center"
+      ],
+      "awardDateOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "awardIconOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "favicon": "/favicon.svg",
+      "heroOverlap": false,
+      "overflow": false,
+      "portraitBelowName": false,
+      "recommendationAlignment": [
+        "center"
+      ],
+      "titlePhotoGap": 102.359375,
+      "width": 820
+    },
+    {
+      "awardAlignment": [
+        "center"
+      ],
+      "awardDateOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "awardIconOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "favicon": "/favicon.svg",
+      "heroOverlap": false,
+      "overflow": false,
+      "portraitBelowName": true,
+      "recommendationAlignment": [
+        "center"
+      ],
+      "titlePhotoGap": -362.34375,
+      "width": 580
+    },
+    {
+      "awardAlignment": [
+        "center"
+      ],
+      "awardDateOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "awardIconOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "favicon": "/favicon.svg",
+      "heroOverlap": false,
+      "overflow": false,
+      "portraitBelowName": true,
+      "recommendationAlignment": [
+        "center"
+      ],
+      "titlePhotoGap": -249.890625,
+      "width": 390
+    }
+  ],
+  "diagrams": [
+    {
+      "width": 1280,
+      "state": "before",
+      "match": true
+    },
+    {
+      "width": 1280,
+      "state": "after",
+      "match": true
+    },
+    {
+      "width": 390,
+      "state": "before",
+      "match": true
+    },
+    {
+      "width": 390,
+      "state": "after",
+      "match": true
+    }
+  ]
+}

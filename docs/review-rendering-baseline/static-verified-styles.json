@@ -1,0 +1,14 @@
+{
+  "files": {
+    "src/styles/review.css": "c7eb46061700d3f11de4995305f17a33cb0bd813a2fa7486d165c89616b0dc17",
+    "src/styles/index.css": "cc4f375f803355f32b34316afec9b960e75d4526e26ba1bc008b589d8fcc268f",
+    "src/styles/tailwind.css": "bbd2568e24c6cf317129280fa5f770715057c435c6cbd939e48b28dd6806d4a3",
+    "src/styles/theme.css": "bbebb4cd280d5c3a3e808233670b18e7ce72c08da66823522d2b5ca3166acde7",
+    "src/styles/static-home.css": "54b45bb1cd1944eabc672da142970edece15f102ea8ea550a63dc6bd5da1ca7b",
+    "src/styles/text-alignment.css": "b0276e4b71476604bd32b0c0476b75b09fd3e06a34a22ae1bfc2956a56ea369e",
+    "src/layouts/ReviewLayout.astro": "d0c5f3792517e078afd1fca70620944518216fd30113ef042013f7b20b0063f8",
+    "src/lib/review-document.mjs": "26c06b40be50d9458372f13259715059980fb72f73077ad238726ef409c62e41",
+    "src/pages/work/hsbc.astro": "ba41108562b0299963801d7b294cbbb9a0770a1373de1b04ef590c2cfa5f5dd5",
+    "public/vendor/mermaid.min.js": "eda3a0ad572bbe69a318c1be0163e8233dd824f3f12939e5168feba207767151"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "routes": {
+    "home": "/",
+    "review": "/review",
+    "articles": "/articles",
+    "editions": "/editions",
+    "research": "/research",
+    "projectAlias": "/projects/"
+  },
+  "resources": {
+    "favicon": "/favicon.svg",
+    "appleTouchIcon": "/apple-touch-icon.png",
+    "rssPath": "/rss.xml",
+    "rssUrl": "{{origin}}/rss.xml",
+    "rssTitle": "Articles by {{profile.name}}"
+  },
+  "runtime": {
+    "caseTabsLabel": "Before and after",
+    "researchTabsLabel": "Research editions",
+    "exploredTemplate": "{percent}% explored",
+    "coordinatesTemplate": "X {x} · Y {y}",
+    "unknownAirport": "···"
+  },
+  "schema": {
+    "personFragment": "#ashwin-gupta",
+    "homeLabel": "Home",
+    "profileName": "{{profile.name}} - {{profile.headline}}"
+  },
+  "review": {
+    "name": "The Technical Review",
+    "initials": "{{profile.initials}}",
+    "mastheadNote": "AI systems / Engineering / Research"
+  }
+}

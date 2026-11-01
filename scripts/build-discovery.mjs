@@ -1,10 +1,10 @@
+import { publication, profile } from './portfolio-data.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { parse } from 'parse5';
 
-const origin = 'https://www.ashwingupta.dev';
-const publication = JSON.parse(fs.readFileSync('src/data/article-publication.json', 'utf8'));
+const origin = new URL(profile.siteUrl).origin;
 const sitemap = fs.readFileSync('dist/sitemap-0.xml', 'utf8');
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 const guide = fs.readFileSync('dist/llms.txt', 'utf8');
@@ -30,9 +30,9 @@ assert.deepEqual(articles.map(article => new URL(article.url).pathname.split('/'
 const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Articles by Ashwin Gupta</title>
+    <title>Articles by ${xml(profile.name)}</title>
     <link>${origin}/articles</link>
-    <description>Writing on AI systems, engineering, design, and business by Ashwin Gupta.</description>
+    <description>Writing on AI systems, engineering, design, and business by ${xml(profile.name)}.</description>
     <language>en</language>
     <atom:link href="${origin}/rss.xml" rel="self" type="application/rss+xml" />
 ${articles.map(article => `    <item>

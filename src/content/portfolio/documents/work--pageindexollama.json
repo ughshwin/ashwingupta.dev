@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "canonical": "{{origin}}{{projects.pageindexollama.href}}",
+    "githuburl": "{{projects.pageindexollama.github}}",
+    "baselayout_title": "{{projects.pageindexollama.displayName}} | {{profile.name}}",
+    "baselayout_description": "Provider-agnostic tree-RAG. Offline execution via Ollama, llama.cpp, and vLLM. Finish-reason normalization eliminates silent traversal corruption on provider switch.",
+    "schema_name": "{{projects.pageindexollama.displayName}}"
+  },
+  "blocks": {
+    "intro_back_link": "← Back to projects",
+    "intro_th_badge": "Shipped • Open Source",
+    "pageindexollama_local_first_fork_of_pageindex_th_title": "{{projects.pageindexollama.displayName}}",
+    "pageindexollama_local_first_fork_of_pageindex_th_subtitle": "Tree-RAG freed from provider lock-in. Offline execution across Ollama, llama.cpp, and vLLM - finish-reason normalization makes traversal correctness independent of which runtime answers.",
+    "the_problem_th_section_title": "The Problem",
+    "the_problem_th_body": "PageIndex's tree-RAG was hardwired to OpenAI's API contract - inline prompt strings, non-normalized completion handling. Any provider switch corrupted recursive traversal silently, with errors surfacing only at collapse. All inference required a live API key, blocking offline or air-gapped execution entirely. Token encoding differences across providers produced inconsistent chunk boundaries with no visible signal.",
+    "the_problem_th_body_2": "The failure mode was particularly dangerous: traversal would proceed, produce output, and only reveal the corruption at the final collapse stage. There was no early signal that the provider difference had invalidated the intermediate steps.",
+    "the_approach_th_section_title": "The Approach",
+    "the_approach_th_body": "Forked and refactored with a",
+    "the_approach_strong": "provider-routing abstraction",
+    "the_approach_th_body_2": "resolved via environment variables. A",
+    "the_approach_strong_2": "finish-reason normalization layer",
+    "the_approach_th_body_3": "stabilizes recursive traversal across model outputs - traversal depends on stable internal contracts, not whichever runtime answered. Prompts externalized into a registry loader, removing the coupling between prompt content and provider expectations.",
+    "the_approach_th_body_4": "The key insight: tree-RAG correctness depends on finish-reason semantics, not provider identity. Normalizing finish reasons before they enter traversal logic makes the rest of the pipeline provider-agnostic. Bounded async concurrency across TOC generation and summarization prevents resource saturation on constrained hardware. Hierarchical fallback handles cases where the primary chunking strategy exceeds available VRAM.",
+    "outcomes_th_section_title": "Outcomes",
+    "outcomes_th_body": "Fully offline tree-RAG with Ollama - no API keys. Seamless provider switching across Ollama, llama.cpp, and vLLM via stable internal contracts, with no traversal corruption on change. Vendor lock-in eliminated. Fallback chunk policies handle constrained VRAM and RAM without requiring manual tuning.",
+    "outcomes_cta_link": "↗ View on GitHub",
+    "outcomes_span": "© 2026 {{profile.name}} • {{profile.headline}} • {{profile.location.city}}, {{profile.location.country}}"
+  },
+  "links": {
+    "back_to_section": "/#projects"
+  },
+  "diagrams": {},
+  "data": {}
+}

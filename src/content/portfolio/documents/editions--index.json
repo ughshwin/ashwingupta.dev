@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "editoriallayout_title": "Editorial layout studies",
+    "exploreLabelTemplate": "Explore {name}",
+    "previewTitleTemplate": "{name} layout preview",
+    "paletteLabelTemplate": "{name} colour palette"
+  },
+  "blocks": {
+    "intro_eyebrow": "{{profile.name}} / A professional edition",
+    "intro_gallery_index": "Design studies",
+    "intro_span": "Volume 01 — Three directions",
+    "same_engineer_h1": "Same engineer.",
+    "same_engineer_em": "A different edition.",
+    "same_engineer_p": "Three ways to tell the story through typography, structure, and the work itself. Explore a complete page, then look under the hood at its rendered style guide.",
+    "same_engineer_gallery_note": "Static HTML · Responsive layouts",
+    "same_engineer_gallery_note_2": "Local fonts · Print styles",
+    "same_engineer_text_link": "Original experience at / ↗",
+    "same_engineer_eyebrow": "A note on these studies",
+    "same_engineer_p_2": "Every direction uses existing portfolio content and links to the full project stories. These are working HTML pages, with a visual system you can inspect and compare. The current homepage remains at",
+    "study_explore_the_full_page": "Explore the full page ↗",
+    "study_style_guide": "Style guide ↗"
+  },
+  "links": {
+    "a_href": "/"
+  },
+  "diagrams": {},
+  "data": {}
+}

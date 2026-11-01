@@ -1,0 +1,10 @@
+{
+  "about": "About - {{profile.name}} | {{profile.headline}}",
+  "impact": "Impact - {{profile.name}} | {{profile.headline}}",
+  "stack": "Stack - {{profile.name}} | {{profile.headline}}",
+  "experience": "Experience - {{profile.name}} | {{profile.headline}}",
+  "recommendations": "Recommendations - {{profile.name}} | {{profile.headline}}",
+  "featured": "Featured Work - {{profile.name}} | {{profile.headline}}",
+  "projects": "Projects & Research - {{profile.name}} | {{profile.headline}}",
+  "contact": "Contact - {{profile.name}} | {{profile.headline}}"
+}

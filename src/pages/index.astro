@@ -1,18 +1,23 @@
 ---
+import { resolveCopy } from '../content/portfolio/copy';
+
+import documentContentSource from "../content/portfolio/documents/index.json";
 import { profileSchema, paperSchema } from "../lib/structured-data";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import App from "../app/App";
-import "../styles/index.css";
-import profilePictureUrl from "../assets/profilePicture.webp?url";
+import PortfolioHome from '../components/static/PortfolioHome.astro';
+import { homeContents } from '../content/portfolio/home';
+const documentContent = resolveCopy(documentContentSource);
 
-const canonical = "https://www.ashwingupta.dev/";
+const canonical = documentContent.metadata.canonical;
+
 
 ---
 
 <BaseLayout
   canonical={canonical}
   jsonLd={[profileSchema, paperSchema]}
+  nativeHome
+  contents={homeContents}
 >
-  <link slot="head" rel="preload" as="image" href={profilePictureUrl} fetchpriority="high" type="image/webp" />
-  <App client:load />
+  <PortfolioHome />
 </BaseLayout>

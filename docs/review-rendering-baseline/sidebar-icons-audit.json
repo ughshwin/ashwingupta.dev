@@ -1,0 +1,44 @@
+{
+  "controls": [
+    {
+      "width": 1280,
+      "cvTextCenterDelta": 0,
+      "downloadLinks": 1,
+      "heroSocials": 0,
+      "icons": 3,
+      "iconsCenterDelta": 0,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "cvTextCenterDelta": 0,
+      "downloadLinks": 1,
+      "heroSocials": 0,
+      "icons": 3,
+      "iconsCenterDelta": 0,
+      "overflow": false
+    }
+  ],
+  "diagrams": [
+    {
+      "width": 1280,
+      "state": "before",
+      "match": true
+    },
+    {
+      "width": 1280,
+      "state": "after",
+      "match": true
+    },
+    {
+      "width": 390,
+      "state": "before",
+      "match": true
+    },
+    {
+      "width": 390,
+      "state": "after",
+      "match": true
+    }
+  ]
+}

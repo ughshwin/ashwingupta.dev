@@ -1,0 +1,90 @@
+{
+  "gallery": {
+    "title": "A way into the work",
+    "eyebrow": "The front door / Three directions",
+    "description": "One portfolio. Two ways to experience it. Explore three entrances, then choose the one that feels right.",
+    "open": "Explore this direction",
+    "previewLabel": "Live preview",
+    "pageTitle": "Landing page studies | {{profile.name}}"
+  },
+  "navigation": {
+    "label": "Landing page samples",
+    "all": "All directions",
+    "skip": "Skip to content",
+    "current": "Current portfolio",
+    "previousChoice": "Last chosen: {mode}",
+    "hint": "Choose an experience. Make yourself at home.",
+    "footer": "{{profile.location.city}}, {{profile.location.country}}",
+    "sameWork": "The same work, at your pace."
+  },
+  "modes": [
+    {
+      "id": "animated",
+      "number": "01",
+      "name": "Animated",
+      "tag": "A little atmosphere",
+      "description": "A portfolio with a pulse. Explore the work through motion, depth, and a little cosmic perspective.",
+      "action": "Enter in motion",
+      "href": "{{chrome.routes.home}}",
+      "details": ["Immersive", "Expressive", "Made to explore"]
+    },
+    {
+      "id": "static",
+      "number": "02",
+      "name": "Static",
+      "tag": "A clear line of sight",
+      "description": "Straight to the substance. A quiet, editorial view of the systems, decisions, and results behind the work.",
+      "action": "Enter at ease",
+      "href": "{{chrome.routes.review}}",
+      "details": ["Focused", "Considered", "Made to read"]
+    }
+  ],
+  "preview": {
+    "role": "{{profile.headline}}",
+    "currentRole": "{{currentEmployment.role}} · {{currentEmployment.company}}",
+    "note": "The model is only the beginning.",
+    "projectsLabel": "Selected systems",
+    "projects": ["{{projects.hsbc-voice.displayName}}", "{{projects.pageindexollama.shortName}}", "{{projects.pinns.displayName}}"],
+    "caption": "Engineering the space around the model."
+  },
+  "proof": [
+    { "value": "{{projects.hsbc-voice.metrics.sessionCapacityMultiplier}}", "label": "session capacity" },
+    { "value": "{{projects.hsbc-voice.metrics.annualizedComputeSavings}}", "label": "annualized savings" },
+    { "value": "{{projects.here-app.metrics.languagesSupported}}", "label": "languages supported" }
+  ],
+  "samples": [
+    {
+      "slug": "split",
+      "number": "01",
+      "name": "The duality",
+      "shortName": "Split",
+      "description": "Two contrasting worlds, side by side. A direct, visual choice between atmosphere and clarity.",
+      "eyebrow": "{{profile.name}} / {{profile.headline}}",
+      "headline": ["Pick your", "pace."],
+      "intro": "Some people explore. Some get straight to it. There’s a way in for both.",
+      "accent": "Two ways in. One body of work."
+    },
+    {
+      "slug": "editorial",
+      "number": "02",
+      "name": "The invitation",
+      "shortName": "Editorial",
+      "description": "Warm paper, generous typography, and two unhurried invitations into the same body of work.",
+      "eyebrow": "A note before you begin",
+      "headline": ["The work stays.", "The tempo changes."],
+      "intro": "I’m {{profile.firstName}}. I build the systems around AI. You can meet the work with a little atmosphere, or a little more quiet.",
+      "accent": "There’s no wrong way to be curious."
+    },
+    {
+      "slug": "signal",
+      "number": "03",
+      "name": "The signal",
+      "shortName": "Atmospheric",
+      "description": "An atmospheric first impression with a restrained green glow and a clear choice of experiences.",
+      "eyebrow": "{{profile.name}} / Systems, with perspective",
+      "headline": ["Same engineer.", "Different frequency."],
+      "intro": "The thinking is the same. The feeling is up to you.",
+      "accent": "Find your frequency. Follow the work."
+    }
+  ]
+}

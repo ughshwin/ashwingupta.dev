@@ -1,0 +1,42 @@
+{
+  "navigation": [
+    {
+      "width": 1280,
+      "navigation": [
+        "left"
+      ],
+      "overflow": false,
+      "paragraph": "justify"
+    },
+    {
+      "width": 390,
+      "navigation": [
+        "left"
+      ],
+      "overflow": false,
+      "paragraph": "justify"
+    }
+  ],
+  "diagrams": [
+    {
+      "width": 1280,
+      "state": "before",
+      "match": true
+    },
+    {
+      "width": 1280,
+      "state": "after",
+      "match": true
+    },
+    {
+      "width": 390,
+      "state": "before",
+      "match": true
+    },
+    {
+      "width": 390,
+      "state": "after",
+      "match": true
+    }
+  ]
+}

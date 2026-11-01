@@ -1,43 +1,31 @@
 ---
+import { profile } from "../content/portfolio/profile";
+import { resolveCopy } from "../content/portfolio/copy";
+import { sectionIds } from '../lib/edition-routes';
+import { chromeCopy } from '../content/portfolio/chrome';
+import sectionTitleSource from '../content/portfolio/section-titles.json';
+
 import { profileSchema, paperSchema } from "../lib/structured-data";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import App from "../app/App";
-import "../styles/index.css";
-import profilePictureUrl from "../assets/profilePicture.webp?url";
+import PortfolioHome from '../components/static/PortfolioHome.astro';
+import { homeContents } from '../content/portfolio/home';
 
 export function getStaticPaths() {
-  return [
-    { params: { section: "about" } },
-    { params: { section: "impact" } },
-    { params: { section: "stack" } },
-    { params: { section: "experience" } },
-    { params: { section: "recommendations" } },
-    { params: { section: "featured" } },
-    { params: { section: "projects" } },
-    { params: { section: "contact" } },
-  ];
+  return sectionIds.map(section => ({ params: { section } }));
 }
 
 const { section } = Astro.params;
-const canonical = "https://www.ashwingupta.dev/";
+const canonical = profile.siteUrl;
 
-const titles: Record<string, string> = {
-  about:           "About - Ashwin Gupta | AI Systems Engineer",
-  impact:          "Impact - Ashwin Gupta | AI Systems Engineer",
-  stack:           "Stack - Ashwin Gupta | AI Systems Engineer",
-  experience:      "Experience - Ashwin Gupta | AI Systems Engineer",
-  recommendations: "Recommendations - Ashwin Gupta | AI Systems Engineer",
-  featured:        "Featured Work - Ashwin Gupta | AI Systems Engineer",
-  projects:        "Projects & Research - Ashwin Gupta | AI Systems Engineer",
-  contact:         "Contact - Ashwin Gupta | AI Systems Engineer",
-};
+const titles: Record<string, string> = resolveCopy(sectionTitleSource);
 ---
 
 <BaseLayout
-  title={titles[section] ?? "Ashwin Gupta - AI Systems Engineer"}
+  title={titles[section] ?? chromeCopy.schema.profileName}
   canonical={canonical}
   jsonLd={[profileSchema, paperSchema]}
+  nativeHome
+  contents={homeContents}
 >
-  <link slot="head" rel="preload" as="image" href={profilePictureUrl} fetchpriority="high" type="image/webp" />
-  <App client:idle />
+  <PortfolioHome />
 </BaseLayout>

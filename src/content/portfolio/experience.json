@@ -1,0 +1,112 @@
+[
+  {
+    "id": "bmsce",
+    "track": "education",
+    "role": "B.E. Mechanical Engineering",
+    "company": "BMS College of Engineering",
+    "bullets": [
+      "Founder & mentor - Augment.AI, BMSCE's AI club",
+      "Sponsorship Head, UTSAV '22 - signed MoUs • raised >50% of total budget in 14 days",
+      "IEEE Joint Secretary • 75+ events • chapter ranked #2 globally • co-founded CS chapter",
+      "Best Outgoing Project '23 - PINNs across fluid, structural & thermal simulation",
+      "Published: MCQ generation via graph + LLMs - NCISCT 2022"
+    ],
+    "start": "2019-08",
+    "end": "2023-05",
+    "status": "completed",
+    "editorialRole": "B.E., Mechanical Engineering"
+  },
+  {
+    "id": "outlawed",
+    "track": "professional",
+    "role": "Graphic Designer",
+    "company": "OutLawed",
+    "bullets": [
+      "Visual identity, event collateral & social content for a teaching NGO",
+      "First audience feedback loop - iteration under zero-budget constraints"
+    ],
+    "start": "2020-01",
+    "end": "2022-10"
+  },
+  {
+    "id": "cellstrat",
+    "track": "professional",
+    "role": "AI Product Developer",
+    "company": "CellStrat",
+    "bullets": [
+      "Early GPT-era enterprise ML - among first Indian teams shipping",
+      "NLP pipelines: document classification & processing for enterprise clients",
+      "Full lifecycle: curation → training → eval → deploy → client handoff"
+    ],
+    "start": "2021-02",
+    "end": "2021-12"
+  },
+  {
+    "id": "iisc",
+    "track": "professional",
+    "role": "Head of Machine Learning",
+    "company": "IISc - NMCAD Lab",
+    "bullets": [
+      "eVTOL aerodynamic & structural optimisation under Prof. Harursampath",
+      "Physics-constrained surrogate ML to reduce FEM simulation cost • 5 projects across fluid, structural & thermal domains",
+      "Stable convergence with a fraction of the labelled data required by classical simulation"
+    ],
+    "start": "2022-01",
+    "end": "2022-09",
+    "shortCompany": "IISc"
+  },
+  {
+    "id": "gida",
+    "track": "professional",
+    "role": "Data Scientist",
+    "company": "Gida Technologies",
+    "bullets": [
+      "Here.app (HDFC ERGO) - 163-lang multilingual RAG • 97% factual accuracy",
+      "Prismforce Skill Graph - +30% relevance • sub-50ms on NVIDIA T4",
+      "Laminar / Metamorph / Polymorph - AI CMS • no-code chatbots • cURL→20+ lang API"
+    ],
+    "start": "2023-01",
+    "end": "2024-05",
+    "shortCompany": "Gida"
+  },
+  {
+    "id": "coforge",
+    "track": "professional",
+    "role": "AI Engineer",
+    "company": "Coforge",
+    "bullets": [
+      "Conversational Analytics (HSBC) - SBC→STT→LLM on GCP/RHEL • authored LLD + orchestration architecture",
+      "GIL fix: CPU-pinned procs + asyncio/uvloop • 20→140–160 sessions/VM • 1,600+ concurrent",
+      "Packer GCE automation • GCP log correlator: 250K lines <5s • MTTR 1–2hr→~10min",
+      "Compute: $118K→$8K/month (~$1.3M/yr) • Azure infra intelligence • Amex GBT RAG"
+    ],
+    "start": "2024-06",
+    "end": "2026-06-05"
+  },
+  {
+    "id": "skan",
+    "track": "professional",
+    "role": "Software Engineer 1",
+    "company": "SkanAI",
+    "bullets": [
+      "{{experience.skan.role}} - applied LLMs & agentic systems",
+      "Process intelligence platform"
+    ],
+    "start": "2026-06-15",
+    "end": null
+  },
+  {
+    "id": "iiitb",
+    "track": "education",
+    "role": "Executive Diploma, AI & ML",
+    "company": "IIIT Bangalore",
+    "bullets": [
+      "Dual specialisation - MLOps, GenAI & Agentic AI",
+      "Concurrent with Coforge - formalising the theory behind production systems",
+      "Structural ML • probabilistic reasoning • optimisation • MLOps at scale"
+    ],
+    "start": "2025-10",
+    "end": "2027-03",
+    "status": "ongoing"
+  }
+]

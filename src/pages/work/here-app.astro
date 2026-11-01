@@ -1,40 +1,40 @@
 ---
+import { resolveCopy } from '../../content/portfolio/copy';
+
+import documentContentSource from "../../content/portfolio/documents/work--here-app.json";
 import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
+const documentContent = resolveCopy(documentContentSource);
 
-const canonical = "https://www.ashwingupta.dev/work/here-app";
+const canonical = documentContent.metadata.canonical;
 
-const metrics = [
-  { value: "~97%", label: "Factual accuracy on spec queries" },
-  { value: "163", label: "Languages supported" },
-  { value: "1", label: "Structured source of truth" },
-  { value: "↓", label: "Manual escalation on spec queries" },
-];
+const metrics = documentContent.data.metrics;
+
 ---
 
 <BaseLayout
-  title="163-Language Vehicle Intelligence - HDFC ERGO | Ashwin Gupta"
-  description="Multilingual RAG for vehicle intelligence at HDFC ERGO. ~97% factual accuracy across 163 languages. Case study."
+  title={documentContent.metadata.baselayout_title}
+  description={documentContent.metadata.baselayout_description}
   canonical={canonical}
   jsonLd={contentSchemas({
     type: "CreativeWork",
-    name: "163-Language Vehicle Intelligence - HDFC ERGO",
+    name: documentContent.metadata.schema_name,
     url: canonical,
-    description: "Multilingual RAG for vehicle intelligence at HDFC ERGO. ~97% factual accuracy across 163 languages. Case study.",
+    description: documentContent.metadata.baselayout_description,
   })}
 >
   <div class="spatial-scene">
     <div class="hologram-interface case-study-scroll">
       <div class="case-study-body" role="main">
 
-        <a href="/#featured" class="back-link">← Back to featured</a>
+        <a href={documentContent.links.back_to_section} class="back-link">{documentContent.blocks.intro_back_link}</a>
 
         <header class="cs-header">
-          <div class="cs-context-badge">Client Delivery • Gida Technologies / HDFC ERGO</div>
-          <h1 class="cs-title">163-Language Vehicle Intelligence - Multilingual RAG at Enterprise Scale</h1>
+          <div class="cs-context-badge">{documentContent.blocks.intro_cs_context_badge}</div>
+          <h1 class="cs-title">{documentContent.blocks.header_title}</h1>
           <p class="cs-subtitle">
-            Vehicle specification queries answered accurately across 163 languages. QA-gated retrieval grounded in a single structured source of truth.
+            {documentContent.blocks.header_subtitle}
           </p>
         </header>
 
@@ -52,62 +52,62 @@ const metrics = [
         <div class="cs-divider"></div>
 
         <section class="cs-section">
-          <h2 class="cs-section-title">The Problem</h2>
+          <h2 class="cs-section-title">{documentContent.blocks.the_problem_cs_section_title}</h2>
           <p class="cs-body">
-            HDFC ERGO needed vehicle intelligence that could answer precise specification queries across their entire product catalogue - and answer them correctly, in the user's language, every time. Standard chatbot approaches failed: the same query in different languages returned contradictory results, creating a trust problem at scale.
+            {documentContent.blocks.the_problem_cs_body}
           </p>
           <p class="cs-body">
-            Manual escalation was the only reliable fallback. Every spec-heavy query the chatbot got wrong became a support ticket. At HDFC ERGO's scale - one of India's largest general insurers - this was a volume bottleneck with a measurable cost.
-          </p>
-        </section>
-
-        <section class="cs-section">
-          <h2 class="cs-section-title">Why Standard RAG Fails at 163 Languages</h2>
-          <p class="cs-body">
-            The naive approach to multilingual RAG is post-hoc translation: generate a response in one language, then translate it. This works for general prose but fails for structured specification data, where terminology must be exact. A wheel size or engine displacement doesn't translate - it must be retrieved correctly in the target language from the start.
-          </p>
-          <p class="cs-body">
-            The system treats all 163 languages as first-class targets throughout the retrieval and generation pipeline. Language-aware chunking and per-language factual validation are built into the retrieval process itself, not bolted on afterward.
+            {documentContent.blocks.the_problem_cs_body_2}
           </p>
         </section>
 
         <section class="cs-section">
-          <h2 class="cs-section-title">The System</h2>
+          <h2 class="cs-section-title">{documentContent.blocks.why_standard_rag_fails_at_163_languages_cs_section_title}</h2>
           <p class="cs-body">
-            A RAG-based vehicle intelligence assistant grounded in a curated specification database with image-linked attributes. Every response is anchored to a single structured source of truth - no speculative answers on spec queries, no hallucinated specifications.
+            {documentContent.blocks.why_standard_rag_fails_at_163_languages_cs_body}
           </p>
           <p class="cs-body">
-            QA-gated retrieval validates lookup quality before generation. If retrieval doesn't meet quality thresholds, the generation step doesn't run. This gate is what makes the ~97% accuracy number hold at scale - errors are caught before they become delivered answers.
-          </p>
-          <p class="cs-body">
-            Dynamic data lookup operates across all 163 languages with localised responses grounded in the same structured data. The specification database acts as a single canonical source regardless of which language the query arrives in.
+            {documentContent.blocks.why_standard_rag_fails_at_163_languages_cs_body_2}
           </p>
         </section>
 
         <section class="cs-section">
-          <h2 class="cs-section-title">Outcomes</h2>
+          <h2 class="cs-section-title">{documentContent.blocks.the_system_cs_section_title}</h2>
+          <p class="cs-body">
+            {documentContent.blocks.the_system_cs_body}
+          </p>
+          <p class="cs-body">
+            {documentContent.blocks.the_system_cs_body_2}
+          </p>
+          <p class="cs-body">
+            {documentContent.blocks.the_system_cs_body_3}
+          </p>
+        </section>
+
+        <section class="cs-section">
+          <h2 class="cs-section-title">{documentContent.blocks.outcomes_cs_section_title}</h2>
           <div class="outcomes-list">
             <div class="outcome-item">
-              <span class="outcome-metric">~97% factual accuracy</span>
-              <span class="outcome-detail">Across vehicle specification queries in all 163 languages</span>
+              <span class="outcome-metric">{documentContent.blocks.outcomes_outcome_metric}</span>
+              <span class="outcome-detail">{documentContent.blocks.outcomes_outcome_detail}</span>
             </div>
             <div class="outcome-item">
-              <span class="outcome-metric">163 languages</span>
-              <span class="outcome-detail">As first-class retrieval targets - not post-processed translation</span>
+              <span class="outcome-metric">{documentContent.blocks.outcomes_outcome_metric_2}</span>
+              <span class="outcome-detail">{documentContent.blocks.outcomes_outcome_detail_2}</span>
             </div>
             <div class="outcome-item">
-              <span class="outcome-metric">Reduced manual escalation</span>
-              <span class="outcome-detail">Autonomous spec-query resolution at HDFC ERGO scale</span>
+              <span class="outcome-metric">{documentContent.blocks.outcomes_outcome_metric_3}</span>
+              <span class="outcome-detail">{documentContent.blocks.outcomes_outcome_detail_3}</span>
             </div>
             <div class="outcome-item">
-              <span class="outcome-metric">QA-gated retrieval</span>
-              <span class="outcome-detail">Errors caught before generation - not after delivery</span>
+              <span class="outcome-metric">{documentContent.blocks.outcomes_outcome_metric_4}</span>
+              <span class="outcome-detail">{documentContent.blocks.outcomes_outcome_detail_4}</span>
             </div>
           </div>
         </section>
 
         <div class="cs-footer">
-          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
+          <span>{documentContent.blocks.outcomes_span}</span>
         </div>
 
       </div>

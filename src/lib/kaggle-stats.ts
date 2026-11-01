@@ -1,9 +1,10 @@
-export const KAGGLE_DATASET_REF = "ashwingupta3012/human-faces";
+import dataset from '../content/portfolio/kaggle.json';
+export const KAGGLE_DATASET_REF = dataset.datasetRef;
 export const KAGGLE_DATASET_URL = `https://www.kaggle.com/datasets/${KAGGLE_DATASET_REF}`;
 export const KAGGLE_STATS_URL = `https://www.kaggle.com/api/v1/datasets/view/${KAGGLE_DATASET_REF}`;
 export const KAGGLE_REFRESH_MS = 60_000;
 // One fallback reference for every dataset statistic displayed on the site.
-export const KAGGLE_RECORDED_COUNTS = Object.freeze({ downloads: 42_800, views: 202_000 });
+export const KAGGLE_RECORDED_COUNTS = Object.freeze(dataset.recordedCounts);
 export type KaggleCount = keyof typeof KAGGLE_RECORDED_COUNTS;
 
 export type KaggleStatsSnapshot = {

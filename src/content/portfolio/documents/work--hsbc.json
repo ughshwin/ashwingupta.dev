@@ -1,0 +1,105 @@
+{
+  "metadata": {
+    "canonical": "{{origin}}{{projects.hsbc-voice.href}}",
+    "baselayout_title": "{{projects.hsbc-voice.title}} | {{profile.name}}",
+    "baselayout_description": "Conversational analytics platform for banking at scale. {{projects.hsbc-voice.metrics.concurrentSessions}} concurrent sessions. {{projects.hsbc-voice.metrics.annualizedComputeSavings}} annualized savings. Case study.",
+    "schema_name": "{{projects.hsbc-voice.title}}"
+  },
+  "blocks": {
+    "intro_back_link": "← Back to featured",
+    "intro_cs_context_badge": "Client Delivery • {{experience.coforge.company}}",
+    "conversational_analytics_hsbc_cs_title": "{{projects.hsbc-voice.title}}",
+    "conversational_analytics_hsbc_cs_subtitle": "Conversational analytics platform for banking at scale. {{projects.hsbc-voice.metrics.concurrentSessions}} concurrent sessions. {{projects.hsbc-voice.metrics.annualizedComputeSavings}} annualized savings.",
+    "conversational_analytics_hsbc_cs_delta_heading": "Δ Infrastructure",
+    "infrastructure_before_heading": "Before",
+    "infrastructure_after_heading": "After",
+    "infrastructure_vm_label": "VM",
+    "infrastructure_vm_before": "80+ 32 vCPU VMs - 1 core active, 31 idle",
+    "infrastructure_vm_after": "~15 8 vCPU VMs - all 8 cores active",
+    "infrastructure_application_label": "Application",
+    "infrastructure_application_before": "Single Python process, threading model, no supervision",
+    "infrastructure_application_after": "8 CPU-pinned processes, asyncio + uvloop, systemd supervised",
+    "infrastructure_observability_label": "Observability",
+    "infrastructure_observability_before": "No log correlation - manual incident reconstruction, 1–2 hrs",
+    "infrastructure_observability_after": "GCP Log Correlator - 250K+ lines correlated in 5–6 min",
+    "the_constraint_environment_cs_section_title": "The Constraint Environment",
+    "the_constraint_environment_cs_body": "HSBC is the world's largest bank by assets. Every engineering decision operates under compliance and security requirements that most teams never encounter. Timeline pressure was acute - services companies move fast, sometimes unreasonably so.",
+    "the_constraint_environment_cs_body_2": "The production environment: Google Cloud Platform, RHEL VMs, a real-time SIP voice stack handling live banking calls. Latency wasn't a preference - it was a contract. Packet loss above 5% was an incident. Downtime had regulatory implications.",
+    "the_constraint_environment_cs_body_3": "Timeline pressure was typical of services delivery - fast, often unreasonably so, with scope evolving mid-execution. The compliance environment was HSBC's: one of the world's most scrutinised financial institutions, with data handling, access controls, and operational standards that aren't negotiable. Every architectural decision had to satisfy both the engineering constraint and the compliance constraint simultaneously. There was no sandbox for testing ideas - changes went into a live banking infrastructure.",
+    "what_was_actually_broken_cs_section_title": "What Was Actually Broken",
+    "what_was_actually_broken_cs_body": "GCP console's VM utilisation board showed we'd never cross about 20% CPU utilisation - but call quality and session capacity kept bottlenecking hard at 20 concurrent calls per VM. The whole team believed the code was incorrect. I knew the code was right. Something else was wrong.",
+    "what_was_actually_broken_cs_body_2": "Running",
+    "what_was_actually_broken_code": "top",
+    "what_was_actually_broken_cs_body_3": "and",
+    "what_was_actually_broken_code_2": "htop",
+    "what_was_actually_broken_cs_body_4": "under load revealed the answer: no matter how many concurrent calls we pushed through the pipeline, only a single CPU core was ever fully utilised. The GIL. Python's Global Interpreter Lock was serialising every audio processing thread into a single-core bottleneck, while 31 other cores sat idle on a 32-core VM.",
+    "what_was_actually_broken_cs_diagram_label": "System Topology - Before",
+    "what_was_actually_broken_cs_diagram_label_2": "Concurrency Model - Before (GIL serialisation)",
+    "observability_before_cs_section_title": "Observability - Before",
+    "observability_before_cs_body": "Before the observability work: diagnosing an incident meant manually entering the agent's extension number, finding the generated conversation ID, browsing across GCE and GKE logs by hand, reconstructing timestamps across services, and building a log trace for that conversation. Manual, error-prone, 1–2 hours minimum. You could draw the wrong conclusion from a misread timestamp.",
+    "observability_before_cs_diagram_label": "Incident Response Workflow - Before",
+    "the_architecture_decision_cs_section_title": "The Architecture Decision",
+    "the_architecture_decision_cs_body": "Escaping the GIL is not straightforward when the audio processing is bound to a SIP session. I evaluated multiprocessing, concurrent.futures, and several threading alternatives. The problem: all audio transformation had to happen inside an active SIP session managed by PJSIP via the PJSUA2 Python API.",
+    "the_architecture_decision_cs_body_2": "Offloading media processing outside the SIP session while maintaining session continuity would have required blocking processes, multiple I/O synchronisation points, and significant architectural complexity. The simpler and more reliable solution: run 8 fully independent parallel instances on the 8-core VM using RHEL's",
+    "the_architecture_decision_code": "taskset",
+    "the_architecture_decision_cs_body_3": "command to pin each instance to a dedicated CPU core.",
+    "the_architecture_decision_cs_body_4": "A shell runner script brought up all 8 instances. A systemd service managed startup and restarts. Each instance owned its core entirely - no GIL contention, no shared memory, no coordination overhead. The concurrency model switched from threading (serialised by GIL) to process-level parallelism (each instance isolated).",
+    "the_architecture_decision_cs_body_5": "The concurrency layer was simultaneously rewritten with",
+    "the_architecture_decision_strong": "asyncio + uvloop",
+    "the_architecture_decision_cs_body_6": "- replacing the threading model with an event loop. Each SIP session became a coroutine across the SBC, STT, and LLM stages, eliminating GIL contention across the full pipeline.",
+    "the_architecture_decision_cs_diagram_label": "System Topology - After",
+    "the_architecture_decision_cs_diagram_label_2": "Concurrency Model - After (per-instance asyncio + uvloop)",
+    "the_architecture_decision_cs_diagram_label_3": "Process Startup and Lifecycle",
+    "observability_after_cs_section_title": "Observability - After",
+    "observability_after_cs_body": "The replacement: a GCP Logging API pipeline that ingested every log from every service in the stack - GCE VMs, GKE pods, ingresses, egresses, databases, caches, APIs - sorted them by conversation ID, grouped them by agent extension, highlighted failure points, and generated a complete dashboard of every agent and every conversation within the specified time window.",
+    "observability_after_cs_body_2": "Input: time window start, time window end, environment (dev / UAT / pre-prod / prod). Output: full correlated trace of all agents and all conversations, failure points marked, generated automatically. 250,000+ log lines ingested, processed, analysed, and dashboard generated in under 5–6 minutes. MTTR dropped from 1–2 hours to approximately 10 minutes.",
+    "observability_after_cs_diagram_label": "GCP Log Correlator - Full Pipeline Architecture",
+    "observability_after_cs_diagram_label_2": "Incident Response Workflow - After",
+    "what_a_senior_engineer_should_take_away_cs_section_title": "What a Senior Engineer Should Take Away",
+    "what_a_senior_engineer_should_take_away_cs_body": "The GIL problem is well-known in Python. What's less discussed is how session-bound media processing constrains your options for escaping it. Multiprocessing across a SIP session context is non-trivial - you can't naively offload without breaking session continuity. The CPU-pinned parallel instances approach bypasses the coordination problem entirely by accepting the trade-off: more memory overhead per instance, simpler architecture, no shared state.",
+    "what_a_senior_engineer_should_take_away_cs_body_2": "The observability work is the part most teams skip until the third incident. Cross-stack log correlation built before the first production incident is qualitatively different from log correlation bolted on after. When logs are correlated by design, you're never reconstructing - you're reading. The difference in incident response time reflects this directly.",
+    "what_a_senior_engineer_should_take_away_cs_body_3": "The underlying lesson: at {{projects.hsbc-voice.metrics.concurrentSessions}} concurrent sessions under a strict latency SLO for a bank, every architectural choice has a cost that's immediately measurable. There's no room for \"we'll fix this later.\" The system had to be correct from the first deployment into production.",
+    "what_a_senior_engineer_should_take_away_span": "© 2026 {{profile.name}} • {{profile.headline}} • {{profile.location.city}}, {{profile.location.country}}"
+  },
+  "links": {
+    "back_to_section": "/#featured"
+  },
+  "diagrams": {
+    "what_was_actually_broken_mermaid": "\nflowchart TD\n    PSTN[PSTN / Banking Caller]\n    SBC[Session Border Controller\\nSIP termination + routing]\n\n    subgraph GCP [\"GCP - Production Boundary\"]\n\n        subgraph SIP_VM [\"GCE SIP VM - RHEL 32 vCPU\"]\n            direction TB\n\n            subgraph APP [\"Single Python Application Process\"]\n                PJSUA2[PJSUA2 SIP Driver\\nPJSIP binding]\n                GIL[\"Python GIL\\nGlobal Interpreter Lock\\nserialises all threads\"]\n\n                subgraph THREADS [\"Audio Processing Threads\"]\n                    T1[Thread - Session 1\\naudio decode + transform]\n                    T2[Thread - Session 2\\naudio decode + transform]\n                    TN[\"Thread - Session N max 20\\naudio decode + transform\"]\n                end\n\n                PJSUA2 --> GIL\n                GIL --\"one at a time\"--> T1\n                GIL --\"one at a time\"--> T2\n                GIL --\"one at a time\"--> TN\n            end\n\n            subgraph CORES [\"CPU Cores\"]\n                C0[\"Core 0 - 100% utilised\"]\n                CX[\"Cores 1 to 31 - IDLE\\n31 cores wasted\"]\n            end\n\n            APP --> C0\n        end\n\n        subgraph GKE_CLUSTER [\"GKE Cluster\"]\n            STT[STT Service\\nspeech-to-text]\n            SUMM[Summarisation Service\\nLLM post-processing]\n            STT --> SUMM\n        end\n\n        UI[Agent UI\\ndashboard + transcript view]\n    end\n\n    PSTN -->|SIP| SBC\n    SBC -->|SIP - GCP boundary| PJSUA2\n    T1 -->|audio stream| STT\n    T2 -->|audio stream| STT\n    TN -->|audio stream| STT\n    SUMM --> UI\n              ",
+    "what_was_actually_broken_mermaid_2": "\nflowchart LR\n    subgraph SIP_SESSION [\"Active SIP Session - PJSUA2-bound\"]\n        direction TB\n        MEDIA[Media stream\\naudio in/out]\n        XFORM[Audio transformation\\ndecode - resample - encode]\n        MEDIA --> XFORM\n    end\n\n    subgraph PROCESS [\"OS Process - single\"]\n        direction TB\n        GIL_LOCK[\"GIL Lock\\nacquired per bytecode tick\"]\n        subgraph TPOOL [\"Thread Pool\"]\n            TA[Thread A]\n            TB[Thread B]\n            TC[Thread C]\n        end\n        GIL_LOCK --\"token passed sequentially\"--> TA\n        GIL_LOCK --\"token passed sequentially\"--> TB\n        GIL_LOCK --\"token passed sequentially\"--> TC\n    end\n\n    subgraph CORE_VIEW [\"CPU\"]\n        CORE[\"Core 0 - only core active\\nall others idle\"]\n    end\n\n    SIP_SESSION --> PROCESS\n    TA -->|\"serialised - one runs, others wait\"| CORE\n    TB -->|\"serialised - one runs, others wait\"| CORE\n    TC -->|\"serialised - one runs, others wait\"| CORE\n              ",
+    "observability_before_mermaid": "\nsequenceDiagram\n    participant ENG as On-Call Engineer\n    participant GCP as GCP Console\n    participant GCE as GCE VM Logs\n    participant GKE as GKE Pod Logs\n    participant DB as DB / Cache Logs\n    participant NOTES as Manual Reconstruction\n\n    ENG->>GCP: Enter agent extension number\n    GCP-->>ENG: Search returns conversation ID\n    ENG->>GCE: Filter GCE logs by conversation ID\n    GCE-->>ENG: Unstructured log dump\n    ENG->>GKE: Filter GKE logs by conversation ID\n    GKE-->>ENG: Unstructured log dump - different timestamp format\n    ENG->>DB: Check DB / cache logs manually\n    DB-->>ENG: Separate log format, separate time zone offsets\n    ENG->>NOTES: Manually align timestamps across all sources\n    ENG->>NOTES: Reconstruct call trace step by step\n    ENG->>NOTES: Identify failure point by process of elimination\n    Note over ENG,NOTES: Elapsed: 1-2 hours minimum\n    Note over ENG,NOTES: High error rate - wrong conclusions from misread timestamps\n    ENG->>ENG: Conclude diagnosis\n              ",
+    "the_architecture_decision_mermaid": "\nflowchart TD\n    PSTN[PSTN / Banking Caller]\n    SBC[Session Border Controller\\nSIP termination + routing]\n\n    subgraph GCP [\"GCP - Production Boundary\"]\n\n        subgraph PROXY_VM [\"GCE SIP Proxy VM\"]\n            KAMAILIO[Kamailio\\nSIP proxy + session distribution]\n        end\n\n        subgraph SIP_VM [\"GCE SIP VM - RHEL c4-standard-8 8 vCPU\"]\n            direction TB\n\n            subgraph INSTANCES [\"8 CPU-pinned Parallel Processes - no GIL\"]\n                I0[\"Instance 0 - taskset -c 0\\nPython - asyncio + uvloop\\nSIP sessions as coroutines\"]\n                I1[\"Instance 1 - taskset -c 1\\nPython - asyncio + uvloop\"]\n                I2[\"Instance 2 - taskset -c 2\\nPython - asyncio + uvloop\"]\n                IN[\"Instances 3 to 7 - taskset -c 3 to 7\\nPython - asyncio + uvloop each\"]\n            end\n\n            subgraph CORES [\"CPU Cores - all active\"]\n                C0[\"Core 0 - 100%\"]\n                C1[\"Core 1 - 100%\"]\n                C2[\"Core 2 - 100%\"]\n                CX[\"Cores 3 to 7 - 100%\"]\n            end\n\n            I0 --> C0\n            I1 --> C1\n            I2 --> C2\n            IN --> CX\n        end\n\n        subgraph GKE_CLUSTER [\"GKE Cluster\"]\n            STT[STT Service\\nspeech-to-text]\n            SUMM[Summarisation Service\\nLLM post-processing]\n            STT --> SUMM\n        end\n\n        UI[Agent UI\\ndashboard + transcript view]\n    end\n\n    PSTN -->|SIP| SBC\n    SBC -->|SIP - GCP boundary| KAMAILIO\n    KAMAILIO -->|SIP sessions distributed| I0\n    KAMAILIO --> I1\n    KAMAILIO --> I2\n    KAMAILIO --> IN\n    I0 -->|audio stream| STT\n    I1 --> STT\n    I2 --> STT\n    IN --> STT\n    SUMM --> UI\n              ",
+    "the_architecture_decision_mermaid_2": "\nflowchart LR\n    subgraph OS [\"RHEL OS Layer\"]\n        TASKSET[\"taskset -c N\\nCPU affinity pinning\\nper instance\"]\n        SYSTEMD_SVC[\"systemd unit\\nstart_instances.sh\\nspawns all 8\"]\n    end\n\n    subgraph INST [\"Per-Instance Architecture x8 independent\"]\n        direction TB\n\n        subgraph SIP_LAYER [\"SIP Layer\"]\n            PJSUA[\"PJSUA2 SIP Driver\\nsession lifecycle\"]\n        end\n\n        subgraph ASYNC_LAYER [\"Concurrency Layer\"]\n            UVLOOP[\"uvloop\\nhigh-perf event loop\\nreplaces asyncio default\"]\n            subgraph COROS [\"Coroutines per session\"]\n                CR1[\"Session A\\nawait STT - await LLM\"]\n                CR2[\"Session B\\nawait STT - await LLM\"]\n                CRN[\"Session N\\nno GIL - separate process\"]\n            end\n            UVLOOP --> CR1\n            UVLOOP --> CR2\n            UVLOOP --> CRN\n        end\n\n        PJSUA --> UVLOOP\n    end\n\n    subgraph PINNED [\"Dedicated CPU Core\"]\n        CORE_N[\"Core N\\nowned exclusively\\nno context-switch contention\"]\n    end\n\n    OS --> INST\n    INST --> PINNED\n              ",
+    "the_architecture_decision_mermaid_3": "\nflowchart TD\n    BOOT[System Boot / Service Restart]\n    SYSTEMD[\"systemd unit file\\nExecStart = start_instances.sh\\nRestart=always\"]\n    SCRIPT[\"start_instances.sh\\nshell runner\"]\n\n    subgraph SPAWN [\"Spawn Loop i = 0 to 7\"]\n        TASKSET_CMD[\"taskset -c i python main.py\\n--instance-id i --port 500i\"]\n    end\n\n    MONITOR[\"systemd process monitor\\nautorestart on non-zero exit\"]\n\n    BOOT --> SYSTEMD --> SCRIPT --> SPAWN\n    SPAWN -->|\"8 isolated processes\"| RUNNING[\"8 Running Instances\\nCores 0 to 7 each pinned\"]\n    RUNNING --> MONITOR\n    MONITOR -->|\"crash detected\"| SYSTEMD\n              ",
+    "observability_after_mermaid": "\nflowchart TD\n    subgraph INPUT [\"Operator Input\"]\n        direction LR\n        TS_START[Time window start]\n        TS_END[Time window end]\n        ENV_SEL[Environment selector]\n    end\n\n    subgraph SOURCES [\"Log Sources\"]\n        direction LR\n        S1[GCE VMs]\n        S2[GKE Pods]\n        S3[Ingress / Egress]\n        S4[Databases]\n        S5[Cache]\n        S6[API Gateway]\n        S7[STT + LLM]\n    end\n\n    subgraph PIPELINE [\"GCP Log Correlator Pipeline\"]\n        direction LR\n        API[GCP Logging API] --> INGEST[Ingest 250K+ lines] --> PARSE[Parse + normalise] --> EXTRACT[Extract conv IDs] --> SORT[Sort by conv + time] --> GROUP[Group by agent] --> FAILURE[Mark failures] --> DASH_GEN[Generate dashboard]\n    end\n\n    subgraph OUTPUT [\"Output Dashboard\"]\n        direction LR\n        ALL_AGENTS[All agents]\n        PER_CONV[Per-conv trace]\n        FAIL_MARK[Failure points]\n        TIMELINE[Unified timeline]\n    end\n\n    INPUT --> API\n    SOURCES --> API\n    DASH_GEN --> OUTPUT\n              ",
+    "observability_after_mermaid_2": "\nsequenceDiagram\n    actor ENG as On-Call Engineer\n    participant CORR as Log Correlator\n    participant GCP_API as GCP Logging API\n    participant SOURCES as All Log Sources\n    participant DASH as Generated Dashboard\n\n    ENG->>CORR: Input: time_start, time_end, environment\n    CORR->>GCP_API: Scoped log fetch request\n    GCP_API->>SOURCES: Parallel fetch - GCE, GKE, DBs, caches, APIs, ingress/egress\n    SOURCES-->>GCP_API: 250K+ raw log lines\n    GCP_API-->>CORR: Raw log payload\n    CORR->>CORR: Parse + normalise timestamps\n    CORR->>CORR: Extract conversation IDs\n    CORR->>CORR: Sort by conversation ID + time\n    CORR->>CORR: Group by agent extension\n    CORR->>CORR: Detect + mark failure conditions\n    CORR->>DASH: Generate full correlation dashboard\n    DASH-->>ENG: All agents - all conversations - failures annotated\n    Note over ENG,DASH: Elapsed: ~5-6 minutes\n    ENG->>ENG: Read trace - no reconstruction needed\n              "
+  },
+  "data": {
+    "metrics": [
+      {
+        "value": "{{projects.hsbc-voice.metrics.sessionCapacityMultiplier}}",
+        "label": "Per-VM session capacity"
+      },
+      {
+        "value": "{{projects.hsbc-voice.metrics.concurrentSessions}}",
+        "label": "Concurrent sessions sustained"
+      },
+      {
+        "value": "{{projects.hsbc-voice.metrics.annualizedComputeSavings}}",
+        "label": "Annualized compute savings"
+      },
+      {
+        "value": "{{projects.hsbc-voice.metrics.incidentMttr}}",
+        "label": "MTTR (from 1–2 hours)"
+      },
+      {
+        "value": "{{projects.hsbc-voice.metrics.monthlyComputeCost}}",
+        "label": "Monthly compute cost (from $118K)"
+      },
+      {
+        "value": "{{projects.hsbc-voice.metrics.peakLatencySlo}}",
+        "label": "Latency SLO held at peak load"
+      }
+    ]
+  }
+}

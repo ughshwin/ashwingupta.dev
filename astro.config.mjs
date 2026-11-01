@@ -1,20 +1,14 @@
-import { readFileSync } from "node:fs";
+import { siteRedirects, profile } from "./scripts/portfolio-data.mjs";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
-const projectRoutes = JSON.parse(readFileSync(new URL("./src/data/project-routes.json", import.meta.url), "utf8"));
-const projectRedirects = Object.fromEntries(Object.entries(projectRoutes).map(([slug, destination]) => ["/projects/" + slug, destination]));
-
 export default defineConfig({
-  site: "https://www.ashwingupta.dev",
+  site: profile.siteUrl.replace(/\/$/, ""),
   output: "static",
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
-  redirects: {
-    "/research": "/projects",
-    ...projectRedirects,
-  },
+  redirects: siteRedirects,
   integrations: [
     react(),
     sitemap({

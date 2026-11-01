@@ -1,0 +1,15 @@
+{
+  "verifiedAt": "2026-10-31T20:34:03.756Z",
+  "buildVerified": true,
+  "canonicalSitemapEntries": 15,
+  "samplesExcludedFromSitemap": true,
+  "desktopWidth": 1365,
+  "phoneWidth": 390,
+  "horizontalOverflow": false,
+  "entryDestinationsVerified": [
+    "/",
+    "/review"
+  ],
+  "savedChoiceFeedbackVerified": true,
+  "chooserHasNoPortfolioHydration": true
+}

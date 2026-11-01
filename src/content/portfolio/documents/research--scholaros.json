@@ -1,0 +1,65 @@
+{
+  "metadata": {
+    "canonical": "{{origin}}{{projects.scholaros.href}}",
+    "githuburl": "{{projects.scholaros.github}}",
+    "baselayout_title": "{{projects.scholaros.title}} | {{profile.name}}",
+    "baselayout_description": "Research as structured execution - five deterministic MCP services over a DAG orchestrator. Evidence-bound outputs, bounded hypothesis critique, fully local.",
+    "schema_name": "{{projects.scholaros.title}}"
+  },
+  "blocks": {
+    "intro_back_link": "← Back to projects",
+    "intro_th_badge": "In Development • Personal",
+    "scholaros_research_as_structured_execution_th_title": "{{projects.scholaros.displayName}} - Research as Structured Execution",
+    "scholaros_research_as_structured_execution_th_subtitle": "Five deterministic MCP services over a DAG orchestrator. Every claim bound to source evidence. No hallucinated synthesis in governance outputs.",
+    "the_problem_with_research_copilots_th_section_title": "The Problem With Research Copilots",
+    "the_problem_with_research_copilots_th_body": "Generic AI tools applied to academic research produce fluent text with no evidence traceability. Hallucinated synthesis is structurally indistinguishable from grounded synthesis - you cannot tell from the output alone whether a claim was derived from the literature or confabulated. Every research workflow - literature review, contradiction detection, hypothesis validation, evidence extraction, proposal drafting - requires a separate manual process with no shared execution model.",
+    "the_problem_with_research_copilots_th_body_2": "Hypothesis stress-testing is the worst case: the same model that generated the hypothesis is asked to critique it. No adversarial challenge, no convergence gate, no provenance on the resulting claim. The output looks like analysis but carries none of the guarantees.",
+    "the_architecture_th_section_title": "The Architecture",
+    "the_architecture_th_body": "{{projects.scholaros.displayName}} is a structured research execution platform - five capabilities delivered as a DAG-executed MCP workflow, not a chatbox. Every output is bound to source evidence. Nine services process research artifacts with rule-based, schema-defined, reproducible logic. No service imports another service - all data flows through the orchestrator via MCP tool invocations, eliminating hidden state.",
+    "the_architecture_th_body_2": "The five capabilities:",
+    "the_architecture_strong": "Literature Mapping",
+    "the_architecture_th_body_3": "(HDBSCAN clustering, LLM cluster labeling, paper ranking);",
+    "the_architecture_strong_2": "Contradiction & Consensus",
+    "the_architecture_th_body_4": "(claim extraction, metric normalization, polarity/value divergence detection, Belief Engine confidence assignment);",
+    "the_architecture_strong_3": "Hypothesis & Critique",
+    "the_architecture_th_body_5": "(bounded Hypothesis/Critic loop, max 5 iterations, grounded to source claim identifiers);",
+    "the_architecture_strong_4": "Multimodal Evidence Extraction",
+    "the_architecture_th_body_6": "(tables, figures, metrics from PDFs to structured output);",
+    "the_architecture_strong_5": "Proposal Assistant",
+    "the_architecture_th_body_7": "(validated hypotheses to Markdown/LaTeX with citation assembly).",
+    "the_architecture_th_body_8": "Data layer: Chroma (vector), SQLite (metadata), Redis (session). Local inference: Ollama qwen2.5:32b, sentence-transformers all-MiniLM-L6-v2.",
+    "the_pipeline_th_section_title": "The Pipeline",
+    "the_pipeline_th_body": "The MCP Orchestrator executes workflows as DAGs with pause/resume, session management, and full trace logging. Only hypothesis critique is agentic - bounded to five iterations with required grounding to source claim identifiers. All other stages are deterministic with provenance tracked through typed artifacts.",
+    "the_pipeline_th_body_2": "{{projects.scholaros.metrics.determinismRate}} determinism rate means identical inputs produce identical outputs. No stochastic processes in the deterministic pipeline. Nine independently testable services with no global state. Agent reasoning is explicitly bounded: convergence detection terminates the hypothesis loop before it runs unconstrained.",
+    "outputs_current_state_th_section_title": "Outputs & Current State",
+    "outputs_current_state_th_body": "Five output artifact types: ClusterMap (JSON), Contradiction Report (JSON), Validated Hypotheses (JSON), Research Proposals (Markdown • LaTeX), Extracted Evidence (CSV • JSON). Fully local and self-hostable - no external API dependency for any deterministic pipeline stage.",
+    "outputs_current_state_th_body_2": "March 2026 validation run: {{projects.scholaros.metrics.validationChunks}} chunks processed, {{projects.scholaros.metrics.validationClaims}} claims extracted, {{projects.scholaros.metrics.validationContradictions}} contradictions detected. Each claim is bound to source evidence. Contradiction detection marks where consensus breaks - keeping outputs falsifiable and useful beyond individual sessions.",
+    "outputs_current_state_cta_link": "↗ View on GitHub",
+    "outputs_current_state_span": "© 2026 {{profile.name}} • {{profile.headline}} • {{profile.location.city}}, {{profile.location.country}}",
+    "repository_access_label": "View private {{projects.scholaros.displayName}} repository on GitHub (requires access)"
+  },
+  "links": {
+    "back_to_section": "/#projects"
+  },
+  "diagrams": {},
+  "data": {
+    "metrics": [
+      {
+        "value": "{{projects.scholaros.metrics.validationChunks}}",
+        "label": "Chunks processed"
+      },
+      {
+        "value": "{{projects.scholaros.metrics.validationClaims}}",
+        "label": "Claims extracted"
+      },
+      {
+        "value": "{{projects.scholaros.metrics.validationContradictions}}",
+        "label": "Contradictions detected"
+      },
+      {
+        "value": "{{projects.scholaros.metrics.determinismRate}}",
+        "label": "Determinism rate"
+      }
+    ]
+  }
+}

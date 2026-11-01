@@ -1,6 +1,6 @@
 # Ashwin Gupta
 
-> AI Systems Engineer based in Bangalore, India. Current employment: AI Engineer at SkanAI since 15 June 2026. Previous employment: AI Engineer at Coforge, June 2024–5 June 2026.
+> AI Systems Engineer based in Bangalore, India. Current employment: Software Engineer 1 at SkanAI since 15 June 2026. Previous employment: AI Engineer at Coforge, June 2024–5 June 2026.
 
 This portfolio describes production AI systems, inference routing, concurrency architecture, retrieval-augmented generation, and physics-informed machine learning. Case studies distinguish delivered work from systems in development.
 

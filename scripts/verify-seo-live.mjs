@@ -1,11 +1,14 @@
+import { profile as contentProfile, currentEmployment as employment, experience as experienceData } from './portfolio-data.mjs';
+import { formatContentDate } from '../src/content/portfolio/selectors.mjs';
+const previousEmployment=experienceData.find(e=>e.id===contentProfile.previousEmploymentId);
 import { CRAWLERS, allowsPath } from './crawler-policy.mjs';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import { pathToFileURL } from 'node:url';
-export const ORIGIN='https://www.ashwingupta.dev';
+export const ORIGIN=new URL(contentProfile.siteUrl).origin;
 const load=p=>JSON.parse(fs.readFileSync(p,'utf8'));
-export const projectRoutes=load('src/data/project-routes.json');
-export const publication=load('src/data/article-publication.json');
+export { projectRoutes, publication } from './portfolio-data.mjs';
+import { projectRoutes, publication } from './portfolio-data.mjs';
 export const aliases=['about','impact','stack','experience','recommendations','featured','projects','contact'];
 export const pages=['/','/articles',...['work','research','articles'].flatMap(f=>fs.readdirSync('src/pages/'+f).filter(n=>n.endsWith('.astro')&&n!=='index.astro'&&!n.startsWith('[')).map(n=>'/'+f+'/'+n.slice(0,-6)))];
 const personId=ORIGIN+'/#ashwin-gupta';
@@ -22,8 +25,8 @@ function validatePage(html,p){
   const people=data.filter(s=>s['@type']==='Person');
   assert.equal(people.length,1,'One shared Person definition');
   assert.equal(people[0]['@id'],personId);
-  assert.equal(people[0].worksFor?.name,'SkanAI');
-  assert.equal(people[0].jobTitle,'AI Systems Engineer');
+  assert.equal(people[0].worksFor?.name,employment.company);
+  assert.equal(people[0].jobTitle,employment.role);
   for(const external of ['https://github.com/ughshwin','https://www.linkedin.com/in/ashwingupta3012/','https://www.kaggle.com/ashwingupta3012'])assert.ok(people[0].sameAs?.includes(external),'Missing sameAs '+external);
   if(p==='/'||p==='/articles')return;
   const content=data.find(s=>s['@id']===url+'#content');
@@ -88,7 +91,7 @@ export async function verifyLive({base=ORIGIN,fetchImpl=fetch}={}){
   jobs.push(()=>check('llms.txt',async()=>{
     const res=await request('/llms.txt');assert.equal(res.status,200);
     assert.match(res.headers.get('content-type')??'',/text\/plain/i);
-    const body=await res.text();assert.ok(body.startsWith('# Ashwin Gupta'));assert.ok(body.includes('AI Systems Engineer'));
+    const body=await res.text();assert.ok(body.startsWith('# '+contentProfile.name));assert.ok(body.includes(contentProfile.headline));
     for(const p of pages)assert.ok(body.includes(']('+ORIGIN+p+')'),'Missing canonical reading link '+p);
   }));
   jobs.push(()=>check('Article RSS feed',async()=>{

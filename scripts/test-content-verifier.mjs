@@ -18,7 +18,7 @@ try {
   assert.equal(verifyContent(fixture).length,expectedPages);
   const home=path.join(fixture,'index.html');const good=fs.readFileSync(home,'utf8');
   for(const [label,mutate] of [
-    ['missing landmark',s=>s.replace('role="main"','')],
+    ['missing landmark',s=>s.replace(/<main\b/g,'<div').replace(/<\/main>/g,'</div>')],
     ['duplicate primary heading',s=>s.replace('<h1','<h1>Extra heading</h1><h1')],
     ['missing analytics coverage',s=>s.replace(/component-url="[^"]*\/SiteAnalytics\.[^"]*"/,'component-url="/missing.js"')],
     ['broken link',s=>s.replace('href="/work/hsbc"','href="/work/missing"')],

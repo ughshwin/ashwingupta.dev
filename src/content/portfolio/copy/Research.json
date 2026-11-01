@@ -1,0 +1,14 @@
+{
+  "typeLabels": {
+    "paper": "Published",
+    "whitepaper": "White Paper",
+    "github": "Open Source",
+    "commercial": "Commercial Software • In Development"
+  },
+  "stageLabels": [
+    "Problem",
+    "Method",
+    "System design",
+    "Insight"
+  ]
+}

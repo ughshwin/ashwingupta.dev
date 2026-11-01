@@ -47,6 +47,11 @@
   ],
   "redirects": [
     {
+      "source": "/research",
+      "destination": "/projects",
+      "statusCode": 301
+    },
+    {
       "source": "/projects/ashwingupta-dev",
       "destination": "/work/ashwingupta-dev",
       "statusCode": 301
@@ -87,8 +92,208 @@
       "statusCode": 301
     },
     {
-      "source": "/research",
+      "source": "/review",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/articles",
+      "destination": "/articles",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/work/ashwingupta-dev",
+      "destination": "/work/ashwingupta-dev",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/work/pageindexollama",
+      "destination": "/work/pageindexollama",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/work/hsbc",
+      "destination": "/work/hsbc",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/work/azure-infra-docs",
+      "destination": "/work/azure-infra-docs",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/work/here-app",
+      "destination": "/work/here-app",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/work/skill-recommendation-engine",
+      "destination": "/work/skill-recommendation-engine",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/research/pinns",
+      "destination": "/research/pinns",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/research/scholaros",
+      "destination": "/research/scholaros",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/research/controla",
+      "destination": "/research/controla",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/research/physclip",
+      "destination": "/research/physclip",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/articles/what-it-takes-to-leave-a-system-alone",
+      "destination": "/articles/what-it-takes-to-leave-a-system-alone",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/articles/the-layer-nobody-talks-about",
+      "destination": "/articles/the-layer-nobody-talks-about",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/articles/the-space-between-stars",
+      "destination": "/articles/the-space-between-stars",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/about",
+      "destination": "/about",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/impact",
+      "destination": "/impact",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/stack",
+      "destination": "/stack",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/experience",
+      "destination": "/experience",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/recommendations",
+      "destination": "/recommendations",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/featured",
+      "destination": "/featured",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/projects",
       "destination": "/projects",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/contact",
+      "destination": "/contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/projects/ashwingupta-dev",
+      "destination": "/work/ashwingupta-dev",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/projects/pageindexollama",
+      "destination": "/work/pageindexollama",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/projects/hsbc-voice",
+      "destination": "/work/hsbc",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/projects/azure-infra-docs",
+      "destination": "/work/azure-infra-docs",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/projects/here-app",
+      "destination": "/work/here-app",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/projects/skill-recommendation-engine",
+      "destination": "/work/skill-recommendation-engine",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/projects/pinns",
+      "destination": "/research/pinns",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/projects/scholaros",
+      "destination": "/research/scholaros",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/research",
+      "destination": "/projects",
+      "statusCode": 301
+    },
+    {
+      "source": "/landing",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/landing/split",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/landing/editorial",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/landing/signal",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/editions",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/editions/gazette",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/editions/fieldnotes",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/editions/review",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/preview",
+      "destination": "/",
       "statusCode": 301
     }
   ],

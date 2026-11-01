@@ -1,0 +1,25 @@
+[
+  {
+    "projectId": "ncisct-2022",
+    "type": "paper",
+    "title": "{{projects.ncisct-2022.title}}",
+    "subtitle": "Published Research • {{publications.ncisct2022.journalAbbreviation}} • Vol. {{publications.ncisct2022.volume}} Special Issue",
+    "bullets": [
+      "MCQ distractors must be **semantically plausible** - factually wrong alone fails to separate understanding from guessing",
+      "**BERT** surfaces salient spans as pivots; **proper nouns anchor pivots**; **WordNet** and **ConceptNet** generate nearby alternatives through sense traversal",
+      "WordNet supplies **hypernym→hyponym chains** with sense disambiguation; ConceptNet adds **part-of** and **related-to** structure when coverage thins; fallback ensures distractor coverage",
+      "**Semantic distance** governs selection - distractors must occupy the same conceptual neighbourhood without matching the tested senses; proximity without identity is the key constraint"
+    ]
+  },
+  {
+    "projectId": "scholaros",
+    "type": "commercial",
+    "title": "Research as Structured Execution - Deterministic Services Over Autonomous Generation",
+    "bullets": [
+      "Research copilots generate **fluent text without evidence traceability** - grounded synthesis and hallucination look identical; no claim can be audited back.",
+      "**Five locked MCP services** cover literature mapping, contradiction detection, hypothesis critique, evidence extraction, and assembly via **schema-defined interfaces**.",
+      "Only hypothesis critique is agentic - **bounded to five iterations**; all other stages are deterministic with provenance tracked through **typed artifacts**.",
+      "Each claim is **bound to source evidence**; contradiction detection marks where consensus breaks, keeping outputs falsifiable and useful beyond sessions."
+    ]
+  }
+]

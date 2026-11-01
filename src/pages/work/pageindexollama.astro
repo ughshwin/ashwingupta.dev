@@ -1,21 +1,26 @@
 ---
+import { resolveCopy } from '../../content/portfolio/copy';
+
+import documentContentSource from "../../content/portfolio/documents/work--pageindexollama.json";
 import { contentSchemas } from "../../lib/structured-data";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import "../../styles/index.css";
+const documentContent = resolveCopy(documentContentSource);
 
-const canonical = "https://www.ashwingupta.dev/work/pageindexollama";
-const githubUrl = "https://github.com/ughshwin/PageIndexOllama";
+const canonical = documentContent.metadata.canonical;
+const githubUrl = documentContent.metadata.githuburl;
+
 ---
 
 <BaseLayout
-  title="PageIndexOllama - Local-First Fork of PageIndex | Ashwin Gupta"
-  description="Provider-agnostic tree-RAG. Offline execution via Ollama, llama.cpp, and vLLM. Finish-reason normalization eliminates silent traversal corruption on provider switch."
+  title={documentContent.metadata.baselayout_title}
+  description={documentContent.metadata.baselayout_description}
   canonical={canonical}
   jsonLd={contentSchemas({
     type: "SoftwareSourceCode",
-    name: "PageIndexOllama - Local-First Fork of PageIndex",
+    name: documentContent.metadata.schema_name,
     url: canonical,
-    description: "Provider-agnostic tree-RAG. Offline execution via Ollama, llama.cpp, and vLLM. Finish-reason normalization eliminates silent traversal corruption on provider switch.",
+    description: documentContent.metadata.baselayout_description,
     codeRepository: githubUrl,
   })}
 >
@@ -23,51 +28,51 @@ const githubUrl = "https://github.com/ughshwin/PageIndexOllama";
     <div class="thinking-scroll">
       <div class="thinking-body" role="main">
 
-        <a href="/#projects" class="back-link">← Back to projects</a>
+        <a href={documentContent.links.back_to_section} class="back-link">{documentContent.blocks.intro_back_link}</a>
 
         <header class="th-header">
-          <div class="th-badge">Shipped • Open Source</div>
-          <h1 class="th-title">PageIndexOllama - Local-First Fork of PageIndex</h1>
-          <p class="th-subtitle">Tree-RAG freed from provider lock-in. Offline execution across Ollama, llama.cpp, and vLLM - finish-reason normalization makes traversal correctness independent of which runtime answers.</p>
+          <div class="th-badge">{documentContent.blocks.intro_th_badge}</div>
+          <h1 class="th-title">{documentContent.blocks.pageindexollama_local_first_fork_of_pageindex_th_title}</h1>
+          <p class="th-subtitle">{documentContent.blocks.pageindexollama_local_first_fork_of_pageindex_th_subtitle}</p>
         </header>
 
         <div class="th-divider"></div>
 
         <section class="th-section">
-          <h2 class="th-section-title">The Problem</h2>
+          <h2 class="th-section-title">{documentContent.blocks.the_problem_th_section_title}</h2>
           <p class="th-body">
-            PageIndex's tree-RAG was hardwired to OpenAI's API contract - inline prompt strings, non-normalized completion handling. Any provider switch corrupted recursive traversal silently, with errors surfacing only at collapse. All inference required a live API key, blocking offline or air-gapped execution entirely. Token encoding differences across providers produced inconsistent chunk boundaries with no visible signal.
+            {documentContent.blocks.the_problem_th_body}
           </p>
           <p class="th-body">
-            The failure mode was particularly dangerous: traversal would proceed, produce output, and only reveal the corruption at the final collapse stage. There was no early signal that the provider difference had invalidated the intermediate steps.
-          </p>
-        </section>
-
-        <section class="th-section">
-          <h2 class="th-section-title">The Approach</h2>
-          <p class="th-body">
-            Forked and refactored with a <strong>provider-routing abstraction</strong> resolved via environment variables. A <strong>finish-reason normalization layer</strong> stabilizes recursive traversal across model outputs - traversal depends on stable internal contracts, not whichever runtime answered. Prompts externalized into a registry loader, removing the coupling between prompt content and provider expectations.
-          </p>
-          <p class="th-body">
-            The key insight: tree-RAG correctness depends on finish-reason semantics, not provider identity. Normalizing finish reasons before they enter traversal logic makes the rest of the pipeline provider-agnostic. Bounded async concurrency across TOC generation and summarization prevents resource saturation on constrained hardware. Hierarchical fallback handles cases where the primary chunking strategy exceeds available VRAM.
+            {documentContent.blocks.the_problem_th_body_2}
           </p>
         </section>
 
         <section class="th-section">
-          <h2 class="th-section-title">Outcomes</h2>
+          <h2 class="th-section-title">{documentContent.blocks.the_approach_th_section_title}</h2>
           <p class="th-body">
-            Fully offline tree-RAG with Ollama - no API keys. Seamless provider switching across Ollama, llama.cpp, and vLLM via stable internal contracts, with no traversal corruption on change. Vendor lock-in eliminated. Fallback chunk policies handle constrained VRAM and RAM without requiring manual tuning.
+            {documentContent.blocks.the_approach_th_body} <strong>{documentContent.blocks.the_approach_strong}</strong> {documentContent.blocks.the_approach_th_body_2} <strong>{documentContent.blocks.the_approach_strong_2}</strong> {documentContent.blocks.the_approach_th_body_3}
+          </p>
+          <p class="th-body">
+            {documentContent.blocks.the_approach_th_body_4}
+          </p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">{documentContent.blocks.outcomes_th_section_title}</h2>
+          <p class="th-body">
+            {documentContent.blocks.outcomes_th_body}
           </p>
         </section>
 
         <div style="margin-bottom: 3.5rem;">
           <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="cta-link">
-            ↗ View on GitHub
+            {documentContent.blocks.outcomes_cta_link}
           </a>
         </div>
 
         <div class="th-footer">
-          <span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span>
+          <span>{documentContent.blocks.outcomes_span}</span>
         </div>
 
       </div>

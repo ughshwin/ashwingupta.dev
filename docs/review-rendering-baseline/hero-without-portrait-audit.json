@@ -1,0 +1,42 @@
+{
+  "hero": [
+    {
+      "width": 1280,
+      "caption": false,
+      "gridColumns": "922px",
+      "heroChildren": 1,
+      "images": 0,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "caption": false,
+      "gridColumns": "335px",
+      "heroChildren": 1,
+      "images": 0,
+      "overflow": false
+    }
+  ],
+  "diagrams": [
+    {
+      "width": 1280,
+      "state": "before",
+      "match": true
+    },
+    {
+      "width": 1280,
+      "state": "after",
+      "match": true
+    },
+    {
+      "width": 390,
+      "state": "before",
+      "match": true
+    },
+    {
+      "width": 390,
+      "state": "after",
+      "match": true
+    }
+  ]
+}

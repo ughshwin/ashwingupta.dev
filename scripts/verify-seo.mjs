@@ -1,14 +1,16 @@
+import { profile as contentProfile, currentEmployment as employment, experience as experienceData } from './portfolio-data.mjs';
+import { formatContentDate } from '../src/content/portfolio/selectors.mjs';
+const previousEmployment=experienceData.find(e=>e.id===contentProfile.previousEmploymentId);
+import { publication, projectRoutes as routes, projects, experience } from './portfolio-data.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 const root=process.cwd();
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const origin='https://www.ashwingupta.dev';
+const origin=new URL(contentProfile.siteUrl).origin;
 const personId=origin+'/#ashwin-gupta';
-const publication=JSON.parse(read('src/data/article-publication.json'));
 const seenArticles=[];
 const aliases=['about','impact','stack','experience','recommendations','featured','projects','contact'];
-const routes=JSON.parse(read('src/data/project-routes.json'));
 const htmlAt=p=>read('dist'+(p==='/'?'':p)+'/index.html');
 const canonical=html=>html.match(/<link\b[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];
 const schemas=html=>[...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map(m=>JSON.parse(m[1]));
@@ -19,8 +21,8 @@ for(const p of pages){
   const data=schemas(html), person=data.filter(s=>s['@type']==='Person');
   assert.equal(person.length,1,p+' one Person');
   assert.equal(person[0]['@id'],personId);
-  assert.equal(person[0].worksFor.name,'SkanAI');
-  assert.equal(person[0].jobTitle,'AI Systems Engineer');
+  assert.equal(person[0].worksFor.name,employment.company);
+  assert.equal(person[0].jobTitle,employment.role);
   assert.equal(data.find(s=>s['@type']==='WebSite').author['@id'],personId);
   const ids=new Set(data.map(s=>s['@id']));
   function checkRefs(v){
@@ -69,8 +71,7 @@ for(const p of ['public/sitemap-0.xml','public/sitemap-index.xml'])assert.ok(!fs
 const hosting=JSON.parse(read('vercel.json'));
 assert.equal(hosting.trailingSlash,false,'canonical URLs must normalize trailing slashes');
 const redirects=hosting.redirects;
-const source=read('src/app/components/Projects.tsx');
-const slugs=[...source.matchAll(/slug: "([^"]+)"/g)].map(m=>m[1]);
+const slugs = [...projects.cardOrder];
 assert.deepEqual(Object.keys(routes).sort(),slugs.sort(),'every project has an authoritative route');
 for(const [slug,destination] of Object.entries(routes)){
   const rule=redirects.find(r=>r.source==='/projects/'+slug);
@@ -84,7 +85,7 @@ const home=htmlAt('/');
 for(const p of Object.values(routes))assert.ok(home.includes('href="'+p+'"'),'crawlable homepage link '+p);
 assert.ok(!/href="\/projects\/[^"#]+/.test(home),'no duplicate project links');
 assert.ok(home.includes('AI Systems Engineer'));
-assert.ok(read('src/app/components/ExperienceTimeline.tsx').includes('role: "AI Engineer"'),'employment title preserved');
+assert.ok(home.includes(previousEmployment.role),'Previous employment title preserved');
 const readingGuide=read('dist/llms.txt');
 for(const p of pages)assert.ok(readingGuide.includes(']('+origin+p+')'),'Missing canonical reading link '+p);
 for(const match of readingGuide.matchAll(/\]\((https:\/\/www\.ashwingupta\.dev[^)]*)\)/g)){

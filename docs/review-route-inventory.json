@@ -1,0 +1,300 @@
+{
+  "capturedOn": "2026-10-28",
+  "basePath": "/review",
+  "note": "Planning snapshot from the current local build. Text hashes cover server-rendered main content, not all runtime states. Capture source blocks and hidden/interactive states before using this as the migration acceptance baseline. The selected rendered reference is /editions/review.",
+  "documents": [
+    {
+      "source": "/",
+      "review": "/review",
+      "sourceFile": "src/pages/index.astro",
+      "wordCount": 3498,
+      "mainTextSha256": "7128768dc50e332f911c7a62ee4e62ad55f270deea5ee502ee880deaa5b82aea",
+      "headingCount": 16,
+      "tableCount": 0,
+      "imageCount": 86,
+      "diagramCount": 0
+    },
+    {
+      "source": "/articles",
+      "review": "/review/articles",
+      "sourceFile": "src/pages/articles/index.astro",
+      "wordCount": 186,
+      "mainTextSha256": "503fca6cf7e32f8ce1b11cf32bb67cf2299024db89af20acbc75cf92c94df1c1",
+      "headingCount": 4,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/work/ashwingupta-dev",
+      "review": "/review/work/ashwingupta-dev",
+      "sourceFile": "src/pages/work/ashwingupta-dev.astro",
+      "wordCount": 604,
+      "mainTextSha256": "c7a170e2fe7eb8422729c528761a24c2e651adbf6ab31d7198c8ee798ee01d70",
+      "headingCount": 6,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/work/azure-infra-docs",
+      "review": "/review/work/azure-infra-docs",
+      "sourceFile": "src/pages/work/azure-infra-docs.astro",
+      "wordCount": 263,
+      "mainTextSha256": "38c488a9ffd61fa2524ff42a00cd65b85f2cd71d3e189843b8f4718650c06827",
+      "headingCount": 4,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/work/here-app",
+      "review": "/review/work/here-app",
+      "sourceFile": "src/pages/work/here-app.astro",
+      "wordCount": 403,
+      "mainTextSha256": "894c8b8da9a17a68085f51010018bcd947819dd1c98e71a7d48cc52e7a81f70c",
+      "headingCount": 5,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/work/hsbc",
+      "review": "/review/work/hsbc",
+      "sourceFile": "src/pages/work/hsbc.astro",
+      "wordCount": 1910,
+      "mainTextSha256": "a0f64825b6df562fccee792e7361de3bcbce372aa6601619e0d09c5fbb96073b",
+      "headingCount": 7,
+      "tableCount": 1,
+      "imageCount": 0,
+      "diagramCount": 8
+    },
+    {
+      "source": "/work/pageindexollama",
+      "review": "/review/work/pageindexollama",
+      "sourceFile": "src/pages/work/pageindexollama.astro",
+      "wordCount": 288,
+      "mainTextSha256": "521a34bdf15e664aefec6fb60d807b373761ce6a6560623aa4439884e9455f8c",
+      "headingCount": 4,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/work/skill-recommendation-engine",
+      "review": "/review/work/skill-recommendation-engine",
+      "sourceFile": "src/pages/work/skill-recommendation-engine.astro",
+      "wordCount": 259,
+      "mainTextSha256": "8e37185879e4aa9f5ee87dd944a1c8c35853062c57d9eab365dd3b305fe259af",
+      "headingCount": 4,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/research/controla",
+      "review": "/review/research/controla",
+      "sourceFile": "src/pages/research/controla.astro",
+      "wordCount": 912,
+      "mainTextSha256": "d94d8c486a160e114548fe0e5298c618ef01361eeee2e832361485993e283e64",
+      "headingCount": 6,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/research/physclip",
+      "review": "/review/research/physclip",
+      "sourceFile": "src/pages/research/physclip.astro",
+      "wordCount": 337,
+      "mainTextSha256": "ccd7989fbcb8e421afd594f063b8956ba04855cb2d4e867abfbee05e9478ad49",
+      "headingCount": 4,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/research/pinns",
+      "review": "/review/research/pinns",
+      "sourceFile": "src/pages/research/pinns.astro",
+      "wordCount": 1038,
+      "mainTextSha256": "1a8eac050dec092816fb0fda2d49a84a17bb1145c2d194f3fc2e5b0149b77bc3",
+      "headingCount": 10,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/research/scholaros",
+      "review": "/review/research/scholaros",
+      "sourceFile": "src/pages/research/scholaros.astro",
+      "wordCount": 462,
+      "mainTextSha256": "2fae3d3461d7dd7b079714927e01c165dbe3e4151532acd760c04ab83feb1201",
+      "headingCount": 5,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/articles/the-layer-nobody-talks-about",
+      "review": "/review/articles/the-layer-nobody-talks-about",
+      "sourceFile": "src/pages/articles/the-layer-nobody-talks-about.astro",
+      "wordCount": 2005,
+      "mainTextSha256": "748cdb045e2710671396517f171929c8980e1c053ebfe8fda0f1c0572fc2b15a",
+      "headingCount": 5,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/articles/the-space-between-stars",
+      "review": "/review/articles/the-space-between-stars",
+      "sourceFile": "src/pages/articles/the-space-between-stars.astro",
+      "wordCount": 3805,
+      "mainTextSha256": "19f0d83cff7a49031cc95dba3cd98b13aed2f9b441ff016a6e68b0e796be5cf7",
+      "headingCount": 11,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    },
+    {
+      "source": "/articles/what-it-takes-to-leave-a-system-alone",
+      "review": "/review/articles/what-it-takes-to-leave-a-system-alone",
+      "sourceFile": "src/pages/articles/what-it-takes-to-leave-a-system-alone.astro",
+      "wordCount": 2170,
+      "mainTextSha256": "38422676c322471de44f0fa2d5f6d3fb69c9442d3f6ee454bfb32dcf765576e1",
+      "headingCount": 10,
+      "tableCount": 0,
+      "imageCount": 0,
+      "diagramCount": 0
+    }
+  ],
+  "aliases": [
+    {
+      "source": "/about",
+      "review": "/review/about",
+      "sectionId": "about",
+      "reviewCanonical": "/review"
+    },
+    {
+      "source": "/impact",
+      "review": "/review/impact",
+      "sectionId": "impact",
+      "reviewCanonical": "/review"
+    },
+    {
+      "source": "/stack",
+      "review": "/review/stack",
+      "sectionId": "stack",
+      "reviewCanonical": "/review"
+    },
+    {
+      "source": "/experience",
+      "review": "/review/experience",
+      "sectionId": "experience",
+      "reviewCanonical": "/review"
+    },
+    {
+      "source": "/recommendations",
+      "review": "/review/recommendations",
+      "sectionId": "recommendations",
+      "reviewCanonical": "/review"
+    },
+    {
+      "source": "/featured",
+      "review": "/review/featured",
+      "sectionId": "featured",
+      "reviewCanonical": "/review"
+    },
+    {
+      "source": "/projects",
+      "review": "/review/projects",
+      "sectionId": "projects",
+      "reviewCanonical": "/review"
+    },
+    {
+      "source": "/contact",
+      "review": "/review/contact",
+      "sectionId": "contact",
+      "reviewCanonical": "/review"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/projects/ashwingupta-dev",
+      "reviewSource": "/review/projects/ashwingupta-dev",
+      "reviewDestination": "/review/work/ashwingupta-dev",
+      "status": 301
+    },
+    {
+      "source": "/projects/pageindexollama",
+      "reviewSource": "/review/projects/pageindexollama",
+      "reviewDestination": "/review/work/pageindexollama",
+      "status": 301
+    },
+    {
+      "source": "/projects/hsbc-voice",
+      "reviewSource": "/review/projects/hsbc-voice",
+      "reviewDestination": "/review/work/hsbc",
+      "status": 301
+    },
+    {
+      "source": "/projects/azure-infra-docs",
+      "reviewSource": "/review/projects/azure-infra-docs",
+      "reviewDestination": "/review/work/azure-infra-docs",
+      "status": 301
+    },
+    {
+      "source": "/projects/here-app",
+      "reviewSource": "/review/projects/here-app",
+      "reviewDestination": "/review/work/here-app",
+      "status": 301
+    },
+    {
+      "source": "/projects/skill-recommendation-engine",
+      "reviewSource": "/review/projects/skill-recommendation-engine",
+      "reviewDestination": "/review/work/skill-recommendation-engine",
+      "status": 301
+    },
+    {
+      "source": "/projects/pinns",
+      "reviewSource": "/review/projects/pinns",
+      "reviewDestination": "/review/research/pinns",
+      "status": 301
+    },
+    {
+      "source": "/projects/scholaros",
+      "reviewSource": "/review/projects/scholaros",
+      "reviewDestination": "/review/research/scholaros",
+      "status": 301
+    },
+    {
+      "source": "/research",
+      "reviewSource": "/review/research",
+      "reviewDestination": "/review/projects",
+      "status": 301
+    }
+  ],
+  "referenceFiles": [
+    {
+      "file": "src/pages/editions/[edition].astro",
+      "sha256": "804f3578cf5f604396fb20b9fd87f0d8420df2510725e54522981f9cad744a99"
+    },
+    {
+      "file": "src/layouts/EditorialLayout.astro",
+      "sha256": "abfe8dd8115cd58fb5bd66c34564ca6c88d85c7baed3a88fd0999b2f2385e831"
+    },
+    {
+      "file": "src/components/editorial/StyleGuide.astro",
+      "sha256": "d5b9fda3dc1a7bc2cf2599fbe7bf0038ed17e8e5c7dd9d6cde63dae77c9ad340"
+    },
+    {
+      "file": "src/styles/editorial.css",
+      "sha256": "e35ba0d3c78dfe7dbfca5c300393cd424f71e9f5a7b4eeba7fb2ac688477a619"
+    },
+    {
+      "file": "src/lib/editorial-editions.ts",
+      "sha256": "22841b8309c7b7e4f44074fd5da7399a1728b08dbf689d03292ecf2861d7973c"
+    }
+  ]
+}

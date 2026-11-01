@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "gridIllustrationLabel": "Twelve-column grid illustration"
+  },
+  "blocks": {
+    "intro_eyebrow": "Behind the edition / Rendered HTML style guide",
+    "the_visual_language_h2": "The visual language.",
+    "the_visual_language_eyebrow": "01 / Colour",
+    "the_visual_language_guide_caption": "Paper and ink lead. The accent marks links, labels, and a small number of important details.",
+    "the_visual_language_eyebrow_2": "02 / Typography",
+    "the_visual_language_type_display": "Ideas into systems.",
+    "the_visual_language_guide_caption_2": "Page headlines ·",
+    "the_visual_language_guide_caption_3": "· fluid",
+    "the_visual_language_type_heading": "Evidence before ornament.",
+    "the_visual_language_type_body": "Readable paragraphs with a comfortable measure. Enough room for an engineering decision and the result it produced.",
+    "the_visual_language_type_meta": "DM MONO / LABELS / 11–12PX",
+    "the_visual_language_guide_caption_4": "Body ·",
+    "the_visual_language_guide_caption_5": "· 16–18px / 1.65 line height",
+    "the_visual_language_eyebrow_3": "03 / Layout & spacing",
+    "the_visual_language_guide_caption_6": "8px spacing rhythm. Columns collapse to one reading sequence on small screens. Native document scrolling.",
+    "the_visual_language_eyebrow_4": "04 / Components & states",
+    "the_visual_language_button": "Get in touch ↗",
+    "the_visual_language_text_link": "Read the case study ↗",
+    "the_visual_language_tag": "Production systems",
+    "the_visual_language_blockquote": "“The system has to earn what it costs to run.”",
+    "the_visual_language_cite": "{{profile.name}} · Engineering approach",
+    "the_visual_language_guide_caption_7": "Visible keyboard focus, underlined text links, static content, and a print layout. No motion library or client-side app required.",
+    "the_visual_language_span": "Study",
+    "the_visual_language_text_link_2": "Compare all three directions ↗",
+    "the_visual_language_text_link_3": "Back to the page ↑"
+  },
+  "links": {
+    "a_href": "mailto:{{profile.email}}",
+    "a_href_2": "{{projects.hsbc-voice.href}}",
+    "a_href_3": "/editions"
+  },
+  "diagrams": {},
+  "data": {}
+}

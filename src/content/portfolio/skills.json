@@ -1,0 +1,369 @@
+[
+  {
+    "id": "lang",
+    "label": "Languages",
+    "technologies": [
+      {
+        "name": "Python",
+        "icons": [
+          "python.svg"
+        ],
+        "detail": "async · concurrency"
+      },
+      {
+        "name": "TypeScript",
+        "icons": [
+          "typescript.svg"
+        ]
+      },
+      {
+        "name": "C / C++",
+        "icons": [
+          "c.svg",
+          "cplusplus.svg"
+        ],
+        "detail": "C, C++"
+      },
+      {
+        "name": "SQL",
+        "icons": [
+          "postgresql.svg",
+          "mysql.svg"
+        ],
+        "detail": "PostgreSQL, MySQL"
+      },
+      {
+        "name": "Bash",
+        "icons": [
+          "gnubash.svg"
+        ]
+      },
+      {
+        "name": "Linux",
+        "icons": [
+          "redhat.svg",
+          "archlinux.svg",
+          "ubuntu.svg"
+        ],
+        "detail": "RHEL, Arch, Ubuntu"
+      }
+    ]
+  },
+  {
+    "id": "backend",
+    "label": "Backend & Systems",
+    "technologies": [
+      {
+        "name": "Distributed systems",
+        "icons": [
+          "tb-topology-star-3.svg"
+        ]
+      },
+      {
+        "name": "Microservices",
+        "icons": [
+          "tb-components.svg"
+        ]
+      },
+      {
+        "name": "REST / OpenAPI",
+        "icons": [
+          "swagger.svg"
+        ]
+      },
+      {
+        "name": "Async / event-driven",
+        "icons": [
+          "apachekafka.svg",
+          "gcp-pubsub.svg"
+        ],
+        "detail": "Kafka, Pub/Sub"
+      },
+      {
+        "name": "Concurrency & perf",
+        "icons": [
+          "tb-gauge.svg"
+        ]
+      },
+      {
+        "name": "Caching",
+        "icons": [
+          "redis.svg"
+        ],
+        "detail": "Redis"
+      },
+      {
+        "name": "Observability",
+        "icons": [
+          "grafana.svg",
+          "prometheus.svg"
+        ],
+        "detail": "Grafana, Prometheus"
+      },
+      {
+        "name": "Fault tolerance",
+        "icons": [
+          "tb-shield-check.svg"
+        ]
+      },
+      {
+        "name": "Browser automation",
+        "icons": [
+          "selenium.svg"
+        ],
+        "detail": "Selenium"
+      },
+      {
+        "name": "Load testing",
+        "icons": [
+          "locust.svg"
+        ],
+        "detail": "Locust"
+      }
+    ]
+  },
+  {
+    "id": "perf",
+    "label": "Profiling & Perf",
+    "technologies": [
+      {
+        "name": "Scalene",
+        "icons": [
+          "scalene.png"
+        ]
+      },
+      {
+        "name": "line_profiler",
+        "icons": [
+          "line_profiler.png"
+        ]
+      },
+      {
+        "name": "Memray",
+        "icons": [
+          "memray.png"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "voice",
+    "label": "Real-Time & Voice",
+    "technologies": [
+      {
+        "name": "PJSIP / PJSUA2",
+        "icons": [
+          "pjsip.png"
+        ]
+      },
+      {
+        "name": "Kamailio",
+        "icons": [
+          "kamailio.svg"
+        ]
+      },
+      {
+        "name": "Real-time systems",
+        "icons": [
+          "tb-clock-bolt.svg"
+        ]
+      },
+      {
+        "name": "SIPp",
+        "icons": [
+          "sipp.png"
+        ],
+        "detail": "SIP load testing"
+      },
+      {
+        "name": "Transport security",
+        "icons": [
+          "openssl.svg"
+        ],
+        "detail": "TLS · DTLS/SRTP · SDES"
+      }
+    ]
+  },
+  {
+    "id": "data",
+    "label": "Data & Infra",
+    "technologies": [
+      {
+        "name": "DB design",
+        "icons": [
+          "postgresql.svg",
+          "mongodb.svg"
+        ],
+        "detail": "SQL / NoSQL"
+      },
+      {
+        "name": "ETL / streaming",
+        "icons": [
+          "apachekafka.svg",
+          "apachespark.svg"
+        ],
+        "detail": "Kafka, Spark"
+      },
+      {
+        "name": "FastAPI",
+        "icons": [
+          "fastapi.svg"
+        ]
+      },
+      {
+        "name": "NetworkX",
+        "icons": [
+          "networkx.svg"
+        ],
+        "detail": "graph analysis"
+      },
+      {
+        "name": "FAISS / ANN",
+        "icons": [
+          "faiss.svg"
+        ]
+      },
+      {
+        "name": "Vector search",
+        "icons": [
+          "chroma.svg",
+          "hnsw.png"
+        ],
+        "detail": "Chroma, HNSW"
+      },
+      {
+        "name": "Doc extraction",
+        "icons": [
+          "camelot.png",
+          "ghostscript.svg",
+          "opendataloader.webp"
+        ],
+        "detail": "Camelot, Ghostscript, OpenDataLoader"
+      }
+    ]
+  },
+  {
+    "id": "ai",
+    "label": "AI / ML Systems",
+    "technologies": [
+      {
+        "name": "LLM deployment",
+        "icons": [
+          "tb-brain.svg"
+        ]
+      },
+      {
+        "name": "On-prem AI",
+        "icons": [
+          "tb-server-cog.svg"
+        ]
+      },
+      {
+        "name": "RAG",
+        "icons": [
+          "tb-database-search.svg"
+        ]
+      },
+      {
+        "name": "Agentic",
+        "icons": [
+          "langchain.svg",
+          "langgraph.svg"
+        ],
+        "detail": "LangChain, LangGraph"
+      },
+      {
+        "name": "Fine-tuning",
+        "icons": [
+          "pytorch.svg",
+          "unsloth.png"
+        ],
+        "detail": "LoRA/QLoRA, Unsloth"
+      },
+      {
+        "name": "Eval & monitoring",
+        "icons": [
+          "weightsandbiases.svg"
+        ],
+        "detail": "W&B"
+      },
+      {
+        "name": "Ollama",
+        "icons": [
+          "ollama.svg"
+        ]
+      },
+      {
+        "name": "Hugging Face",
+        "icons": [
+          "huggingface.svg"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cloud",
+    "label": "Cloud & DevOps",
+    "technologies": [
+      {
+        "name": "GCP",
+        "icons": [
+          "gcp-compute-engine.svg",
+          "gcp-gke.svg",
+          "gcp-network.svg"
+        ],
+        "detail": "GCE, GKE, networking"
+      },
+      {
+        "name": "Azure",
+        "icons": [
+          "azure.svg"
+        ],
+        "detail": "Resource Graph"
+      },
+      {
+        "name": "AWS",
+        "icons": [
+          "aws.svg"
+        ],
+        "detail": "working"
+      },
+      {
+        "name": "Docker",
+        "icons": [
+          "docker.svg"
+        ]
+      },
+      {
+        "name": "Kubernetes",
+        "icons": [
+          "kubernetes.svg"
+        ]
+      },
+      {
+        "name": "Autoscaling",
+        "icons": [
+          "tb-arrows-maximize.svg"
+        ]
+      },
+      {
+        "name": "Packer",
+        "icons": [
+          "packer.svg"
+        ]
+      },
+      {
+        "name": "Terraform",
+        "icons": [
+          "terraform.svg"
+        ]
+      },
+      {
+        "name": "CI/CD",
+        "icons": [
+          "githubactions.svg"
+        ]
+      }
+    ]
+  }
+]
