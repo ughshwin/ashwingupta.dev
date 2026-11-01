@@ -9,7 +9,7 @@ export function HologramInterface({
 }: Readonly<HologramInterfaceProps>) {
   return (
     <div className="hologram-interface">
-      <div className="hologram-content">{children}</div>
+      <div className="hologram-content" role="main">{children}</div>
     </div>
   );
 }

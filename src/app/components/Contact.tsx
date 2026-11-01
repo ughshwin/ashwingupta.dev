@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { Mail, Github, Linkedin, MapPin, FileDown } from "lucide-react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
@@ -53,9 +53,12 @@ export function Contact() {
       setVpH(vh);
       setSectionH(vh + maxOffset);
     };
-    requestAnimationFrame(measure);
+    const measureFrame = requestAnimationFrame(measure);
     window.addEventListener("resize", measure, { passive: true });
-    return () => window.removeEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(measureFrame);
+      window.removeEventListener("resize", measure);
+    };
   }, [isMobile]);
 
   useEffect(() => {
@@ -76,12 +79,15 @@ export function Contact() {
       cachedTopRef.current = acc;
     };
 
+    let previousOffset = -1;
     const onScroll = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         if (cachedTopRef.current === null) measureTop();
         const raw = scroller.scrollTop - (cachedTopRef.current ?? 0);
         const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
+        if (offset === previousOffset) return;
+        previousOffset = offset;
         if (innerRef.current) {
           innerRef.current.style.transform = `translateY(-${offset}px)`;
         }
@@ -94,15 +100,11 @@ export function Contact() {
     };
 
     scroller.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener(
-      "resize",
-      () => {
-        cachedTopRef.current = null;
-      },
-      { passive: true },
-    );
+    const invalidateTop = () => { cachedTopRef.current = null; };
+    window.addEventListener("resize", invalidateTop, { passive: true });
     return () => {
       scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", invalidateTop);
       cancelAnimationFrame(rafRef.current);
     };
   }, [isMobile]);
@@ -247,7 +249,7 @@ export function Contact() {
             />
           </div>
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -264,7 +266,7 @@ export function Contact() {
               }}
             >
               Hard problems welcome.
-            </motion.h2>
+            </m.h2>
           </div>
         </div>
 
@@ -298,9 +300,9 @@ export function Contact() {
                 alignItems: "start",
               }}
             >
-              {/* LEFT — description */}
+              {/* LEFT - description */}
               <div>
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
@@ -334,11 +336,11 @@ export function Contact() {
                       textTransform: "uppercase",
                     }}
                   >
-                    Optimising: Residuals · Not: Roles
+                    Optimising: Residuals • Not: Roles
                   </span>
-                </motion.div>
+                </m.div>
 
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
@@ -352,28 +354,30 @@ export function Contact() {
                     textJustify: "inter-word",
                   }}
                 >
-                  Heads-down building right now — not looking for roles. But if you've
-                  got a hard problem, a wild idea, or just want to talk shop about
-                  LLMs, distributed systems, scientific ML, or why this site is
-                  unreasonably over-engineered for a portfolio, I'm always up for
-                  that.
-                </motion.p>
+                  Heads-down building right now - not looking for roles. But if
+                  you've got a hard problem, a wild idea, or just want to talk
+                  shop about LLMs, distributed systems, scientific ML, or why
+                  this site is unreasonably over-engineered for a portfolio, I'm
+                  always up for that.
+                </m.p>
               </div>
 
-              {/* RIGHT — contact links */}
-              <motion.div
+              {/* RIGHT - contact links */}
+              <m.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
                 style={{ display: "flex", flexDirection: "column", gap: "0" }}
               >
                 {links.map(({ label, value, href, icon, download }, i) => (
-                  <motion.a
+                  <m.a
                     key={i}
                     href={href}
                     download={download ?? undefined}
                     target={
-                      !download && href.startsWith("http") ? "_blank" : undefined
+                      !download && href.startsWith("http")
+                        ? "_blank"
+                        : undefined
                     }
                     rel={
                       !download && href.startsWith("http")
@@ -409,7 +413,9 @@ export function Contact() {
                       el.style.borderBottomColor = "rgba(255,255,255,0.05)";
                     }}
                   >
-                    <span style={{ color: "rgba(255,255,255,0.4)", width: "16px" }}>
+                    <span
+                      style={{ color: "rgba(255,255,255,0.4)", width: "16px" }}
+                    >
                       {icon}
                     </span>
                     <div style={{ flex: 1 }}>
@@ -426,7 +432,11 @@ export function Contact() {
                         {label}
                       </p>
                       <div
-                        style={{ display: "flex", alignItems: "center", gap: "12px" }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "12px",
+                        }}
                       >
                         <p
                           style={{
@@ -443,7 +453,7 @@ export function Contact() {
                             {(label === "Email"
                               ? copyToastMessage
                               : downloadToastMessage) && (
-                              <motion.p
+                              <m.p
                                 key={
                                   label === "Email"
                                     ? copyToastMessage!
@@ -471,7 +481,7 @@ export function Contact() {
                                 {label === "Email"
                                   ? copyToastMessage
                                   : downloadToastMessage}
-                              </motion.p>
+                              </m.p>
                             )}
                           </AnimatePresence>
                         )}
@@ -485,9 +495,9 @@ export function Contact() {
                     >
                       ↗
                     </span>
-                  </motion.a>
+                  </m.a>
                 ))}
-              </motion.div>
+              </m.div>
             </div>
 
             {/* Footer */}
@@ -504,11 +514,12 @@ export function Contact() {
                   fontFamily: FONT_MONO,
                   fontSize: "0.6rem",
                   letterSpacing: "0.12em",
-                  color: "rgba(255,255,255,0.35)",
+                  color: "rgba(255,255,255,0.5)",
                   textTransform: "uppercase",
                 }}
               >
-                © 2026 Ashwin Gupta · AI Engineer · Bangalore, India
+                🎨 Vision & design by Ashwin Gupta • ⚡ Engineered with Claude
+                Code • 🚀 Deployed on Vercel{" "}
               </span>
             </div>
           </div>

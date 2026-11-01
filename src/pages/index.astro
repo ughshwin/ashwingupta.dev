@@ -1,4 +1,5 @@
 ---
+import { profileSchema, paperSchema } from "../lib/structured-data";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import App from "../app/App";
 import "../styles/index.css";
@@ -6,57 +7,12 @@ import profilePictureUrl from "../assets/profilePicture.webp?url";
 
 const canonical = "https://www.ashwingupta.dev/";
 
-const personSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Ashwin Gupta",
-  "url": "https://www.ashwingupta.dev",
-  "jobTitle": "AI Systems Engineer",
-  "worksFor": { "@type": "Organization", "name": "Coforge" },
-  "alumniOf": [
-    { "@type": "EducationalOrganization", "name": "IIIT Bangalore" },
-    { "@type": "EducationalOrganization", "name": "BMS College of Engineering" }
-  ],
-  "knowsAbout": [
-    "Inference Routing",
-    "Concurrency Architecture",
-    "Physics-Informed ML",
-    "RAG Systems",
-    "LLM Inference",
-    "Distributed Systems",
-    "Scientific Machine Learning",
-    "AsyncIO Concurrency",
-    "Vector Search"
-  ],
-  "sameAs": [
-    "https://github.com/ughshwin",
-    "https://www.linkedin.com/in/ashwingupta3012/",
-    "https://www.kaggle.com/ashwingupta3012"
-  ],
-  "email": "ashwingupta3012@gmail.com",
-  "description": "Not what a model outputs — how the system decides, executes, and holds under load. AI Systems Engineer at Coforge.",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Bangalore",
-    "addressCountry": "IN"
-  }
-};
-
-const websiteSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Ashwin Gupta — AI Systems Engineer",
-  "url": "https://www.ashwingupta.dev",
-  "author": { "@type": "Person", "name": "Ashwin Gupta" }
-};
 ---
 
 <BaseLayout
-  title="Ashwin Gupta — AI Systems Engineer | Not what a model outputs — how the system decides, executes, and holds under load."
-  description="Not what a model outputs — how the system decides, executes, and holds under load. AI Systems Engineer at Coforge. Inference routing, concurrency architecture, and scientific ML. Bangalore."
   canonical={canonical}
-  jsonLd={[personSchema, websiteSchema]}
+  jsonLd={[profileSchema, paperSchema]}
 >
   <link slot="head" rel="preload" as="image" href={profilePictureUrl} fetchpriority="high" type="image/webp" />
-  <App client:idle />
+  <App client:load />
 </BaseLayout>

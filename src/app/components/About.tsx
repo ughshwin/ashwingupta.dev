@@ -1,6 +1,14 @@
-import { motion } from "motion/react";
-import { useRef, useEffect, useState, useLayoutEffect } from "react";
+import { Fragment } from "react";
+import { m } from "motion/react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
+import { useKaggleDatasetStats } from "../../hooks/useKaggleDatasetStats";
+import { formatKaggleCount, KAGGLE_RECORDED_COUNTS } from "../../lib/kaggle-stats";
+import bmsLogoUrl from "../../assets/BMSlogo.webp?url";
+import coforgeLogoUrl from "../../assets/coforgeLogo.webp?url";
+import augmentLogoUrl from "../../assets/augmentAILogo.webp?url";
+import guinnessLogoUrl from "../../assets/GuinnessLogo.webp?url";
+import hsbcLogoUrl from "../../assets/HSBCLogo.webp?url";
+import kaggleLogoUrl from "../../assets/KaggleLogo.webp?url";
 
 const FONT_SERIF = '"Playfair Display", Georgia, serif';
 const FONT_MONO = '"DM Mono", monospace';
@@ -9,15 +17,15 @@ const FONT_SANS = '"DM Sans", sans-serif';
 const pillars = [
   {
     title: "Inference as a System",
-    desc: "Most teams ship inference as a function call. The real questions — p95 latency, 10× load, what happens when a backend goes down — are architecture questions. I answer them before the first model goes live.",
+    desc: "Most teams ship inference as a function call. The real questions - p95 latency, 10× load, what happens when a backend goes down - are architecture questions. I answer them before the first model goes live.",
   },
   {
     title: "Execution Under Constraints",
-    desc: "Systems that perform in demos often don't survive production. Real constraints — latency budgets, VRAM ceilings, cost per token — are known at design time, not discovered at launch. I build the constraint model first.",
+    desc: "Systems that perform in demos often don't survive production. Real constraints - latency budgets, VRAM ceilings, cost per token - are known at design time, not discovered at launch. I build the constraint model first.",
   },
   {
     title: "Physics-Informed Scientific ML",
-    desc: "Data-driven physics models aren't data problems — they're structure problems. Ignoring governing equations forces the model to rediscover physics from data it may never have enough of. Embedding PDEs into the objective is what makes sparse data sufficient.",
+    desc: "Data-driven physics models aren't data problems - they're structure problems. Ignoring governing equations forces the model to rediscover physics from data it may never have enough of. Embedding PDEs into the objective is what makes sparse data sufficient.",
   },
 ];
 
@@ -27,153 +35,98 @@ const dontDo = [
   "I don't take off-the-shelf work. If the implementation is a Google search away, I'm not the right person.",
 ];
 
+const SPRING_ICON = "/logos/spring.svg";
+
+const highlights: { title: string; sub: string; icon: string; time: string }[] = [
+  {
+    title: "Guinness World Record",
+    sub: "Command Centre Ops • Most Participants - Agentic AI Day 2025\nGoogle Cloud | Hack2Skill • July 2025",
+    icon: guinnessLogoUrl,
+    time: "Jul 2025",
+  },
+  {
+    title: "$1.3M+ Annualised Savings",
+    sub: "HSBC • Coforge",
+    icon: hsbcLogoUrl,
+    time: "Jan 2026",
+  },
+  {
+    title: "Best Team Award",
+    sub: "HSBC Account • Coforge",
+    icon: hsbcLogoUrl,
+    time: "Nov 2025",
+  },
+  {
+    title: "Pat on Back - Think Customer Award",
+    sub: "Individual Delivery Excellence • Coforge",
+    icon: coforgeLogoUrl,
+    time: "Dec 2024",
+  },
+  {
+    title: "Keep It Up Award",
+    sub: "Ownership of Professional Growth & Skill Visibility • Coforge",
+    icon: coforgeLogoUrl,
+    time: "Jun 2026",
+  },
+  {
+    title: "Java Spring AI Trainer",
+    sub: "130+ Participants • 81% voted preferred trainer • NPS +50",
+    icon: SPRING_ICON,
+    time: "Dec '25 – May '26",
+  },
+  {
+    title: "Best Outgoing Project",
+    sub: "Mechanical Engineering • BMSCE 2023",
+    icon: bmsLogoUrl,
+    time: "Aug 2024",
+  },
+  {
+    title: "Augment.AI, Mentor and Founder",
+    sub: "BMSCE's AI Club",
+    icon: augmentLogoUrl,
+    time: "Jan 2022",
+  },
+  {
+    title: `${formatKaggleCount(KAGGLE_RECORDED_COUNTS.downloads)} Downloads • ${formatKaggleCount(KAGGLE_RECORDED_COUNTS.views)} Views`,
+    sub: "Human Faces Kaggle Dataset",
+    icon: kaggleLogoUrl,
+    time: "Present",
+  },
+];
+
 export function About() {
   const isMobile = useIsMobile();
-  const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef(0);
-  const headerGapRef = useRef<HTMLDivElement>(null);
-  const maxOffsetRef = useRef(0);
-  const cachedTopRef = useRef<number | null>(null);
-
-  const [vpH, setVpH] = useState(() =>
-    typeof window !== "undefined" ? window.innerHeight : 900,
+  const { counts } = useKaggleDatasetStats();
+  const displayedHighlights = highlights.map((highlight) =>
+    highlight.sub === "Human Faces Kaggle Dataset"
+      ? { ...highlight, title: `${formatKaggleCount(counts.downloads)} Downloads • ${formatKaggleCount(counts.views)} Views` }
+      : highlight,
   );
-  const [sectionH, setSectionH] = useState(() =>
-    typeof window !== "undefined" ? window.innerHeight : 900,
-  );
-
-  useEffect(() => {
-    if (isMobile) return;
-    const measure = () => {
-      const header = headerRef.current;
-      const inner = innerRef.current;
-      if (!header || !inner) return;
-      const vh = window.innerHeight;
-      const headerH = header.offsetHeight;
-      const contentH = inner.scrollHeight;
-      const stripH = Math.max(0, vh - headerH);
-      const maxOffset = Math.max(0, contentH - stripH);
-      maxOffsetRef.current = maxOffset;
-      cachedTopRef.current = null;
-      setVpH(vh);
-      setSectionH(vh + maxOffset);
-    };
-    requestAnimationFrame(measure);
-    window.addEventListener("resize", measure, { passive: true });
-    return () => window.removeEventListener("resize", measure);
-  }, [isMobile]);
-
-  useEffect(() => {
-    if (isMobile) return;
-    const scroller = document.querySelector(
-      ".hologram-interface",
-    ) as HTMLElement | null;
-    const section = sectionRef.current;
-    if (!scroller || !section) return;
-
-    const measureTop = () => {
-      let acc = 0;
-      let el: HTMLElement | null = section;
-      while (el && el !== scroller) {
-        acc += el.offsetTop;
-        el = el.offsetParent as HTMLElement | null;
-      }
-      cachedTopRef.current = acc;
-    };
-
-    const onScroll = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        if (cachedTopRef.current === null) measureTop();
-        const raw = scroller.scrollTop - (cachedTopRef.current ?? 0);
-        const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
-        if (innerRef.current) {
-          innerRef.current.style.transform = `translateY(-${offset}px)`;
-        }
-        const compressRatio = Math.min(1, offset / 100);
-        const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
-        if (headerGapRef.current) {
-          headerGapRef.current.style.marginBottom = `${gapPx}px`;
-        }
-      });
-    };
-
-    scroller.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener(
-      "resize",
-      () => {
-        cachedTopRef.current = null;
-      },
-      { passive: true },
-    );
-    return () => {
-      scroller.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [isMobile]);
-
-  useLayoutEffect(() => {
-    if (isMobile) return;
-    const scroller = document.querySelector(
-      ".hologram-interface",
-    ) as HTMLElement | null;
-    const section = sectionRef.current;
-    if (!scroller || !section || !innerRef.current) return;
-    let acc = 0;
-    let el: HTMLElement | null = section;
-    while (el && el !== scroller) {
-      acc += el.offsetTop;
-      el = el.offsetParent as HTMLElement | null;
-    }
-    cachedTopRef.current = acc;
-    const raw = scroller.scrollTop - acc;
-    const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
-    innerRef.current.style.transform = `translateY(-${offset}px)`;
-    if (headerGapRef.current) {
-      const compressRatio = Math.min(1, offset / 100);
-      headerGapRef.current.style.marginBottom = `${80 * (1 - compressRatio) + 20 * compressRatio}px`;
-    }
-  }, [isMobile, sectionH]);
 
   return (
     <section
-      ref={sectionRef}
       id="about"
       style={{
         position: "relative",
-        height: isMobile ? "auto" : sectionH,
         background: "transparent",
-        ...(isMobile && { padding: "4rem 4vw" }),
+        padding: isMobile ? "4rem 4vw" : "4rem 0 0",
       }}
     >
-      <div
-        style={
-          isMobile
-            ? {}
-            : {
-                position: "sticky",
-                top: 0,
-                height: vpH,
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-              }
+      <style>{`
+        @keyframes highlights-marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
         }
-      >
+      `}</style>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         {/* Header */}
-        <div
-          ref={headerRef}
-          style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}
-        >
+        <div style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}>
           <div
-            ref={headerGapRef}
             style={{
               display: "flex",
               alignItems: "center",
               gap: "1rem",
-              marginBottom: isMobile ? "2rem" : "80px",
+              marginBottom: "2rem",
             }}
           >
             <span
@@ -197,7 +150,7 @@ export function About() {
           </div>
 
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -214,34 +167,15 @@ export function About() {
               }}
             >
               Inference is easy. Everything around it isn't.
-            </motion.h2>
+            </m.h2>
           </div>
         </div>
 
         {/* Content strip */}
-        <div
-          style={
-            isMobile
-              ? {}
-              : { flex: 1, position: "relative", overflow: "hidden" }
-          }
-        >
-          <div
-            ref={innerRef}
-            style={
-              isMobile
-                ? { paddingTop: "2rem" }
-                : {
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    padding: "1.5rem 6vw 4rem",
-                  }
-            }
-          >
+        <div>
+          <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 2rem" }}>
             {/* Brand thesis */}
-            <motion.p
+            <m.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
@@ -257,7 +191,7 @@ export function About() {
               }}
             >
               Honest where it matters. Available when it's hard.
-            </motion.p>
+            </m.p>
 
             {/* Two-column grid */}
             <div
@@ -268,9 +202,9 @@ export function About() {
                 alignItems: "start",
               }}
             >
-              {/* LEFT — story paragraphs */}
+              {/* LEFT - story paragraphs */}
               <div style={{ alignSelf: "start" }}>
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
@@ -280,22 +214,23 @@ export function About() {
                     lineHeight: 1.8,
                     color: "rgba(255,255,255,0.62)",
                     marginBottom: "1.2rem",
-                    maxWidth: "520px",
+                    maxWidth: "580px",
                     textAlign: "justify",
                     textJustify: "inter-word",
                   }}
                 >
-                  Mechanical engineering by training — which meant learning to ask why
-                  a system fails before asking how to build it. AI hit in second year
-                  like a realisation, not a subject: software that understood language
-                  was a new class of thing, and I knew it would matter before anyone
-                  around me thought it would. The IISc ML lead role confirmed the
-                  direction — physics-constrained optimisation on eVTOL design under
-                  Dr. Harursampath, five projects in eight months, at the edge of what
-                  was understood.
-                </motion.p>
+                  Mechanical engineering by training - which meant learning to
+                  ask why a system fails before asking how to build it. AI hit
+                  in second year like a realisation, not a subject: software
+                  that understood language was a new class of thing, and I knew
+                  it would matter before anyone around me thought it would. The
+                  IISc ML lead role confirmed the direction -
+                  physics-constrained optimisation on eVTOL design under Dr.
+                  Harursampath, five projects in eight months, at the edge of
+                  what was understood.
+                </m.p>
 
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
@@ -305,20 +240,21 @@ export function About() {
                     lineHeight: 1.8,
                     color: "rgba(255,255,255,0.62)",
                     marginBottom: "1.2rem",
-                    maxWidth: "520px",
+                    maxWidth: "580px",
                     textAlign: "justify",
                     textJustify: "inter-word",
                   }}
                 >
-                  Production changed the picture fast. At Gida and then Coforge, the
-                  same pattern emerged: the GenAI core — prompts, basic RAG, API calls
-                  — is learnable in three months. Everyone builds it. The real gap is
-                  what surrounds the model: the routing logic, the concurrency
-                  architecture, the observability that tells you what actually broke
-                  and when. That's the part nobody wants to own. That's where I went.
-                </motion.p>
+                  Production changed the picture fast. At Gida and then Coforge,
+                  the same pattern emerged: the GenAI core - prompts, basic RAG,
+                  API calls - is learnable in three months. Everyone builds it.
+                  The real gap is what surrounds the model: the routing logic,
+                  the concurrency architecture, the observability that tells you
+                  what actually broke and when. That's the part nobody wants to
+                  own. That's where I went.
+                </m.p>
 
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 }}
@@ -328,28 +264,33 @@ export function About() {
                     lineHeight: 1.8,
                     color: "rgba(255,255,255,0.62)",
                     marginBottom: 0,
-                    maxWidth: "520px",
+                    maxWidth: "580px",
                     textAlign: "justify",
                     textJustify: "inter-word",
                   }}
                 >
-                  At Coforge on the HSBC Conversational Analytics project, I was the
-                  youngest on the team and three months in when I became the de facto
-                  integration lead — having solved in one week a problem another
-                  technology partner hadn't resolved in eight months at the same
-                  client. GIL'd threading replaced with CPU-pinned parallel instances,
-                  asyncio + uvloop across the full pipeline, cross-stack observability
-                  built before the second incident happened. 7× session capacity.
-                  $1.3M annualised savings. MTTR from ~1hr to ~10mins.
-                </motion.p>
+                  At Coforge on the HSBC Conversational Analytics project, I was
+                  the youngest on the team and three months in when I became the
+                  de facto integration lead - having solved in one week a
+                  problem another technology partner hadn't resolved in eight
+                  months at the same client. GIL'd threading replaced with
+                  CPU-pinned parallel instances, asyncio + uvloop across the
+                  full pipeline, cross-stack observability built before the
+                  second incident happened. 7× session capacity. $1.3M
+                  annualised savings. MTTR from ~1hr to ~10mins.
+                </m.p>
               </div>
 
-              {/* RIGHT — pillars + What I Don't Do */}
+              {/* RIGHT - pillars + What I Don't Do */}
               <div
-                style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.75rem",
+                }}
               >
                 {pillars.map(({ title, desc }, i) => (
-                  <motion.div
+                  <m.div
                     key={i}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -363,8 +304,8 @@ export function About() {
                         gap: "1.2rem",
                         padding: "1.4rem 1.6rem",
                         borderRadius: "8px",
-                        border: "1px solid rgba(255,255,255,0.11)",
-                        background: "rgba(255,255,255,0.025)",
+                        border: "1px solid rgba(255,255,255,0.15)",
+                        background: "transparent",
                       }}
                     >
                       <div
@@ -404,10 +345,10 @@ export function About() {
                         </p>
                       </div>
                     </div>
-                  </motion.div>
+                  </m.div>
                 ))}
 
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -450,11 +391,134 @@ export function About() {
                           textJustify: "inter-word",
                         }}
                       >
-                        — {line}
+                        - {line}
                       </p>
                     ))}
                   </div>
-                </motion.div>
+                </m.div>
+              </div>
+            </div>
+
+            {/* The Gold and the Glory */}
+            <div style={{ marginTop: isMobile ? "4rem" : "6rem" }}>
+              <div style={{ marginBottom: "1.5rem" }}>
+                <span
+                  style={{
+                    fontFamily: FONT_MONO,
+                    fontSize: "0.62rem",
+                    letterSpacing: "0.2em",
+                    color: "rgba(245,202,64,1)",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <center>• The Gold and the Glory •</center>
+                </span>
+              </div>
+              <div style={{ overflow: "hidden" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    width: "max-content",
+                    animation: "highlights-marquee 45s linear infinite",
+                    willChange: "transform",
+                  }}
+                >
+                  {[...displayedHighlights, ...displayedHighlights].map((h, i) => (
+                    <Fragment key={i}>
+                      {/* card */}
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "0.3rem",
+                          width: "max-content",
+                          flexShrink: 0,
+                          userSelect: "none",
+                        }}
+                      >
+                        {/* row: icon + title */}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.65rem",
+                          }}
+                        >
+                          <img
+                            src={h.icon}
+                            alt=""
+                            aria-hidden="true"
+                            loading="lazy"
+                            decoding="async"
+                            style={{
+                              width: "28px",
+                              height: "28px",
+                              objectFit: "contain",
+                              flexShrink: 0,
+                              opacity: 0.9,
+                            }}
+                          />
+                          <div
+                            style={{
+                              fontFamily: FONT_SERIF,
+                              fontSize: "1rem",
+                              fontWeight: 700,
+                              lineHeight: 1.2,
+                              color: "#f5ca40",
+                              letterSpacing: "0.03em",
+                              textShadow: "0 0 12px rgba(245,202,64,0.25)",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {h.title}
+                          </div>
+                        </div>
+                        {/* time */}
+                        <div
+                          style={{
+                            fontFamily: FONT_MONO,
+                            fontSize: "0.58rem",
+                            letterSpacing: "0.1em",
+                            color: "rgba(245,202,64,0.45)",
+                            textTransform: "uppercase",
+                            paddingLeft: "42px",
+                          }}
+                        >
+                          {h.time}
+                        </div>
+                        {/* sub */}
+                        <div
+                          style={{
+                            fontFamily: FONT_SANS,
+                            fontSize: "0.7rem",
+                            lineHeight: 1.45,
+                            color: "rgba(255,255,255,0.38)",
+                            letterSpacing: "0.02em",
+                            paddingLeft: "42px",
+                            whiteSpace: "pre-line",
+                          }}
+                        >
+                          {h.sub}
+                        </div>
+                      </div>
+                      {/* bullet separator */}
+                      <span
+                        style={{
+                          fontSize: "1.6rem",
+                          color: "rgba(245,202,64,0.3)",
+                          margin: "0 2.2rem",
+                          alignSelf: "flex-start",
+                          flexShrink: 0,
+                          lineHeight: 1,
+                          userSelect: "none",
+                        }}
+                      >
+                        •
+                      </span>
+                    </Fragment>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

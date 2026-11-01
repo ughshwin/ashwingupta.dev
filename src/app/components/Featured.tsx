@@ -1,5 +1,5 @@
-import { motion } from "motion/react";
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { m } from "motion/react";
+import { useState } from "react";
 import type React from "react";
 import { useIsMobile, useIsDesktop } from "../../hooks/useMediaQuery";
 import { useEqualRows } from "../../hooks/useCollageGrid";
@@ -30,6 +30,7 @@ type FeaturedItem = {
   title: string;
   subtitle: string;
   link: string | null;
+  secondaryBadge?: string;
   bullets: [string, string, string, string];
 };
 
@@ -45,7 +46,7 @@ const TYPE_META: Record<
     glow: "0 0 4px rgba(74,222,128,0.28)",
   },
   patent: {
-    label: "Patent Pending · In Development",
+    label: "Commercial Software • In Development",
     color: "#ffffff",
     border: "rgba(139,92,246,0.55)",
     bg: "rgba(93,33,182,0.22)",
@@ -74,40 +75,40 @@ const ITEMS: FeaturedItem[] = [
     type: "production",
     name: "Conversational Analytics",
     title:
-      "Real-Time Conversational AI — SIP Voice Infrastructure at Production Scale",
-    subtitle: "Coforge — HSBC · Jun 2024 – Present",
+      "Real-Time Conversational AI - SIP Voice Infrastructure at Production Scale",
+    subtitle: "Coforge - HSBC • Jun 2024 – 5 Jun 2026",
     link: "/work/hsbc",
     bullets: [
-      "GIL-bound threading serialised all audio onto one core on a **32-core VM** — **20 concurrent calls**, 31 cores idle, CPU utilisation capped below **20%**.",
-      "**CPU-pinned** parallel processes via Linux **taskset** escaped the GIL; **asyncio + uvloop** replaced threading — each SIP session became a coroutine across SBC, STT, and LLM stages.",
+      "GIL-bound threading serialised all audio onto one core on a **32-core VM** - **20 concurrent calls**, 31 cores idle, CPU utilisation capped below **20%**.",
+      "**CPU-pinned** parallel processes via Linux **taskset** escaped the GIL; **asyncio + uvloop** replaced threading - each SIP session became a coroutine across SBC, STT, and LLM stages.",
       "Packer automated GCE image builds; **SIPp** validated **2,000** concurrent users; n2-standard-32 → c4-standard-8 gave **30–40%** longer transcripts; GCP log correlator scanned **250K+** lines in <5s, cutting MTTR to ~10 min.",
-      "**20 → 140–160** sessions/VM (**7×**); **1,600+** peak at <**300ms** E2E, <**5%** packet loss; compute **$118K → $8K/month** (~**$1.3M/yr** saved); **Best Team Award** — HSBC Account.",
+      "**20 → 140–160** sessions/VM (**7×**); **1,600+** peak at <**300ms** E2E, <**5%** packet loss; compute **$118K → $8K/month** (~**$1.3M/yr** saved); **Best Team Award** - HSBC Account.",
     ],
   },
   {
     type: "patent",
     name: "controla",
     title:
-      "Local-First Self-Improving Inference OS — Routing That Compounds With Every Deployment",
-    subtitle: "Personal · Patent Pending · In Active Development",
+      "Local-First Self-Improving Inference OS - Routing That Compounds With Every Deployment",
+    subtitle: "Personal • In Active Development",
     link: "/research/controla",
     bullets: [
-      "Local inference routing is **stateless** — prior outcomes ignored, blind dispatch repeated indefinitely; no unified API surface across modalities.",
-      "**19 backends** across **7 modalities** — text, STT, TTS, image gen, embeddings, vision, reasoning — under one **OpenAI-compatible API**; not a proxy, a control plane.",
+      "Local inference routing is **stateless** - prior outcomes ignored, blind dispatch repeated indefinitely; no unified API surface across modalities.",
+      "**19 backends** across **7 modalities** - text, STT, TTS, image gen, embeddings, vision, reasoning - under one **OpenAI-compatible API**; not a proxy, a control plane.",
       "Every request classified, scored across **6 dimensions** (capability, performance, resource, load, reliability, context), queued in Redis, dispatched, observed. **EWMA** weights per (backend, task_type, complexity) persist across restarts.",
-      "Routing accuracy compounds with deployment time — versioned policy, reward signals, and **ReplayEngine** regression gating. No retuning.",
+      "Routing accuracy compounds with deployment time - versioned policy, reward signals, and **ReplayEngine** regression gating. No retuning.",
     ],
   },
   {
     type: "production",
     name: "Here.app",
     title:
-      "163-Language Vehicle Intelligence — Multilingual RAG at Enterprise Scale",
-    subtitle: "Gida Technologies / HDFC ERGO · 2023–2024",
+      "163-Language Vehicle Intelligence - Multilingual RAG at Enterprise Scale",
+    subtitle: "Gida Technologies / HDFC ERGO • 2023–2024",
     link: "/work/here-app",
     bullets: [
-      "Standard chatbots failed on structured vehicle spec data — inconsistent answers drove manual escalation at **HDFC ERGO**, one of India's largest general insurers.",
-      "Multilingual **RAG** pipeline with structured retrieval, language-aware chunking, and per-language factual validation — **163 languages** as first-class targets, not as post-processing.",
+      "Standard chatbots failed on structured vehicle spec data - inconsistent answers drove manual escalation at **HDFC ERGO**, one of India's largest general insurers.",
+      "Multilingual **RAG** pipeline with structured retrieval, language-aware chunking, and per-language factual validation - **163 languages** as first-class targets, not as post-processing.",
       "**QA-gated retrieval** validates lookup quality before generation; structured vehicle database with image-linked attributes as single source of truth across **163 languages**.",
       "**~97% factual accuracy** on vehicle spec queries; autonomous sales-support resolution at **HDFC ERGO** scale; reduced manual escalation across full product catalogue.",
     ],
@@ -116,28 +117,29 @@ const ITEMS: FeaturedItem[] = [
     type: "thesis",
     name: "PINNs",
     title:
-      "Physics-Informed Neural Networks — Dual-Loss Framework for Multi-Domain Simulation",
-    subtitle: "BMS College of Engineering · Final Year Thesis · 2022–23",
+      "Physics-Informed Neural Networks - Dual-Loss Framework for Multi-Domain Simulation",
+    subtitle: "BMS College of Engineering • Final Year Thesis • 2022–23",
     link: "/research/pinns",
+    secondaryBadge: "Published • CellStrat",
     bullets: [
-      "Purely data-driven physics simulation demanded large labeled datasets — sparse data let models ignore governing equations, producing physically implausible solutions.",
-      "Dual-loss **PINN** framework embedding **PDE/ODE** constraints directly into the optimization objective beside data loss — physics constraints act as the regularizer.",
+      "Purely data-driven physics simulation demanded large labeled datasets - sparse data let models ignore governing equations, producing physically implausible solutions.",
+      "Dual-loss **PINN** framework embedding **PDE/ODE** constraints directly into the optimization objective beside data loss - physics constraints act as the regularizer.",
       "Validated across **6 benchmarks**: Burgers' equation, **1D heat conduction**, fixed-fixed column deflection, cantilever deflection, transient cooling under Neumann and Dirichlet conditions.",
-      "Stable convergence across **fluid**, **structural**, and **thermal** domains with limited labeled data; **Best Outgoing Project** — Mechanical Engineering, BMSCE, 2022–23.",
+      "Stable convergence across **fluid**, **structural**, and **thermal** domains with limited labeled data; **Best Outgoing Project** - Mechanical Engineering, BMSCE, 2022–23.",
     ],
   },
   {
     type: "open-source",
     name: "PHYSCLIP",
     title:
-      "Contrastive Regime Classification — Symbolic and Observed Space Alignment",
-    subtitle: "Personal · Open Source",
+      "Contrastive Regime Classification - Symbolic and Observed Space Alignment",
+    subtitle: "Personal • Open Source",
     link: "/research/physclip",
     bullets: [
-      "Physics-informed models assume the governing equation is known — the harder upstream problem is **regime classification**: which regime applies to the observed field.",
+      "Physics-informed models assume the governing equation is known - the harder upstream problem is **regime classification**: which regime applies to the observed field.",
       "Dual encoders map symbolic descriptions (**PDE**) and field observations into a shared latent space; regime recognition emerges from cross-modal alignment, not hand-coded rules.",
-      "Contrastive objective pulls matched (description, observation) pairs together, pushes mismatched apart — **PHYSCLIP** as a perception layer upstream of **PINN**-style enforcement.",
-      "Latent proximity carries physical meaning — nearby embeddings indicate similar regimes, enabling interpretable identification under partial observability.",
+      "Contrastive objective pulls matched (description, observation) pairs together, pushes mismatched apart - **PHYSCLIP** as a perception layer upstream of **PINN**-style enforcement.",
+      "Latent proximity carries physical meaning - nearby embeddings indicate similar regimes, enabling interpretable identification under partial observability.",
     ],
   },
 ];
@@ -196,25 +198,53 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
           >
             {item.name}
           </p>
-          <span
+          <div
             style={{
-              fontFamily: FONT_MONO,
-              fontSize: "0.52rem",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              whiteSpace: "nowrap",
-              padding: "3px 9px",
-              borderRadius: "20px",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0.4rem",
+              justifyContent: "flex-end",
               flexShrink: 0,
               alignSelf: "flex-start",
-              color: meta.color,
-              border: `1px solid ${meta.border}`,
-              background: meta.bg,
-              boxShadow: meta.glow,
             }}
           >
-            {meta.label}
-          </span>
+            <span
+              style={{
+                fontFamily: FONT_MONO,
+                fontSize: "0.52rem",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                whiteSpace: "nowrap",
+                padding: "3px 9px",
+                borderRadius: "20px",
+                color: meta.color,
+                border: `1px solid ${meta.border}`,
+                background: meta.bg,
+                boxShadow: meta.glow,
+              }}
+            >
+              {meta.label}
+            </span>
+            {item.secondaryBadge && (
+              <span
+                style={{
+                  fontFamily: FONT_MONO,
+                  fontSize: "0.52rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  whiteSpace: "nowrap",
+                  padding: "3px 9px",
+                  borderRadius: "20px",
+                  color: "#10b981",
+                  border: "1px solid rgba(16,185,129,0.45)",
+                  background: "rgba(16,185,129,0.08)",
+                  boxShadow: "0 0 4px rgba(16,185,129,0.28)",
+                }}
+              >
+                {item.secondaryBadge}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Title */}
@@ -337,7 +367,7 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
 
   if (isLink) {
     return (
-      <motion.a
+      <m.a
         href={item.link!}
         target={item.link!.startsWith("/") ? undefined : "_blank"}
         rel={item.link!.startsWith("/") ? undefined : "noopener noreferrer"}
@@ -357,12 +387,12 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
         style={sharedStyle}
       >
         {inner}
-      </motion.a>
+      </m.a>
     );
   }
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -375,161 +405,40 @@ function FeaturedCard({ item }: { item: FeaturedItem }) {
       style={sharedStyle}
     >
       {inner}
-    </motion.div>
+    </m.div>
   );
 }
 
 // ── Section ───────────────────────────────────────────────────────────────
 export function Featured() {
   const isMobile = useIsMobile();
-  const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef(0);
-  const headerGapRef = useRef<HTMLDivElement>(null);
-  const maxOffsetRef = useRef(0);
-  const cachedTopRef = useRef<number | null>(null);
-
-  const [vpH, setVpH] = useState(() =>
-    typeof window !== "undefined" ? window.innerHeight : 900,
-  );
-  const [sectionH, setSectionH] = useState(() =>
-    typeof window !== "undefined" ? window.innerHeight : 900,
-  );
-
-  useEffect(() => {
-    if (isMobile) return;
-    const measure = () => {
-      const header = headerRef.current;
-      const inner = innerRef.current;
-      if (!header || !inner) return;
-      const vh = window.innerHeight;
-      const headerH = header.offsetHeight;
-      const contentH = inner.scrollHeight;
-      const stripH = Math.max(0, vh - headerH);
-      const maxOffset = Math.max(0, contentH - stripH);
-      maxOffsetRef.current = maxOffset;
-      cachedTopRef.current = null;
-      setVpH(vh);
-      setSectionH(vh + maxOffset);
-    };
-    requestAnimationFrame(measure);
-    window.addEventListener("resize", measure, { passive: true });
-    return () => window.removeEventListener("resize", measure);
-  }, [isMobile]);
-
-  useEffect(() => {
-    if (isMobile) return;
-    const scroller = document.querySelector(
-      ".hologram-interface",
-    ) as HTMLElement | null;
-    const section = sectionRef.current;
-    if (!scroller || !section) return;
-
-    const measureTop = () => {
-      let acc = 0;
-      let el: HTMLElement | null = section;
-      while (el && el !== scroller) {
-        acc += el.offsetTop;
-        el = el.offsetParent as HTMLElement | null;
-      }
-      cachedTopRef.current = acc;
-    };
-
-    const onScroll = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        if (cachedTopRef.current === null) measureTop();
-        const raw = scroller.scrollTop - (cachedTopRef.current ?? 0);
-        const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
-        if (innerRef.current) {
-          innerRef.current.style.transform = `translateY(-${offset}px)`;
-        }
-        const compressRatio = Math.min(1, offset / 100);
-        const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
-        if (headerGapRef.current) {
-          headerGapRef.current.style.marginBottom = `${gapPx}px`;
-        }
-      });
-    };
-
-    scroller.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener(
-      "resize",
-      () => {
-        cachedTopRef.current = null;
-      },
-      { passive: true },
-    );
-    return () => {
-      scroller.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [isMobile]);
-
-  useLayoutEffect(() => {
-    if (isMobile) return;
-    const scroller = document.querySelector(
-      ".hologram-interface",
-    ) as HTMLElement | null;
-    const section = sectionRef.current;
-    if (!scroller || !section || !innerRef.current) return;
-    let acc = 0;
-    let el: HTMLElement | null = section;
-    while (el && el !== scroller) {
-      acc += el.offsetTop;
-      el = el.offsetParent as HTMLElement | null;
-    }
-    cachedTopRef.current = acc;
-    const raw = scroller.scrollTop - acc;
-    const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
-    innerRef.current.style.transform = `translateY(-${offset}px)`;
-    if (headerGapRef.current) {
-      const compressRatio = Math.min(1, offset / 100);
-      headerGapRef.current.style.marginBottom = `${80 * (1 - compressRatio) + 20 * compressRatio}px`;
-    }
-  }, [isMobile, sectionH]);
 
   const maxPerRow = isMobile ? 1 : 3;
   const rows = useEqualRows(ITEMS.length, maxPerRow);
 
   return (
     <section
-      ref={sectionRef}
       id="featured"
       style={{
         position: "relative",
-        height: isMobile ? "auto" : sectionH,
         background: "transparent",
-        ...(isMobile && { padding: "5rem 4vw" }),
+        padding: isMobile ? "5rem 4vw" : "4rem 0",
       }}
     >
       <div
-        style={
-          isMobile
-            ? {}
-            : {
-                position: "sticky",
-                top: 0,
-                height: vpH,
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-              }
-        }
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         {/* Header */}
-        <div
-          ref={headerRef}
-          style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}
-        >
+        <div style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}>
           <div
-            ref={headerGapRef}
             style={{
               display: "flex",
               alignItems: "center",
               gap: "1rem",
-              marginBottom: isMobile ? "2rem" : "80px",
+              marginBottom: "2rem",
             }}
           >
             <span
@@ -553,7 +462,7 @@ export function Featured() {
           </div>
 
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -570,37 +479,16 @@ export function Featured() {
               }}
             >
               What the arc produced.
-            </motion.h2>
+            </m.h2>
           </div>
         </div>
 
         {/* Content strip */}
-        <div
-          style={
-            isMobile
-              ? {}
-              : { flex: 1, position: "relative", overflow: "hidden" }
-          }
-        >
-          <div
-            ref={innerRef}
-            style={
-              isMobile
-                ? { paddingTop: "2rem" }
-                : {
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    padding: "1.5rem 6vw 4rem",
-                  }
-            }
-          >
-            <EqualGridRenderer
-              rows={rows}
-              renderCard={(idx) => <FeaturedCard item={ITEMS[idx]} />}
-            />
-          </div>
+        <div style={{ padding: isMobile ? "2rem 0 0" : "1.5rem 6vw 4rem" }}>
+          <EqualGridRenderer
+            rows={rows}
+            renderCard={(idx) => <FeaturedCard item={ITEMS[idx]} />}
+          />
         </div>
       </div>
     </section>

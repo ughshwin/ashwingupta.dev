@@ -3,30 +3,30 @@ import type { CSSProperties } from "react";
 
 // ── Span variant system ─────────────────────────────────────────────────────
 // Each card gets a layout span type that maps to CSS Grid column/row spans.
-// The variant controls GEOMETRY only — card content is never modified.
+// The variant controls GEOMETRY only - card content is never modified.
 
 export type SpanVariant = "small" | "wide" | "tall" | "large" | "hero";
 
 type SpanDef = { col: number; row: number };
 
 const SPAN_MAP: Record<SpanVariant, SpanDef> = {
-  small: { col: 2, row: 1 },  // 33% on 6-col grid — narrow
-  wide:  { col: 3, row: 1 },  // 50% on 6-col grid — medium
-  tall:  { col: 4, row: 1 },  // 67% on 6-col grid — wide
-  large: { col: 4, row: 1 },  // alias for tall, kept for type compat
-  hero:  { col: 6, row: 1 },  // 100% full-width accent, max 1 per section
+  small: { col: 2, row: 1 }, // 33% on 6-col grid - narrow
+  wide: { col: 3, row: 1 }, // 50% on 6-col grid - medium
+  tall: { col: 4, row: 1 }, // 67% on 6-col grid - wide
+  large: { col: 4, row: 1 }, // alias for tall, kept for type compat
+  hero: { col: 6, row: 1 }, // 100% full-width accent, max 1 per section
 };
 
 const VARIANT_WEIGHTS: Record<SpanVariant, number> = {
   small: 0.35,
-  wide:  0.40,
-  tall:  0.20,
-  large: 0,    // never picked directly (alias)
-  hero:  0.05,
+  wide: 0.4,
+  tall: 0.2,
+  large: 0, // never picked directly (alias)
+  hero: 0.05,
 };
 
 // ── Seeded PRNG ─────────────────────────────────────────────────────────────
-// Linear congruential generator — deterministic within a session so the layout
+// Linear congruential generator - deterministic within a session so the layout
 // stays stable across re-renders but changes on page reload.
 
 function seededRandom(seed: number): () => number {
@@ -76,10 +76,7 @@ function pickVariant(
 // Returns an array of SpanVariant assignments, one per card.
 // Seed is captured once per component mount for session consistency.
 
-export function useCollageGrid(
-  count: number,
-  cols: number,
-): SpanVariant[] {
+export function useCollageGrid(count: number, cols: number): SpanVariant[] {
   const seedRef = useRef(Math.floor(Math.random() * 2147483647));
 
   return useMemo(() => {
@@ -121,7 +118,7 @@ export function useCollageGrid(
 }
 
 // ── Style helper ────────────────────────────────────────────────────────────
-// Column-only spanning. Row height is content-driven — different widths
+// Column-only spanning. Row height is content-driven - different widths
 // cause different text wrapping, which produces natural height variation.
 // Row spanning is intentionally omitted: it inflates grid tracks and
 // forces cards to fill space their content doesn't need.
@@ -136,11 +133,11 @@ export function getSpanStyle(variant: SpanVariant): CSSProperties {
 //
 // Two block kinds:
 //
-//  "row"  — a flat flex row of 2 or 3 cards.
+//  "row"  - a flat flex row of 2 or 3 cards.
 //           weights[] sum to 1; use as flex-grow values.
 //           align-items: flex-start → each card is exactly its content height.
 //
-//  "tall" — 1 narrow card alongside 2 stacked cards, spanning the same height.
+//  "tall" - 1 narrow card alongside 2 stacked cards, spanning the same height.
 //           The narrow "main" card is wider than 25 % so it wraps text into a
 //           natural tall shape. The two stacked cards are wider (less wrapping)
 //           so each is roughly half the main card's height.
@@ -148,7 +145,7 @@ export function getSpanStyle(variant: SpanVariant): CSSProperties {
 //           combined height of the stack; a CSS grid wrapper passes that height
 //           into the card component so its footer stays pinned to the bottom.
 //
-// No 4-card rows — they produce overly narrow, hard-to-read cards.
+// No 4-card rows - they produce overly narrow, hard-to-read cards.
 // TallBlock replaces the role of 4-card rows with a more readable pattern.
 
 /** A flat flex row: 2 or 3 cards, widths proportional to weights (sum = 1). */
@@ -160,7 +157,11 @@ export type RowBlock = { kind: "row"; weights: number[] };
  * side: which side the main (tall) card is on.
  * mainWeight: fraction of row width given to the main card (0–1).
  */
-export type TallBlock = { kind: "tall"; side: "left" | "right"; mainWeight: number };
+export type TallBlock = {
+  kind: "tall";
+  side: "left" | "right";
+  mainWeight: number;
+};
 
 export type CollageBlock = RowBlock | TallBlock;
 
@@ -179,9 +180,9 @@ const ROW3: number[][] = [
   [0.38, 0.32, 0.30], [0.30, 0.38, 0.32], [0.32, 0.30, 0.38],
 ];
 
-// mainWeight options for TallBlock — narrow enough to wrap text tall,
+// mainWeight options for TallBlock - narrow enough to wrap text tall,
 // wide enough to stay readable (38–45 % of row width).
-const TALL_WEIGHTS = [0.38, 0.40, 0.42, 0.44];
+const TALL_WEIGHTS = [0.38, 0.4, 0.42, 0.44];
 
 function pickWeights(rand: () => number, n: number): number[] {
   const pool = n === 3 ? ROW3 : ROW2;
@@ -196,7 +197,7 @@ function pickBlockSize(rand: () => number, remaining: number): number {
   if (valid.length === 0) return 2;
   // Slight bias toward 3-card rows for variety.
   const r = rand();
-  if (valid.includes(3) && r > 0.40) return 3;
+  if (valid.includes(3) && r > 0.4) return 3;
   return 2;
 }
 
@@ -219,12 +220,16 @@ function pickBlockSize(rand: () => number, remaining: number): number {
 // 2 (medium paired), or 3 (compact trio) alternate randomly per session.
 // Single-card rows appear ~12 % of the time on desktop as bold accent breaks.
 
-function pickEqualRows(count: number, rand: () => number, maxPerRow: number): number[] {
+function pickEqualRows(
+  count: number,
+  rand: () => number,
+  maxPerRow: number,
+): number[] {
   const rows: number[] = [];
   let rem = count;
 
   while (rem > 0) {
-    // Row size distribution — intentionally varied so each page load
+    // Row size distribution - intentionally varied so each page load
     // produces a noticeably different composition:
     //   22 % → 1-card full-width accent break
     //   36 % → 2-card pair
@@ -264,12 +269,18 @@ export function useEqualRows(count: number, maxPerRow: number): number[] {
   }, [count, maxPerRow]);
 }
 
-export function useCollageBlocks(count: number, maxPerRow: number): CollageBlock[] {
+export function useCollageBlocks(
+  count: number,
+  maxPerRow: number,
+): CollageBlock[] {
   const seedRef = useRef(Math.floor(Math.random() * 2_147_483_647));
 
   return useMemo<CollageBlock[]>(() => {
     if (maxPerRow <= 1 || count === 0) {
-      return Array.from({ length: count }, () => ({ kind: "row", weights: [1] } as RowBlock));
+      return Array.from(
+        { length: count },
+        () => ({ kind: "row", weights: [1] }) as RowBlock,
+      );
     }
 
     const rand = seededRandom(seedRef.current);
@@ -287,7 +298,8 @@ export function useCollageBlocks(count: number, maxPerRow: number): CollageBlock
 
       if (canTall && rand() < 0.32) {
         const side: "left" | "right" = rand() < 0.5 ? "left" : "right";
-        const mainWeight = TALL_WEIGHTS[Math.floor(rand() * TALL_WEIGHTS.length)];
+        const mainWeight =
+          TALL_WEIGHTS[Math.floor(rand() * TALL_WEIGHTS.length)];
         blocks.push({ kind: "tall", side, mainWeight });
         remaining -= 3;
       } else {

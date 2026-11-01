@@ -7,7 +7,17 @@
     "build": "astro build",
     "dev": "astro dev",
     "preview": "astro preview",
-    "dev:vite": "vite"
+    "dev:vite": "vite",
+    "check:seo": "node scripts/verify-seo.mjs",
+    "sync:seo": "node scripts/sync-seo.mjs",
+    "check:seo:config": "node scripts/sync-seo.mjs --check",
+    "prebuild": "npm run check:seo:config",
+    "postbuild": "node scripts/build-discovery.mjs",
+    "build:verified": "npm run build && npm run check:seo && npm run check:content",
+    "check:seo:live": "node scripts/verify-seo-live.mjs",
+    "check:content": "node scripts/verify-content.mjs",
+    "notify:indexnow": "node scripts/notify-indexnow.mjs",
+    "notify:indexnow:preview": "node scripts/notify-indexnow.mjs --dry-run"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.0",
@@ -31,6 +41,7 @@
     "@playwright/test": "^1.60.0",
     "@tailwindcss/vite": "4.1.12",
     "@vitejs/plugin-react": "4.7.0",
+    "parse5": "7.3.0",
     "sharp": "^0.34.5",
     "tailwindcss": "4.1.12",
     "vite": "^6.4.1"

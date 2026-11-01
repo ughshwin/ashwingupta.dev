@@ -1,13 +1,7 @@
-import { motion } from "motion/react";
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { m } from "motion/react";
+import { useState } from "react";
 import type React from "react";
-import {
-  useIsMobile,
-  useIsTablet,
-  useIsDesktop,
-} from "../../hooks/useMediaQuery";
-import { useEqualRows } from "../../hooks/useCollageGrid";
-import { EqualGridRenderer } from "./CollageRenderer";
+import { useIsMobile, useIsDesktop } from "../../hooks/useMediaQuery";
 
 function renderBullet(text: string): React.ReactNode {
   const parts = text.split(/\*\*(.+?)\*\*/g);
@@ -64,7 +58,7 @@ const TYPE_META: Record<
     glow: "0 0 2px rgba(96,165,250,0.35)",
   },
   commercial: {
-    label: "Patent Pending · In Development",
+    label: "Commercial Software • In Development",
     color: "#ffffff",
     border: "rgba(139,92,246,0.55)",
     bg: "rgba(93,33,182,0.22)",
@@ -74,48 +68,36 @@ const TYPE_META: Record<
 
 const RESEARCH_LABELS = ["Problem", "Method", "System design", "Insight"];
 
-const items: ResearchItem[] = [
+export const researchItems: ResearchItem[] = [
   {
     type: "paper",
     name: "NCISCT 2022",
-    title: "Automated Assessment Generation — Graphs & Language Models",
-    subtitle: "Published Research · IJISET · Vol. 9 Special Issue",
+    title: "Automated Assessment Generation - Graphs & Language Models",
+    subtitle: "Published Research • IJISET • Vol. 9 Special Issue",
     link: "https://ijiset.com/conference/NCISCT-2022/IJISET-NCISCT-220520.pdf",
     bullets: [
-      "MCQ distractors must be **semantically plausible** — factually wrong alone fails to separate understanding from guessing",
+      "MCQ distractors must be **semantically plausible** - factually wrong alone fails to separate understanding from guessing",
       "**BERT** surfaces salient spans as pivots; **proper nouns anchor pivots**; **WordNet** and **ConceptNet** generate nearby alternatives through sense traversal",
       "WordNet supplies **hypernym→hyponym chains** with sense disambiguation; ConceptNet adds **part-of** and **related-to** structure when coverage thins; fallback ensures distractor coverage",
-      "**Semantic distance** governs selection — distractors must occupy the same conceptual neighbourhood without matching the tested senses; proximity without identity is the key constraint",
-    ],
-  },
-  {
-    type: "whitepaper",
-    name: "PINNs White Paper",
-    title: "Physics-Informed Inference for Partial Observability",
-    link: "/research/pinns-whitepaper",
-    bullets: [
-      "**Partial observability** creates a blind-control problem — sparse telemetry leaves conventional solvers unable to reconstruct what sensors never captured.",
-      "**PDE constraints embedded in the training objective** — network fits telemetry while satisfying governing dynamics; physics regularizes, not post-processes.",
-      "**Staged training** rebalances telemetry fidelity against PDE adherence; convergence via **residual consistency**, boundary behavior, and physical plausibility.",
-      "Physics acts as regularizer under uncertainty — extrapolation stays bounded by governing structure; generalization depends on dynamics, not coverage, alone.",
+      "**Semantic distance** governs selection - distractors must occupy the same conceptual neighbourhood without matching the tested senses; proximity without identity is the key constraint",
     ],
   },
   {
     type: "commercial",
     name: "ScholarOS",
     title:
-      "Research as Structured Execution — Deterministic Services Over Autonomous Generation",
+      "Research as Structured Execution - Deterministic Services Over Autonomous Generation",
     link: "/research/scholaros",
     bullets: [
-      "Research copilots generate **fluent text without evidence traceability** — grounded synthesis and hallucination look identical; no claim can be audited back.",
+      "Research copilots generate **fluent text without evidence traceability** - grounded synthesis and hallucination look identical; no claim can be audited back.",
       "**Five locked MCP services** cover literature mapping, contradiction detection, hypothesis critique, evidence extraction, and assembly via **schema-defined interfaces**.",
-      "Only hypothesis critique is agentic — **bounded to five iterations**; all other stages are deterministic with provenance tracked through **typed artifacts**.",
+      "Only hypothesis critique is agentic - **bounded to five iterations**; all other stages are deterministic with provenance tracked through **typed artifacts**.",
       "Each claim is **bound to source evidence**; contradiction detection marks where consensus breaks, keeping outputs falsifiable and useful beyond sessions.",
     ],
   },
 ];
 
-function ResearchCard({ item }: { item: ResearchItem }) {
+export function ResearchCard({ item }: { item: ResearchItem }) {
   const [hovered, setHovered] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const isMobile = useIsMobile();
@@ -123,7 +105,7 @@ function ResearchCard({ item }: { item: ResearchItem }) {
   const showOutcome = hovered || revealed;
 
   return (
-    <motion.a
+    <m.a
       href={item.link}
       target={item.link.startsWith("/") ? undefined : "_blank"}
       rel={item.link.startsWith("/") ? undefined : "noopener noreferrer"}
@@ -143,6 +125,7 @@ function ResearchCard({ item }: { item: ResearchItem }) {
       style={{
         display: "flex",
         flexDirection: "column",
+        height: "100%",
         padding: "1.6rem",
         borderRadius: "8px",
         border: `1px solid ${hovered ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.15)"}`,
@@ -161,7 +144,8 @@ function ResearchCard({ item }: { item: ResearchItem }) {
           flexDirection: "column",
           gap: "1rem",
           overflow: "hidden",
-          maxHeight: showOutcome ? "1000px" : "17rem",
+          maxHeight: showOutcome ? "1000px" : "14rem",
+          minHeight: showOutcome ? undefined : "14rem",
           transition: "max-height 0.5s cubic-bezier(0.76, 0, 0.24, 1)",
           ...(!showOutcome
             ? {
@@ -326,234 +310,6 @@ function ResearchCard({ item }: { item: ResearchItem }) {
           ↗
         </span>
       </div>
-    </motion.a>
-  );
-}
-
-export function Research() {
-  const isMobile = useIsMobile();
-  const isTablet = useIsTablet();
-  const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef(0);
-  const headerGapRef = useRef<HTMLDivElement>(null);
-  const maxOffsetRef = useRef(0);
-  const cachedTopRef = useRef<number | null>(null);
-
-  const [vpH, setVpH] = useState(() =>
-    typeof window !== "undefined" ? window.innerHeight : 900,
-  );
-  const [sectionH, setSectionH] = useState(() =>
-    typeof window !== "undefined" ? window.innerHeight : 900,
-  );
-
-  useEffect(() => {
-    if (isMobile) return;
-    const measure = () => {
-      const header = headerRef.current;
-      const inner = innerRef.current;
-      if (!header || !inner) return;
-      const vh = window.innerHeight;
-      const headerH = header.offsetHeight;
-      const contentH = inner.scrollHeight;
-      const stripH = Math.max(0, vh - headerH);
-      const maxOffset = Math.max(0, contentH - stripH);
-      maxOffsetRef.current = maxOffset;
-      cachedTopRef.current = null;
-      setVpH(vh);
-      setSectionH(vh + maxOffset);
-    };
-    requestAnimationFrame(measure);
-    window.addEventListener("resize", measure, { passive: true });
-    return () => window.removeEventListener("resize", measure);
-  }, [isMobile]);
-
-  useEffect(() => {
-    if (isMobile) return;
-    const scroller = document.querySelector(
-      ".hologram-interface",
-    ) as HTMLElement | null;
-    const section = sectionRef.current;
-    if (!scroller || !section) return;
-
-    const measureTop = () => {
-      let acc = 0;
-      let el: HTMLElement | null = section;
-      while (el && el !== scroller) {
-        acc += el.offsetTop;
-        el = el.offsetParent as HTMLElement | null;
-      }
-      cachedTopRef.current = acc;
-    };
-
-    const onScroll = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        if (cachedTopRef.current === null) measureTop();
-        const raw = scroller.scrollTop - (cachedTopRef.current ?? 0);
-        const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
-        if (innerRef.current) {
-          innerRef.current.style.transform = `translateY(-${offset}px)`;
-        }
-        const compressRatio = Math.min(1, offset / 100);
-        const gapPx = 80 * (1 - compressRatio) + 20 * compressRatio;
-        if (headerGapRef.current) {
-          headerGapRef.current.style.marginBottom = `${gapPx}px`;
-        }
-      });
-    };
-
-    scroller.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener(
-      "resize",
-      () => {
-        cachedTopRef.current = null;
-      },
-      { passive: true },
-    );
-    return () => {
-      scroller.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [isMobile]);
-
-  useLayoutEffect(() => {
-    if (isMobile) return;
-    const scroller = document.querySelector(
-      ".hologram-interface",
-    ) as HTMLElement | null;
-    const section = sectionRef.current;
-    if (!scroller || !section || !innerRef.current) return;
-    let acc = 0;
-    let el: HTMLElement | null = section;
-    while (el && el !== scroller) {
-      acc += el.offsetTop;
-      el = el.offsetParent as HTMLElement | null;
-    }
-    cachedTopRef.current = acc;
-    const raw = scroller.scrollTop - acc;
-    const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
-    innerRef.current.style.transform = `translateY(-${offset}px)`;
-    if (headerGapRef.current) {
-      const compressRatio = Math.min(1, offset / 100);
-      headerGapRef.current.style.marginBottom = `${80 * (1 - compressRatio) + 20 * compressRatio}px`;
-    }
-  }, [isMobile, sectionH]);
-
-  const maxPerRow = isMobile ? 1 : isTablet ? 2 : 3;
-  const rows = useEqualRows(items.length, maxPerRow);
-
-  return (
-    <section
-      ref={sectionRef}
-      id="research"
-      style={{
-        position: "relative",
-        height: isMobile ? "auto" : sectionH,
-        background: "transparent",
-        ...(isMobile && { padding: "5rem 4vw" }),
-      }}
-    >
-      <div
-        style={
-          isMobile
-            ? {}
-            : {
-                position: "sticky",
-                top: 0,
-                height: vpH,
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-              }
-        }
-      >
-        {/* Header */}
-        <div
-          ref={headerRef}
-          style={isMobile ? {} : { padding: "0.85rem 6vw 2rem" }}
-        >
-          <div
-            ref={headerGapRef}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
-              marginBottom: isMobile ? "2rem" : "80px",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: FONT_MONO,
-                fontSize: "0.62rem",
-                letterSpacing: "0.2em",
-                color: "rgba(255,255,255,0.4)",
-                textTransform: "uppercase",
-              }}
-            >
-              Research
-            </span>
-            <div
-              style={{
-                flex: 1,
-                height: "1px",
-                background: "rgba(255,255,255,0.07)",
-              }}
-            />
-          </div>
-
-          <div style={{ overflow: "hidden" }}>
-            <motion.h2
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-              style={{
-                fontFamily: FONT_SERIF,
-                fontSize: isMobile
-                  ? "clamp(1.8rem, 7vw, 4rem)"
-                  : "clamp(2.6rem, 4.5vw, 4rem)",
-                fontWeight: 800,
-                lineHeight: 1.1,
-                letterSpacing: "0.02em",
-                color: "#fafaf8",
-                margin: 0,
-              }}
-            >
-              Problems worth losing sleep over.
-            </motion.h2>
-          </div>
-        </div>
-
-        {/* Content strip */}
-        <div
-          style={
-            isMobile
-              ? {}
-              : { flex: 1, position: "relative", overflow: "hidden" }
-          }
-        >
-          <div
-            ref={innerRef}
-            style={
-              isMobile
-                ? { paddingTop: "2rem" }
-                : {
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    padding: "1.5rem 6vw 4rem",
-                  }
-            }
-          >
-            <EqualGridRenderer
-              rows={rows}
-              renderCard={(idx) => <ResearchCard item={items[idx]} />}
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+    </m.a>
   );
 }

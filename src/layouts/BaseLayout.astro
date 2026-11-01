@@ -1,12 +1,19 @@
 ---
+import { personSchema, websiteSchema } from "../lib/structured-data";
 import { ClientRouter } from "astro:transitions";
 import { PageBackground } from "../app/components/PageBackground";
+import { ClockWidget } from "../app/components/ClockWidget";
+import { BottomRightHUD } from "../app/components/BottomRightHUD";
+import Entrance from "../components/Entrance.astro";
+import SiteAnalytics from "../app/SiteAnalytics";
 import "@fontsource/playfair-display/800.css";
 import "@fontsource/playfair-display/400-italic.css";
 import "@fontsource/dm-sans/400.css";
 import "@fontsource/dm-sans/500.css";
 import "@fontsource/dm-sans/600.css";
 import "@fontsource/dm-mono/400.css";
+import dmSans400Url from "@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2?url";
+import playfair800Url from "@fontsource/playfair-display/files/playfair-display-latin-800-normal.woff2?url";
 interface Props {
   title?: string;
   description?: string;
@@ -16,12 +23,17 @@ interface Props {
 }
 
 const {
-  title = "Ashwin Gupta",
-  description = "Ashwin Gupta designs how AI systems behave under real-world constraints — inference routing, orchestration layers, and physics-informed models. AI Engineer at Coforge. Based in Bangalore.",
+  title = "Ashwin Gupta | AI Systems Engineer in Bangalore",
+  description = "Ashwin Gupta is an AI Systems Engineer at SkanAI in Bangalore. Explore production AI, RAG, inference infrastructure, open-source projects, and research.",
   canonical = "https://www.ashwingupta.dev/",
-  image = "https://www.ashwingupta.dev/og-image.png",
+  image = "https://www.ashwingupta.dev/og-image.jpg",
   jsonLd = [],
 } = Astro.props;
+const pageSchemas = jsonLd.map((schema) => ({
+  ...schema,
+  ...((schema as Record<string, string>).url === canonical && ["Article", "ScholarlyArticle", "WebPage", "ProfilePage", "CollectionPage"].includes((schema as Record<string, string>)["@type"]) ? { image } : {}),
+}));
+const article = jsonLd.find((schema) => (schema as Record<string, string>).url === canonical && ["Article", "ScholarlyArticle"].includes((schema as Record<string, string>)["@type"])) as Record<string, string> | undefined;
 ---
 
 <!doctype html>
@@ -32,21 +44,25 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="Articles by Ashwin Gupta" href="https://www.ashwingupta.dev/rss.xml" />
+    <link rel="preload" href={dmSans400Url} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={playfair800Url} as="font" type="font/woff2" crossorigin="anonymous" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Ashwin Gupta" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? "article" : "website"} />
+    {article?.datePublished && <meta property="article:published_time" content={article.datePublished} />}
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Ashwin Gupta — AI Systems Engineer" />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1728" />
+    <meta property="og:image:height" content="910" />
+    <meta property="og:image:alt" content="Ashwin Gupta - AI Systems Engineer. Inference routing, concurrency architecture, physics-informed ML." />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:locale" content="en_US" />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -56,15 +72,54 @@ const {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
 
-    {jsonLd.map((schema) => (
-      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    {[personSchema, websiteSchema, ...pageSchemas].map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, "\\u003c")} />
     ))}
 
     <ClientRouter />
+    <noscript>
+      <style is:inline>
+        /* Motion's initial styles must not hide the server-rendered document. */
+        #site-content [style*="opacity:0;"],
+        #site-content [style$="opacity:0"],
+        #site-content [style*="opacity: 0;"],
+        #site-content [style$="opacity: 0"] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        #site-content [style*="translateY(100%)"],
+        #site-content [style*="translateY(105%)"] { transform: none !important; }
+      </style>
+    </noscript>
+    <script is:inline>
+      // Run before paint. No JS means no gate; deep links always open directly.
+      if (!window.__portfolioEntranceChecked) {
+        window.__portfolioEntranceChecked = true;
+        let entered = false;
+        try { entered = sessionStorage.getItem('portfolio:entered') === '2'; } catch {}
+        if (location.pathname === '/' && !location.hash && !entered) {
+          document.documentElement.dataset.entrance = 'waiting';
+          setTimeout(() => {
+            if (!document.documentElement.dataset.entranceMounted) {
+              delete document.documentElement.dataset.entrance;
+              document.getElementById('entrance')?.setAttribute('hidden', '');
+              document.getElementById('site-content')?.removeAttribute('inert');
+            }
+          }, 6000);
+        }
+      }
+    </script>
     <slot name="head" />
   </head>
   <body>
     <PageBackground client:load transition:persist="site-bg" />
-    <slot />
+    <div id="site-chrome">
+    <ClockWidget client:idle transition:persist="clock-widget" />
+    <BottomRightHUD client:idle transition:persist="bottom-right-hud" />
+    <div transition:persist="bottom-fade" style="position:fixed;bottom:0;left:0;right:0;height:5.5rem;background:linear-gradient(to top,rgba(6,6,8,0.72) 0%,transparent 100%);pointer-events:none;z-index:48;" />
+    </div>
+    <div id="site-content"><slot /></div>
+    <Entrance />
+    <SiteAnalytics client:idle transition:persist="site-analytics" />
   </body>
 </html>

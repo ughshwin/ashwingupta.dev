@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useIsMobile } from "../../hooks/useMediaQuery";
 
@@ -11,7 +11,7 @@ const recs = [
     name: "Arun Kumar Vastrakar",
     title: "Senior Delivery Director",
     company: "Coforge",
-    relationship: "Delivery Head · HSBC AI · Pat on Back award",
+    relationship: "Delivery Head • HSBC AI • Pat on Back award",
     date: "Nov 2024",
     text: "Ashwin showed a great flexibility and stretched to complete a challenging task which resulted in client's delight. He was able to code a logic which client's other partner could not do it. Well done Ashwin.",
   },
@@ -19,15 +19,15 @@ const recs = [
     name: "Raja Sekhar Amirapu",
     title: "Senior Technical Architect",
     company: "Coforge",
-    relationship: "Direct colleague · HSBC project",
+    relationship: "Direct colleague • HSBC project",
     date: "Nov 2025",
-    text: "Ashwin's work on the telephony ingestion layer — PJSIP-based, highly stable, low-latency SIP call-handling at scale — was technically precise. Technically strong, dependable, and proactive. He consistently delivered production-ready code with strong technical ownership, and enhanced the development workflow through automation. Highly recommended for roles in VoIP engineering, real-time media systems, or conversational-AI infrastructure.",
+    text: "Ashwin's work on the telephony ingestion layer - PJSIP-based, highly stable, low-latency SIP call-handling at scale - was technically precise. Technically strong, dependable, and proactive. He consistently delivered production-ready code with strong technical ownership, and enhanced the development workflow through automation. Highly recommended for roles in VoIP engineering, real-time media systems, or conversational-AI infrastructure.",
   },
   {
     name: "Snehasish Chakraborty",
     title: "GCP Infrastructure Engineer",
     company: "HSBC (client)",
-    relationship: "Client · HSBC",
+    relationship: "Client • HSBC",
     date: "Feb 2025",
     text: "I had the pleasure of working with Ashwin on a highly complex GCP infrastructure setup, where his expertise in scalability, testing, and debugging proved invaluable. He played a crucial role in designing and implementing the scalability logic, ensuring our infrastructure could handle increasing workloads efficiently. His structured approach to testing helped identify potential bottlenecks early, saving us from critical failures down the line.",
   },
@@ -35,9 +35,9 @@ const recs = [
     name: "Kartik Mehta",
     title: "Fraud VS Technology Lead",
     company: "HSBC (client)",
-    relationship: "Client · HSBC",
+    relationship: "Client • HSBC",
     date: "Feb 2025",
-    text: "He would keep an open mind, welcome challenges, and think to deliver an end-to-end solution. I rate Ashwin highly — not just for his knowledge and skills, but his attitude to continue trying under pressure and deliver. I'm sure he will be adding great value wherever he works.",
+    text: "He would keep an open mind, welcome challenges, and think to deliver an end-to-end solution. I rate Ashwin highly - not just for his knowledge and skills, but his attitude to continue trying under pressure and deliver. I'm sure he will be adding great value wherever he works.",
   },
   {
     name: "Tulsi Patro",
@@ -45,7 +45,7 @@ const recs = [
     company: "Gida Technologies",
     relationship: "Direct colleague",
     date: "Nov 2023",
-    text: "Ashwin is a risk-taker, never shying away from trying innovative approaches — and what sets him apart is his ability to convert those risks into successful implementations. His commitment to meeting deadlines while upholding the quality of work is a testament to his professionalism. Fearlessness in taking on challenges inspires the entire team to push boundaries and strive for excellence.",
+    text: "Ashwin is a risk-taker, never shying away from trying innovative approaches - and what sets him apart is his ability to convert those risks into successful implementations. His commitment to meeting deadlines while upholding the quality of work is a testament to his professionalism. Fearlessness in taking on challenges inspires the entire team to push boundaries and strive for excellence.",
   },
 ];
 
@@ -53,15 +53,17 @@ function RecCard({
   rec,
   index,
   isVisible,
+  centerSpan,
 }: {
   rec: (typeof recs)[number];
   index: number;
   isVisible: boolean;
+  centerSpan?: boolean;
 }) {
   const isMobile = useIsMobile();
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
@@ -73,11 +75,17 @@ function RecCard({
         display: "flex",
         flexDirection: "column",
         gap: "0.9rem",
-        border: "1px solid rgba(255,255,255,0.07)",
+        border: "1px solid rgba(255,255,255,0.15)",
         borderLeftWidth: "2px",
         borderLeftColor: "rgba(232,224,208,0.2)",
         borderRadius: "6px",
-        background: "rgba(255,255,255,0.015)",
+        background: "transparent",
+        // lone last card: span the row but keep one-column width, centered
+        ...(centerSpan && {
+          gridColumn: "1 / -1",
+          justifySelf: "center",
+          width: "calc((100% - 1.5rem) / 2)",
+        }),
       }}
     >
       <div>
@@ -102,7 +110,7 @@ function RecCard({
             margin: 0,
           }}
         >
-          {rec.title} · {rec.company}
+          {rec.title} • {rec.company}
         </p>
       </div>
 
@@ -134,9 +142,9 @@ function RecCard({
           textTransform: "uppercase",
         }}
       >
-        {rec.relationship} · {rec.date}
+        {rec.relationship} • {rec.date}
       </p>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -174,9 +182,12 @@ export function Recommendations() {
       setVpH(vh);
       setSectionH(vh + maxOffset);
     };
-    requestAnimationFrame(measure);
+    const measureFrame = requestAnimationFrame(measure);
     window.addEventListener("resize", measure, { passive: true });
-    return () => window.removeEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(measureFrame);
+      window.removeEventListener("resize", measure);
+    };
   }, [isMobile]);
 
   useEffect(() => {
@@ -197,12 +208,15 @@ export function Recommendations() {
       cachedTopRef.current = acc;
     };
 
+    let previousOffset = -1;
     const onScroll = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         if (cachedTopRef.current === null) measureTop();
         const raw = scroller.scrollTop - (cachedTopRef.current ?? 0);
         const offset = Math.max(0, Math.min(maxOffsetRef.current, raw));
+        if (offset === previousOffset) return;
+        previousOffset = offset;
         if (innerRef.current) {
           innerRef.current.style.transform = `translateY(-${offset}px)`;
         }
@@ -215,15 +229,11 @@ export function Recommendations() {
     };
 
     scroller.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener(
-      "resize",
-      () => {
-        cachedTopRef.current = null;
-      },
-      { passive: true },
-    );
+    const invalidateTop = () => { cachedTopRef.current = null; };
+    window.addEventListener("resize", invalidateTop, { passive: true });
     return () => {
       scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", invalidateTop);
       cancelAnimationFrame(rafRef.current);
     };
   }, [isMobile]);
@@ -324,7 +334,7 @@ export function Recommendations() {
           </div>
 
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               initial={{ y: "100%" }}
               animate={isVisible ? { y: 0 } : { y: "100%" }}
               transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
@@ -341,7 +351,7 @@ export function Recommendations() {
               }}
             >
               In their words.
-            </motion.h2>
+            </m.h2>
           </div>
         </div>
 
@@ -375,7 +385,17 @@ export function Recommendations() {
               }}
             >
               {recs.map((rec, i) => (
-                <RecCard key={rec.name} rec={rec} index={i} isVisible={isVisible} />
+                <RecCard
+                  key={rec.name}
+                  rec={rec}
+                  index={i}
+                  isVisible={isVisible}
+                  centerSpan={
+                    !isMobile &&
+                    recs.length % 2 === 1 &&
+                    i === recs.length - 1
+                  }
+                />
               ))}
             </div>
           </div>

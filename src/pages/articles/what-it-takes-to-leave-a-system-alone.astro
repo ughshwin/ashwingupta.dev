@@ -1,0 +1,274 @@
+---
+import publication from "../../data/article-publication.json";
+import { contentSchemas } from "../../lib/structured-data";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+
+const canonical = "https://www.ashwingupta.dev/articles/what-it-takes-to-leave-a-system-alone";
+const description = "What it takes to leave a system alone: shared state, audit convergence, and the recurring engineering cost that led me to stop building SyDaG.";
+---
+
+<BaseLayout
+  title="What It Takes to Leave a System Alone - Ashwin Gupta"
+  description={description}
+  canonical={canonical}
+  jsonLd={contentSchemas({
+    type: "Article",
+    datePublished: publication["what-it-takes-to-leave-a-system-alone"].datePublished,
+    name: "What It Takes to Leave a System Alone",
+    url: canonical,
+    description,
+  })}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <div class="thinking-body" role="main">
+        <a href="/articles" class="back-link">← Back to articles</a>
+
+        <header class="th-header">
+          <div class="th-badge">Article • September 2026</div>
+          <h1 class="th-title">What It Takes to Leave a System Alone</h1>
+          <p class="th-subtitle">The recurring cost of keeping an autonomous system coherent—and the engineering decision to stop.</p>
+          <p class="th-byline">by Ashwin Gupta</p>
+        </header>
+
+        <div class="th-divider"></div>
+
+        <p class="th-body"><strong>About three weeks per process.</strong></p>
+        <p class="th-body">That was the workload I wanted to reduce. Each new business process meant another cycle of referring to the previous implementation, porting reusable components, writing automation scripts, testing them on a Windows VM, and repairing whatever failed.</p>
+        <p class="th-body">Ten or fifteen days into development, we would test another set of variants and cases. Familiar errors would return. More fixes, more testing. The work was repetitive enough to invite automation and demanding enough that getting it almost right was insufficient.</p>
+        <p class="th-body">I built SyDaG to take over that work. It never reached a working end-to-end proof of concept. I stopped development myself when keeping the automation reliable began consuming the effort it was supposed to save.</p>
+        <p class="th-body">The question that stayed with me was simple: <em>even if I get this process working, what happens when the next one arrives?</em></p>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Work We Were Trying to Remove</h2>
+          <p class="th-body">Our synthetic-data-generation team reproduces how people execute business processes on computers. A process can cross internal portals, web applications, Microsoft desktop and web apps, Adobe tools, and whatever else a person needs to complete the work. We drive those interactions and capture their execution as training data.</p>
+          <p class="th-body">The product team supplies the BPMN—the business-process model—and the platform. Our scripts execute the defined variants and cases, grounded in that model, through the applications a person would use.</p>
+          <p class="th-body">We use Win32 and Python’s <code>ctypes</code> for physical desktop interactions: mouse input, keyboard input, window focus, and application transitions. An apparently straightforward step in the process can involve several layers of desktop behaviour before it is complete.</p>
+          <p class="th-body"><strong>Correctness extends beyond reaching the expected final screen.</strong> The path, intermediate actions, and recordings matter. Bypassing an interaction can produce the right application state and still produce the wrong training data.</p>
+          <p class="th-body">Every new process shares enough with the previous one to make reuse worthwhile, but differs enough to require substantial engineering. We inherit machinery we trust, adapt it, then discover which assumptions no longer hold as we exercise more variants.</p>
+          <p class="th-body">The automation opportunity seemed practical. We had a reference implementation, a process definition, and an environment in which to test the result. We also had engineering judgement accumulated through repeated failures. SyDaG would have to turn that judgement into dependable behaviour.</p>
+          <p class="th-body">Our greater value lies in understanding and defining processes, their variants, and the behaviour the data should represent. Returning time to that work was the reason to build it.</p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">What Autonomy Had to Own</h2>
+          <p class="th-body">The intended workflow followed what we already did: take the new process contracts, target platform, and stable reference implementation; reuse proven components; write the process-specific code; execute it on the VM; inspect the evidence; and repair failures until it met acceptance.</p>
+          <p class="th-body">A central orchestrator owned the lifecycle and persisted run state. Scoped workers handled implementation. A separate execution component drove the VM. Mechanical checks evaluated results, independent audits challenged completion claims, and repair loops returned failures to the responsible worker. An operator channel surfaced conditions requiring intervention.</p>
+          <p class="th-body">Supplied business definitions were preserved rather than rewritten by a model. Evidence was tied to the candidate code under review, so an earlier successful result could not certify a later revision. The builder could not simply declare its own output complete.</p>
+          <p class="th-body">Each component had a clear responsibility. That made the work look separable: finish the worker interface, finish the audit, finish VM execution. But the system was actively changing the artifact it would later execute and assess. Those components had to keep agreeing through every change, failure, and repair.</p>
+          <p class="th-body">That was where the implementation became difficult. A component could be functional on its own while the complete workflow still could not move forward reliably.</p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">A Checkpoint Is a Record of Belief</h2>
+          <p class="th-body">I would fix something, run the system again, and encounter another stall. Sometimes state failed to propagate. Sometimes a downstream component did not receive what it needed. Getting past one failure did not give me much confidence about the next run.</p>
+          <p class="th-body">The orchestrator needed a consistent account of which code existed, which work had completed, what the VM had executed, which evidence belonged to that execution, and whether the audit had accepted the claim. A disagreement anywhere in that chain could stop progress or undermine the result.</p>
+          <p class="th-body"><strong>Centralising state gave it a place to live. Keeping it accurate across the moving parts remained a separate problem.</strong></p>
+          <p class="th-body">A checkpoint preserved what the orchestrator believed at a particular moment. It could not establish that the desktop session, worker output, credentials, and external services still matched that belief when execution resumed.</p>
+          <p class="th-body">Debugging meant reconstructing what had actually happened. Did the action execute? Did its result propagate? Was the evidence current? A visible failure could be the point where an earlier disagreement finally became observable.</p>
+          <p class="th-body">Repair added another set of questions. Had the code changed enough to invalidate previous evidence? Did the VM contain the intended revision? Could the workflow resume safely, or did part of it need to run again? Fixing the immediate defect did not answer those questions.</p>
+          <p class="th-body">Too often, I supplied the missing interpretation and restored agreement myself. The workflow might then continue, but its recovery still depended on me. Inspecting a failed run and choosing a safe continuation are different capabilities; unattended operation required both.</p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Hardening-and-Softening Loop</h2>
+          <p class="th-body">The audits brought a different kind of stall. They needed to challenge incomplete work rigorously enough to make unattended execution credible. The required work had to exist, and the evidence had to support the builder’s claim.</p>
+          <p class="th-body">Harden the guards, and the system would keep rejecting. Address a concern, return for review, and it would still struggle to reach an accepted state. So I would loosen them—and lose the assurance I needed. Tighten them again, and progress stalled.</p>
+          <p class="th-body">I kept moving between configurations that advanced too easily and configurations that barely advanced at all. A change that helped the current attempt was difficult to trust across the next one.</p>
+          <p class="th-body"><em>The reviewer needed to reject insufficient work and reliably recognise sufficient work.</em> It also needed to return corrections the builder could complete. Finding another plausible concern was only part of the job.</p>
+          <p class="th-body">Bounded retries limited how long an attempt could continue. They did not make the review converge. Exhausting the budget simply left another unresolved state for an engineer to investigate.</p>
+          <p class="th-body">I initially called the behaviour reward hacking: an auditor focused on finding problems seemed to favour continued rejection. I cannot establish that as the complete explanation. What I could observe was the repeated hardening-and-softening cycle and the intervention it demanded.</p>
+          <p class="th-body">The design evolved from an external Council to an in-process supervisor audit. The underlying requirement survived that change: review had to provide assurance while allowing acceptable work to advance.</p>
+          <p class="th-body">Keeping final acceptance mechanical did not make the path to acceptance mechanical. <strong>A reviewer that can block advancement has real authority over whether the system ever completes.</strong> Its ability to reach a justified approval deserved as much attention as its ability to find defects.</p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Environment Kept Moving</h2>
+          <p class="th-body">Meanwhile, the execution environment kept introducing problems of its own. Credentials could be supplied during setup, smoke tests could pass, and a later real run could still fail. One debugging effort consumed roughly two weeks without establishing a reliable execution path.</p>
+          <p class="th-body">A key being present during setup did not establish that the eventual process could use it from its actual runtime context. I never isolated a single proven root cause for that entire episode, so attributing it to token expiry or environment inheritance would make this account more certain than the investigation justified.</p>
+          <p class="th-body">GCP policy updates could also require revisiting VM access and the RDP client setup. Windows sessions and desktop applications had their own requirements. Those dependencies continued to move while I was trying to stabilise the workflow above them.</p>
+          <p class="th-body">A new process and a new day tested different things. The process tested whether implementation and review could adapt to different work. The day tested whether assumptions about access and execution still held. Hardening against one did not settle the other.</p>
+          <p class="th-body">None of these problems made SyDaG uniquely impossible. They mattered because every recurring access repair and execution investigation consumed part of the engineering time the system was meant to return.</p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Components Were Necessary</h2>
+          <p class="th-body">With this many moving parts, “simplify the architecture” is an understandable response. There may have been cleaner implementations and better boundaries. But the responsibilities themselves were necessary.</p>
+          <p class="th-body">We needed Windows for real desktop execution, verification for trustworthy data, persistent state for coordination, and recovery for failures already present in the manual workflow. Removing a component would leave its responsibility somewhere else.</p>
+          <p class="th-body">If I manually checked the evidence, repaired the environment, or resolved every ambiguous audit, that work returned to the engineer whose time SyDaG was supposed to free. A smaller diagram would not make that cost disappear.</p>
+          <p class="th-body"><strong>The useful system needed these responsibilities to be fulfilled together.</strong> That was the difficulty: necessary components, individually understandable, repeatedly failing to behave as one dependable machine.</p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Next Process Was the Real Test</h2>
+          <p class="th-body">The difficult part of stopping was that I believed I could get SyDaG working for the process in front of me. There were identifiable problems to address and further changes I could make.</p>
+          <p class="th-body">But attempts to introduce new processes already brought renewed coordination problems, audit tuning, and execution failures. A success that required another round of hardening each time would leave much of the original burden intact.</p>
+          <p class="th-body">I was willing to pay the initial cost of reusable infrastructure. Its return comes when later work becomes cheaper and more predictable. Instead, I was maintaining the automation while still dealing with the process-specific problems it had been built to absorb.</p>
+          <p class="th-body">That changed how I assessed a fix: <em>did it remove a recurring class of intervention, or just let this attempt continue?</em> Both helped in the moment. Only enough lasting reduction would justify the investment.</p>
+          <p class="th-body">I also could not count all the manual scripting time as a future saving. Process specification, output checks, and exception handling would still require effort. SyDaG had to earn its cost against the work it could actually remove.</p>
+          <p class="th-body">The team now had two things to get right: the scripts, and the machinery responsible for producing and judging them. I no longer saw a credible path to reducing that combined workload within a worthwhile investment.</p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Decision to Stop</h2>
+          <p class="th-body">What I initially expected to take four or five weeks now looked like at least half a calendar year to get close to usable. That was my engineering estimate, with substantial uncertainty about adaptation and maintenance afterward.</p>
+          <p class="th-body">The calculation had to include development, onboarding new processes, repairing integrations, diagnosing failures, and verifying outputs. Hours of unattended execution would offer little benefit if the work before and after each run consumed the saving.</p>
+          <p class="th-body">I did not need to prove the technical problems were unsolvable. I needed to decide whether solving them was a good use of our time. We could spend that same effort delivering process work directly, with more limited automation.</p>
+          <p class="th-body">The weeks already invested made stopping difficult, but they could not justify the next months. The original ambition still appealed to me. The evidence had changed what I was prepared to spend pursuing it.</p>
+          <p class="th-body"><strong>I stopped before the end-to-end objective was achieved.</strong> That remains the outcome. A successful demonstration was still something I believed I could reach; sustained reduction in team effort was what I no longer expected to achieve at an acceptable cost.</p>
+        </section>
+
+        <section class="th-section">
+          <h2 class="th-section-title">The Boundary We Kept</h2>
+          <p class="th-body">We kept using agents for starter code and implementation shells. Engineers complete the core functionality, integration, and acceptance. We can take useful output and continue the work without first making the agent responsible for every uncertainty in the workflow.</p>
+          <p class="th-body">I do not have a measured productivity improvement to claim for that change. It gives us a scope of automation we are prepared to maintain, and lets individual improvements earn their place through the work they remove.</p>
+          <p class="th-body">If I approached SyDaG again, I would test transfer between processes earlier. Alongside the first successful execution, I would measure what returned with the second process: implementation changes, audit recalibration, environment repair, and debugging. I would want evidence that engineer intervention per process was falling.</p>
+          <p class="th-body">For a system built to remove recurring engineering work, that belongs in acceptance. Correct execution matters. So does how much effort it takes to make correct execution happen again.</p>
+          <p class="th-body">That is the standard I took away from SyDaG: <strong>useful automation should make the next delivery easier in a way the team can observe.</strong> The engineering behind it and the attention it needs to keep running both count.</p>
+        </section>
+
+        <p class="th-author-note">This is a retrospective on an unfinished internal engineering effort. The timelines are my working estimates; the reliability problems describe our experience with this workflow, rather than a general limit on what coding agents can achieve.</p>
+        <div class="th-footer"><span>© 2026 Ashwin Gupta • AI Systems Engineer • Bangalore, India</span></div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body {
+    background: #060608;
+    margin: 0;
+    padding: 0;
+  }
+
+  .thinking-scroll {
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .thinking-body {
+    --prose-gap: 1.1rem;
+    /* Preserve the former divider: two prose gaps plus its 0.7rem line box. */
+    --section-gap: calc(var(--prose-gap) + var(--prose-gap) + 0.7rem);
+    width: max(320px, 60vw);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+
+  @media (min-width: 640px) {
+    .thinking-body {
+      padding: 7rem 0 8rem;
+    }
+  }
+
+  /* Navigation */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    margin-bottom: 3.5rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: rgba(255, 255, 255, 0.9); }
+
+  /* Header */
+  .th-header { margin-bottom: 2rem; }
+
+  .th-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 1.1rem;
+  }
+
+  .th-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5.5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: 0.04em;
+    color: #fafaf8;
+    margin: 0 0 0.5rem;
+  }
+
+  .th-subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0 0 1rem;
+  }
+
+  .th-byline {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.28);
+    margin: 0;
+  }
+
+  /* Dividers */
+  .th-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 2.5rem 0;
+  }
+
+  /* Sections */
+  .th-section { margin: var(--section-gap) 0 0; }
+
+  .th-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    line-height: 1.4;
+    font-weight: 800;
+    color: #fafaf8;
+    margin: 0 0 var(--prose-gap);
+    letter-spacing: 0.04em;
+  }
+
+  /* Body prose */
+  .th-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+    line-height: 1.85;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 var(--prose-gap);
+  }
+
+  .th-body em { color: rgba(255, 255, 255, 0.8); font-style: italic; }
+  .th-body strong { color: #e8e0d0; font-weight: 600; }
+
+  /* Closing author note */
+  .th-author-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.28);
+    font-style: italic;
+    margin: var(--section-gap) 0 6rem;
+  }
+
+  /* Footer */
+  .th-footer {
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+  }
+</style>

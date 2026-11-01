@@ -1,5 +1,5 @@
-import { Github, Linkedin, Mail, FileDown } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { Github, Linkedin, Mail, FileDown, Menu, X } from "lucide-react";
+import { AnimatePresence, m } from "motion/react";
 import { useRef, useCallback, useState, useEffect } from "react";
 import { useIsMobile, useIsTouchDevice } from "../../hooks/useMediaQuery";
 import { scrollToSection } from "../../hooks/useHashScroll";
@@ -21,6 +21,8 @@ export function Hero() {
   const [workOpen, setWorkOpen] = useState(false);
   const workRef = useRef<HTMLDivElement>(null);
   const workTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileWorkOpen, setMobileWorkOpen] = useState(false);
 
   const openWork = useCallback(() => {
     if (workTimerRef.current) clearTimeout(workTimerRef.current);
@@ -41,6 +43,15 @@ export function Hero() {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [workOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [menuOpen]);
 
   const showToast = useCallback((msg: string, duration = 1600) => {
     setToastMessage(msg);
@@ -101,18 +112,12 @@ export function Hero() {
     section: string | null;
   }[] = [
     { label: "About", href: "/about", section: "about" },
-    { label: "Stack", href: "/stack", section: "stack" },
     { label: "Experience", href: "/experience", section: "experience" },
-    {
-      label: "Recommendations",
-      href: "/recommendations",
-      section: "recommendations",
-    },
+    { label: "Impact", href: "/impact", section: "impact" },
   ];
 
   const workItems = [
     { label: "Featured", href: "/featured", section: "featured" },
-    { label: "Research", href: "/research", section: "research" },
     { label: "Projects", href: "/projects", section: "projects" },
   ];
 
@@ -121,14 +126,20 @@ export function Hero() {
     href: string;
     section: string | null;
   }[] = [
-    { label: "Notes", href: "/notes", section: null },
+    {
+      label: "Recommendations",
+      href: "/recommendations",
+      section: "recommendations",
+    },
+    { label: "Stack", href: "/stack", section: "stack" },
+    { label: "Articles", href: "/articles", section: null },
     { label: "Contact", href: "/contact", section: "contact" },
   ];
 
   const navLinkStyle = {
     fontFamily: '"DM Mono", monospace',
-    fontSize: isMobile ? "0.42rem" : "0.58rem",
-    letterSpacing: isMobile ? "0" : "0.13em",
+    fontSize: "0.65rem",
+    letterSpacing: "0.13em",
     textTransform: "uppercase" as const,
     color: "rgba(255,255,255,0.35)",
     textDecoration: "none",
@@ -136,8 +147,8 @@ export function Hero() {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: isMobile ? "0.5rem 0.3rem" : "0.65rem 0.4rem",
-    cursor: isMobile ? "auto" : "none",
+    padding: "0.65rem 0.4rem",
+    cursor: "none",
     transition: "color 0.2s, background 0.2s",
     borderRadius: "3px",
   } as const;
@@ -160,7 +171,7 @@ export function Hero() {
       }}
     >
       {/* Horizontal rule top */}
-      <motion.div
+      <m.div
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
@@ -176,213 +187,433 @@ export function Hero() {
         }}
       />
 
-      {/* Navigation bar */}
-      <motion.nav
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.1, duration: 0.6 }}
-        style={{
-          position: "absolute",
-          top: isMobile ? 18 : 36,
-          left: isMobile ? "5.5vw" : "5%",
-          right: isMobile ? "5.5vw" : "5%",
-          display: "grid",
-          gridTemplateColumns: `repeat(${navBeforeWork.length + 1 + navAfterWork.length}, 1fr)`,
-          zIndex: 5,
-        }}
-      >
-        {/* Flat links — before Work dropdown */}
-        {navBeforeWork.map(({ label, href, section }) => (
-          <a
-            key={href}
-            href={href}
-            onClick={(e) => {
-              if (section) {
-                e.preventDefault();
-                scrollToSection(section);
-                history.pushState(null, "", href);
-              }
-            }}
-            style={navLinkStyle}
-            onMouseEnter={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.9)";
-                    el.style.background =
-                      "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
-                  }
-            }
-            onMouseLeave={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.35)";
-                    el.style.background = "transparent";
-                  }
-            }
-          >
-            {label}
-          </a>
-        ))}
-
-        {/* Work ▾ dropdown */}
-        <div
-          ref={workRef}
-          onMouseEnter={openWork}
-          onMouseLeave={scheduleCloseWork}
-          style={{ position: "relative", display: "flex" }}
-        >
-          <div
+      {/* Navigation - hamburger on mobile, grid on desktop */}
+      {isMobile ? (
+        <>
+          {/* Hamburger button */}
+          <m.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
             style={{
-              flex: 1,
-              fontFamily: '"DM Mono", monospace',
-              fontSize: isMobile ? "0.42rem" : "0.58rem",
-              letterSpacing: isMobile ? "0" : "0.13em",
-              textTransform: "uppercase" as const,
-              color: "rgba(255,255,255,0.35)",
+              position: "absolute",
+              top: 18,
+              right: "5.5vw",
+              zIndex: 50,
               background: "transparent",
+              border: "1px solid rgba(255,255,255,0.12)",
+              borderRadius: "4px",
+              width: "36px",
+              height: "36px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "3px",
-              padding: isMobile ? "0.5rem 0.3rem" : "0.65rem 0.4rem",
-              cursor: isMobile ? "auto" : "none",
-              transition: "color 0.2s, background 0.2s",
-              borderRadius: "3px",
+              color: "rgba(255,255,255,0.65)",
+              cursor: "auto",
+              padding: 0,
             }}
-            onMouseEnter={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.9)";
-                    el.style.background =
-                      "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
-                  }
-            }
-            onMouseLeave={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.35)";
-                    el.style.background = "transparent";
-                  }
-            }
           >
-            <span>Work</span>
-            <span
-              style={{ fontSize: "0.75em", opacity: 0.65, marginTop: "0.05em" }}
-            >
-              ▾
-            </span>
-          </div>
+            <AnimatePresence mode="wait" initial={false}>
+              {menuOpen ? (
+                <m.span
+                  key="close"
+                  initial={{ opacity: 0, rotate: -45 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 45 }}
+                  transition={{ duration: 0.18 }}
+                  style={{ display: "flex" }}
+                >
+                  <X size={16} />
+                </m.span>
+              ) : (
+                <m.span
+                  key="menu"
+                  initial={{ opacity: 0, rotate: 45 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: -45 }}
+                  transition={{ duration: 0.18 }}
+                  style={{ display: "flex" }}
+                >
+                  <Menu size={16} />
+                </m.span>
+              )}
+            </AnimatePresence>
+          </m.button>
 
+          {/* Mobile full-screen overlay menu */}
           <AnimatePresence>
-            {workOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.15 }}
-                onMouseEnter={openWork}
-                onMouseLeave={scheduleCloseWork}
+            {menuOpen && (
+              <m.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.22 }}
                 style={{
-                  position: "absolute",
-                  top: "calc(100% + 2px)",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  background: "rgba(8,8,8,0.95)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  borderRadius: "4px",
-                  padding: "0.3rem 0",
-                  minWidth: "130px",
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
-                  zIndex: 20,
+                  position: "fixed",
+                  inset: 0,
+                  background: "rgba(6,6,6,0.55)",
+                  backdropFilter: "blur(10px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                  zIndex: 40,
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "80px 8vw 48px",
+                  overflowY: "auto",
                 }}
               >
-                {workItems.map(({ label, href, section }) => (
-                  <a
-                    key={href}
-                    href={href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setWorkOpen(false);
-                      scrollToSection(section);
-                      history.pushState(null, "", href);
-                    }}
-                    style={{
-                      display: "block",
-                      fontFamily: '"DM Mono", monospace',
-                      fontSize: isMobile ? "0.42rem" : "0.55rem",
-                      letterSpacing: "0.13em",
-                      textTransform: "uppercase" as const,
-                      color: "rgba(255,255,255,0.4)",
-                      textDecoration: "none",
-                      padding: "0.5rem 1rem",
-                      cursor: isMobile ? "auto" : "none",
-                      transition: "color 0.15s, background 0.15s",
-                    }}
-                    onMouseEnter={(e) => {
-                      const el = e.currentTarget as HTMLElement;
-                      el.style.color = "rgba(255,255,255,0.9)";
-                      el.style.background = "rgba(255,255,255,0.05)";
-                    }}
-                    onMouseLeave={(e) => {
-                      const el = e.currentTarget as HTMLElement;
-                      el.style.color = "rgba(255,255,255,0.4)";
-                      el.style.background = "transparent";
+                {/* All nav items */}
+                <nav
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 0,
+                    flex: 1,
+                  }}
+                >
+                  {navBeforeWork.map(({ label, href, section }, i) => (
+                    <m.a
+                      key={href}
+                      href={href}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.05 + i * 0.04, duration: 0.22 }}
+                      onClick={(e) => {
+                        if (section) {
+                          e.preventDefault();
+                          setMenuOpen(false);
+                          scrollToSection(section);
+                          history.pushState(null, "", href);
+                        }
+                      }}
+                      style={{
+                        fontFamily: '"DM Mono", monospace',
+                        fontSize: "0.75rem",
+                        letterSpacing: "0.15em",
+                        textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.8)",
+                        textDecoration: "none",
+                        padding: "1rem 0",
+                        borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        display: "block",
+                      }}
+                    >
+                      {label}
+                    </m.a>
+                  ))}
+
+                  {/* Work expandable row */}
+                  <m.div
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: 0.05 + navBeforeWork.length * 0.04,
+                      duration: 0.22,
                     }}
                   >
-                    {label}
-                  </a>
-                ))}
-              </motion.div>
+                    <button
+                      onClick={() => setMobileWorkOpen((v) => !v)}
+                      style={{
+                        width: "100%",
+                        background: "transparent",
+                        border: "none",
+                        borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        padding: "1rem 0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        fontFamily: '"DM Mono", monospace',
+                        fontSize: "0.75rem",
+                        letterSpacing: "0.15em",
+                        textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.8)",
+                        cursor: "auto",
+                      }}
+                    >
+                      <span>Work</span>
+                      <m.span
+                        animate={{ rotate: mobileWorkOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                          fontSize: "1.5em",
+                          opacity: 0.55,
+                          display: "inline-block",
+                        }}
+                      >
+                        ▾
+                      </m.span>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {mobileWorkOpen && (
+                        <m.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{
+                            duration: 0.22,
+                            ease: [0.4, 0, 0.2, 1],
+                          }}
+                          style={{ overflow: "hidden" }}
+                        >
+                          {workItems.map(({ label, href, section }) => (
+                            <a
+                              key={href}
+                              href={href}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setMenuOpen(false);
+                                setMobileWorkOpen(false);
+                                scrollToSection(section);
+                                history.pushState(null, "", href);
+                              }}
+                              style={{
+                                display: "block",
+                                fontFamily: '"DM Mono", monospace',
+                                fontSize: "0.68rem",
+                                letterSpacing: "0.13em",
+                                textTransform: "uppercase",
+                                color: "rgba(255,255,255,0.6)",
+                                textDecoration: "none",
+                                padding: "0.75rem 0 0.75rem 1.25rem",
+                                borderBottom:
+                                  "1px solid rgba(255,255,255,0.04)",
+                              }}
+                            >
+                              {label}
+                            </a>
+                          ))}
+                        </m.div>
+                      )}
+                    </AnimatePresence>
+                  </m.div>
+
+                  {navAfterWork.map(({ label, href, section }, i) => (
+                    <m.a
+                      key={href}
+                      href={href}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        delay: 0.05 + (navBeforeWork.length + 1 + i) * 0.04,
+                        duration: 0.22,
+                      }}
+                      onClick={(e) => {
+                        if (section) {
+                          e.preventDefault();
+                          setMenuOpen(false);
+                          scrollToSection(section);
+                          history.pushState(null, "", href);
+                        }
+                      }}
+                      style={{
+                        fontFamily: '"DM Mono", monospace',
+                        fontSize: "0.75rem",
+                        letterSpacing: "0.15em",
+                        textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.8)",
+                        textDecoration: "none",
+                        padding: "1rem 0",
+                        borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        display: "block",
+                      }}
+                    >
+                      {label}
+                    </m.a>
+                  ))}
+                </nav>
+              </m.div>
             )}
           </AnimatePresence>
-        </div>
+        </>
+      ) : (
+        /* Desktop horizontal nav */
+        <m.nav
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1, duration: 0.6 }}
+          style={{
+            position: "absolute",
+            top: 36,
+            left: "5%",
+            right: "5%",
+            display: "grid",
+            gridTemplateColumns: `repeat(${navBeforeWork.length + 1 + navAfterWork.length}, 1fr)`,
+            zIndex: 5,
+          }}
+        >
+          {navBeforeWork.map(({ label, href, section }) => (
+            <a
+              key={href}
+              href={href}
+              onClick={(e) => {
+                if (section) {
+                  e.preventDefault();
+                  scrollToSection(section);
+                  history.pushState(null, "", href);
+                }
+              }}
+              style={navLinkStyle}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.9)";
+                el.style.background =
+                  "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.35)";
+                el.style.background = "transparent";
+              }}
+            >
+              {label}
+            </a>
+          ))}
 
-        {/* Flat links — after Work dropdown */}
-        {navAfterWork.map(({ label, href, section }) => (
-          <a
-            key={href}
-            href={href}
-            onClick={(e) => {
-              if (section) {
-                e.preventDefault();
-                scrollToSection(section);
-                history.pushState(null, "", href);
-              }
-            }}
-            style={navLinkStyle}
-            onMouseEnter={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.9)";
-                    el.style.background =
-                      "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
-                  }
-            }
-            onMouseLeave={
-              isMobile
-                ? undefined
-                : (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = "rgba(255,255,255,0.35)";
-                    el.style.background = "transparent";
-                  }
-            }
+          {/* Work ▾ dropdown */}
+          <div
+            ref={workRef}
+            onMouseEnter={openWork}
+            onMouseLeave={scheduleCloseWork}
+            style={{ position: "relative", display: "flex" }}
           >
-            {label}
-          </a>
-        ))}
-      </motion.nav>
+            <div
+              style={{
+                flex: 1,
+                fontFamily: '"DM Mono", monospace',
+                fontSize: "0.58rem",
+                letterSpacing: "0.13em",
+                textTransform: "uppercase" as const,
+                color: "rgba(255,255,255,0.35)",
+                background: "transparent",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "3px",
+                padding: "0.65rem 0.4rem",
+                cursor: "none",
+                transition: "color 0.2s, background 0.2s",
+                borderRadius: "3px",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.9)";
+                el.style.background =
+                  "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.35)";
+                el.style.background = "transparent";
+              }}
+            >
+              <span>Work</span>
+              <span
+                style={{
+                  fontSize: "1.5em",
+                  opacity: 0.65,
+                  marginTop: "0.05em",
+                }}
+              >
+                ▾
+              </span>
+            </div>
+
+            <AnimatePresence>
+              {workOpen && (
+                <m.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.15 }}
+                  onMouseEnter={openWork}
+                  onMouseLeave={scheduleCloseWork}
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 2px)",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: "transparent",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: "4px",
+                    padding: "0.5rem 0",
+                    minWidth: "190px",
+                    backdropFilter: "blur(20px)",
+                    WebkitBackdropFilter: "blur(20px)",
+                    zIndex: 20,
+                  }}
+                >
+                  {workItems.map(({ label, href, section }) => (
+                    <a
+                      key={href}
+                      href={href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setWorkOpen(false);
+                        scrollToSection(section);
+                        history.pushState(null, "", href);
+                      }}
+                      style={{
+                        display: "block",
+                        fontFamily: '"DM Mono", monospace',
+                        fontSize: "0.6rem",
+                        letterSpacing: "0.13em",
+                        textTransform: "uppercase" as const,
+                        color: "rgba(255,255,255,0.4)",
+                        textDecoration: "none",
+                        padding: "0.75rem 1.3rem",
+                        cursor: "none",
+                        transition: "color 0.15s, background 0.15s",
+                      }}
+                      onMouseEnter={(e) => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.color = "rgba(255,255,255,0.9)";
+                        el.style.background = "rgba(255,255,255,0.05)";
+                      }}
+                      onMouseLeave={(e) => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.color = "rgba(255,255,255,0.4)";
+                        el.style.background = "transparent";
+                      }}
+                    >
+                      {label}
+                    </a>
+                  ))}
+                </m.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {navAfterWork.map(({ label, href, section }) => (
+            <a
+              key={href}
+              href={href}
+              onClick={(e) => {
+                if (section) {
+                  e.preventDefault();
+                  scrollToSection(section);
+                  history.pushState(null, "", href);
+                }
+              }}
+              style={navLinkStyle}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.9)";
+                el.style.background =
+                  "linear-gradient(to top, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0) 100%)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "rgba(255,255,255,0.35)";
+                el.style.background = "transparent";
+              }}
+            >
+              {label}
+            </a>
+          ))}
+        </m.nav>
+      )}
 
       {/* Main content */}
       <div
@@ -396,11 +627,11 @@ export function Hero() {
           zIndex: 1,
         }}
       >
-        {/* LEFT — typography */}
+        {/* LEFT - typography */}
         <div ref={layerText} style={{ willChange: "transform" }}>
-          {/* Eyebrow — tagline */}
+          {/* Eyebrow - tagline */}
           <div style={{ overflow: "hidden", marginBottom: "2rem" }}>
-            <motion.div
+            <m.div
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{
@@ -420,77 +651,81 @@ export function Hero() {
               <span
                 style={{
                   fontFamily: '"DM Mono", monospace',
-                  fontSize: isMobile ? "0.58rem" : "0.65rem",
+                  fontSize: isMobile ? "0.6rem" : "0.7rem",
                   letterSpacing: "0.12em",
                   color: "#e8e0d0",
                 }}
               >
-                Not what a model outputs — how the system decides, executes, and
+                Not what a model outputs - how the system decides, executes, and
                 holds under load.
               </span>
-            </motion.div>
+            </m.div>
           </div>
 
           {/* Giant name */}
-          <div style={{ overflow: "visible", marginBottom: "-0.05em" }}>
-            <motion.h1
-              initial={{ y: "105%" }}
-              animate={{ y: 0 }}
-              transition={{
-                delay: 0.5,
-                duration: 0.9,
-                ease: [0.76, 0, 0.24, 1],
-              }}
+          <h1 style={{ margin: 0, font: "inherit" }}>
+            <span style={{ display: "block", overflow: "visible", marginBottom: "-0.05em" }}>
+              <m.span
+                initial={{ y: "105%" }}
+                animate={{ y: 0 }}
+                transition={{
+                  delay: 0.5,
+                  duration: 0.9,
+                  ease: [0.76, 0, 0.24, 1],
+                }}
+                style={{
+                  fontFamily:
+                    '"Editorial New", "Playfair Display", Georgia, serif',
+                  fontSize: isMobile
+                    ? "clamp(2.8rem, 10vw, 8.5rem)"
+                    : "clamp(3.8rem, 10vw, 8.5rem)",
+                  fontWeight: 800,
+                  lineHeight: 0.9,
+                  letterSpacing: "0.02em",
+                  color: "#fafaf8",
+                  margin: 0,
+                  display: "block",
+                }}
+              >
+                Ashwin
+              </m.span>
+            </span>
+            <span
               style={{
-                fontFamily:
-                  '"Editorial New", "Playfair Display", Georgia, serif',
-                fontSize: isMobile
-                  ? "clamp(2.8rem, 10vw, 8.5rem)"
-                  : "clamp(3.8rem, 10vw, 8.5rem)",
-                fontWeight: 800,
-                lineHeight: 0.9,
-                letterSpacing: "0.02em",
-                color: "#fafaf8",
-                margin: 0,
-              }}
-            >
-              Ashwin
-            </motion.h1>
-          </div>
-          <div
-            style={{
-              overflow: "visible",
-              marginBottom: isMobile ? "2rem" : "3rem",
-            }}
-          >
-            <motion.h1
-              initial={{ y: "105%" }}
-              animate={{ y: 0 }}
-              transition={{
-                delay: 0.65,
-                duration: 0.9,
-                ease: [0.76, 0, 0.24, 1],
-              }}
-              style={{
-                fontFamily:
-                  '"Editorial New", "Playfair Display", Georgia, serif',
-                fontSize: isMobile
-                  ? "clamp(2.8rem, 10vw, 8.5rem)"
-                  : "clamp(3.8rem, 10vw, 8.5rem)",
-                fontWeight: 800,
-                lineHeight: 1.1,
-                letterSpacing: "0.02em",
-                color: "#fafaf8",
-                margin: 0,
                 display: "block",
+                overflow: "visible",
+                marginBottom: isMobile ? "2rem" : "3rem",
               }}
             >
-              Gupta
-            </motion.h1>
-          </div>
+              <m.span
+                initial={{ y: "105%" }}
+                animate={{ y: 0 }}
+                transition={{
+                  delay: 0.65,
+                  duration: 0.9,
+                  ease: [0.76, 0, 0.24, 1],
+                }}
+                style={{
+                  fontFamily:
+                    '"Editorial New", "Playfair Display", Georgia, serif',
+                  fontSize: isMobile
+                    ? "clamp(2.8rem, 10vw, 8.5rem)"
+                    : "clamp(3.8rem, 10vw, 8.5rem)",
+                  fontWeight: 800,
+                  lineHeight: 1.1,
+                  letterSpacing: "0.02em",
+                  color: "#fafaf8",
+                  margin: 0,
+                  display: "block",
+                }}
+              >
+                Gupta
+              </m.span>
+            </span>
+          </h1>
 
           {/* Role + Company */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0, duration: 0.7 }}
@@ -546,15 +781,15 @@ export function Hero() {
                   lineHeight: 1.5,
                 }}
               >
-                Coforge
+                SkanAI
                 <br />
-                Jun 2024 – Present
+                15 Jun 2026 – Present
               </p>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Status + socials row */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.7 }}
@@ -566,10 +801,10 @@ export function Hero() {
               position: "relative",
             }}
           >
-            {/* Toast — absolutely positioned so it never affects row width */}
+            {/* Toast - absolutely positioned so it never affects row width */}
             <AnimatePresence mode="wait">
               {toastMessage && (
-                <motion.div
+                <m.div
                   key={toastMessage}
                   initial={{ opacity: 0, y: 4, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -592,11 +827,11 @@ export function Hero() {
                   }}
                 >
                   {toastMessage}
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
 
-            {/* Row 1 — icon buttons (+ Download Resume on desktop) */}
+            {/* Row 1 - icon buttons (+ Download Resume on desktop) */}
             <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
               {[
                 {
@@ -615,7 +850,7 @@ export function Hero() {
                   label: "LinkedIn",
                 },
               ].map(({ href, icon, label }) => (
-                <motion.a
+                <m.a
                   key={label}
                   href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
@@ -657,11 +892,11 @@ export function Hero() {
                   }}
                 >
                   {icon}
-                </motion.a>
+                </m.a>
               ))}
-              {/* Download Resume — desktop only in this row */}
+              {/* Download Resume - desktop only in this row */}
               {!isMobile && (
-                <motion.a
+                <m.a
                   href={resumeUrl}
                   download="Ashwin_Gupta_Senior_AI_Engineer.pdf"
                   onClick={handleResumeDownload}
@@ -703,13 +938,13 @@ export function Hero() {
                   >
                     Download Resume
                   </span>
-                </motion.a>
+                </m.a>
               )}
             </div>
 
-            {/* Row 2 — Download Resume, mobile only */}
+            {/* Row 2 - Download Resume, mobile only */}
             {isMobile && (
-              <motion.a
+              <m.a
                 href={resumeUrl}
                 download="Ashwin_Gupta_Senior_AI_Engineer.pdf"
                 onClick={handleResumeDownload}
@@ -750,7 +985,7 @@ export function Hero() {
                 >
                   Download Resume
                 </span>
-              </motion.a>
+              </m.a>
             )}
 
             {/* Building not Browsing status */}
@@ -785,14 +1020,14 @@ export function Hero() {
                   textTransform: "uppercase",
                 }}
               >
-                Optimising: Residuals · Not: Roles
+                Optimising: Residuals • Not: Roles
               </span>
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
-        {/* RIGHT — photo */}
-        <motion.div
+        {/* RIGHT - photo */}
+        <m.div
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
@@ -862,7 +1097,7 @@ export function Hero() {
                   textTransform: "uppercase",
                 }}
               >
-                MLOps & GenAI — IIIT Bangalore
+                MLOps & GenAI - IIIT Bangalore
               </span>
               <span
                 style={{
@@ -873,11 +1108,11 @@ export function Hero() {
                   textTransform: "uppercase",
                 }}
               >
-                PyTorch · LLMs · RAG · GCP
+                PyTorch • LLMs • RAG • GCP
               </span>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Scroll indicator */}
