@@ -1,4 +1,4 @@
-import { profile, experience, siteRedirects, contentFacts } from './portfolio-data.mjs';
+import { profile, experience, siteRedirects, contentFacts, projects, articles } from './portfolio-data.mjs';
 import { resolveReferences } from '../src/content/portfolio/references.mjs';
 import { darkenWhiteSvg } from '../src/lib/review-svg.mjs';
 import assert from 'node:assert/strict';
@@ -17,7 +17,8 @@ const hasClass=(n,c)=>(attr(n,'class')||'').split(' ').includes(c);
 const load=route=>walk(parse(fs.readFileSync(path.join('dist',route,'index.html'),'utf8')));
 const read=name=>resolveReferences(JSON.parse(fs.readFileSync(`src/content/portfolio/${name}.json`,'utf8')),contentFacts);
 const routes=[...fs.readFileSync('dist/sitemap-0.xml','utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>new URL(m[1]).pathname);
-assert.equal(routes.length,15,'Only the authoritative documents belong in the sitemap');
+const expectedRoutes=['/','/articles',...new Set(Object.values(projects.entries).map(p=>p.href).filter(h=>h.startsWith('/'))),...Object.values(articles).map(a=>'/articles/'+a.slug)];
+assert.deepEqual([...routes].sort(),expectedRoutes.sort(),'Only the authoritative documents belong in the sitemap');
 for(const route of routes){
   const nodes=load(route);
   assert.equal(attr(nodes.find(n=>n.tagName==='body'),'class'),'review-edition',route+' static default');

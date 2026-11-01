@@ -8,6 +8,7 @@ This portfolio describes production AI systems, inference routing, concurrency a
 - [{{profile.name}}]({{profile.siteUrl}}): Authoritative profile, experience, impact, and contact information. Section URLs such as /about and /projects are entry points into this same document.
 
 ## Work
+- [Process Dashboard]({{origin}}{{projects.process-dashboard.href}}): Team-standard process workspace, single-command onboarding, and all eight artefact phases live.
 - [HSBC conversational analytics]({{origin}}{{projects.hsbc-voice.href}}): Voice infrastructure, concurrency, observability, and cost engineering.
 - [PageIndexOllama]({{origin}}{{projects.pageindexollama.href}}): Local-first tree-based retrieval and provider abstraction.
 - [Portfolio engineering]({{origin}}{{projects.ashwingupta-dev.href}}): Interface architecture and performance engineering.

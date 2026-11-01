@@ -1,0 +1,148 @@
+{
+  "metadata": {
+    "canonical": "{{origin}}{{projects.process-dashboard.href}}",
+    "title": "{{projects.process-dashboard.displayName}} - SkanAI | {{profile.name}}",
+    "description": "SkanAI's standard process dashboard: all eight artefact phases live, single-command onboarding, and clickstream review in one workspace. Study and artefact kickoff: 3–4 hours to 10–15 minutes.",
+    "schemaName": "{{projects.process-dashboard.displayName}} - SkanAI"
+  },
+  "data": {
+    "metrics": [
+      {
+        "value": "{{projects.process-dashboard.metrics.kickoffTime}}",
+        "label": "Study & artefact kickoff · was 3–4 hrs"
+      },
+      {
+        "value": "{{projects.process-dashboard.metrics.onboardingCommand}}",
+        "label": "Onboard a new process"
+      },
+      {
+        "value": "{{projects.process-dashboard.metrics.adoption}}",
+        "label": "Adopted across the team"
+      }
+    ],
+    "changes": [
+      {
+        "task": "Start a process study",
+        "before": "Build a new clickstream dashboard for each process",
+        "after": "Onboard the process into a shared viewer with one command"
+      },
+      {
+        "task": "Review a case",
+        "before": "Piece together captures, metadata, and separate documents",
+        "after": "Read the flow or summary beside frames, with evidence links back to captures"
+      },
+      {
+        "task": "Audit artefacts",
+        "before": "Search local folders; open Markdown in Notion or VS Code",
+        "after": "Preview documents, tables, diagrams, and review pages in one workspace"
+      },
+      {
+        "task": "Reuse the workspace",
+        "before": "Repeat dashboard setup for the next clickstream",
+        "after": "Reuse the same interface with a separate instance for each process"
+      }
+    ],
+    "phases": [
+      {
+        "number": "01",
+        "title": "Process definition",
+        "live": true,
+        "detail": "The live artefact library brings together process definitions, applications, behaviours, case grounding, deliverables, audit evidence, and human review. Missing files show definitions of the expected artefacts."
+      },
+      {
+        "number": "02",
+        "title": "BPMN & process contracts",
+        "live": true,
+        "detail": "BPMN, process contracts, variant drivers, rules, and generated step flows are consolidated in the process workspace for review."
+      },
+      {
+        "number": "03",
+        "title": "Static validation & replay",
+        "live": true,
+        "detail": "Static checks, ordered replay, validation reports, and source-correction findings stay alongside the process definitions and contracts."
+      },
+      {
+        "number": "04",
+        "title": "Application & seed data",
+        "live": true,
+        "detail": "The runnable application, screen catalogue, seeded cases, and validation package are brought together under the same process context."
+      },
+      {
+        "number": "05",
+        "title": "Humanized flows",
+        "live": true,
+        "detail": "Behaviour catalogues, humanizer configuration, generated flows, and their validation are available in the same artefact lifecycle."
+      },
+      {
+        "number": "06",
+        "title": "Ground truth & automation",
+        "live": true,
+        "detail": "Atomic plans, automation drivers, ground-truth events, and replay reports form a consolidated evidence package within the dashboard."
+      },
+      {
+        "number": "07",
+        "title": "Pilot synchronization",
+        "live": true,
+        "detail": "A representative pilot aligns captured events, images, and ground truth before batch execution. Its aligned package and synchronization report remain in the process workspace."
+      },
+      {
+        "number": "08",
+        "title": "Batch recording & synchronization",
+        "live": true,
+        "detail": "Batch assignments, raw runs, aligned case packages, and recording reports complete the lifecycle: one dashboard carries the process from study through the complete dataset."
+      }
+    ]
+  },
+  "blocks": {
+    "block_1": "← Back to projects",
+    "block_2": "Internal Tooling • SkanAI • Team Standard",
+    "block_3": "{{projects.process-dashboard.displayName}}",
+    "block_4": "One process. One workspace.",
+    "block_5": "A reusable home for clickstream study, case documents, frame metadata, and process artefacts. One command replaces the initial dashboard build; the evidence and the work stay together.",
+    "block_7": "The Problem",
+    "block_8": "Every incoming process clickstream started with the same overhead: create a new dashboard before anyone could study it. There was no standard viewer to reuse. ",
+    "block_9": "Process study and artefact creation kickoff took 3–4 hours.",
+    "block_10": "After the study, the process became a collection of scattered files. Definitions, flows, reports, and supporting documents lived in different local directories. No single asset held everything belonging to a process. Even a Markdown export meant switching to Notion or a VS Code preview to read and audit it.",
+    "block_11": "The System",
+    "block_12": "Built a ",
+    "block_13": "process-agnostic dashboard with one workspace per process",
+    "block_14": ". Two views share the same context: Clickstream for cases, captured frames, and event metadata; Process Artefacts for discovery evidence, deliverables, audit material, and human review.",
+    "block_15": "Single-command onboarding",
+    "block_16": " creates a process-specific instance, mounts its source folders, and can serve it immediately. Shared UI files and process sources are linked into the instance rather than copied. The next process reuses the same interface, and source edits remain visible in its workspace.",
+    "block_17": "One process-specific instance",
+    "block_18": "./onboard.sh my-process /path/to/my-process --serve --port 8000",
+    "block_19": "The dashboard is ",
+    "block_20": "static HTML and JavaScript",
+    "block_21": ", with Bash and Python handling onboarding. It runs over local HTTP with no build step or application backend. A browser-side adapter supports expanded CSV/image datasets and native capture packages: it normalizes event metadata, decodes indexed JPEG containers, and keeps the original event available for inspection.",
+    "block_22": "Review without losing the evidence",
+    "block_23": "Case flows and summaries sit beside the captured frames in a resizable split view. Cited frame ranges lead back to the corresponding captures; target and cursor overlays help inspect what happened. Event metadata remains available alongside the study.",
+    "block_24": "Markdown renders inside the dashboard. JSON and CSV become tables; Mermaid becomes diagrams; decision points and rules have an explorer; human-review pages open in sandboxed frames. A preview router keeps supported document links within the process workspace.",
+    "block_25": "Deep links preserve the selected case and capture. Refresh restores review state, while dataset-scoped pins keep important cases close at hand. Configured subprocess ranges keep frames, playback, and documents tied to the selected part of a case.",
+    "block_26": "What changed in the daily workflow",
+    "block_27": "Task",
+    "block_28": "Before",
+    "block_29": "With the dashboard",
+    "block_31": "All eight phases, live in one workspace",
+    "block_32": "One consolidated owner holds everything belonging to a process, from initial study through the complete simulation dataset. ",
+    "block_33": "Discovery and all eight phases of artefact creation are live",
+    "block_34": ", with navigation and document loading managed through a data-driven registry.",
+    "block_35": "Each phase defines its artefact slots and renderers. Files are probed when that phase opens. Real files take precedence; explicit stubs explain expected deliverables when they are absent, keeping the lifecycle visible even while a process is still in progress.",
+    "block_37": "Outcomes",
+    "block_38": "Process study and artefact kickoff dropped from 3–4 hours to 10–15 minutes.",
+    "block_39": " This measures the time to get a process onboarded and work underway, rather than the duration of the full eight-phase creation workflow.",
+    "block_40": "The team adopted it as the ",
+    "block_41": "standard dashboard for process work",
+    "block_42": ". A new clickstream now enters a familiar workspace. Case documents, frame metadata, and the current artefact package can be reviewed together, with one place to return to as the process develops.",
+    "block_43": "© 2026 {{profile.name}} • {{profile.headline}} • {{profile.location.city}}, {{profile.location.country}}"
+  },
+  "links": {
+    "back": "/#projects",
+    "logo": "/logos/skan.svg"
+  },
+  "labels": {
+    "live": "Live",
+    "planned": "Planned",
+    "logo": "SkanAI",
+    "comparison": "Workflow before and after the dashboard"
+  }
+}

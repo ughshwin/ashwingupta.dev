@@ -75,7 +75,7 @@
       "value": "{{projects.skill-recommendation-engine.metrics.inferenceLatency}}"
     },
     {
-      "label": "full production load, single GPU",
+      "label": "full test load, single GPU",
       "category": "scale",
       "magnitude": 3,
       "projectId": "skill-recommendation-engine",
@@ -94,6 +94,20 @@
       "magnitude": 2,
       "projectId": "ashwingupta-dev",
       "value": "60 FPS"
+    },
+    {
+      "value": "hrs→min",
+      "label": "study & artefact kickoff: 3–4 hrs → 10–15 min",
+      "category": "cost",
+      "magnitude": 4,
+      "projectId": "process-dashboard"
+    },
+    {
+      "value": "{{projects.process-dashboard.metrics.onboardingCommand}}",
+      "label": "process onboarding replaces a bespoke dashboard",
+      "category": "cost",
+      "magnitude": 3,
+      "projectId": "process-dashboard"
     },
     {
       "label": "annualized compute savings",
@@ -254,6 +268,20 @@
       "item": "Training",
       "href": "/about",
       "value": "NPS +50"
+    },
+    {
+      "value": "8 phases",
+      "label": "live artefact lifecycle in one process workspace",
+      "category": "systems",
+      "magnitude": 3,
+      "projectId": "process-dashboard"
+    },
+    {
+      "value": "Team-wide",
+      "label": "adopted as the standard process dashboard",
+      "category": "systems",
+      "magnitude": 3,
+      "projectId": "process-dashboard"
     },
     {
       "label": "inference backends under one API",

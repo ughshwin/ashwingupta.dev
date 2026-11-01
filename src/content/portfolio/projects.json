@@ -2,6 +2,7 @@
   "cardOrder": [
     "ashwingupta-dev",
     "pageindexollama",
+    "process-dashboard",
     "hsbc-voice",
     "azure-infra-docs",
     "here-app",
@@ -121,11 +122,24 @@
       "title": "Automated Assessment Generation - Graphs & Language Models",
       "displayName": "NCISCT 2022",
       "href": "https://ijiset.com/conference/NCISCT-2022/IJISET-NCISCT-220520.pdf"
+    },
+    "process-dashboard": {
+      "title": "Process Dashboard - One Workspace for Every Process",
+      "displayName": "Process Dashboard",
+      "href": "/work/process-dashboard",
+      "github": null,
+      "redirect": true,
+      "metrics": {
+        "kickoffTime": "10–15 min",
+        "onboardingCommand": "1 command",
+        "adoption": "Team standard"
+      }
     }
   },
   "secondaryCardOrder": [
     "ashwingupta-dev",
     "pageindexollama",
+    "process-dashboard",
     "azure-infra-docs",
     "skill-recommendation-engine"
   ]

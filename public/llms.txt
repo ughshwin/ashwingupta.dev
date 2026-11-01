@@ -8,6 +8,7 @@ This portfolio describes production AI systems, inference routing, concurrency a
 - [Ashwin Gupta](https://www.ashwingupta.dev/): Authoritative profile, experience, impact, and contact information. Section URLs such as /about and /projects are entry points into this same document.
 
 ## Work
+- [Process Dashboard](https://www.ashwingupta.dev/work/process-dashboard): Team-standard process workspace, single-command onboarding, and all eight artefact phases live.
 - [HSBC conversational analytics](https://www.ashwingupta.dev/work/hsbc): Voice infrastructure, concurrency, observability, and cost engineering.
 - [PageIndexOllama](https://www.ashwingupta.dev/work/pageindexollama): Local-first tree-based retrieval and provider abstraction.
 - [Portfolio engineering](https://www.ashwingupta.dev/work/ashwingupta-dev): Interface architecture and performance engineering.

@@ -47,7 +47,7 @@ export function verifyPortfolioData(root='src/content/portfolio') {
     projectRef(id);const d=details[id];
     assert.equal(d.summary.length,projectCopy.summaryLabels.length,id+' summary has one item per narrative stage');
     assert.ok(d.bullets.length,id+' complete account');nonempty(d.logo,id+' logo');
-    assert.ok(['award','client','completed','development'].includes(d.statusTone),'Unknown project status '+id);
+    assert.ok(['award','client','completed','development','team'].includes(d.statusTone),'Unknown project status '+id);
     for(const duplicate of ['github','status','devStatus'])assert.ok(!(duplicate in d),'Duplicate project field '+duplicate+' in '+id);
   }
   for(const section of ['featured','research']){

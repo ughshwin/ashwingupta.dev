@@ -92,6 +92,11 @@
       "statusCode": 301
     },
     {
+      "source": "/projects/process-dashboard",
+      "destination": "/work/process-dashboard",
+      "statusCode": 301
+    },
+    {
       "source": "/review",
       "destination": "/",
       "statusCode": 301
@@ -149,6 +154,11 @@
     {
       "source": "/review/research/physclip",
       "destination": "/research/physclip",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/work/process-dashboard",
+      "destination": "/work/process-dashboard",
       "statusCode": 301
     },
     {
@@ -244,6 +254,11 @@
     {
       "source": "/review/projects/scholaros",
       "destination": "/research/scholaros",
+      "statusCode": 301
+    },
+    {
+      "source": "/review/projects/process-dashboard",
+      "destination": "/work/process-dashboard",
       "statusCode": 301
     },
     {

@@ -25,7 +25,7 @@ function projectCard(id: string) {
   const record = detailsById[id];
   if (!record) throw new Error(`Missing portfolio project details: ${id}`);
   const statusTone = record.statusTone;
-  if (statusTone !== 'award' && statusTone !== 'client' && statusTone !== 'completed' && statusTone !== 'development') {
+  if (statusTone !== 'award' && statusTone !== 'client' && statusTone !== 'completed' && statusTone !== 'development' && statusTone !== 'team') {
     throw new Error(`Unknown portfolio project status tone: ${statusTone}`);
   }
   const identity = projectById(id);

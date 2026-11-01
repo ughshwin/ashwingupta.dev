@@ -1,0 +1,161 @@
+---
+import { resolveCopy } from "../../content/portfolio/copy";
+import source from "../../content/portfolio/documents/work--process-dashboard.json";
+import { contentSchemas } from "../../lib/structured-data";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/index.css";
+const documentContent = resolveCopy(source);
+const {canonical,description} = documentContent.metadata;
+const {metrics,changes,phases} = documentContent.data;
+---
+
+<BaseLayout
+  title={documentContent.metadata.title}
+  description={description}
+  canonical={canonical}
+  jsonLd={contentSchemas({ type: "CreativeWork", name: documentContent.metadata.schemaName, url: canonical, description })}
+>
+  <div class="spatial-scene">
+    <div class="thinking-scroll">
+      <main class="thinking-body">
+        <a href={documentContent.links.back} class="back-link">{documentContent.blocks.block_1}</a>
+
+        <header class="th-header">
+          <img class="th-logo" src={documentContent.links.logo} alt={documentContent.labels.logo} width="24" height="24" decoding="async" />
+          <div class="th-badge">{documentContent.blocks.block_2}</div>
+          <h1 class="th-title">{documentContent.blocks.block_3}</h1>
+          <p class="th-deck">{documentContent.blocks.block_4}</p>
+          <p class="th-subtitle">{documentContent.blocks.block_5}</p>
+        </header>
+
+        <div class="th-divider"></div>
+        <div class="metrics-grid">
+          {metrics.map(({ value, label }) => (
+            <div class="metric-block">
+              <span class="metric-value">{value}</span>
+              <span class="metric-label">{label}</span>
+            </div>
+          ))}
+        </div>
+        <div class="th-divider"></div>
+
+        <section class="th-section" aria-labelledby="problem">
+          <h2 id="problem" class="th-section-title">{documentContent.blocks.block_7}</h2>
+          <p class="th-body">{documentContent.blocks.block_8}<strong>{documentContent.blocks.block_9}</strong></p>
+          <p class="th-body">{documentContent.blocks.block_10}</p>
+        </section>
+
+        <section class="th-section" aria-labelledby="system">
+          <h2 id="system" class="th-section-title">{documentContent.blocks.block_11}</h2>
+          <p class="th-body">{documentContent.blocks.block_12}<strong>{documentContent.blocks.block_13}</strong>{documentContent.blocks.block_14}</p>
+          <p class="th-body"><strong>{documentContent.blocks.block_15}</strong>{documentContent.blocks.block_16}</p>
+          <div class="command-block">
+            <span class="command-label">{documentContent.blocks.block_17}</span>
+            <code>{documentContent.blocks.block_18}</code>
+          </div>
+          <p class="th-body">{documentContent.blocks.block_19}<strong>{documentContent.blocks.block_20}</strong>{documentContent.blocks.block_21}</p>
+        </section>
+
+        <section class="th-section" aria-labelledby="review">
+          <h2 id="review" class="th-section-title">{documentContent.blocks.block_22}</h2>
+          <p class="th-body">{documentContent.blocks.block_23}</p>
+          <p class="th-body">{documentContent.blocks.block_24}</p>
+          <p class="th-body">{documentContent.blocks.block_25}</p>
+          <div class="comparison-scroll" tabindex="0" role="region" aria-label={documentContent.labels.comparison}>
+            <table class="comparison-table">
+              <caption>{documentContent.blocks.block_26}</caption>
+              <thead><tr><th scope="col">{documentContent.blocks.block_27}</th><th scope="col">{documentContent.blocks.block_28}</th><th scope="col">{documentContent.blocks.block_29}</th></tr></thead>
+              <tbody>
+                {changes.map(({ task, before, after }) => (
+                  <tr><th scope="row">{task}</th><td>{before}</td><td>{after}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="th-section" aria-labelledby="lifecycle">
+          <h2 id="lifecycle" class="th-section-title">{documentContent.blocks.block_31}</h2>
+          <p class="th-body">{documentContent.blocks.block_32}<strong>{documentContent.blocks.block_33}</strong>{documentContent.blocks.block_34}</p>
+          <p class="th-body">{documentContent.blocks.block_35}</p>
+          <div class="phase-list">
+            {phases.map(({ number, title, live, detail }) => (
+              <details class:list={["phase-item", { "phase-live": live }]}>
+                <summary>
+                  <span class="phase-number">{number}</span>
+                  <span class="phase-title">{title}</span>
+                  <span class="phase-status">{live ? documentContent.labels.live : documentContent.labels.planned}</span>
+                </summary>
+                <p class="th-body phase-detail">{detail}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section class="th-section" aria-labelledby="outcomes">
+          <h2 id="outcomes" class="th-section-title">{documentContent.blocks.block_37}</h2>
+          <p class="th-body"><strong>{documentContent.blocks.block_38}</strong>{documentContent.blocks.block_39}</p>
+          <p class="th-body">{documentContent.blocks.block_40}<strong>{documentContent.blocks.block_41}</strong>{documentContent.blocks.block_42}</p>
+        </section>
+
+        <div class="th-footer"><span>{documentContent.blocks.block_43}</span></div>
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  body { background: #060608; margin: 0; padding: 0; }
+  .thinking-scroll { overflow-y: auto; height: 100vh; height: 100dvh; position: relative; z-index: 10; }
+  .thinking-body { width: min(60vw, 960px); margin: 0 auto; padding: 7rem 0 8rem; }
+  .back-link { display: inline-flex; align-items: center; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); text-decoration: none; margin-bottom: 3.5rem; transition: color 0.2s; }
+  .back-link:hover { color: rgba(255,255,255,0.9); }
+  .th-header { margin-bottom: 2.5rem; }
+  .th-logo { display: block; width: 24px; height: 24px; margin-bottom: 1.25rem; }
+  .th-badge { font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rv-accent); margin-bottom: 1rem; }
+  .th-title { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem,5vw,3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: 0.03em; color: var(--rv-ink); margin: 0 0 0.75rem; }
+  .th-deck { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.2rem,3vw,1.65rem); color: var(--rv-ink); margin: 0 0 1.2rem; }
+  .th-subtitle { font-family: 'DM Sans', sans-serif; font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.55); margin: 0; }
+  .th-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 2rem 0; }
+  .metrics-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1.5rem; margin: 2rem 0; }
+  .metric-block { display: flex; flex-direction: column; gap: 8px; }
+  .metric-value { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.25rem,2.4vw,2rem); font-weight: 800; color: var(--rv-accent); line-height: 1.1; }
+  .metric-label { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.45); line-height: 1.6; }
+  .th-section { margin-bottom: 3.5rem; }
+  .th-section-title { font-family: 'Playfair Display', Georgia, serif; font-size: 1.25rem; font-weight: 800; color: var(--rv-ink); margin: 0 0 1.2rem; letter-spacing: 0.03em; }
+  .th-body { font-family: 'DM Sans', sans-serif; font-size: 0.95rem; line-height: 1.8; color: rgba(255,255,255,0.62); margin: 0 0 1rem; }
+  .th-body strong { color: var(--rv-ink); font-weight: 600; }
+  .command-block { margin: 1.5rem 0; padding: 1.2rem; border: 1px solid var(--rv-rule); border-radius: 8px; background: var(--rv-wash); }
+  .command-label { display: block; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rv-accent); margin-bottom: 0.7rem; }
+  .command-block code { font-family: 'DM Mono', monospace; font-size: 0.75rem; line-height: 1.8; color: var(--rv-ink); overflow-wrap: anywhere; }
+  .comparison-scroll { overflow-x: auto; margin-top: 2rem; }
+  .comparison-table { width: 100%; border-collapse: collapse; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; line-height: 1.6; text-align: left; }
+  .comparison-table caption { text-align: left; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rv-muted); padding-bottom: 1rem; }
+  .comparison-table th, .comparison-table td { padding: 1rem 1rem 1rem 0; border-bottom: 1px solid var(--rv-rule); vertical-align: top; }
+  .comparison-table thead th { color: var(--rv-accent); font-weight: 500; }
+  .comparison-table tbody th { color: var(--rv-ink); font-weight: 500; width: 22%; }
+  .comparison-table td { color: var(--rv-muted); width: 39%; }
+  .phase-list { margin-top: 1.5rem; border-top: 1px solid var(--rv-rule); }
+  .phase-item { border-bottom: 1px solid var(--rv-rule); }
+  .phase-item summary { display: grid; grid-template-columns: 2rem minmax(0,1fr) auto; gap: 0.75rem; align-items: center; cursor: pointer; padding: 1.1rem 0; list-style: none; }
+  .phase-item summary::-webkit-details-marker { display: none; }
+  .phase-number { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4); }
+  .phase-title { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; line-height: 1.5; color: var(--rv-ink); }
+  .phase-title::after { content: ' +'; color: rgba(255,255,255,0.4); }
+  .phase-item[open] .phase-title::after { content: ' −'; }
+  .phase-status { font-family: 'DM Mono', monospace; font-size: 0.52rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rv-muted); }
+  .phase-live .phase-number, .phase-live .phase-status { color: #4ade80; }
+  .phase-detail { margin: 0 0 1.25rem 2.75rem; }
+  .back-link:focus-visible, .phase-item summary:focus-visible, .comparison-scroll:focus-visible { outline: 2px solid var(--rv-accent); outline-offset: 5px; }
+  .th-footer { margin-top: 6rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.07); font-family: 'DM Mono', monospace; font-size: 0.58rem; line-height: 1.7; letter-spacing: 0.12em; color: rgba(255,255,255,0.25); text-transform: uppercase; }
+  @media (max-width: 900px) { .thinking-body { width: 84vw; } }
+  @media (max-width: 639px) {
+    .thinking-body { width: 90vw; padding-top: 5rem; }
+    .metrics-grid { grid-template-columns: 1fr; gap: 1.4rem; }
+    .metric-value { font-size: 1.7rem; }
+    .comparison-table { min-width: 540px; }
+    .phase-item summary { grid-template-columns: 1.5rem minmax(0,1fr) auto; gap: 0.5rem; }
+    .phase-title { font-size: 0.82rem; }
+    .phase-detail { margin-left: 2rem; }
+  }
+</style>
