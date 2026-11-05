@@ -6,29 +6,9 @@ import { MapPin } from "lucide-react";
 
 const BLR_TZ = profile.homeTimeZone;
 
-type Airport = { code: string; lat: number; lng: number; tz: string };
+type Airport = { code: string; tz: string };
 
 const AIRPORTS: Airport[] = airports;
-
-function haversine(lat1: number, lng1: number, lat2: number, lng2: number) {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLng = ((lng2 - lng1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-function nearestAirport(lat: number, lng: number): Airport {
-  return AIRPORTS.reduce((best, a) =>
-    haversine(lat, lng, a.lat, a.lng) < haversine(lat, lng, best.lat, best.lng)
-      ? a
-      : best,
-  );
-}
 
 function useClockTime(tz: string) {
   const [time, setTime] = useState("--:--:--");
@@ -84,23 +64,8 @@ export function ClockWidget() {
   const [userAirport, setUserAirport] = useState<Airport | null>(null);
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const match = AIRPORTS.find((a) => a.tz === tz);
-      setUserAirport(match ?? null);
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        setUserAirport(nearestAirport(coords.latitude, coords.longitude));
-      },
-      () => {
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const match = AIRPORTS.find((a) => a.tz === tz);
-        setUserAirport(match ?? null);
-      },
-      { timeout: 6000, maximumAge: 300_000 },
-    );
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setUserAirport(AIRPORTS.find((airport) => airport.tz === tz) ?? null);
   }, []);
 
   const userTz =
