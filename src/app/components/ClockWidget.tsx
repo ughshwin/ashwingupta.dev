@@ -31,15 +31,7 @@ function nearestAirport(lat: number, lng: number): Airport {
 }
 
 function useClockTime(tz: string) {
-  const [time, setTime] = useState(() =>
-    new Intl.DateTimeFormat("en-GB", {
-      timeZone: tz,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    }).format(new Date()),
-  );
+  const [time, setTime] = useState("--:--:--");
 
   useEffect(() => {
     const fmt = new Intl.DateTimeFormat("en-GB", {
@@ -50,6 +42,7 @@ function useClockTime(tz: string) {
       hour12: false,
     });
     const tick = () => setTime(fmt.format(new Date()));
+    tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [tz]);
