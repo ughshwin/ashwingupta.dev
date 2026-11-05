@@ -73,6 +73,7 @@ const article = jsonLd.find(s => ['Article','ScholarlyArticle'].includes(s['@typ
     <div class="rv-frame">
       <header class="rv-masthead" data-review-chrome>
         <a class="rv-brand" href={documentContent.links.a_href}>{documentContent.blocks.intro_rv_brand} <span>{documentContent.blocks.intro_span}</span></a>
+        <a class="rv-link rv-mobile-articles" href={documentContent.links.a_href_2}>{documentContent.blocks.intro_span_2}</a>
         <span class="rv-masthead-note">{documentContent.blocks.intro_rv_masthead_note}</span>
       </header>
       <div class="rv-layout">

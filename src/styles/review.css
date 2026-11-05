@@ -84,6 +84,10 @@ body.review-edition {
   white-space: nowrap;
 }
 
+.review-edition .rv-mobile-articles {
+  display: none;
+}
+
 .review-edition .rv-layout {
   display: grid;
   grid-template-columns: 225px minmax(0,1fr);
@@ -1244,16 +1248,17 @@ body.review-edition>svg {
   }
 
   .review-edition .rv-rail nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 13px 22px;
-    margin: 0;
-    overflow: visible;
+    display: none;
   }
 
-  .review-edition .rv-rail nav a {
-    display: flex;
-    gap: 7px;
+  .review-edition .rv-mobile-articles {
+    display: inline;
+  }
+
+  .review-edition .rv-rail-actions {
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
   }
 
   .review-edition .rv-main {
@@ -1375,7 +1380,7 @@ body.review-edition>svg {
     display: block;
   }
 
-  .review-edition :where(.rv-rail,.rv-resume,.rv-utilities,.rv-copy-feedback,.rv-skip,.rv-footer [data-edition-switch]) {
+  .review-edition :where(.rv-rail,.rv-resume,.rv-utilities,.rv-copy-feedback,.rv-skip,.rv-mobile-articles,.rv-footer [data-edition-switch]) {
     display: none!important;
   }
 
