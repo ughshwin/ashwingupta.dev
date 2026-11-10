@@ -6,8 +6,8 @@
     "src/styles/theme.css": "bbebb4cd280d5c3a3e808233670b18e7ce72c08da66823522d2b5ca3166acde7",
     "src/styles/static-home.css": "58e006c861565ec33ec53449dfd2b95b95a1a1216d52c32ab0f6bf7998c22f42",
     "src/styles/text-alignment.css": "b0276e4b71476604bd32b0c0476b75b09fd3e06a34a22ae1bfc2956a56ea369e",
-    "src/layouts/ReviewLayout.astro": "0f1a69a8b5c195f0db0e20b8ec2872108bd42b612fa156fa4d2aac3c2ee1e74a",
-    "src/lib/review-document.mjs": "26c06b40be50d9458372f13259715059980fb72f73077ad238726ef409c62e41",
+    "src/layouts/ReviewLayout.astro": "0f05f484eea63020f4a221eccee84e8b878b4c755a91baf07505d1869452eba0",
+    "src/lib/review-document.mjs": "80834576396174e159d8cdfee305fc91b78bbf4008759b7074ab230470e159cc",
     "src/pages/work/hsbc.astro": "ba41108562b0299963801d7b294cbbb9a0770a1373de1b04ef590c2cfa5f5dd5",
     "public/vendor/mermaid.min.js": "eda3a0ad572bbe69a318c1be0163e8233dd824f3f12939e5168feba207767151"
   }

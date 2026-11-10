@@ -2,7 +2,9 @@ import { parseFragment, serializeOuter } from 'parse5';
 import svgAssets from './review-svg-assets.json';
 import hsbcLogoUrl from '../assets/HSBCLogo.webp?url';
 import kaggleLogoUrl from '../assets/KaggleLogo.webp?url';
-import resumeUrl from '../assets/Ashwin_Gupta_Senior_AI_Engineer.pdf?url';
+import { portfolioAsset } from './portfolio/assets.ts';
+
+const resumeUrl = portfolioAsset('resume');
 
 const reviewAssets = {
   ...svgAssets,

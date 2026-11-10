@@ -16,7 +16,7 @@ import '../styles/static-home.css';
 import { presentReview } from '../lib/review-document.mjs';
 import { editionHref, originalPath } from '../lib/edition-routes';
 import { personSchema, websiteSchema } from '../lib/structured-data';
-import resume from '../assets/Ashwin_Gupta_Senior_AI_Engineer.pdf?url';
+import { portfolioAsset } from '../lib/portfolio/assets';
 import SiteAnalytics from '../app/SiteAnalytics';
 import { Mail } from 'lucide-react';
 import { Github, Linkedin } from '../lib/social-icons';
@@ -94,7 +94,7 @@ const article = jsonLd.find(s => ['Article','ScholarlyArticle'].includes(s['@typ
                 <a class="rv-social-link" href={profile.socials.github} target="_blank" rel="noopener noreferrer" aria-label={documentContent.metadata.a_title_2} title={documentContent.metadata.a_title_2}><Github size={16} /></a>
                 <a class="rv-social-link" href={profile.socials.linkedin} target="_blank" rel="noopener noreferrer" aria-label={documentContent.metadata.a_title_3} title={documentContent.metadata.a_title_3}><Linkedin size={16} /></a>
               </div>
-              <a class="rv-link rv-resume" href={resume} download>{documentContent.blocks.intro_rv_link_rv_resume}</a>
+              <a class="rv-link rv-resume" href={portfolioAsset('resume')} download={profile.resumeFilename}>{documentContent.blocks.intro_rv_link_rv_resume}</a>
             </div>
           </div>
         </aside>

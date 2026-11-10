@@ -7,7 +7,7 @@ import kaggle from '../../assets/KaggleLogo.webp?url';
 import gida from '../../assets/gidaLogo.webp?url';
 import hdfc from '../../assets/HDFClogo.webp?url';
 import prismforce from '../../assets/prismforceLogo.webp?url';
-import resume from '../../assets/Ashwin_Gupta_Senior_AI_Engineer.pdf?url';
+import resume from '../../assets/Ashwin_Gupta_AI_Systems_Engineer.docx?url';
 
 // Asset resolution belongs to the renderer; content stores stable asset keys.
 const assets: Record<string, string> = { bmsce, coforge, 'augment-ai': augment, guinness, hsbc, kaggle, gida, hdfc, prismforce, resume };

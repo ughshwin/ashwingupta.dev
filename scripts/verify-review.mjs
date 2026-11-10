@@ -26,8 +26,11 @@ for(const route of routes){
   assert.equal(nodes.filter(n=>n.tagName==='canvas'||attr(n,'data-edition-switch')!==undefined).length,0,route+' no animated design or mode switch');
   const islands=nodes.filter(n=>n.tagName==='astro-island').map(n=>attr(n,'component-url'));
   assert.ok(islands.every(url=>/\/(ClockWidget|SiteAnalytics)\./.test(url)),route+' only functional enhancements hydrate');
-  const downloads=nodes.filter(n=>n.tagName==='a'&&attr(n,'download')!==undefined&&/Senior_AI_Engineer.*\.pdf$/.test(attr(n,'href')||''));
+  const downloads=nodes.filter(n=>n.tagName==='a'&&attr(n,'download')===profile.resumeFilename);
   assert.equal(downloads.length,1,route+' one CV download');
+  const resumeHref=attr(downloads[0],'href');
+  assert.equal(path.extname(resumeHref),path.extname(profile.resumeFilename),route+' CV format');
+  assert.ok(fs.existsSync(path.join('dist',resumeHref)),route+' CV asset exists');
   assert.ok(walk(nodes.find(n=>hasClass(n,'rv-rail'))).includes(downloads[0]),route+' CV lives in the rail');
   const ribbon=nodes.filter(n=>attr(n,'id')==='awwwards');
   assert.equal(ribbon.length,1,route+' one Awwwards ribbon');
