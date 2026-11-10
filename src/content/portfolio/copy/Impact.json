@@ -1,7 +1,15 @@
 {
   "impact": "Impact",
-  "proof_not_promises": "Proof, not promises.",
-  "measurable_results_across_performance_efficiency_quality_and": "Measurable results across performance, efficiency, quality, and beyond.",
+  "results_by_area": "Results by area",
+  "result_areas": "Result areas",
+  "result_area": "Result area",
+  "sourceLabels": {
+    "hsbc-voice": "HSBC voice analytics",
+    "ashwingupta-dev": "Portfolio engineering",
+    "pageindexollama": "PageIndexOllama",
+    "skill-recommendation-engine": "Skill recommendation engine",
+    "azure-infra-docs": "Azure infrastructure documentation"
+  },
   "freshness": {
     "live": "Live",
     "recorded": "Recorded",

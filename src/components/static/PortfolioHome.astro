@@ -6,7 +6,6 @@ import { profile } from '../../content/portfolio/profile';
 import { currentEmployment, experienceRecords } from '../../content/portfolio/experience';
 import { experiencePeriod } from '../../content/portfolio/selectors.mjs';
 import { getAchievements } from '../../content/portfolio/achievements';
-import { impacts, impactCategories, CATEGORY_ORDER, getKaggleFreshness } from '../../content/portfolio/impact';
 import { featuredItems, featuredCopy } from '../../content/portfolio/featured';
 import { secondaryProjectCards } from '../../content/portfolio/projects';
 import { researchItems, researchCopy } from '../../content/portfolio/research';
@@ -17,20 +16,17 @@ import skillsSource from '../../content/portfolio/skills.json';
 import heroSource from '../../content/portfolio/copy/Hero.json';
 import aboutCopySource from '../../content/portfolio/copy/About.json';
 import experienceCopySource from '../../content/portfolio/copy/ExperienceTimeline.json';
-import impactCopySource from '../../content/portfolio/copy/Impact.json';
 import projectCopySource from '../../content/portfolio/copy/Projects.json';
 import recommendationCopySource from '../../content/portfolio/copy/Recommendations.json';
 import skillCopySource from '../../content/portfolio/copy/Skills.json';
 import { staticAsset, inlineCopy } from '../../lib/static-assets';
+import ImpactReadingPane from './ImpactReadingPane.astro';
 import NarrativeCard from './NarrativeCard.astro';
 
 const about=resolveCopy(aboutSource), recommendations=resolveCopy(recommendationSource),skills=resolveCopy(skillsSource);
 const hero=resolveCopy(heroSource), aboutCopy=resolveCopy(aboutCopySource), experienceCopy=resolveCopy(experienceCopySource);
-const impactCopy=resolveCopy(impactCopySource), projectCopy=resolveCopy(projectCopySource), recommendationCopy=resolveCopy(recommendationCopySource),skillCopy=resolveCopy(skillCopySource);
+const projectCopy=resolveCopy(projectCopySource), recommendationCopy=resolveCopy(recommendationCopySource),skillCopy=resolveCopy(skillCopySource);
 const entries=[...experienceRecords].sort((a,b)=>b.start.localeCompare(a.start));
-const groups=CATEGORY_ORDER.map(category=>({category,items:impacts.filter(metric=>metric.category===category)})).filter(group=>group.items.length).sort((a,b)=>b.items.length-a.items.length);
-const rows=[groups.slice(0,3),groups.slice(3,5),groups.slice(5)].filter(row=>row.length);
-const freshness=getKaggleFreshness({stats:null,status:'recorded'});
 const icons:Record<string,typeof Mail>={email:Mail,github:Github,linkedin:Linkedin,location:MapPin};
 ---
 <div class="rv-source rv-home rv-native" data-static-home>
@@ -59,17 +55,7 @@ const icons:Record<string,typeof Mail>={email:Mail,github:Github,linkedin:Linked
       <p class="native-employer">{entry.company}</p><ul>{entry.bullets.map(bullet=><li>{bullet}</li>)}</ul>
     </article>)}</div>
   </section>
-  <section id="impact">
-    <span class="rv-label">{impactCopy.impact}</span><h2>{impactCopy.proof_not_promises}</h2><p>{impactCopy.measurable_results_across_performance_efficiency_quality_and}</p>
-    <div class="impact-outcomes-rows">{rows.map(row=><div class="impact-outcomes-grid">{row.map(group=><section class="impact-outcome-column">
-      <h3 class="impact-outcome-heading">{impactCategories[group.category].label}</h3><ul class="impact-outcome-list">
-        {group.items.map(metric=><li class="impact-outcome-metric" data-kaggle-stat={metric.liveStat}>
-          <div class="impact-outcome-readout"><span class="impact-outcome-value" data-value={metric.value}><span class="impact-slot-visual">{metric.value}</span></span>
-          <span class="impact-outcome-copy"><span class="impact-outcome-label">{metric.label}</span><span class="impact-outcome-source" data-impact-project={metric.href}>{metric.item}</span></span>
-          {metric.liveStat&&<span class="impact-outcome-freshness" title={freshness.detail}>{freshness.label}</span>}</div>
-        </li>)}
-      </ul></section>)}</div>)}</div>
-  </section>
+  <ImpactReadingPane />
   <section id="featured">
     <span class="rv-label">{featuredCopy.featured}</span><h2>{featuredCopy.what_the_arc_produced}</h2>
     <div class="rv-grid">{featuredItems.map(item=><NarrativeCard href={item.link} name={item.name} title={item.title} subtitle={item.subtitle} badge={featuredCopy.typeLabels[item.type]} secondaryBadge={item.secondaryBadge} bullets={item.bullets} labels={featuredCopy.stageLabels} />)}</div>

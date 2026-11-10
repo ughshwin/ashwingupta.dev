@@ -1,0 +1,213 @@
+---
+import { resolveCopy } from '../../content/portfolio/copy';
+import source from '../../content/portfolio/copy/Impact.json';
+import { CATEGORY_ORDER, getKaggleFreshness, impactCategories, impacts } from '../../content/portfolio/impact';
+
+const copy = resolveCopy(source);
+const sourceLabels: Readonly<Record<string, string>> = copy.sourceLabels;
+const groups = CATEGORY_ORDER.map(category => {
+  const items = impacts.filter(metric => metric.category === category);
+  return {
+    category,
+    label: impactCategories[category].label,
+    items,
+    count: `${items.length} ${items.length === 1 ? 'result' : 'results'}`,
+  };
+}).filter(group => group.items.length);
+const initial = groups[0]?.category;
+const freshness = getKaggleFreshness({ stats: null, status: 'recorded' });
+---
+
+<section id="impact" aria-labelledby="impact-heading">
+  <header class="ledger-head">
+    <span class="ledger-label">{copy.impact}</span>
+    <h2 id="impact-heading">{copy.results_by_area}</h2>
+  </header>
+
+  <div class="ledger-reader">
+    <div class="ledger-reader-buttons" role="group" aria-label={copy.result_areas}>
+      {groups.map(({ category, label, items }) => (
+        <button class="ledger-area-button" type="button" data-impact-area={category}
+          aria-controls={`impact-results-${category}`} aria-pressed={category === initial ? 'true' : 'false'}>
+          <span>{label}</span><span class="ledger-count">{items.length}</span>
+        </button>
+      ))}
+    </div>
+    <label class="ledger-reader-select">
+      <span class="ledger-label">{copy.result_area}</span>
+      <select>
+        {groups.map(({ category, label, count }) => (
+          <option value={category} data-count={count} selected={category === initial}>{label}</option>
+        ))}
+      </select>
+    </label>
+    <div class="ledger-reader-results">
+      {groups.map(({ category, label, items, count }) => (
+        <section id={`impact-results-${category}`} data-impact-results={category}
+          aria-labelledby={`impact-title-${category}`} hidden={category !== initial}>
+          <div class="ledger-reader-heading">
+            <h3 id={`impact-title-${category}`}>{label}</h3><span class="ledger-count">{count}</span>
+          </div>
+          <ul class="ledger-records">
+            {items.map(metric => (
+              <li class="ledger-record" data-kaggle-stat={metric.liveStat}>
+                <div>{metric.label}<span class="ledger-source">
+                  {sourceLabels[metric.projectId ?? ''] ?? metric.item}
+                  {metric.liveStat && <> · <span data-kaggle-freshness title={freshness.detail}>{freshness.label}</span></>}
+                </span></div>
+                <span class="ledger-value" data-kaggle-value={metric.liveStat ? '' : undefined}>{metric.value}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+    <span class="ledger-status" role="status"></span>
+  </div>
+</section>
+
+<script>
+  const impact = document.getElementById('impact');
+  if (impact) {
+    const buttons = impact.querySelectorAll<HTMLButtonElement>('[data-impact-area]');
+    const panels = impact.querySelectorAll<HTMLElement>('[data-impact-results]');
+    const picker = impact.querySelector('select')!;
+    const status = impact.querySelector('[role="status"]')!;
+
+    function showArea(area: string) {
+      picker.value = area;
+      for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.impactArea === area));
+      for (const panel of panels) panel.hidden = panel.dataset.impactResults !== area;
+      const option = picker.selectedOptions[0];
+      status.textContent = `${option.textContent}, ${option.dataset.count}`;
+    }
+
+    for (const button of buttons) button.addEventListener('click', () => showArea(button.dataset.impactArea!));
+    picker.addEventListener('change', () => showArea(picker.value));
+  }
+</script>
+
+<style>
+  :global(body.review-edition[data-review-home]) { --rv-paper: #f4f0e7; }
+
+  #impact {
+    --ledger-ink: #29271f;
+    --ledger-muted: #61594c;
+    --ledger-rule: #d8d0c1;
+    --ledger-strong-rule: #ada291;
+    --ledger-mono: 'DM Mono', ui-monospace, monospace;
+    container-type: inline-size;
+    border-top-color: var(--ledger-rule);
+    padding-block: 25px 28px;
+    color: var(--ledger-ink);
+    font: 400 15px/1.5 'DM Sans', system-ui, sans-serif;
+    overflow-wrap: anywhere;
+  }
+  #impact * { text-align: start !important; }
+  .ledger-head { margin-bottom: 20px; }
+  .ledger-label, .ledger-count, .ledger-source {
+    color: var(--ledger-muted);
+    font: 400 11px/1.45 var(--ledger-mono);
+  }
+  .ledger-label {
+    display: block;
+    margin-bottom: 5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  #impact :is(h2, h3) {
+    margin: 0;
+    color: inherit;
+    font: 400 clamp(27px, 5vw, 36px)/1.16 'Playfair Display', Georgia, serif;
+    letter-spacing: -.025em;
+    text-wrap: wrap;
+  }
+  .ledger-reader {
+    display: grid;
+    grid-template-columns: minmax(170px, .9fr) minmax(0, 2fr);
+    gap: 16px 28px;
+    align-items: start;
+  }
+  .ledger-area-button {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-block-size: 42px;
+    padding: 10px 2px 10px 9px;
+    border: 0;
+    border-top: 1px solid var(--ledger-rule);
+    background: none;
+    color: var(--ledger-muted);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .ledger-area-button[aria-pressed='true'] {
+    border-top-color: var(--ledger-strong-rule);
+    box-shadow: inset 2px 0 var(--ledger-strong-rule);
+    color: var(--ledger-ink);
+    font-weight: 500;
+  }
+  #impact :is(button, select):focus-visible { outline: 2px solid var(--ledger-ink); outline-offset: 2px; }
+  .ledger-count { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .ledger-reader-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 9px;
+  }
+  #impact h3 { font-size: clamp(18px, 3vw, 23px); }
+  #impact .ledger-records { margin: 0; padding: 0 0 8px; list-style: none; color: inherit; }
+  #impact .ledger-record {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 12px;
+    align-items: baseline;
+    margin: 0;
+    padding-block: 10px;
+    border-top: 1px solid color-mix(in srgb, var(--ledger-rule) 70%, transparent);
+    font: 400 13px/1.5 'DM Sans', system-ui, sans-serif;
+  }
+  .ledger-source { display: block; margin-top: 3px; }
+  #impact .ledger-value {
+    max-inline-size: 13ch;
+    font: 500 13px/1.45 var(--ledger-mono);
+    font-variant-numeric: tabular-nums;
+    text-align: end !important;
+  }
+  .ledger-reader-select { display: none; }
+  .ledger-reader-select select {
+    width: 100%;
+    min-block-size: 44px;
+    padding: 6px 8px;
+    border: 1px solid var(--ledger-strong-rule);
+    border-radius: 0;
+    background: var(--rv-paper);
+    color: var(--ledger-ink);
+    font: inherit;
+    font-size: 16px;
+  }
+  .ledger-status {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  @container (max-width: 560px) {
+    .ledger-reader-buttons { display: none; }
+    .ledger-reader-select { display: block; }
+    .ledger-reader { grid-template-columns: 1fr; }
+  }
+  @media (pointer: coarse) { .ledger-area-button { min-block-size: 44px; } }
+  @media print, (scripting: none) {
+    .ledger-reader { display: block; }
+    .ledger-reader-buttons, .ledger-reader-select { display: none; }
+    .ledger-reader-results > section[hidden] { display: block; }
+    .ledger-reader-results > section + section { margin-top: 20px; }
+  }
+</style>

@@ -49,7 +49,7 @@ for(const route of routes){
 const home=load('/'),homeSource=home.find(n=>attr(n,'data-static-home')!==undefined);
 assert.ok(homeSource,'Homepage is a native Astro template');
 const section=id=>home.find(n=>attr(n,'id')===id);
-assert.deepEqual(walk(homeSource).filter(n=>n.tagName==='section'&&attr(n,'id')).map(n=>attr(n,'id')),['hero','about','experience','impact','featured','projects','recommendations','stack','contact']);
+assert.deepEqual(homeSource.childNodes.filter(n=>n.tagName==='section'&&attr(n,'id')).map(n=>attr(n,'id')),['hero','about','experience','impact','featured','projects','recommendations','stack','contact']);
 assert.equal(walk(section('hero')).filter(n=>n.tagName==='img').length,0,'Removed portrait stays removed');
 const career=home.filter(n=>attr(n,'data-experience-id'));
 assert.deepEqual(career.map(n=>attr(n,'data-experience-id')),[...experience].sort((a,b)=>b.start.localeCompare(a.start)).map(e=>e.id),'Newest experience first');
@@ -68,8 +68,13 @@ for(const rec of read('recommendations')){
   assert.ok(hasClass(card.childNodes.filter(n=>n.tagName).at(-1),'recommendation-attribution'),'Attribution at bottom');
 }
 assert.equal(recs.length,read('recommendations').length);
-assert.equal(walk(section('impact')).filter(n=>n.tagName==='a').length,0,'Impact names are plain text');
-assert.equal(home.filter(n=>hasClass(n,'impact-outcome-metric')).length,read('impact').entries.length,'All impact entries retained');
+const impact=read('impact'), ledger=walk(section('impact'));
+assert.equal(ledger.filter(n=>n.tagName==='a').length,0,'Impact names are plain text');
+assert.equal(ledger.filter(n=>hasClass(n,'ledger-record')).length,impact.entries.length,'All impact entries retained');
+const areas=ledger.filter(n=>attr(n,'data-impact-results')!==undefined);
+const impactOrder=impact.order.filter(category=>impact.entries.some(item=>item.category===category));
+assert.deepEqual(areas.map(n=>attr(n,'data-impact-results')),impactOrder,'Impact categories follow catalogue order');
+assert.deepEqual(areas.filter(n=>attr(n,'hidden')===undefined).map(n=>attr(n,'data-impact-results')),impactOrder.slice(0,1),'First Impact category opens on load');
 assert.equal(walk(section('stack')).filter(n=>hasClass(n,'native-skill-category')).length,read('skills').length,'All skill categories retained');
 const personal=home.find(n=>attr(n,'data-project-id')==='ashwingupta-dev');
 assert.equal(attr(walk(personal).find(n=>n.tagName==='img'),'src'),'/favicon.svg','Personal project favicon');

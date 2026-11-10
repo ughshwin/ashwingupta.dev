@@ -102,10 +102,9 @@ function renderKaggle() {
   document.querySelectorAll<HTMLElement>('[data-kaggle-stat]').forEach(row => {
     const key = row.dataset.kaggleStat as 'downloads' | 'views';
     const value = formatKaggleCount(counts[key]);
-    row.querySelectorAll<HTMLElement>('.impact-slot-accessible,.impact-slot-visual').forEach(el => { el.textContent = value; });
-    const readout = row.querySelector<HTMLElement>('.impact-outcome-value');
-    if (readout) readout.dataset.value = value;
-    const freshness = row.querySelector<HTMLElement>('.impact-outcome-freshness');
+    const readout = row.querySelector<HTMLElement>('[data-kaggle-value]');
+    if (readout) readout.textContent = value;
+    const freshness = row.querySelector<HTMLElement>('[data-kaggle-freshness]');
     if (freshness) {
       const presentation = getKaggleFreshness({ stats, status });
       freshness.textContent = presentation.label;

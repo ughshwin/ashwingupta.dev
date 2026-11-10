@@ -11,7 +11,7 @@ import contact from './copy/Contact.json';
 export const homeContents = resolveCopy([
   {id:'about',title:about.headline},
   {id:'experience',title:experience.the_trajectory},
-  {id:'impact',title:impact.proof_not_promises},
+  {id:'impact',title:impact.results_by_area},
   {id:'featured',title:featured.what_the_arc_produced},
   {id:'projects',title:projects.systems_that_had_to_hold},
   {id:'recommendations',title:recommendations.in_their_words},
