@@ -33,11 +33,12 @@
   ],
   "entries": [
     {
-      "label": "per-VM session capacity (20 → 140–160)",
+      "label": "VM capacity",
       "category": "scale",
       "magnitude": 5,
       "projectId": "hsbc-voice",
-      "value": "{{projects.hsbc-voice.metrics.sessionCapacityMultiplier}}"
+      "value": "{{projects.hsbc-voice.metrics.sessionCapacityMultiplier}}",
+      "result": "{{projects.hsbc-voice.metrics.sessionCapacityMultiplier}}’d"
     },
     {
       "label": "concurrent voice sessions at peak",
@@ -47,18 +48,19 @@
       "value": "{{projects.hsbc-voice.metrics.concurrentSessions}}"
     },
     {
-      "label": "users validated via SIPp load test",
+      "label": "users validated in SIPp load tests",
       "category": "scale",
       "magnitude": 3,
       "projectId": "hsbc-voice",
       "value": "2,000"
     },
     {
-      "label": "end-to-end latency held at peak",
+      "label": "end-to-end latency at peak",
       "category": "scale",
       "magnitude": 4,
       "projectId": "hsbc-voice",
-      "value": "{{projects.hsbc-voice.metrics.peakLatencySlo}}"
+      "value": "{{projects.hsbc-voice.metrics.peakLatencySlo}}",
+      "result": "<300 ms"
     },
     {
       "label": "packet loss at 1,600+ sessions",
@@ -68,28 +70,31 @@
       "value": "<5%"
     },
     {
-      "label": "recommendation inference (99th pct)",
+      "label": "p99 recommendation latency",
       "category": "scale",
       "magnitude": 4,
       "projectId": "skill-recommendation-engine",
-      "value": "{{projects.skill-recommendation-engine.metrics.inferenceLatency}}"
+      "value": "{{projects.skill-recommendation-engine.metrics.inferenceLatency}}",
+      "result": "<50 ms"
     },
     {
-      "label": "full test load, single GPU",
+      "label": "handled the full test load",
       "category": "scale",
       "magnitude": 3,
       "projectId": "skill-recommendation-engine",
-      "value": "1× T4"
+      "value": "1× T4",
+      "result": "One T4"
     },
     {
-      "label": "canvas frame time (18–25 → 4–6ms)",
+      "label": "canvas frame time, down from 18–25 ms",
       "category": "scale",
       "magnitude": 3,
       "projectId": "ashwingupta-dev",
-      "value": "18→4ms"
+      "value": "18→4ms",
+      "result": "4–6 ms"
     },
     {
-      "label": "stable under CPU throttle",
+      "label": "held under CPU throttling",
       "category": "scale",
       "magnitude": 2,
       "projectId": "ashwingupta-dev",
@@ -97,125 +102,137 @@
     },
     {
       "value": "hrs→min",
-      "label": "study & artefact kickoff: 3–4 hrs → 10–15 min",
+      "label": "lower kickoff time",
       "category": "cost",
       "magnitude": 4,
-      "projectId": "process-dashboard"
+      "projectId": "process-dashboard",
+      "result": "~94%"
     },
     {
       "value": "{{projects.process-dashboard.metrics.onboardingCommand}}",
-      "label": "process onboarding replaces a bespoke dashboard",
+      "label": "to onboard a process",
       "category": "cost",
       "magnitude": 3,
       "projectId": "process-dashboard"
     },
     {
-      "label": "annualized compute savings",
+      "label": "saved in annual projected infra costs",
       "category": "cost",
       "magnitude": 5,
       "projectId": "hsbc-voice",
-      "value": "~$1.3M"
+      "value": "~$1.3M",
+      "result": "$1.3M+"
     },
     {
       "label": "monthly compute cost",
       "category": "cost",
       "magnitude": 5,
       "projectId": "hsbc-voice",
-      "value": "$118K→$8K"
+      "value": "$118K→$8K",
+      "result": "$118K → $8K"
     },
     {
-      "label": "production VMs (32 → 8 vCPU)",
+      "label": "production VMs, from 32 to 8 vCPU each",
       "category": "cost",
       "magnitude": 3,
       "projectId": "hsbc-voice",
-      "value": "80→15"
+      "value": "80→15",
+      "result": "80 → 15"
     },
     {
-      "label": "infra docs: 2–3 days → 2–3 hours",
+      "label": "for infrastructure docs, down from 2–3 days",
       "category": "cost",
       "magnitude": 4,
       "projectId": "azure-infra-docs",
-      "value": "days→hrs"
+      "value": "days→hrs",
+      "result": "2–3 hours"
     },
     {
-      "label": "image weight cut (2 MB → 211 KB)",
+      "label": "images, from 2 MB to 211 KB",
       "category": "cost",
       "magnitude": 3,
       "projectId": "ashwingupta-dev",
-      "value": "{{projects.ashwingupta-dev.metrics.imageReduction}}"
+      "value": "{{projects.ashwingupta-dev.metrics.imageReduction}}",
+      "result": "{{projects.ashwingupta-dev.metrics.imageReduction}} smaller"
     },
     {
-      "label": "JS bundle cut",
+      "label": "JavaScript bundle",
       "category": "cost",
       "magnitude": 3,
       "projectId": "ashwingupta-dev",
-      "value": "{{projects.ashwingupta-dev.metrics.javascriptReduction}}"
+      "value": "{{projects.ashwingupta-dev.metrics.javascriptReduction}}",
+      "result": "{{projects.ashwingupta-dev.metrics.javascriptReduction}} smaller"
     },
     {
-      "label": "CSS-animated DOM nodes eliminated",
+      "label": "CSS-animated DOM nodes removed",
       "category": "cost",
       "magnitude": 2,
       "projectId": "ashwingupta-dev",
-      "value": "400→0"
+      "value": "400→0",
+      "result": "400"
     },
     {
-      "label": "incident MTTR",
+      "label": "mean time to resolve incidents",
       "category": "reliability",
       "magnitude": 4,
       "projectId": "hsbc-voice",
-      "value": "2hr→10m"
+      "value": "2hr→10m",
+      "result": "2 hrs → 10 min"
     },
     {
-      "label": "post-call documentation time",
+      "label": "for post-call documentation",
       "category": "reliability",
       "magnitude": 3,
       "projectId": "hsbc-voice",
-      "value": "15→3m"
+      "value": "15→3m",
+      "result": "15 → 3 min"
     },
     {
-      "label": "log lines correlated in 5–6 min",
+      "label": "log lines correlated in 5–6 minutes",
       "category": "reliability",
       "magnitude": 3,
       "projectId": "hsbc-voice",
       "value": "250K+"
     },
     {
-      "label": "fabricated components (guardrail)",
+      "label": "in infrastructure docs",
       "category": "reliability",
       "magnitude": 3,
       "projectId": "azure-infra-docs",
-      "value": "{{projects.azure-infra-docs.metrics.fabricatedComponents}}"
+      "value": "{{projects.azure-infra-docs.metrics.fabricatedComponents}}",
+      "result": "Zero fabricated components"
     },
     {
-      "label": "determinism rate",
+      "label": "determinism in validation",
       "category": "reliability",
       "magnitude": 4,
       "projectId": "scholaros",
       "value": "{{projects.scholaros.metrics.determinismRate}}"
     },
     {
-      "label": "fully offline / air-gapped",
+      "label": "retrieval without API keys",
       "category": "reliability",
       "magnitude": 3,
       "projectId": "pageindexollama",
-      "value": "0 keys"
+      "value": "0 keys",
+      "result": "Fully offline"
     },
     {
-      "label": "factual accuracy, vehicle spec queries",
+      "label": "factual accuracy on vehicle specs",
       "category": "accuracy",
       "magnitude": 5,
       "projectId": "here-app",
       "value": "{{projects.here-app.metrics.factualAccuracy}}"
     },
     {
-      "label": "table extraction across carrier PDFs",
+      "label": "accuracy extracting PDF tables",
       "category": "accuracy",
       "magnitude": 4,
       "item": "Airline Contract Intelligence",
       "value": "~96%"
     },
     {
-      "label": "physics benchmarks, stable convergence",
+      "label": "physics benchmarks with stable convergence",
       "category": "accuracy",
       "magnitude": 3,
       "projectId": "pinns",
@@ -226,133 +243,149 @@
       "category": "accuracy",
       "magnitude": 3,
       "projectId": "skill-recommendation-engine",
-      "value": "{{projects.skill-recommendation-engine.metrics.recommendationRelevance}}"
+      "value": "{{projects.skill-recommendation-engine.metrics.recommendationRelevance}}",
+      "result": "30% higher"
     },
     {
-      "label": "languages, first-class RAG targets",
+      "label": "supported in retrieval",
       "category": "reach",
       "magnitude": 5,
       "projectId": "here-app",
-      "value": "{{projects.here-app.metrics.languagesSupported}}"
+      "value": "{{projects.here-app.metrics.languagesSupported}}",
+      "result": "163+ languages"
     },
     {
-      "label": "languages for content generation",
+      "label": "for content generation",
       "category": "reach",
       "magnitude": 3,
       "item": "Laminar (toolchain)",
-      "value": "163+"
+      "value": "163+",
+      "result": "163+ languages"
     },
     {
-      "label": "languages, cURL→code conversion",
+      "label": "for cURL-to-code conversion",
       "category": "reach",
       "magnitude": 2,
       "item": "Polymorph (toolchain)",
-      "value": "20+"
+      "value": "20+",
+      "result": "20+ languages"
     },
     {
-      "label": "downloads, {{kaggle.metricLabelName}}",
+      "label": "downloads",
       "category": "reach",
       "magnitude": 3,
       "liveStat": "downloads"
     },
     {
-      "label": "views, {{kaggle.metricLabelName}}",
+      "label": "views",
       "category": "reach",
       "magnitude": 3,
       "liveStat": "views"
     },
     {
-      "label": "Java Spring AI trainer, 130+ trained",
+      "label": "from Java Spring AI training for 130+ participants",
       "category": "reach",
       "magnitude": 3,
       "item": "Training",
       "href": "/about",
-      "value": "NPS +50"
+      "value": "NPS +50",
+      "result": "+50 NPS"
     },
     {
       "value": "8 phases",
-      "label": "live artefact lifecycle in one process workspace",
+      "label": "in one workspace",
       "category": "systems",
       "magnitude": 3,
-      "projectId": "process-dashboard"
+      "projectId": "process-dashboard",
+      "result": "8 artefact phases"
     },
     {
       "value": "Team-wide",
-      "label": "adopted as the standard process dashboard",
+      "label": "as the standard process dashboard",
       "category": "systems",
       "magnitude": 3,
-      "projectId": "process-dashboard"
+      "projectId": "process-dashboard",
+      "result": "Team-wide adoption"
     },
     {
-      "label": "inference backends under one API",
+      "label": "behind one API",
       "category": "systems",
       "magnitude": 4,
       "projectId": "controla",
-      "value": "19"
+      "value": "19",
+      "result": "19 inference backends"
     },
     {
-      "label": "modalities, single control plane",
+      "label": "through one control plane",
       "category": "systems",
       "magnitude": 3,
       "projectId": "controla",
-      "value": "7"
+      "value": "7",
+      "result": "7 modalities"
     },
     {
-      "label": "scoring dimensions per routing decision",
+      "label": "per routing decision",
       "category": "systems",
       "magnitude": 2,
       "projectId": "controla",
-      "value": "6"
+      "value": "6",
+      "result": "6 scoring dimensions"
     },
     {
-      "label": "capabilities · deterministic services",
+      "label": "and 9 deterministic services",
       "category": "systems",
       "magnitude": 3,
       "projectId": "scholaros",
-      "value": "5 · 9"
+      "value": "5 · 9",
+      "result": "5 capabilities"
     },
     {
-      "label": "chunks processed (Mar 2026 validation)",
+      "label": "chunks processed in March 2026 validation",
       "category": "systems",
       "magnitude": 2,
       "projectId": "scholaros",
       "value": "{{projects.scholaros.metrics.validationChunks}}"
     },
     {
-      "label": "contradictions detected in corpus",
+      "label": "found in the validation corpus",
       "category": "systems",
       "magnitude": 2,
       "projectId": "scholaros",
-      "value": "{{projects.scholaros.metrics.validationContradictions}}"
+      "value": "{{projects.scholaros.metrics.validationContradictions}}",
+      "result": "76 contradictions"
     },
     {
-      "label": "peer-reviewed paper, Vol. {{publications.ncisct2022.volume}} ({{projects.ncisct-2022.displayName}})",
+      "label": "for peer-reviewed research on MCQ generation",
       "category": "research",
       "magnitude": 4,
       "projectId": "ncisct-2022",
-      "value": "IJISET"
+      "value": "IJISET",
+      "result": "Published in IJISET"
     },
     {
-      "label": "white paper published, Dec 2025",
+      "label": "in December 2025",
       "category": "research",
       "magnitude": 4,
       "projectId": "pinns",
-      "value": "CellStrat"
+      "value": "CellStrat",
+      "result": "Published with CellStrat"
     },
     {
-      "label": "enterprise workflows / verticals (white paper)",
+      "label": "documented across 2 industries",
       "category": "research",
       "magnitude": 2,
       "projectId": "pinns",
-      "value": "6 / 2"
+      "value": "6 / 2",
+      "result": "6 workflows"
     },
     {
-      "label": "physics-constrained eVTOL projects, IISc",
+      "label": "modelled in 8 months",
       "category": "research",
       "magnitude": 2,
       "item": "Research arc",
       "href": "/about",
-      "value": "5 / 8mo"
+      "value": "5 / 8mo",
+      "result": "5 eVTOL projects"
     }
   ]
 }

@@ -8,7 +8,7 @@ import { formatKaggleCount, KAGGLE_DATASET_URL } from '../../lib/kaggle-stats';
 
 export type ImpactCategory = keyof typeof data.categories;
 export type Impact = {
-  value: string; label: string; item: string; category: ImpactCategory;
+  value: string; result?: string; label: string; item: string; category: ImpactCategory;
   magnitude: 1 | 2 | 3 | 4 | 5; href?: string; projectId?: string;
   liveStat?: 'downloads' | 'views';
 };

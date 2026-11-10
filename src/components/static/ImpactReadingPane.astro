@@ -11,7 +11,6 @@ const groups = CATEGORY_ORDER.map(category => {
     category,
     label: impactCategories[category].label,
     items,
-    count: `${items.length} ${items.length === 1 ? 'result' : 'results'}`,
   };
 }).filter(group => group.items.length);
 const initial = groups[0]?.category;
@@ -19,43 +18,41 @@ const freshness = getKaggleFreshness({ stats: null, status: 'recorded' });
 ---
 
 <section id="impact" aria-labelledby="impact-heading">
-  <header class="ledger-head">
-    <span class="ledger-label">{copy.impact}</span>
-    <h2 id="impact-heading">{copy.results_by_area}</h2>
-  </header>
+  <span class="rv-label">{copy.impact}</span>
+  <h2 id="impact-heading">{copy.results_by_area}</h2>
 
   <div class="ledger-reader">
     <div class="ledger-reader-buttons" role="group" aria-label={copy.result_areas}>
-      {groups.map(({ category, label, items }) => (
+      {groups.map(({ category, label }) => (
         <button class="ledger-area-button" type="button" data-impact-area={category}
           aria-controls={`impact-results-${category}`} aria-pressed={category === initial ? 'true' : 'false'}>
-          <span>{label}</span><span class="ledger-count">{items.length}</span>
+          {label}
         </button>
       ))}
     </div>
     <label class="ledger-reader-select">
-      <span class="ledger-label">{copy.result_area}</span>
+      <span class="rv-label">{copy.result_area}</span>
       <select>
-        {groups.map(({ category, label, count }) => (
-          <option value={category} data-count={count} selected={category === initial}>{label}</option>
+        {groups.map(({ category, label }) => (
+          <option value={category} selected={category === initial}>{label}</option>
         ))}
       </select>
     </label>
     <div class="ledger-reader-results">
-      {groups.map(({ category, label, items, count }) => (
+      {groups.map(({ category, label, items }) => (
         <section id={`impact-results-${category}`} data-impact-results={category}
           aria-labelledby={`impact-title-${category}`} hidden={category !== initial}>
-          <div class="ledger-reader-heading">
-            <h3 id={`impact-title-${category}`}>{label}</h3><span class="ledger-count">{count}</span>
-          </div>
+          <h3 id={`impact-title-${category}`}>{label}</h3>
           <ul class="ledger-records">
             {items.map(metric => (
-              <li class="ledger-record" data-kaggle-stat={metric.liveStat}>
-                <div>{metric.label}<span class="ledger-source">
+              <li class="rv-card ledger-record" data-kaggle-stat={metric.liveStat}>
+                <p>
+                  <strong data-kaggle-value={metric.liveStat ? '' : undefined}>{metric.result ?? metric.value}</strong>{' '}{metric.label}
+                </p>
+                <span class="rv-label ledger-source">
                   {sourceLabels[metric.projectId ?? ''] ?? metric.item}
                   {metric.liveStat && <> · <span data-kaggle-freshness title={freshness.detail}>{freshness.label}</span></>}
-                </span></div>
-                <span class="ledger-value" data-kaggle-value={metric.liveStat ? '' : undefined}>{metric.value}</span>
+                </span>
               </li>
             ))}
           </ul>
@@ -78,8 +75,7 @@ const freshness = getKaggleFreshness({ stats: null, status: 'recorded' });
       picker.value = area;
       for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.impactArea === area));
       for (const panel of panels) panel.hidden = panel.dataset.impactResults !== area;
-      const option = picker.selectedOptions[0];
-      status.textContent = `${option.textContent}, ${option.dataset.count}`;
+      status.textContent = picker.selectedOptions[0].textContent;
     }
 
     for (const button of buttons) button.addEventListener('click', () => showArea(button.dataset.impactArea!));
@@ -88,105 +84,81 @@ const freshness = getKaggleFreshness({ stats: null, status: 'recorded' });
 </script>
 
 <style>
-  :global(body.review-edition[data-review-home]) { --rv-paper: #f4f0e7; }
-
-  #impact {
-    --ledger-ink: #29271f;
-    --ledger-muted: #61594c;
-    --ledger-rule: #d8d0c1;
-    --ledger-strong-rule: #ada291;
-    --ledger-mono: 'DM Mono', ui-monospace, monospace;
-    container-type: inline-size;
-    border-top-color: var(--ledger-rule);
-    padding-block: 25px 28px;
-    color: var(--ledger-ink);
-    font: 400 15px/1.5 'DM Sans', system-ui, sans-serif;
-    overflow-wrap: anywhere;
+  #impact { container-type: inline-size; }
+  #impact > :is(.rv-label, h2) {
+    text-align: start !important;
   }
-  #impact * { text-align: start !important; }
-  .ledger-head { margin-bottom: 20px; }
-  .ledger-label, .ledger-count, .ledger-source {
-    color: var(--ledger-muted);
-    font: 400 11px/1.45 var(--ledger-mono);
-  }
-  .ledger-label {
+  #impact .ledger-reader-select > .rv-label {
     display: block;
-    margin-bottom: 5px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
+    margin-inline: 0;
   }
-  #impact :is(h2, h3) {
-    margin: 0;
-    color: inherit;
-    font: 400 clamp(27px, 5vw, 36px)/1.16 'Playfair Display', Georgia, serif;
-    letter-spacing: -.025em;
-    text-wrap: wrap;
+  #impact h3,
+  #impact .ledger-reader-select > .rv-label,
+  #impact .ledger-record :is(p, .ledger-source) {
+    text-align: center !important;
   }
-  .ledger-reader {
-    display: grid;
-    grid-template-columns: minmax(170px, .9fr) minmax(0, 2fr);
-    gap: 16px 28px;
-    align-items: start;
+  .ledger-reader-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 20px;
+    margin-bottom: 28px;
   }
   .ledger-area-button {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    min-block-size: 42px;
-    padding: 10px 2px 10px 9px;
+    min-block-size: 44px;
+    padding: 8px 0;
     border: 0;
-    border-top: 1px solid var(--ledger-rule);
+    border-block-end: 1px solid transparent;
     background: none;
-    color: var(--ledger-muted);
+    color: var(--rv-muted);
     font: inherit;
-    font-size: 13px;
+    font-size: 14px;
+    text-align: start;
     cursor: pointer;
   }
+  .ledger-area-button:hover,
   .ledger-area-button[aria-pressed='true'] {
-    border-top-color: var(--ledger-strong-rule);
-    box-shadow: inset 2px 0 var(--ledger-strong-rule);
-    color: var(--ledger-ink);
-    font-weight: 500;
+    border-block-end-color: var(--rv-accent);
+    color: var(--rv-accent);
   }
-  #impact :is(button, select):focus-visible { outline: 2px solid var(--ledger-ink); outline-offset: 2px; }
-  .ledger-count { white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .ledger-reader-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 9px;
-  }
-  #impact h3 { font-size: clamp(18px, 3vw, 23px); }
-  #impact .ledger-records { margin: 0; padding: 0 0 8px; list-style: none; color: inherit; }
-  #impact .ledger-record {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px 12px;
-    align-items: baseline;
+  #impact .ledger-records {
     margin: 0;
-    padding-block: 10px;
-    border-top: 1px solid color-mix(in srgb, var(--ledger-rule) 70%, transparent);
-    font: 400 13px/1.5 'DM Sans', system-ui, sans-serif;
+    padding: 0;
+    list-style: none;
   }
-  .ledger-source { display: block; margin-top: 3px; }
-  #impact .ledger-value {
-    max-inline-size: 13ch;
-    font: 500 13px/1.45 var(--ledger-mono);
-    font-variant-numeric: tabular-nums;
-    text-align: end !important;
+  #impact .ledger-record {
+    position: relative;
+    margin: 0;
+    padding-block: 14px;
+    border-block-start: 0;
+    overflow-wrap: anywhere;
+  }
+  #impact .ledger-record + .ledger-record::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    inline-size: min(44%, 18rem);
+    margin-inline: auto;
+    border-block-start: 1px solid var(--rv-rule);
+  }
+  #impact .ledger-record p {
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+  #impact .ledger-source {
+    display: block;
+    margin: 3px 0 0;
   }
   .ledger-reader-select { display: none; }
   .ledger-reader-select select {
     width: 100%;
     min-block-size: 44px;
     padding: 6px 8px;
-    border: 1px solid var(--ledger-strong-rule);
+    border: 1px solid var(--rv-rule);
     border-radius: 0;
     background: var(--rv-paper);
-    color: var(--ledger-ink);
+    color: var(--rv-ink);
     font: inherit;
     font-size: 16px;
   }
@@ -198,14 +170,11 @@ const freshness = getKaggleFreshness({ stats: null, status: 'recorded' });
     clip-path: inset(50%);
     white-space: nowrap;
   }
-  @container (max-width: 560px) {
+  @container (max-width: 520px) {
     .ledger-reader-buttons { display: none; }
-    .ledger-reader-select { display: block; }
-    .ledger-reader { grid-template-columns: 1fr; }
+    .ledger-reader-select { display: block; margin-bottom: 28px; }
   }
-  @media (pointer: coarse) { .ledger-area-button { min-block-size: 44px; } }
   @media print, (scripting: none) {
-    .ledger-reader { display: block; }
     .ledger-reader-buttons, .ledger-reader-select { display: none; }
     .ledger-reader-results > section[hidden] { display: block; }
     .ledger-reader-results > section + section { margin-top: 20px; }
