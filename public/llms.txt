@@ -18,6 +18,7 @@ This portfolio describes production AI systems, inference routing, concurrency a
 
 ## Research and experimental systems
 - [Controla](https://www.ashwingupta.dev/research/controla): Local inference routing with contextual weight learning; in development.
+- [Agent Control](https://www.ashwingupta.dev/work/agent-control): Local Go supervisor for task-scoped agent actions, exact approvals, and audited execution on Linux. In development.
 - [ScholarOS](https://www.ashwingupta.dev/research/scholaros): Evidence-bound research execution; in development. This case study is public; the source repository is private.
 - [Physics-informed neural networks](https://www.ashwingupta.dev/research/pinns): Dual-loss framework, benchmarks, and publication references.
 - [PHYSCLIP](https://www.ashwingupta.dev/research/physclip): Contrastive physics regime classification.

@@ -152,6 +152,11 @@
       "statusCode": 301
     },
     {
+      "source": "/review/work/agent-control",
+      "destination": "/work/agent-control",
+      "statusCode": 301
+    },
+    {
       "source": "/review/research/physclip",
       "destination": "/research/physclip",
       "statusCode": 301

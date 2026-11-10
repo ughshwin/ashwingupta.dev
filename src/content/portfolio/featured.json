@@ -24,6 +24,18 @@
     ]
   },
   {
+    "projectId": "agent-control",
+    "type": "development",
+    "title": "Local Agent Supervision – Policy Before Side Effects",
+    "subtitle": "Personal • Go / Linux",
+    "bullets": [
+      "An agent can have tools that exceed the task it was given. **File writes, API calls, and publication** each need their own authorization.",
+      "A local **Go supervisor** checks each proposed action against the authenticated task, its grants, and current policy. Sensitive actions can wait for human approval of the exact proposal.",
+      "A **Linux execution boundary** isolates the agent from host credentials. Go, JavaScript/TypeScript, and Python SDKs share one proposal protocol. A durable journal records decisions and observed effects.",
+      "The reported validation passed **{{projects.agent-control.metrics.liveWorkflows}} live Codex-backed SDK workflows** and **{{projects.agent-control.metrics.modelFreeTestFamilies}} model-free end-to-end test families**. Broader host coverage and release benchmarks remain open."
+    ]
+  },
+  {
     "projectId": "here-app",
     "type": "production",
     "title": "163-Language Vehicle Intelligence - Multilingual RAG at Enterprise Scale",

@@ -18,6 +18,7 @@ This portfolio describes production AI systems, inference routing, concurrency a
 
 ## Research and experimental systems
 - [Controla]({{origin}}{{projects.controla.href}}): Local inference routing with contextual weight learning; in development.
+- [{{projects.agent-control.displayName}}]({{origin}}{{projects.agent-control.href}}): Local Go supervisor for task-scoped agent actions, exact approvals, and audited execution on Linux. In development.
 - [ScholarOS]({{origin}}{{projects.scholaros.href}}): Evidence-bound research execution; in development. This case study is public; the source repository is private.
 - [Physics-informed neural networks]({{origin}}{{projects.pinns.href}}): Dual-loss framework, benchmarks, and publication references.
 - [PHYSCLIP]({{origin}}{{projects.physclip.href}}): Contrastive physics regime classification.

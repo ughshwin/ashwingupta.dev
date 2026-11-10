@@ -1,0 +1,32 @@
+---
+import { resolveCopy } from '../../content/portfolio/copy';
+import source from '../../content/portfolio/documents/work--agent-control.json';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { contentSchemas } from '../../lib/structured-data';
+
+const { metadata, blocks, links, data } = resolveCopy(source);
+const { title, description, canonical } = metadata;
+---
+
+<BaseLayout
+  {title}
+  {description}
+  {canonical}
+  jsonLd={contentSchemas({ type: 'CreativeWork', name: blocks.title, url: canonical, description })}
+>
+  <main class="thinking-body">
+    <a href={links.back} class="back-link">{blocks.backLink}</a>
+    <header class="th-header">
+      <div class="th-badge">{blocks.badge}</div>
+      <h1 class="th-title">{blocks.title}</h1>
+      <p class="th-subtitle">{blocks.subtitle}</p>
+    </header>
+
+    {data.sections.map(({ id, title: heading, paragraphs }) => (
+      <section class="th-section" aria-labelledby={id}>
+        <h2 id={id} class="th-section-title">{heading}</h2>
+        {paragraphs.map(paragraph => <p class="th-body">{paragraph}</p>)}
+      </section>
+    ))}
+  </main>
+</BaseLayout>

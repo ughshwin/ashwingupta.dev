@@ -112,6 +112,15 @@
       "currentLabel": "Controla",
       "href": "/research/controla"
     },
+    "agent-control": {
+      "title": "Agent Control – Local Supervision for AI Agents",
+      "displayName": "Agent Control",
+      "href": "/work/agent-control",
+      "metrics": {
+        "liveWorkflows": "2",
+        "modelFreeTestFamilies": "24"
+      }
+    },
     "physclip": {
       "title": "PHYSCLIP",
       "displayName": "PHYSCLIP",

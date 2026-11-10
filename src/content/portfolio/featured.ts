@@ -3,7 +3,7 @@ import copySource from './copy/Featured.json';
 import { projectById } from './catalog';
 import { resolveCopy } from './copy';
 
-export type FeaturedType = 'production' | 'patent' | 'thesis' | 'open-source';
+export type FeaturedType = 'production' | 'patent' | 'development' | 'thesis' | 'open-source';
 
 export type FeaturedItem = {
   projectId: string;
@@ -20,6 +20,7 @@ function featuredType(value: string): FeaturedType {
   switch (value) {
     case 'production':
     case 'patent':
+    case 'development':
     case 'thesis':
     case 'open-source':
       return value;

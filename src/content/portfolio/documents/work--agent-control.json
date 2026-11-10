@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "canonical": "{{origin}}{{projects.agent-control.href}}",
+    "title": "{{projects.agent-control.title}} | {{profile.name}}",
+    "description": "A local Go supervisor for AI agents. Task-scoped policies, exact human approvals, isolated Linux execution, and a durable audit journal for managed actions."
+  },
+  "blocks": {
+    "backLink": "← Back to featured",
+    "badge": "Personal Project • In Development",
+    "title": "{{projects.agent-control.displayName}}",
+    "subtitle": "A local supervisor that checks what an AI agent is about to do before it writes a file, calls an API, or publishes a response."
+  },
+  "links": {
+    "back": "/#featured"
+  },
+  "data": {
+    "sections": [
+      {
+        "id": "context",
+        "title": "Tool access is broader than task authority",
+        "paragraphs": [
+          "A request to review a repository may require reading files. Writing a patch or sending its contents somewhere else are separate actions with different consequences. Agent Control puts a policy check at the point where each managed action would affect the outside world."
+        ]
+      },
+      {
+        "id": "approach",
+        "title": "Approve the exact action",
+        "paragraphs": [
+          "The Go supervisor evaluates each proposal against the current policy and the grants tied to its authenticated task. An approval covers a specific action, target, and payload. The supervisor checks that authority is still valid before execution, so a changed proposal needs a fresh decision.",
+          "A durable journal records decisions and observed outcomes. Pending approvals and confirmed effects have distinct states, which lets an operator see whether an action was proposed, approved, or actually carried out."
+        ]
+      },
+      {
+        "id": "system",
+        "title": "One supervisor across three SDKs",
+        "paragraphs": [
+          "Sanatan, the sn CLI, launches supported SDK agents inside a Linux boundary with resource limits. Go, JavaScript/TypeScript, and Python clients share the same local protocol for managed file operations, constrained API calls, and checked publication.",
+          "An optional inference broker keeps provider credentials outside the protected agent and limits concurrent requests. The deterministic policy path runs without a resident model."
+        ]
+      },
+      {
+        "id": "outcomes",
+        "title": "What the tests established",
+        "paragraphs": [
+          "The October 2026 validation recorded {{projects.agent-control.metrics.liveWorkflows}} successful live Codex-backed SDK workflows, covering approved repair and recovery after a denied deletion, and {{projects.agent-control.metrics.modelFreeTestFamilies}} passing model-free end-to-end test families.",
+          "A 200-prompt evaluation measured live model behavior separately from policy enforcement. It surfaced cases where misleading edits or publication could still pass within existing grants. The project remains in development, with broader native host coverage and sustained-load acceptance still open."
+        ]
+      }
+    ]
+  }
+}
